@@ -1,12 +1,14 @@
-function ret = hdrimwrite(img, filename, hdr_jpeg_2000_ratio)
+function ret = hdrimwrite(img, filename, hdr_info)
 %
-%       ret=hdrimwrite(img, filename)
+%       ret = hdrimwrite(img, filename, hdr_info)
 %
 %
 %        Input:
 %           -img: the image to write on the hard disk
 %           -filename: the name of the image to write
-%           -hdr_jpeg_2000_ratio: ratio for HDR JPEG 2000
+%	    -hdr_info: a MATLAB struct with datum for writing:
+%		-RGBE: exposure (exposure) and gamma (gamma)
+%		-HDR JPEG2000: the compression ratio (compression_ratio)
 %
 %        Output:
 %           -ret: a boolean value, it is set to 1 if the write succeed, 0 otherwise
@@ -40,7 +42,7 @@ end
 
 if(col==1)
     [r,c] = size(img);
-    imgOut = zeros(r,c,3);
+    imgOut = zeros(r, c, 3);
     
     for i=1:3
         imgOut(:,:,i) = img;
@@ -51,8 +53,8 @@ end
 
 ret = 0;
 
-if(~exist('hdr_jpeg_2000_ratio','var'))
-    hdr_jpeg_2000_ratio = 2;
+if(~exist('hdr_info','var'))
+    hdr_info = struct('exposure', 1.0, 'gamma', 1.0, 'compression_ratio', 2.0);
 end
 
 extension = lower(fileExtension(filename));
@@ -66,7 +68,7 @@ switch extension
     %PIC-HDR format by Greg Ward (.hdr)
     case 'hdr'
         try
-            write_rgbe(img, filename, 1);
+            write_rgbe(img, filename, 1, hdr_info);
         catch
             error('This PIC/HDR file can not be written.');
         end
@@ -82,7 +84,11 @@ switch extension
     %HDR JPEG2000 (.jp2)
     case 'jp2'
          try
-            HDRJPEG2000Enc(img, filename, hdr_jpeg_2000_ratio)
+            if(~exist('hdr_info.compression_ratio', 'var'))
+	        HDRJPEG2000Enc(img, filename, 2.0);
+  	    else
+                HDRJPEG2000Enc(img, filename, hdr_info.compression_ratio);
+	    end
          catch
              error('This HDR JPEG 2000 file can not be written.');
          end        
