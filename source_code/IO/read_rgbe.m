@@ -65,7 +65,8 @@ while(~isempty(line))
 end
 
 %reading the height and the width of the image
-[len, count] = fscanf(fid,'-Y %d +X %d\n',2);
+[len, count] = fscanf(fid,'-Y %d +X %d',2);
+[retChar, count] = fread(fid,1,'uint8');
 
 %reading pixels...
 [tmpImg, count] = fread(fid,inf,'uint8');
