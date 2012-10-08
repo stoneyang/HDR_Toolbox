@@ -22,6 +22,7 @@ Run the demos to understand how to use I/O function, visualize images, tone Map 
 
 -Update Report:
 
+09/10/2012: -Removed a bug when reading uncompressed .hdr/.pic files.
 29/08/2012: -Fixed the EXPOSURE's semantic when opening .hdr/.pic files. Thanks to Matthieu Perreira Da Silva 
 06/07/2012: -Partial rewritten of the ChangeMapping.m function and its auxiliary functions
             -Fixed BanterleExpandMap.m to be closer to reference. Fixed a bug in the samples
