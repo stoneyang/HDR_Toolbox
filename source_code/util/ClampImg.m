@@ -30,10 +30,7 @@ function img=ClampImg(img,a,b)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-valA=find(img<a);
-img(valA)=a;
-
-valB=find(img>b);
-img(valB)=b;
+img(img<a)=a;
+img(img>b)=b;
 
 end
