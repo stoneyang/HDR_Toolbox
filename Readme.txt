@@ -22,6 +22,10 @@ Run the demos to understand how to use I/O function, visualize images, tone Map 
 
 -Update Report:
 
+12/10/2012: -Added Raman and Chaudhuri Eurographics 2009 Short paper on tone mapping             (exposure fusion), see RamanTMO.m
+            -Added a new demo for performing exposure fusion on stack
+             demo_fusion_from_stack.m (this demo applies RamanTMO.m and Mertens.m)
+	    -Fixed the interface for MertensTMO.m, now directories can be inserted as input
 09/10/2012: -Removed a bug when reading uncompressed .hdr/.pic files.
 29/08/2012: -Fixed the EXPOSURE's semantic when opening .hdr/.pic files. Thanks to Matthieu Perreira Da Silva 
 06/07/2012: -Partial rewritten of the ChangeMapping.m function and its auxiliary functions

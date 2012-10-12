@@ -16,6 +16,8 @@ function [imgOut,pAlpha,pWhite]=ReinhardBilTMO(img, pAlpha, pWhite, pLocal)
 %           -pAlpha: as in input
 %           -pLocal: as in input
 % 
+%     Copyright (C) 2011  Francesco Banterle
+% 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
 %     the Free Software Foundation, either version 3 of the License, or

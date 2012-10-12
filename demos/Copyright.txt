@@ -2,6 +2,9 @@ Images Copyright © 2008-2012 Francesco Banterle:
 - Bottles_Small.pfm
 - Oxford_Church.pfm
 - Venice01.png
+- stack/venice_calle_exp_0.jpg
+- stack/venice_calle_exp_1.jpg
+- stack/venice_calle_exp_2.jpg
 - CS_Warwick.pfm (captured using Spheron camera by WMG, Warwick, UK)
 
 If you would like to use these images in publications, demos, or for other

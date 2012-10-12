@@ -1,4 +1,4 @@
-function imgOut = MertensTMO( img, format, wE, wS, wC )
+function imgOut = MertensTMO( img, directory, format, wE, wS, wC )
 %
 %
 %        imgOut = MertensTMO( img, format, wE, wS, wC )
@@ -6,6 +6,8 @@ function imgOut = MertensTMO( img, format, wE, wS, wC )
 %
 %        Input:
 %           -img: input HDR image
+%           -directory: the directory where to fetch the exposure stack in
+%           the case img=[]
 %           -format: the format of LDR images ('bmp', 'jpg', etc) in case
 %                    img=[] and the tone mapped images is built from a sequence of
 %                    images in the current directory
@@ -25,6 +27,8 @@ function imgOut = MertensTMO( img, format, wE, wS, wC )
 %        Note: Gamma correction is not needed because it works on gamma
 %        corrected images.
 % 
+%     Copyright (C) 2010 Francesco Banterle
+% 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
 %     the Free Software Foundation, either version 3 of the License, or
@@ -38,9 +42,6 @@ function imgOut = MertensTMO( img, format, wE, wS, wC )
 %     You should have received a copy of the GNU General Public License
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
-
-%is it a three color channels image?
-check3Color(img);
 
 %default parameters if they are missing
 if(~exist('wE'))
@@ -64,10 +65,10 @@ if((r*c)>0)
     [stack,stack_exposure] = GenerateExposureBracketing(img,2);
 else
     %load images from the current directory
-    images=dir(['*.',format]);
+    images=dir([directory,'/','*.',format]);
     n = length(images);
     for i=1:n
-        stack(:,:,:,i) = double(imread(images(i).name))/255;
+        stack(:,:,:,i) = single(imread([directory,'/',images(i).name]))/255.0;
     end
 end
 
