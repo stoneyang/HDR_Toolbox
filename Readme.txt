@@ -22,6 +22,7 @@ Run the demos to understand how to use I/O function, visualize images, tone Map 
 
 -Update Report:
 
+18/10/2012: -Added Boschett et al. 2011 ICIP paper on HDR compression
 12/10/2012: -Added Raman and Chaudhuri Eurographics 2009 Short paper on tone mapping             (exposure fusion), see RamanTMO.m
             -Added a new demo for performing exposure fusion on stack
              demo_fusion_from_stack.m (this demo applies RamanTMO.m and Mertens.m)
