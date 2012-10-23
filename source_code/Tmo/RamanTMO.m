@@ -40,7 +40,7 @@ stack=[];
 [r,c,col]=size(img);
 if((r*c)>0)
     %Convert the HDR image into a stack
-    [stack,stack_exposure] = GenerateExposureBracketing(img,2);
+    [stack,stack_exposure] = GenerateExposureBracketing(img,1);
 else
     %load images from the current directory
     images=dir([directory,'/','*.',format]);

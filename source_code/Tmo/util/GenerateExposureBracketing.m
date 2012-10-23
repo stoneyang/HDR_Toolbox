@@ -46,30 +46,28 @@ end
 %luminance channel
 L = lum(img);
 
-MinL = MaxQuart(L(L>0.0),0.001);
-MaxL = MaxQuart(L(L>0.0),0.999);
+MinL = MaxQuart(L(L>0.0),0.01);
+MaxL = MaxQuart(L(L>0.0),0.9999);
 
 minExposure = floor(log2(MaxL));
 maxExposure = ceil(log2(MinL));
 
-maxExposure = -(maxExposure-1);
-minExposure = -(minExposure+1);
-
-val=sort([minExposure,maxExposure]);
+tMax = -(maxExposure-1);
+tMin = -(minExposure+1);
 
 %allocate memory for the stack
-n=length(val(1):fstopDistance:val(2));
-stack=zeros(r,c,col,n);
+n = length(tMin:fstopDistance:tMax);
+stack = zeros(r,c,col,n);
 
-c=1;
+c = 1;
 %calculate exposures
-for i=val(1):fstopDistance:val(2)
+for i=tMin:fstopDistance:tMax
     expo = ClampImg((2^i*img).^inv_gamma,0,1);
     stack(:,:,:,c) = expo;
     c=c+1;
 end
 
-stack_exposure = 2.^(val(1):fstopDistance:val(2));
+stack_exposure = 2.^(tMin:fstopDistance:tMax);
 
 end
 
