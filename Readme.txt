@@ -22,6 +22,8 @@ Run the demos to understand how to use I/O function, visualize images, tone Map 
 
 -Update Report:
 
+23/10/2012: -Added ExposureHistogramCovering.m for sampling exposures with the histogram
+	     using a greedy approach.
 18/10/2012: -Added Boschetti et al. 2011 ICIP paper on HDR compression
 12/10/2012: -Added Raman and Chaudhuri Eurographics 2009 Short paper on tone mapping             (exposure fusion), see RamanTMO.m
             -Added a new demo for performing exposure fusion on stack
