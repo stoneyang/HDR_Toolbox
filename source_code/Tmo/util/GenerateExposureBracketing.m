@@ -46,29 +46,16 @@ end
 %luminance channel
 L = lum(img);
 
-indx = find(L>0.0);
-MinL = min(L(indx));
-MaxL = max(L(:));
+MinL = MaxQuart(L(L>0.0),0.001);
+MaxL = MaxQuart(L(L>0.0),0.999);
 
-minExposure = log2(MaxL);
-maxExposure = log2(MinL);
-
-if(minExposure<0)
-    minExposure = floor(minExposure);
-else
-    minExposure = ceil(minExposure);
-end
-
-if(maxExposure<0)
-    maxExposure = floor(maxExposure);
-else
-    maxExposure = ceil(maxExposure);
-end
+minExposure = floor(log2(MaxL));
+maxExposure = ceil(log2(MinL));
 
 maxExposure = -(maxExposure-1);
 minExposure = -(minExposure+1);
 
-val=sort([maxExposure,minExposure]);
+val=sort([minExposure,maxExposure]);
 
 %allocate memory for the stack
 n=length(val(1):fstopDistance:val(2));
