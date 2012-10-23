@@ -1,7 +1,7 @@
-function [histo,bound,haverage]=HistogramHDR(img,nZone,typeLog,debug)
+function [histo,bound,haverage]=HistogramHDR(img,nZone,typeLog,bNormalized,debug)
 %
 %
-%        [histo,bound,haverage]=HistogramHDR(img,nZone,typeLog,debug)
+%        [histo,bound,haverage]=HistogramHDR(img,nZone,typeLog,bNormalized,debug)
 %
 %
 %        Input:
@@ -10,6 +10,7 @@ function [histo,bound,haverage]=HistogramHDR(img,nZone,typeLog,debug)
 %           -typeLog: type of space for calculating the histogram: 'linear'
 %           for linear space, 'log2' for base 2 logarithm space, 'loge', for
 %           natural logarithm space, 'log10' for base 10 logarithm space
+%           -bNormalized: the histogram is normalized
 %           -debug: if it is true the histogram is visualised
 %
 %        Output:
@@ -36,32 +37,34 @@ function [histo,bound,haverage]=HistogramHDR(img,nZone,typeLog,debug)
 %is it a three color channels image?
 check3Color(img);
 
-if(~exist('nZone')|~exist('typeLog')|~exist('debug'))
-    nZone=100;
-    typeLog='log2';
+if(~exist('nZone'))
+    nZone = 256;
+end
+
+if(~exist('typeLog'))
+    typeLog = 'log10';
+end
+
+if(~exist('bNormalized'))
+    bNormalized = 0;
+end
+
+if(~exist('debug'))
     debug=0;
 end
 
 L=lum(img);
-
-[n,m]=size(L);
-
-L=reshape(L,n*m,1);
-
-Lmin2=min(L);
-Lmax2=max(L);
-
+L=L(:);
 L2=L;
 
 delta=1e-6;
-
 switch typeLog       
     case 'log2'
-        L=log2(L+delta);
+    	L=log2(L+delta);
     case 'loge'
         L=log(L+delta);
     case 'log10'
-       L=log10(L+delta);
+    	L=log10(L+delta);
 end
 
 Lmin=min(L);
@@ -74,9 +77,7 @@ bound(1)=Lmin;
 bound(2)=Lmax;
 
 haverage=0;
-
 total=0;
-
 for i=1:nZone
     indx=find(L>=(dMM*(i-1)+Lmin)&L<(dMM*i+Lmin));
     [n2,m2]=size(indx);
@@ -88,12 +89,17 @@ for i=1:nZone
     end
 end
 
+if(bNormalized)
+    norm = sum(histo);
+    if(norm>0)
+        histo = histo/norm;
+    end
+end
+
 haverage=haverage/(total);
 
 if(debug)
-    x=1:nZone;
-    x=x/nZone;
-    x=x*(Lmax-Lmin)+Lmin;
+    x=((1:nZone)/nZone)*(Lmax-Lmin)+Lmin;
     bar(x,histo);
 end
 

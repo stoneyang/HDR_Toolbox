@@ -1,4 +1,4 @@
-function [stack, stack_exposure] = GenerateExposureBracketing( img, fstopDistance, geb_gamma )
+function [stack, stack_exposure] = GenerateExposureBracketing( img, fstopDistance, geb_gamma, geb_mode )
 %
 %
 %       stack = GenerateExposureBracketing( img )
@@ -8,6 +8,11 @@ function [stack, stack_exposure] = GenerateExposureBracketing( img, fstopDistanc
 %           -img: input HDR image
 %           -fstopDistance: delta f-stop for generating exposures
 %           -geb_gamma: the gamma for encoding the images
+%           -geb_mode: how to samples the image.
+%                  - if geb_mode = 'uniform', exposures are sampled
+%                    in an uniform way
+%                  - if geb_mode = 'histogram', exposures are sampled using
+%                    the histogram using a greedy approach
 %
 %        Output:
 %           -stack: a stack of LDR images
@@ -33,7 +38,7 @@ function [stack, stack_exposure] = GenerateExposureBracketing( img, fstopDistanc
 [r,c,col]=size(img);
 
 if(~exist('fstopDistance'))
-    fstopDistance=2;
+    fstopDistance = 1;
 end
 
 %inverse gamma
@@ -43,31 +48,40 @@ else
     inv_gamma = 1.0/geb_gamma;
 end
 
+if(~exist('geb_mode'))
+    geb_mode = 'histogram';
+end
+
 %luminance channel
 L = lum(img);
 
-MinL = MaxQuart(L(L>0.0),0.01);
-MaxL = MaxQuart(L(L>0.0),0.9999);
+switch(geb_mode)
+    case 'histogram'
+        stack_exposure = 2.^ExposureHistogramCovering(img);
+        
+    case 'uniform'
+        MinL = MaxQuart(L(L>0.0),0.01);
+        MaxL = MaxQuart(L(L>0.0),0.9999);
 
-minExposure = floor(log2(MaxL));
-maxExposure = ceil(log2(MinL));
+        minExposure = floor(log2(MaxL));
+        maxExposure = ceil(log2(MinL));
 
-tMax = -(maxExposure-1);
-tMin = -(minExposure+1);
-
-%allocate memory for the stack
-n = length(tMin:fstopDistance:tMax);
-stack = zeros(r,c,col,n);
-
-c = 1;
-%calculate exposures
-for i=tMin:fstopDistance:tMax
-    expo = ClampImg((2^i*img).^inv_gamma,0,1);
-    stack(:,:,:,c) = expo;
-    c=c+1;
+        tMax = -(maxExposure-1);
+        tMin = -(minExposure+1);
+        stack_exposure = 2.^(tMin:fstopDistance:tMax);
+    otherwise
+        error('wrong mode for sampling the HDR image');
 end
 
-stack_exposure = 2.^(tMin:fstopDistance:tMax);
+%allocate memory for the stack
+n = length(stack_exposure);
+stack = zeros(r,c,col,n);
+
+%calculate exposures
+for i=1:n
+    expo = ClampImg((stack_exposure(i)*img).^inv_gamma,0,1);
+    stack(:,:,:,i) = expo;
+end
 
 end
 
