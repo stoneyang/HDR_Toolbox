@@ -5,7 +5,8 @@ function imgOut = MeylanEO(img, Meylan_Max, Meylan_lambda, gammaRemoval)
 %
 %        Input:
 %           -img: input LDR image
-%           -Meylan_Max: this value defines the 
+%           -Meylan_Max: this value defines the maximum luminance output of
+%           the final expanded image in cd/m^2
 %           -Meylan_lambda: threshold for applying the iTMO
 %           -gammaRemoval: the gamma value to be removed if known
 %
@@ -34,7 +35,7 @@ check3Color(img);
 %default parameters
 if(~exist('Meylan_Max')|~exist('Meylan_lambda')|~exist('gammaRemoval'))
     %Maximum value of DR-37P: 3000 cd/m^2 
-    Meylan_Max=3000;   
+    Meylan_Max=3000.0;   
     %standard diffuse part range
     Meylan_lambda=0.67;
     %no gamma removal
