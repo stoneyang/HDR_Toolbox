@@ -79,7 +79,6 @@ while(check)
     %is the smallest dimension bigger than pyrMinSize?
     check=min(size(mask))>pyrMinSize;
 end
-hdrimwrite(mask,'mask_low.pfm');
 
 %Flood-fill using pyramids
 tr=0.05;   
