@@ -65,7 +65,7 @@ rescale_alpha=4.0;     %rescale alpha as in the original paper
 Lexp=(L+1/256)*(maxL-0.3);
 
 %Generate expand map
-expand_map=RempelExpandMap(L);
+expand_map=RempelExpandMapPyr(L);
 
 %Remap expand map range in [1,..., rescale_alpha]
 expand_map=expand_map*(rescale_alpha-1)+1;

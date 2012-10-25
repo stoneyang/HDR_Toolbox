@@ -1,7 +1,8 @@
-function expand_map=RempelExpandMap(L, video_flag)
+function expand_map=RempelExpandMapPyr(L, video_flag)
 %
-%		 expand_map=RempelExpandMap(L, video_flag)
+%		 expand_map=RempelExpandMapPyr(L, video_flag)
 %
+%        Rempel et al.'s expand maps using Laplacian Pyramids
 %
 %		 Input:
 %			-L: a luminance channel
@@ -10,7 +11,7 @@ function expand_map=RempelExpandMap(L, video_flag)
 %		 Output:
 %			-expand_map: the final expand map
 %
-%     Copyright (C) 2011  Francesco Banterle
+%     Copyright (C) 2012  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -47,10 +48,12 @@ mask(indx)=1;
 mask=double(bwmorph(mask,'clean'));
 
 %Filtering with a 150x150 Gaussian kernel size
-sbeFil=GaussianFilter(mask,30);
+mask_pyr = pyrGaussGen(mask,64);
+mask_pyr_blur = pyrGaussianBlur(mask_pyr,3);
+sbeFil = pyrVal(mask_pyr_blur);
 
 %Normalization
-sbeFilMax=max(max(sbeFil));									
+sbeFilMax=max(sbeFil(:));									
 if(sbeFilMax>0.0)
 	sbeFil=sbeFil/sbeFilMax;
 end
@@ -68,25 +71,27 @@ dx=imfilter(L,Sx);
 
 grad=sqrt(dx.^2+dy.^2);         %magnitude of the directional gradient
 grad=grad/max(max(grad));
+grad_pyr = pyrGaussGen(grad,64);
 
 %threshold for the gradient
-tr=0.05;                       
+tr=0.05;   
+edge_stop = round(mask_pyr.base);
+tmp=double(bwmorph(edge_stop,'dilate'));
+tmp=abs(tmp-edge_stop);
+edge_stop(tmp>0&grad_pyr.base<tr)=1;    
 
-%maximum number of iteration for the flood fill
-maxIter=1000;
-for k=1:maxIter
-    %Flood fill
-    tmp=double(bwmorph(mask,'dilate'));
-    tmp=abs(tmp-mask);
-    mask(tmp>0&grad<tr)=1;
+n = length(grad_pyr.list); 
+for i=1:n
+    ind=n-i+1;
+    [r,c]=size(grad_pyr.list(ind).detail);    
+    edge_stop = imresize(edge_stop, [r,c],'nearest');
     
-    %ended?
-    stopping=length(indx);
-    if(stopping<1)
-        break;
-    end  
+    tmp=double(bwmorph(edge_stop,'dilate'));
+    tmp=abs(tmp-edge_stop);
+    edge_stop(tmp>0&grad_pyr.list(ind).detail<tr)=1;    
 end
-
+ 
 %Multiply the flood fill mask with the BEF
-expand_map=sbeFil.*mask;
+expand_map = sbeFil.*edge_stop;
+
 end

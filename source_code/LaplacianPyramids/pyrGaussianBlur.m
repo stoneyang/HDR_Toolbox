@@ -1,14 +1,15 @@
-function img=pyrVal(pyramid)
+function pOut=pyrGaussianBlur(pA,kernelSize)
 %
 %
-%        img=pyrVal(pyramid)
+%        pOut=pyrMul(pA,kernelSize)
 %
 %
 %        Input:
-%           -pyramid: an image pyramid
+%           -pA: an image pyramid
+%           -kernelSize: kernel size of the Gaussian blur
 %
 %        Output:
-%           -img: an image
+%           -pOut: the result of multiplying pA and pB
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -24,22 +25,13 @@ function img=pyrVal(pyramid)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-list=pyramid.list;
-base=pyramid.base;
+%multiplying base levels
+pOut.base=GaussianFilterWindow(pA.base,kernelSize);
+pOut.list=pA.list;
 
-n = length(list);
-
-img=[];
-for i=1:n
-    ind=n-i+1;
-    [r,c]=size(list(ind).detail);
-    if(i==1)        
-        base = imresize(base, [r,c]);
-        img=base+list(ind).detail;
-    else
-        img = imresize(img, [r,c]);
-        img=img+list(ind).detail;        
-    end
+%multiplying the detail of each level
+for i=1:length(pA.list)
+    pOut.list(i).detail=GaussianFilterWindow(pA.list(i).detail,kernelSize);
 end
 
 end
