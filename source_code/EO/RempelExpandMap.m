@@ -41,16 +41,15 @@ else
 end
 
 %binary map for saturated pixels
-indx=find(L>threshold);
 mask=zeros(size(L));
-mask(indx)=1;
+mask(L>threshold)=1;
 mask=double(bwmorph(mask,'clean'));
 
 %Filtering with a 150x150 Gaussian kernel size
 sbeFil=GaussianFilter(mask,30);
 
 %Normalization
-sbeFilMax=max(max(sbeFil));									
+sbeFilMax=max(sbeFil(:));									
 if(sbeFilMax>0.0)
 	sbeFil=sbeFil/sbeFilMax;
 end
@@ -67,7 +66,7 @@ dy=imfilter(L,Sy);
 dx=imfilter(L,Sx);
 
 grad=sqrt(dx.^2+dy.^2);         %magnitude of the directional gradient
-grad=grad/max(max(grad));
+grad=grad/max(grad(:));
 
 %threshold for the gradient
 tr=0.05;                       
@@ -88,5 +87,5 @@ for k=1:maxIter
 end
 
 %Multiply the flood fill mask with the BEF
-expand_map=sbeFil.*mask;
+expand_map=sbeFil.*GaussianFilter(mask,1);
 end

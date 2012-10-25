@@ -28,7 +28,7 @@ function [imgOut,imgB]=pyrGaussGenAux(img)
 %5x5 Gaussian Kernel
 kernel=[1,4,6,4,1];
 mtx=kernel'*kernel;
-mtx=mtx/sum(sum(mtx));
+mtx=mtx/sum(mtx(:));
 
 %Convolution
 imgB=conv2(img,mtx,'same');
