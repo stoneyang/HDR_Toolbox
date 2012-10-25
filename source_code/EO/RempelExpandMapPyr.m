@@ -75,13 +75,14 @@ grad_pyr = pyrGaussGen(grad,64);
 
 %threshold for the gradient
 tr=0.05;   
-edge_stop = round(mask_pyr.base);
+edge_stop = floor(mask_pyr.base);
+tmp=double(bwmorph(edge_stop,'erode'));
 tmp=double(bwmorph(edge_stop,'dilate'));
 tmp=abs(tmp-edge_stop);
 edge_stop(tmp>0&grad_pyr.base<tr)=1;    
 
 n = length(grad_pyr.list); 
-for i=1:n
+for i=2:n
     ind=n-i+1;
     [r,c]=size(grad_pyr.list(ind).detail);    
     edge_stop = imresize(edge_stop, [r,c],'nearest');
