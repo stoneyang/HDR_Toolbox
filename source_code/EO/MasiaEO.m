@@ -1,11 +1,13 @@
-function imgOut = MasiaEO(img, Masia_Max, gammaRemoval)
+function imgOut = MasiaEO(img, Masia_Max, Masia_noise_removal, gammaRemoval)
 %
-%       imgOut = MasiaEO(img, Mesia_Max, gammaRemoval)
+%       imgOut = MasiaEO(img, Mesia_Max, Masia_noise_removal, gammaRemoval)
 %
 %
 %        Input:
 %           -img: input LDR image
 %           -Masia_Max: maximum luminance output in cd/m^2
+%           -Masia_noise_removal: if set to 1 it removes noise or artifacts
+%           using the bilateral filter
 %           -gammaRemoval: the gamma value to be removed if known
 %
 %        Output:
@@ -38,6 +40,10 @@ if(~exist('gammaRemoval'))
     gammaRemoval = -1.0;
 end
 
+if(~exist('Masia_noise_removal'))
+    Masia_noise_removal = 1;
+end
+
 if(gammaRemoval>0.0)
     img=img.^gammaRemoval;
 end
@@ -59,10 +65,18 @@ b_var = -6.282;
 
 gamma_cor = imageKey*a_var + b_var;
 
+if(gamma_cor<=0.0)
+    disp('WARNING: gamma_cor value is negative so the image may have false color.');
+end
+
 %Bilateral filter to avoid to boost noise/artifacts
-Lbase = bilateralFilter(L);
-Ldetail = RemoveSpecials(L./Lbase);
-Lexp = Ldetail.*(Lbase.^gamma_cor);
+if(Masia_noise_removal)
+    Lbase = bilateralFilter(L);
+    Ldetail = RemoveSpecials(L./Lbase);
+    Lexp = Ldetail.*(Lbase.^gamma_cor);
+else
+    Lexp = L.^gamma_cor;
+end
 
 imgOut = zeros(size(img));
 for i=1:3
