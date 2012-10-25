@@ -33,7 +33,7 @@ function imgOut = MasiaEO(img, Masia_Max, Masia_noise_removal, gammaRemoval)
 check3Color(img);
 
 if(~exist('Masia_Max'))
-    Masia_Max = 3000.0;
+    Masia_Max = 3000.0;%The maximum output of a Brightside DR37p
 end
 
 if(~exist('gammaRemoval'))
