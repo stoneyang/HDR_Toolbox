@@ -30,6 +30,14 @@ function imgOut = MasiaEO(img, Masia_Max, gammaRemoval)
 %is it a three color channels image?
 check3Color(img);
 
+if(~exist('Masia_Max'))
+    Masia_Max = 3000.0;
+end
+
+if(~exist('gammaRemoval'))
+    gammaRemoval = -1.0;
+end
+
 if(gammaRemoval>0.0)
     img=img.^gammaRemoval;
 end
@@ -58,7 +66,7 @@ Lexp = Ldetail.*(Lbase.^gamma_cor);
 
 imgOut = zeros(size(img));
 for i=1:3
-    imgOut(:,:,i) = (img(:,:,i)*Lexp)./L;
+    imgOut(:,:,i) = (img(:,:,i).*Lexp)./L;
 end
 imgOut = Masia_Max*RemoveSpecials(imgOut);
 end
