@@ -1,4 +1,4 @@
-function [imgOut, expand_map] = BanterleEO(img, expansion_operator, eo_parameters, bclampingThreshold, bColorRec, gammaRemoval)
+function [imgOut, expand_map] = BanterleEO(img, expansion_operator, eo_parameters, bclampingThreshold, bColorRec, gammaRemoval, bNoiseRemoval)
 %
 %       [imgOut, expand_map] = BanterleEO(img, expansion_operator, params, colorRec, gammaRemoval)
 %
@@ -18,6 +18,8 @@ function [imgOut, expand_map] = BanterleEO(img, expansion_operator, eo_parameter
 %           be calculated for each color channel
 %           -gammaRemoval: the gamma value to be removed if img was encoded
 %           using gamme encoding
+%           -bNoiseRemoval: a boolean value. If it is set 1 it will apply a
+%           gentle bilateral filter to the image in order to remove noise.
 %
 %        Output:
 %           -imgOut: inverse tone mapped image
@@ -50,9 +52,15 @@ if(~exist('expansion_operator'))
     expansion_operator = @InverseReinhard;
 end
 
+if(~exist('bNoiseRemoval'))
+    bNoiseRemoval = 0;
+end
+
 %Apply a gentle bilateral filter for removing noise
-for i=1:3
-    img(:,:,i) = bilateralFilter(img(:,:,i),[],0.0,1.0,16.0,0.0125);
+if(bNoiseRemoval)
+    for i=1:3
+        img(:,:,i) = bilateralFilter(img(:,:,i),[],0.0,1.0,16.0,0.0125);
+    end
 end
 
 %Luminance expansion
@@ -60,7 +68,7 @@ L = lum(img);
 Lexp = expansion_operator(img,eo_parameters);
 
 %Combining expanded and unexpanded luminance channels
-expand_map = BanterleExpandMap(img, bColorRec, bclampingThreshold, 0.95, 'gaussian', 1);
+expand_map = BanterleExpandMap(img, bColorRec, bclampingThreshold, 0.95, 'gaussian', 0);
 
 LFinal = zeros(size(img));
 for i=1:3

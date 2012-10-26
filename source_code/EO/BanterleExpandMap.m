@@ -61,10 +61,10 @@ nLights = 2.^(round(log2(min([r,c]))+2));
 [imgOut,lights] = MedianCut(img,nLights,0);
 
 %Determing the samples clamping
-window = round(min([r,c])/(2*sqrt(nLights)));
+window = round(max([r,c])/(2.0*sqrt(nLights)));
 Lout = lum(imgOut);
 
-if(BEM_clamping_threshold>0)
+if(BEM_clamping_threshold>=0)
     thresholdSamples = BEM_clamping_threshold;
 else
     %Create the histogram
@@ -83,8 +83,8 @@ else
     thresholdSamples = H(indx);
 end
 
+%samples' clamping
 if(thresholdSamples>0)
-    %samples' clamping
     imgOut_tmp = imgOut;
     Lout_tmp = Lout;
     for i=1:length(lights)
@@ -136,15 +136,20 @@ if(BEM_bColorRec)
     clear('img_density');
     clear('counter_map');
 else
-    splat_power = Lout(y,x);
+    size(Lout);
+    splat_power = zeros(length(x),1);
+    for i=1:length(x)
+        splat_power(i,1) = Lout(y(i),x(i));
+    end    
     
     clear('imgOut');
     clear('Lout');
 
-    [img_density,counter_map] = imSplat(r,c,H,splat_pos,splat_power); 
+    [img_density,counter_map] = imSplat(r,c,H,splat_pos,splat_power);
     img_density = img_density./counter_map;
 
     expand_map_de = GaussianFilterWindow(img_density, scaled_widow);
+    
     clear('img_density');
     clear('counter_map');
 end
@@ -174,7 +179,7 @@ end
 
 %Expand map normalization
 max_em = max(expand_map(:));
-if(max_em>0)
+if(max_em>0.0)
     expand_map = expand_map/max_em;
 end
 
