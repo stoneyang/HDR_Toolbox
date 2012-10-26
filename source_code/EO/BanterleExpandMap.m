@@ -157,14 +157,14 @@ if(BEM_bColorRec)
         if(BEM_bHighQuality)
             expand_map(:,:,i) = LischinskiMinimization(img(:,:,i),expand_map_de(:,:,i),0.07*ones(r,c));
         else
-            expand_map(:,:,i) = bilateralfilter(img(:,:,i), expand_map_de(:,:,i),32,all);
+            expand_map(:,:,i) = bilateralfilter(expand_map_de(:,:,i),img(:,:,i));
         end
     end
 else    
     if(BEM_bHighQuality)
         tmp_expand_map = LischinskiMinimization(L,expand_map_de,0.07*ones(r,c));
     else
-        tmp_expand_map = bilateralfilter(L, expand_map_de);
+        tmp_expand_map = bilateralfilter(expand_map_de, L);
     end
     
     for i=1:col

@@ -52,7 +52,7 @@ end
 
 %Apply a gentle bilateral filter for removing noise
 for i=1:3
-    img(:,:,i) = bilateralFilter(img(:,:,i),[],0.0,1.0,8.0,0.0125);
+    img(:,:,i) = bilateralFilter(img(:,:,i),[],0.0,1.0,16.0,0.0125);
 end
 
 %Luminance expansion
