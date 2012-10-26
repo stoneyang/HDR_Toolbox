@@ -1,6 +1,6 @@
-function imgOut = MasiaEO(img, Masia_Max, Masia_noise_removal, gammaRemoval)
+function [imgOut,bWarning] = MasiaEO(img, Masia_Max, Masia_noise_removal, gammaRemoval)
 %
-%       imgOut = MasiaEO(img, Mesia_Max, Masia_noise_removal, gammaRemoval)
+%       [imgOut,bWarning] = MasiaEO(img, Mesia_Max, Masia_noise_removal, gammaRemoval)
 %
 %
 %        Input:
@@ -12,6 +12,7 @@ function imgOut = MasiaEO(img, Masia_Max, Masia_noise_removal, gammaRemoval)
 %
 %        Output:
 %           -imgOut: an expanded image
+%           -bWarning: a flag if there was gamma inversion
 %
 %     Copyright (C) 2011  Francesco Banterle
 % 
@@ -48,6 +49,8 @@ if(gammaRemoval>0.0)
     img=img.^gammaRemoval;
 end
 
+bWarning = 0;
+
 %Calculate luminance
 L=lum(img);
 
@@ -67,6 +70,7 @@ gamma_cor = imageKey*a_var + b_var;
 
 if(gamma_cor<=0.0)
     disp('WARNING: gamma_cor value is negative so the image may have false color.');
+    bWarning = 1;
 end
 
 %Bilateral filter to avoid to boost noise/artifacts

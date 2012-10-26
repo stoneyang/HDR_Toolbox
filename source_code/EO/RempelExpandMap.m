@@ -72,16 +72,16 @@ grad=grad/max(grad(:));
 tr=0.05;                       
 
 %maximum number of iteration for the flood fill
-maxIter=1000;
+maxIter=2048;
 for k=1:maxIter
     %Flood fill
     tmp=double(bwmorph(mask,'dilate'));
     tmp=abs(tmp-mask);
-    mask(tmp>0&grad<tr)=1;
-    
+    val1 = sum(mask(:));
+    mask((tmp>0.5)&grad<tr)=1;
+   
     %ended?
-    stopping=length(indx);
-    if(stopping<1)
+    if((sum(mask(:))-val1)<1)
         break;
     end  
 end

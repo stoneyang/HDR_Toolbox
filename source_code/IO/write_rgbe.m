@@ -38,7 +38,6 @@ fprintf(fid,'-Y %d +X %d\n',n,m);
 
 %convert from float to RGBE
 RGBEbuffer = float2RGBE(img);
-delete('img');
 
 %reshape of data
 data=zeros(n*m*4,1);

@@ -81,10 +81,10 @@ while(check)
 end
 
 %Flood-fill using pyramids
-tr=0.05;   
+tr=0.1;   
 tmp=double(bwmorph(mask,'dilate'));
 tmp=abs(tmp-mask);
-mask(tmp>0&abs(grad_pyr.base)<tr)=1;   
+mask((tmp>0.5)&(abs(grad_pyr.base)<tr))=1;   
 n = length(grad_pyr.list);
 for i=1:n
     ind=n-i+1;
@@ -92,7 +92,7 @@ for i=1:n
     mask = imresize(mask, [r,c],'nearest');    
     tmp=double(bwmorph(mask,'dilate'));
     tmp=abs(tmp-mask);
-    mask(tmp>0&abs(grad_pyr.list(ind).detail)<tr)=1;    
+    mask((tmp>0.5)&(abs(grad_pyr.list(ind).detail)<tr))=1;    
 end
 
 %Multiply the flood fill mask with the BEF
