@@ -6,8 +6,9 @@ function Lexp = InverseReinhard(img, eo_parameters)
 %           -img: input LDR image. The image is assumed to be linearized
 %           -eo_parameters: is an array of two values:
 %               -eo_parameters(1): is the maximum output luminance in cd/m^2
-%               -eo_parameters(2: is the strecthing factor of the
+%               -eo_parameters(2): is the strecthing factor of the
 %                Reinhard et al. curve
+%               -eo_parameters(3): normalization on/off (optional)
 %
 %        Output:
 %           -Lexp: expanded luminance using inverse Reinhard et al. 2002
@@ -32,11 +33,20 @@ function Lexp = InverseReinhard(img, eo_parameters)
 %parameters extraction
 LMaxOut = eo_parameters(1);
 LWhite = eo_parameters(2);
+bNormalization = 1;
+
+if(length(eo_parameters)>2)
+    bNormalization = eo_parameters(3);
+end
 
 %Luminance channel
 L = lum(img);
-maxL = max(max(L));
-L = L/maxL;
+
+if(bNormalization)
+    maxL = max(L(:));
+    minL = min(L(:));
+    L = (L-minL)/(maxL-minL);
+end
 
 %Luminance expansion
 LWhite2 = LWhite^2;

@@ -22,6 +22,7 @@ Run the demos to understand how to use I/O function, visualize images, tone Map 
 
 -Update Report:
 
+12/02/2013: -Fixed TpFerwerda and TsFerwerda functions. Thanks to Miguel Melo.
 23/10/2012: -Added ExposureHistogramCovering.m for sampling exposures with the histogram
 	     using a greedy approach.
 18/10/2012: -Added Boschetti et al. 2011 ICIP paper on HDR compression

@@ -1,16 +1,16 @@
+
 function val=TsFerwerda(x)
 %
-%        val=TsFerwerda(x)
+%       val=TsFerwerda(x)
 %
 %
-%       The gamma function used in Ferwerda TMO for Scotopic levels
+%       The gamma function used in Ferwerda TMO for Photopic levels
 %
 %       Input:
 %           -x: a value
 %
 %       Output:
 %           -val: application of the gamma function
-%
 % 
 %     Copyright (C) 2010 Francesco Banterle
 % 
@@ -30,13 +30,13 @@ function val=TsFerwerda(x)
 
 x2=log10(x);
 
-if(x2<=-2.6)
-    val=-0.72;
+if(x2<=-3.94)
+    val=-2.86;
 else
-    if(x2>=1.9)
-        val=x2-1.255;
+    if(x2>=-1.44)
+        val=x2-0.395;
     else
-        val=(0.249*x2+0.65)^2.7-0.72;
+        val=(0.405*x2+1.6)^2.18-2.86;
     end
 end
 
