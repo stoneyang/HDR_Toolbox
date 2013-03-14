@@ -45,11 +45,15 @@ img_cur_exp = (img*exposure);
 while(bFlag)
     imshow(img_cur_exp.^invGamma);
     [x,y,button] = ginput(1);
-    
+
     if(isempty(x)==0)
+        disp(['Coordinates (',num2str([x,y]),')']);
+        x = round(real(x));
+        y = round(real(y));
+        disp(['Pixel value: [', num2str(img(y,x,:)),']']);
         block = L((y-kernelSize):(y+kernelSize),(x-kernelSize):(x+kernelSize));
         exposure = 0.25/mean(block(:));
-        disp(exposure);
+        disp(['Exposure: ',num2str(exposure)]);
         img_cur_exp = (img*exposure);
         
         if(button==3)
