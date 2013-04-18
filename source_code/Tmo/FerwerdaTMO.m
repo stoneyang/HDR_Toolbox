@@ -33,31 +33,29 @@ check3Color(img);
 L=lum(img);
 
 if(~exist('LdMax')|~exist('Lda'))
-    LdMax=100;
-    Lda=30;
+    LdMax = 100;
+    Lda   = 30;
 end
 
 if(Lda<0)
-    Lda=LdMax/2;
+    Lda = LdMax/2;
 end
 
 %Luminance world adaptation
-Lwa=mean(mean(L));
+Lwa = mean(L(:));
 
 %Contrast reduction
-mR=TpFerwerda(Lda)/TpFerwerda(Lwa);
-mC=TsFerwerda(Lda)/TsFerwerda(Lwa);
-k=ClampImg((1-(Lwa/2-0.01)/(10-0.01))^2,0,1);
+mR = TpFerwerda(Lda)/TpFerwerda(Lwa);
+mC = TsFerwerda(Lda)/TsFerwerda(Lwa);
+k  = ClampImg((1-(Lwa/2-0.01)/(10-0.01))^2,0,1);
 
 %Removing the old luminance
-imgOut=zeros(size(img));
-vec=[1.05,0.97,1.27];
+imgOut = zeros(size(img));
+vec = [1.05,0.97,1.27];
 for i=1:3
     imgOut(:,:,i)=(mC*img(:,:,i)+vec(i)*mR*k*L);
 end
 
 imgOut=imgOut/LdMax;
-
-%imgOut=imgOut/mean(mean(mean(imgOut)));
 
 end
