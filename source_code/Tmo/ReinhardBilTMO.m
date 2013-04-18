@@ -1,4 +1,4 @@
-function [imgOut,pAlpha,pWhite]=ReinhardBilTMO(img, pAlpha, pWhite, pLocal)
+function [imgOut,pAlpha,pWhite]=ReinhardBilTMO(img, pAlpha, pWhite)
 %
 %
 %      imgOut=ReinhardBilTMO(img, pAlpha, pWhite, pLocal)
@@ -8,13 +8,11 @@ function [imgOut,pAlpha,pWhite]=ReinhardBilTMO(img, pAlpha, pWhite, pLocal)
 %           -img: input HDR image
 %           -pAlpha: value of exposure of the image
 %           -pWhite: the white point 
-%           -pLocal: boolean value. If it is true a local version is used
-%                   otherwise a global version.
 %
 %       Output:
 %           -imgOut: output tone mapped image in linear domain
 %           -pAlpha: as in input
-%           -pLocal: as in input
+%           -pWhite: as in input
 % 
 %     Copyright (C) 2011  Francesco Banterle
 % 
@@ -36,12 +34,14 @@ function [imgOut,pAlpha,pWhite]=ReinhardBilTMO(img, pAlpha, pWhite, pLocal)
 check3Color(img);
 
 %Luminance channel
-L=lum(img);
+L = lum(img);
 
-if(~exist('pWhite')||~exist('pAlpha')||~exist('pLocal'))
-    pWhite=2*max(max(L));
-    pAlpha=0.15;
-    pLocal=0;
+if(~exist('pAlpha'))
+    pAlpha = ReinhardAlpha(L);
+end
+
+if(~exist('pWhite'))
+    pWhite = ReinhardWhitePoint(L);
 end
 
 %Logarithmic mean calcultaion
@@ -51,21 +51,15 @@ Lwa=logMean(L);
 L=(pAlpha*L)/Lwa;
 
 %Local calculation?
-if(pLocal)
-    sMax = 9;     
-    alpha1 = 1/(2*sqrt(2));
-    alpha2 = 1.6^sMax;    
-    L_adapt = bilateralFilter(L,[],min(min(L)),max(max(L)),alpha2,alpha1);
-end
+sMax    = 9;     
+alpha1  = 1/(2*sqrt(2));
+alpha2  = 1.6^sMax;    
+L_adapt = bilateralFilter(L,[],min(min(L)),max(max(L)),alpha2,alpha1);
 
-pWhite2=pWhite*pWhite;
+pWhite2 = pWhite*pWhite;
 
 %Range compression
-if(pLocal)
-    Ld=(L.*(1+L/pWhite2))./(1+L_adapt);
-else
-    Ld=(L.*(1+L/pWhite2))./(1+L);
-end
+Ld=(L.*(1+L/pWhite2))./(1+L_adapt);
 
 %Removing the old luminance
 imgOut=zeros(size(img));

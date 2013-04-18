@@ -1,4 +1,4 @@
-function [imgOut,pAlpha,pWhite]=ReinhardTMO(img, pAlpha, pWhite, pLocal, phi)
+function [imgOut,pAlpha,pWhite]=ReinhardTMO(img, pAlpha, pWhite, pLocal, pPhi)
 %
 %
 %      imgOut=ReinhardTMO(img, pAlpha, pWhite, pLocal, phi)
@@ -10,7 +10,7 @@ function [imgOut,pAlpha,pWhite]=ReinhardTMO(img, pAlpha, pWhite, pLocal, phi)
 %           -pWhite: the white point 
 %           -pLocal: boolean value. If it is true a local version is used
 %                   otherwise a global version.
-%           -phi: a parameter which controls the sharpening
+%           -pPhi: a parameter which controls the sharpening
 %
 %       Output:
 %           -imgOut: output tone mapped image in linear domain
@@ -39,11 +39,20 @@ check3Color(img);
 %Luminance channel
 L=lum(img);
 
-if(~exist('pWhite')||~exist('pAlpha')||~exist('pLocal')||~exist('phi'))
-    pWhite=2*max(max(L));
-    pAlpha=0.18;
-    pLocal=0;
-    phi=8;
+if(~exist('pLocal'))
+    pLocal = 0;
+end
+
+if(~exist('pAlpha'))
+    pAlpha = ReinhardAlpha(L);
+end
+
+if(~exist('pWhite'))
+    pWhite = ReinhardWhitePoint(L);
+end
+
+if(~exist('pPhi'))
+    pPhi = 8;
 end
 
 %Logarithmic mean calcultaion
@@ -62,7 +71,7 @@ if(pLocal)
     alpha1=1/(2*sqrt(2));
     alpha2=alpha1*1.6;
     
-    constant=(2^phi)*pAlpha;
+    constant=(2^pPhi)*pAlpha;
     sizeWindow=1;
     for i=1:sMax        
         s = round(sizeWindow);
