@@ -51,25 +51,32 @@ totWeight = zeros (r,c,col);
 
 for i= 1: n
     tmpStack = [];
+    weight = [];
+
     switch lin_type
         case 'linearized'
             tmpStack = stack(:,:,:,i)/255;
+            weight = WeightFunction(tmpStack, weight_type);
+
         case 'gamma2.2'
+            weight = WeightFunction(stack(:,:,:,i)/255, weight_type);
             tmpStack = ((stack(:,:,:,i)/255).^2.2);
+
         case 'function'
+            weight = WeightFunction(tmpStack/255, weight_type);
             tmpStack = lin_fun(stack(:,:,:,i)/255);
+        
         case 'tabledDeb97'
+            weight = WeightFunction(tmpStack/255, weight_type);
             tmpStack = tabledFunction(stack(:,:,:,i), lin_fun);
         otherwise
             tmpStack = [];
     end
    
-    %Calculation of the weight function
-    tmpWeight = WeightFunction(tmpStack, weight_type);
+    %Calculation of the weight function    
+    imgOut = imgOut + (weight.*tmpStack) / stack_exposure(i) ;
     
-    imgOut = imgOut + (tmpWeight.*tmpStack) / stack_exposure(i) ;
-    
-    totWeight = totWeight + tmpWeight;
+    totWeight = totWeight + weight;
 end
 
 imgOut = RemoveSpecials(imgOut ./ totWeight);
