@@ -25,6 +25,6 @@ function same=CheckSameImage(Img1,Img2)
 [r1,c1,col1]=size(Img1);
 [r2,c2,col2]=size(Img2);
 
-same=((r1==r2)&(c1==c2)&(col1==col2));
+same = ((r1==r2)&(c1==c2)&(col1==col2));
 
 end
