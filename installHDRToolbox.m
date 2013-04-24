@@ -33,26 +33,28 @@ d12 = 'Tmo';
 d13 = 'Tmo/util';
 d14 = 'util';
 d15 = 'BatchFunctions';
+d16 = 'Metrics';
 
 cp = pwd();
 
 tmpStr = '/source_code/';
-addpath([cp,tmpStr,d1],'-begin');
-addpath([cp,tmpStr,d2],'-begin');
-addpath([cp,tmpStr,d3],'-begin');
-addpath([cp,tmpStr,d4],'-begin');
-addpath([cp,tmpStr,d5],'-begin');
-addpath([cp,tmpStr,d6],'-begin');
-addpath([cp,tmpStr,d7],'-begin');
-addpath([cp,tmpStr,d8],'-begin');
-addpath([cp,tmpStr,d9],'-begin');
+addpath([cp,tmpStr,d1], '-begin');
+addpath([cp,tmpStr,d2], '-begin');
+addpath([cp,tmpStr,d3], '-begin');
+addpath([cp,tmpStr,d4], '-begin');
+addpath([cp,tmpStr,d5], '-begin');
+addpath([cp,tmpStr,d6], '-begin');
+addpath([cp,tmpStr,d7], '-begin');
+addpath([cp,tmpStr,d8], '-begin');
+addpath([cp,tmpStr,d9], '-begin');
 addpath([cp,tmpStr,d10],'-begin');
 addpath([cp,tmpStr,d11],'-begin');
 addpath([cp,tmpStr,d12],'-begin');
 addpath([cp,tmpStr,d13],'-begin');
 addpath([cp,tmpStr,d14],'-begin');
 addpath([cp,tmpStr,d15],'-begin');
-addpath([cp,'/demos/'],'-begin');
+addpath([cp,tmpStr,d16],'-begin');
+addpath([cp,'/demos/'], '-begin');
 
 savepath
 disp('done!');
@@ -71,6 +73,8 @@ clear('d11');
 clear('d12');
 clear('d13');
 clear('d14');
+clear('d15');
+clear('d16');
 clear('cp');
 
 disp('Check demo1.m and demo2.m on basics for how using the HDR Toolbox!');
