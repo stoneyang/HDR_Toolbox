@@ -8,7 +8,7 @@ function imgOut = imShiftWrap(img, isw_dx)
 %       map encoded as longituted-latitude encoding.
 %
 %       Input:
-%           -img: an image
+%           -img: an input image to be shifted with wrapping
 %           -isw_dx: the amount in pixel for shifting the image on the
 %           X-axis. This can be positive or negative
 %
