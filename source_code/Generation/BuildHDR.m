@@ -1,10 +1,12 @@
-function imgHDR = BuildHDR(format, lin_type, weightFun, stack, stack_exposure)
+function imgHDR = BuildHDR(dir_name, format, lin_type, weightFun, stack, stack_exposure)
 %
-%       imgHDR = BuildHDR(format, lin_type, weightFun, stack, stack_exposure)
+%       imgHDR = BuildHDR(dir_name, format, lin_type, weightFun, stack, stack_exposure)
 %
 %
 %        Input:
-%           -format: an LDR format for reading LDR images in the current directory 
+%           -dir_name: the folder name where the stack is stored as a
+%           series of LDR images.
+%           -format: an LDR format for reading LDR images in dir_name
 %           -lin_type: the linearization function:
 %                      - 'linearized': images are already linearized
 %                      - 'gamma2.2': gamma function 2.2 is used for
@@ -58,7 +60,8 @@ end
 
 if(~exist('stack')&&~exist('stack_exposure'))
     %Read images from the current directory
-    [stack, stack_exposure] = ReadLDRStack(format);
+    stack = ReadLDRStack(dir_name, format);
+    stack_exposure = ReadLDRExif(dir_name, format);
 else
     maxStack = max(stack(:));
     if(maxStack<=1.0)
@@ -66,11 +69,10 @@ else
     end   
 end
 
-%CRF Calculation
 lin_fun = [];
 switch lin_type
     
-    case 'tabledDeb97'
+    case 'tabledDeb97' %Estimating the CRF using Debevec and Malik
         %Weight function
         W = WeightFunction(0:(1/255):1,weightFun);
         %Convert the stack into a smaller stack

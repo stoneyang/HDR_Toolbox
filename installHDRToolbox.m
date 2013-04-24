@@ -34,6 +34,7 @@ d13 = 'Tmo/util';
 d14 = 'util';
 d15 = 'BatchFunctions';
 d16 = 'Metrics';
+d17 = 'Alignment';
 
 cp = pwd();
 
@@ -54,6 +55,7 @@ addpath([cp,tmpStr,d13],'-begin');
 addpath([cp,tmpStr,d14],'-begin');
 addpath([cp,tmpStr,d15],'-begin');
 addpath([cp,tmpStr,d16],'-begin');
+addpath([cp,tmpStr,d17],'-begin');
 addpath([cp,'/demos/'], '-begin');
 
 savepath
@@ -75,6 +77,7 @@ clear('d13');
 clear('d14');
 clear('d15');
 clear('d16');
+clear('d17');
 clear('cp');
 
 disp('Check demo1.m and demo2.m on basics for how using the HDR Toolbox!');

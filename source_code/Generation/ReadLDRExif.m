@@ -1,13 +1,14 @@
-function stack = ReadLDRStack(dir_name, format)
+function exposure = ReadLDRExif(dir_name, format)
 %
-%       stack = ReadLDRStack(dir_name, format)
+%       exposure = ReadLDRExif(dir_name, format)
 %
 %
 %        Input:
-%           -format: an LDR format for reading LDR images in the current directory 
+%           -dir_name: the folder name where the stack is stored.
+%           -format: an LDR format for reading LDR images.
 %
 %        Output:
-%           -stack: a stack of LDR images
+%           -exposure: a stack of exposure values from images in dir_name
 %
 %     Copyright (C) 2011  Francesco Banterle
 % 
@@ -25,23 +26,22 @@ function stack = ReadLDRStack(dir_name, format)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-%Create a stack of images from the disk
 list = dir([dir_name,'/*.',format]);
 n = length(list);
+exposure = zeros(n,1);
 
-stack = [];
 for i=1:n
-    disp(list(i).name);
-    %read an image
-    img = single(imread([dir_name,'/',list(i).name]));
-    
-    [r,c,col]=size(img);  
-    if(i==1)
-        stack = zeros(r,c,col,n);
+    %Read Exif file information
+    if(strcmpi(format,'jpg')==1||strcmpi(format,'jpeg')==1)
+        try
+            exifInfo = exifread([dir_name,'/',list(i).name]);
+            exposure(i) = exifInfo.ExposureTime;
+        catch
+            exposure(i) = 1;
+        end
+    else
+        exposure(i) = 1;
     end
-    
-    %store in the stack
-    stack(:,:,:,i) = img;    
 end
 
 end

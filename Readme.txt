@@ -22,6 +22,7 @@ Run the demos to understand how to use I/O function, visualize images, tone Map 
 
 -Update Report:
 24/04/2013: -Fixed BuildHDR.m and aux files. Thanks to Luis Paulo Dos Santos.
+	    -Added Alignment folder for aligning LDR images, and added demo_build_radiance_map.m
 18/04/2013: -Fixed read_rgbe new line in the header. Thanks to Ronan Boitard.
 12/02/2013: -Fixed TpFerwerda and TsFerwerda functions. Thanks to Miguel Melo.
 23/10/2012: -Added ExposureHistogramCovering.m for sampling exposures with the histogram
