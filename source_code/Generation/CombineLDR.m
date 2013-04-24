@@ -20,9 +20,13 @@ function imgOut = CombineLDR(stack, stack_exposure, lin_type, lin_fun, weight_ty
 %                                       method
 %           -lin_fun: extra parameters for linearization, see lin_type
 %           -weight_type:
-%               - 'all': weight is set to 1
-%               - 'hat': hat function 1-(2x-1)^12
+%               - 'all':   weight is set to 1
+%               - 'hat':   hat function 1-(2x-1)^12
 %               - 'Deb97': Debevec and Malik 97 weight function
+%               - 'Gauss': Gaussian function as weight function.
+%                          This function produces good results when some 
+%                          under-exposed or over-exposed images are present
+%                          in the stack.
 %
 %        Output:
 %           -imgOut: the combined HDR image from the stack
@@ -45,45 +49,44 @@ function imgOut = CombineLDR(stack, stack_exposure, lin_type, lin_fun, weight_ty
 
 [r,c,col,n] = size(stack);
 
-imgOut = zeros(r,c,col);
+imgOut    = zeros(r,c,col);
+totWeight = zeros(r,c,col);
 
-totWeight = zeros (r,c,col);
-
-for i= 1: n
-    tmpStack = [];
-    weight = [];
-
+for i=1:n
+    weight   = [];
+    img_lin  = [];
+    tmpStack = stack(:,:,:,i);
+    
     switch lin_type
         case 'linearized'
-            tmpStack = stack(:,:,:,i)/255;
-            weight = WeightFunction(tmpStack, weight_type);
+            img_lin = tmpStack/255;
+            weight  = WeightFunction(img_lin,      weight_type);
 
         case 'gamma2.2'
-            weight = WeightFunction(stack(:,:,:,i)/255, weight_type);
-            tmpStack = ((stack(:,:,:,i)/255).^2.2);
+            tmpStack = tmpStack/255;
+            weight  = WeightFunction(tmpStack,     weight_type);
+            img_lin = tmpStack.^2.2;
 
         case 'function'
-            weight = WeightFunction(tmpStack/255, weight_type);
-            tmpStack = lin_fun(stack(:,:,:,i)/255);
+            tmpStack = tmpStack/255;
+            weight  = WeightFunction(tmpStack,     weight_type);
+            img_lin = lin_fun(stack(:,:,:,i));
         
         case 'tabledDeb97'
-            weight = WeightFunction(tmpStack/255, weight_type);
-            tmpStack = tabledFunction(stack(:,:,:,i), lin_fun);
+            weight  = WeightFunction(tmpStack/255, weight_type);
+            img_lin = tabledFunction(tmpStack, lin_fun);
+            
         otherwise
-            tmpStack = [];
     end
    
     %Calculation of the weight function    
-    imgOut = imgOut + (weight.*tmpStack) / stack_exposure(i) ;
+    imgOut    = imgOut + (weight.*img_lin) / stack_exposure(i);
     
     totWeight = totWeight + weight;
 end
 
-if(~isempty(find(totWeight<=0.0)))
-    disp('WARNING: the final HDR image has some saturated pixels. Try to use ''Gauss'' weight function.');
-end
-
 totWeight(totWeight<=0.0) = 1.0;
-imgOut = imgOut ./ totWeight;
+
+imgOut = (imgOut ./ totWeight);
 
 end

@@ -32,7 +32,7 @@ stackOut = [];
 
 for i=1:n
     tmpStack = stack(:,:,:,i);
-    tmpStack = round(imresize(tmpStack,0.01,'bilinear'));
+    tmpStack = round(imresize(tmpStack,0.01,'nearest'));
     [r,c,col] = size(tmpStack);  
     
     if(i==1)

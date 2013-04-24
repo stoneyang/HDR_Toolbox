@@ -1,6 +1,6 @@
 function imgHDR = BuildHDR(format, lin_type, weightFun, stack, stack_exposure)
 %
-%       imgHDR = BuildHDR(format)
+%       imgHDR = BuildHDR(format, lin_type, weightFun, stack, stack_exposure)
 %
 %
 %        Input:
@@ -17,9 +17,13 @@ function imgHDR = BuildHDR(format, lin_type, weightFun, stack, stack_exposure)
 %                                       lin_fun using Debevec and Malik 97
 %                                       method
 %           -weight_type:
-%               - 'all': weight is set to 1
-%               - 'hat': hat function 1-(2x-1)^12
+%               - 'all':   weight is set to 1
+%               - 'hat':   hat function 1-(2x-1)^12
 %               - 'Deb97': Debevec and Malik 97 weight function
+%               - 'Gauss': Gaussian function as weight function.
+%                          This function produces good results when some 
+%                          under-exposed or over-exposed images are present
+%                          in the stack.
 %           -stack: a stack of LDR images; 4-D array where values are
 %           -stack_exposure: exposure values of the stack in seconds
 %
@@ -56,8 +60,7 @@ if(~exist('stack')&&~exist('stack_exposure'))
     %Read images from the current directory
     [stack, stack_exposure] = ReadLDRStack(format);
 else
-    %
-    maxStack = max(max(max(max(stack))));
+    maxStack = max(stack(:));
     if(maxStack<=1.0)
         stack = stack * 255;
     end   
@@ -66,18 +69,20 @@ end
 %CRF Calculation
 lin_fun = [];
 switch lin_type
+    
     case 'tabledDeb97'
         %Weight function
-        W = WeightFunction(0:1/255:1,weightFun);
+        W = WeightFunction(0:(1/255):1,weightFun);
         %Convert the stack into a smaller stack
         stack2 = StackLowRes(stack);
         %Linearization process using Debevec and Malik 1998's method
         lin_fun = zeros(256,3);
         log_stack_exposure = log(stack_exposure);
         for i=1:3
-            g=gsolve(stack2(:,:,i),log_stack_exposure,10,W);
-            lin_fun(:,i)=(g/max(g));
+            g = gsolve(stack2(:,:,i),log_stack_exposure,10,W);
+            lin_fun(:,i) = (g/max(g));
         end
+        
     otherwise    
 end
 
