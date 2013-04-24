@@ -2,13 +2,14 @@ Title: The Laplacian Pyramid Toolbox for Matlab
 
 Author: Francesco Banterle
 
-Copyright: February 2010 (C)
+Copyright: February 2010-2013 (C)
 
 Description: This toolbox allows the user to
 represent images using Laplacian/Gaussian pyramids.
 
 Functions:
 
+- pryBlend.m: blends to images using a weight image
 - pyrGaussGen.m: generates a Gaussian pyramid from a greyscale image
 - pyrLapGen.m: generates a Laplacian pyramid from a greyscale image
 - pyrEmptyGen.m: generates an empty pyramid
