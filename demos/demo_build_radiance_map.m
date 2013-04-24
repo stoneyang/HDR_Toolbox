@@ -4,8 +4,8 @@
 %	   2) Align the stack
 %	   3) Read exposure values from the exif
 %	   4) Build the radiance map using the stack and stack_exposure
-%	   5) Save the radiance map
-%	   6) Show a tone mapped version
+%	   5) Save the radiance map in .hdr format
+%	   6) Show the tone mapped version of the radiance map
 %       Author: Francesco Banterle
 %       Copyright June 2012 (c)
 %
@@ -24,8 +24,8 @@ stack_exposure = ReadLDRExif('stack_alignment', 'jpg');
 disp('4) Build the radiance map using the stack and stack_exposure');
 imgHDR = BuildHDR([], [], 'tabledDeb97', 'Gauss', stackOut, stack_exposure);
 
-disp('5) Save the radiance map');
+disp('5) Save the radiance map in the .hdr format');
 hdrimwrite(imgHDR,'example_build_alignment.hdr');
 
-disp('6) Show the image after fusion, note that there is no need of gamma correction!');
+disp('6) Show the tone mapped version of the radiance map');
 GammaTMO(ReinhardBilTMO(imgHDR), 2.2, 0, 1);
