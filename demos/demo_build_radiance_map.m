@@ -22,7 +22,7 @@ disp('3) Read exposure values from the exif');
 stack_exposure = ReadLDRExif('stack_alignment', 'jpg');
 
 disp('4) Build the radiance map using the stack and stack_exposure');
-imgHDR = BuildHDR([], [], 'tabledDeb97', 'hat', stackOut, stack_exposure);
+imgHDR = BuildHDR([], [], 'tabledDeb97', 'Gauss', stackOut, stack_exposure);
 
 disp('5) Save the radiance map');
 hdrimwrite(imgHDR,'example_build_alignment.hdr');
