@@ -85,6 +85,10 @@ for i=1:n
     totWeight = totWeight + weight;
 end
 
+if(~isempty(find(totWeight<=0.0)))
+    disp('WARNING: the stack has saturated pixels in all the stack, please use ''Gauss'' weighting function to avoid artifacts.');
+end
+
 totWeight(totWeight<=0.0) = 1.0;
 
 imgOut = (imgOut ./ totWeight);
