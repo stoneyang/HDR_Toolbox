@@ -79,6 +79,11 @@ for i= 1: n
     totWeight = totWeight + weight;
 end
 
-imgOut = RemoveSpecials(imgOut ./ totWeight);
+if(~isempty(find(totWeight<=0.0)))
+    disp('WARNING: the final HDR image has some saturated pixels. Try to use ''Gauss'' weight function.');
+end
+
+totWeight(totWeight<=0.0) = 1.0;
+imgOut = imgOut ./ totWeight;
 
 end
