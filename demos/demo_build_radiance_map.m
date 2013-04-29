@@ -7,7 +7,7 @@
 %	   5) Save the radiance map
 %	   6) Show a tone mapped version
 %       Author: Francesco Banterle
-%       Copyright June 2012 (c)
+%       Copyright June 2013 (c)
 %
 %
 
@@ -28,4 +28,4 @@ disp('5) Save the radiance map');
 hdrimwrite(imgHDR,'example_build_alignment.hdr');
 
 disp('6) Show the image after fusion, note that there is no need of gamma correction!');
-GammaTMO(ReinhardBilTMO(imgHDR), 2.2, 0, 1);
+GammaTMO(ReinhardBilTMO(imresize(imgHDR,0.5,'bilinear')), 2.2, 0, 1);
