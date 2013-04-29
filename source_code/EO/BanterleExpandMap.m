@@ -162,7 +162,7 @@ if(BEM_bColorRec)
         if(BEM_bHighQuality)
             expand_map(:,:,i) = LischinskiMinimization(img(:,:,i),expand_map_de(:,:,i),0.07*ones(r,c));
         else
-            expand_map(:,:,i) = bilateralfilter(expand_map_de(:,:,i),img(:,:,i));
+            expand_map(:,:,i) = bilateralFilter(expand_map_de(:,:,i),img(:,:,i));
         end
     end
 else    
