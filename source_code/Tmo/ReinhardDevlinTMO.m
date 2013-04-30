@@ -6,10 +6,10 @@ function imgOut = ReinhardDevlinTMO(img, rd_f, rd_m, rd_a, rd_c)
 %
 %       Input:
 %           -img: input HDR image
-%	    -rd_f: overall intensity in [0.3, 1.0]
-%	    -rd_m: contrast in [-8.0, 8.0]
-%	    -rd_a: adaptation in [0.0, 1.0]
-%	    -rd_c: color correction [0.0, 1.0]
+%           -rd_f: overall intensity in [0.3, 1.0]
+%           -rd_m: contrast in [-8.0, 8.0]
+%           -rd_a: adaptation in [0.0, 1.0]
+%           -rd_c: color correction [0.0, 1.0]
 %
 %       Output:
 %           -imgOut: output tone mapped image in linear domain
@@ -34,13 +34,15 @@ function imgOut = ReinhardDevlinTMO(img, rd_f, rd_m, rd_a, rd_c)
 check3Color(img);
 
 %Luminance channel
-L = lum(img);
+L   = lum(img);
 Lav = logMean(L);
 
 if(~exist('rd_m'))
+    LMax = MaxQuart(L, 0.99);
+    LMin = MaxQuart(L, 0.01);
     Lmax = max(L(:));
     Lmin = min(L(:));
-    k = (log(Lmax) - log(Lav))/(log(Lmax)-log(Lmin));
+    k = (log2(Lmax+1e-9) - log2(Lav+1e-9))/(log2(Lmax+1e-9)-log2(Lmin+1e-9));
     rd_m = 0.3 + 0.7*k^1.4;
 else
     rd_m = ClampImg(rd_m, 0.3, 1.0);
@@ -75,9 +77,11 @@ for i=1:3
     I_g = rd_c*Cav        + (1-rd_c)*Lav;
     I_a = rd_a*I_l        + (1-rd_a)*I_g;
 
-    imgOut(:,:,i) = img(:,:,i)./(img(:,:,i)+(rd_f*I_a)^rd_m);
+    imgOut(:,:,i) = img(:,:,i)./(img(:,:,i)+(rd_f*I_a).^rd_m);
 end
 
 imgOut = RemoveSpecials(imgOut);
+
+disp('Suggested gamma correction for displaying imgOut is 1.6');
 
 end

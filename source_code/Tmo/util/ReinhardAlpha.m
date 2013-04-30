@@ -27,7 +27,7 @@ function alpha = ReinhardAlpha(L)
 %
 
 LMax = MaxQuart(L, 0.99);
-LMin = MaxQuart(L, 0.11);
+LMin = MaxQuart(L, 0.01);
 
 log2Max     = log2(LMax+1e-9);
 log2Min     = log2(LMin+1e-9);
