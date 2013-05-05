@@ -35,29 +35,30 @@ check3Color(img);
 L=lum(img);
 
 if(~exist('Drago_Ld_Max'))
-    Drago_Ld_Max=100;
+    Drago_Ld_Max = 100;
 end
 
 if(~exist('Drago_b'))   
-    Drago_b=0.95;
+    Drago_b = 0.95;
 end
 
 if(~exist('Drago_LMax'))   
-    Drago_LMax=max(max(L));
+    Drago_LMax = max(L(:));
 end
+
 %Max luminance
-LMax=Drago_LMax*0.5+0.5*max(max(L));
+LMax = Drago_LMax*0.5+0.5*max(L(:));
 Drago_LMax = LMax;
 
-constant=log(Drago_b)/log(0.5);
-costant2=(Drago_Ld_Max/100)/(log10(1+LMax));
+constant = log(Drago_b)/log(0.5);
+costant2 = (Drago_Ld_Max/100)/(log10(1+LMax));
 
-Ld=costant2*log(1+L)./log(2+8*((L/LMax).^constant));
+Ld = costant2*log(1+L)./log(2+8*((L/LMax).^constant));
 
 %Removing the old luminance
-imgOut=zeros(size(img));
+imgOut = zeros(size(img));
 for i=1:3
-    imgOut(:,:,i)=img(:,:,i).*Ld./L;
+    imgOut(:,:,i) = img(:,:,i).*Ld./L;
 end
 
 imgOut=RemoveSpecials(imgOut);

@@ -34,8 +34,8 @@ g2 = pyrGaussGen(1-weight);
 
 imgOut = zeros(size(img1));
 for i=1:3
-    tpg1 = pyrLst2OP(p1(i),g1,@pyrMul);
-    tpg2 = pyrLst2OP(p2(i),g2,@pyrMul);
+    tpg1 = pyrLst2OP(p1(i),g1, @pyrMul);
+    tpg2 = pyrLst2OP(p2(i),g2, @pyrMul);
     tf   = pyrLst2OP(tpg1,tpg2,@pyrAdd);
     
     imgOut(:,:,i) = pyrVal(tf);
