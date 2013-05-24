@@ -30,8 +30,7 @@ function [imgOut,pAlpha,pWhite]=ReinhardBilTMO(img, pAlpha, pWhite)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-%is it a three color channels image?
-check3Color(img);
+check13Color(img);
 
 %Luminance channel
 L = lum(img);
@@ -45,28 +44,22 @@ if(~exist('pWhite'))
 end
 
 %Logarithmic mean calcultaion
-Lwa=logMean(L);
+Lwa = logMean(L);
 
 %Scale luminance using alpha and logarithmic mean
-L=(pAlpha*L)/Lwa;
+Lscaled = (pAlpha*L)/Lwa;
 
 %Local calculation?
 sMax    = 9;     
 alpha1  = 1/(2*sqrt(2));
 alpha2  = 1.6^sMax;    
-L_adapt = bilateralFilter(L,[],min(min(L)),max(max(L)),alpha2,alpha1);
+L_adapt = bilateralFilter(Lscaled,[],min(Lscaled(:)),max(Lscaled(:)),alpha2,alpha1);
 
 pWhite2 = pWhite*pWhite;
 
 %Range compression
-Ld=(L.*(1+L/pWhite2))./(1+L_adapt);
+Ld = (Lscaled.*(1+Lscaled/pWhite2))./(1+L_adapt);
 
-%Removing the old luminance
-imgOut=zeros(size(img));
-for i=1:3
-    imgOut(:,:,i)=img(:,:,i)./lum(img).*Ld;
-end
-
-imgOut=RemoveSpecials(imgOut);
-
+%Changing luminance
+imgOut = ChangeLuminance(img, L, Ld);
 end

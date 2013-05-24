@@ -30,11 +30,25 @@ function imgOut=SchlickTMO(img, schlick_mode, schlick_p, schlick_bit, schlick_dL
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-%is it a three color channels image?
-check3Color(img);
+check13Color(img);
 
-if(~exist('schlick_mode')|~exist('schlick_p')|~exist('schlick_bit')|~exist('schlick_dL0')|~exist('schlick_k'))
-    schlick_mode='standard';
+if(~exist('schlick_mode'))
+    schlick_mode = 'nonuniform';
+end
+
+if(~exist('schlick_bit'))
+    schlick_bit = 8;
+end
+
+if(~exist('schlick_dL0'))
+    schlick_dL0 = 1;
+end
+
+if(~exist('schlick_k'))
+    schlick_k = 0.5;
+end
+
+if(~exist('schlick_p'))
     schlick_p=1/0.005;
 end
 
@@ -42,10 +56,10 @@ end
 L=lum(img);
 
 %Max Luminance value 
-LMax= max(L(:));
+LMax = max(L(:));
 
 %Min Luminance value 
-LMin=min(L(:));
+LMin = min(L(:));
 if(LMin<=0.0)
      LMin=min(min(L(LMin>0.0)));
 end
@@ -53,27 +67,22 @@ end
 %Mode selection
 switch schlick_mode
     case 'standard'
-        p=schlick_p;        
+        p = schlick_p;        
         if(p<1)
             p=1;
         end
         
     case 'calib'
-        p=schlick_dL0*LMax/(2^schlick_bit*LMin);
+        p = schlick_dL0*LMax/(2^schlick_bit*LMin);
         
     case 'nonuniform'
-        p=schlick_dL0*LMax/(2^schlick_bit*LMin);
-        p=p*(1-schlick_k+schlick_k*L/sqrt(LMax*LMin));
+        p = schlick_dL0*LMax/(2^schlick_bit*LMin);
+        p = p*(1-schlick_k+schlick_k*L/sqrt(LMax*LMin));
 end
 
 %Dynamic Range Reduction
 Ld=p.*L./((p-1).*L+LMax);
-
-%Removing the old luminance
-imgOut=zeros(size(img));
-for i=1:3
-    imgOut(:,:,i)=(img(:,:,i).*Ld)./L;
-end
-imgOut=RemoveSpecials(imgOut);
+%Changing luminance
+imgOut = ChangeLuminance(img, L, Ld);
 
 end

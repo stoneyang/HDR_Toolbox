@@ -1,4 +1,4 @@
-Images Copyright © 2008-2012 Francesco Banterle:
+Images Copyright © 2008-2013 Francesco Banterle:
 - Bottles_Small.pfm
 - Oxford_Church.pfm
 - Venice01.png

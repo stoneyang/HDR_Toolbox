@@ -30,8 +30,7 @@ function imgOut = ReinhardDevlinTMO(img, rd_f, rd_m, rd_a, rd_c)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-%is it a three color channels image?
-check3Color(img);
+check13Color(img);
 
 %Luminance channel
 L   = lum(img);
@@ -66,11 +65,11 @@ else
     rd_a = ClampImg(rd_a, 0.0, 1.0);
 end
 
-imgOut = zeros(size(img));
-
 rd_f = exp(-rd_f);
 
-for i=1:3
+[r,c,col] = size(img);
+imgOut = zeros(r,c,col);
+for i=1:col
     Cav = mean(mean(img(:,:,i)));
 
     I_l = rd_c*img(:,:,i) + (1-rd_c)*L;

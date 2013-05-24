@@ -5,7 +5,7 @@ function check3Color(img)
 %
 %
 %        Input:
-%           -img: an image to be tested if it is a three colour channels
+%           -img: an image to be tested if it is a three color channels
 %           image
 %
 %     Copyright (C) 2011  Francesco Banterle

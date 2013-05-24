@@ -33,8 +33,7 @@ function [imgOut,pAlpha,pWhite]=ReinhardTMO(img, pAlpha, pWhite, pLocal, pPhi)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-%is it a three color channels image?
-check3Color(img);
+check13Color(img);
 
 %Luminance channel
 L=lum(img);
@@ -107,12 +106,7 @@ else
     Ld=(L.*(1+L/pWhite2))./(1+L);
 end
 
-%Removing the old luminance
-imgOut=zeros(size(img));
-for i=1:3
-    imgOut(:,:,i)=img(:,:,i)./lum(img).*Ld;
-end
-
-imgOut=RemoveSpecials(imgOut);
+%Changing luminance
+imgOut = ChangeLuminance(img, lum(img), Ld);
 
 end

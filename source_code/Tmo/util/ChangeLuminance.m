@@ -1,18 +1,18 @@
-function l=lum(img)
+function imgOut = ChangeLuminance(img, Lold, Lnew)
 %
-%       l=lum(img)
-%
-%       This function calculates the luminance
+%       imgOut = ChangeLuminance(img, Lold, Lnew)
 %
 %
-%       input:
-%           img: an RGB image
+%       Input:
+%           -img: input image
+%           -Lold: old luminance
+%           -Lnew: new luminance
 %
-%       output:
-%           l: luminance as XYZ color 
-%
-%     Copyright (C) 2011  Francesco Banterle
+%       Output
+%           -imgOut: output image with Lnew luminance
 % 
+%     Copyright (C) 2013  Francesco Banterle
+%
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
 %     the Free Software Foundation, either version 3 of the License, or
@@ -27,15 +27,14 @@ function l=lum(img)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-col = size(img,3);
+%Removing the old luminance
+[r,c,col] = size(img);
+imgOut = zeros(r,c,col);
 
-switch col
-    case 1
-        l = img;
-    case 3
-        l=0.213*img(:,:,1)+0.715*img(:,:,2)+0.072*img(:,:,3);
-    otherwise
-         error('The input image is not an RGB or luminance image!');
+for i=1:col
+    imgOut(:,:,i) = (img(:,:,i).*Lnew)./Lold;
 end
+
+imgOut = RemoveSpecials(imgOut);
 
 end
