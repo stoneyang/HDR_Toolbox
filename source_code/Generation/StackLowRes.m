@@ -36,10 +36,10 @@ for i=1:n
     [r,c,col] = size(tmpStack);  
     
     if(i==1)
-        stackOut = zeros(r*c,n,3);
+        stackOut = zeros(r*c,n,col);
     end
     
-    for j=1:3
+    for j=1:col
         stackOut(:,i,j) = reshape(tmpStack(:,:,j),r*c,1);
     end
 end

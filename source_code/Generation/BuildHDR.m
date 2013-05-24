@@ -78,9 +78,12 @@ switch lin_type
         %Convert the stack into a smaller stack
         stack2 = StackLowRes(stack);
         %Linearization process using Debevec and Malik 1998's method
-        lin_fun = zeros(256,3);
+        [nPixel, nStack, nCol] = size(stack2);
+        
+        lin_fun = zeros(256,nCol);
         log_stack_exposure = log(stack_exposure);
-        for i=1:3
+
+        for i=1:nCol
             g = gsolve(stack2(:,:,i),log_stack_exposure,10,W);
             lin_fun(:,i) = (g/max(g));
         end
