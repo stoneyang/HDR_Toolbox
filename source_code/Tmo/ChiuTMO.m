@@ -1,4 +1,4 @@
-function imgOut=ChiuTMO(img, k, sigma, clamping, glare, glare_n, glare_width)
+function imgOut=ChiuTMO(img, chiu_k, chiu_sigma, chiu_clamping, chiu_glare, chiu_glare_n, chiu_glare_width)
 %
 %       imgOut = ChiuTMO(img, k, sigma, clamping, glare, glare_n, glare_width)
 %
@@ -36,31 +36,52 @@ function imgOut=ChiuTMO(img, k, sigma, clamping, glare, glare_n, glare_width)
 %
 
 %Is it a three color channels image?
-check3Color(img);
+check13Color(img);
 
 %Luminance channel
 L=lum(img);
 
 %default parameters
-if(~exist('k')|~exist('sigma')|~exist('clamping')|~exist('glare')|~exist('glare_n'))
-    k=8;
-    [r,c,col]=size(img);
-    sigma=round(16*max([r,c])/1024)+1;
-    clamping=500;
-    glare=0.8;
-    glare_n=8;
-    glare_width=121;
+if(~exist('chiu_k'))
+    chiu_k = 8;
+end
+
+if(~exist('chiu_sigma'))
+    r = size(img,1);
+    c = size(img,2);
+    chiu_sigma = round(16*max([r,c])/1024)+1;
+end
+
+if(~exist('chiu_clamping'))
+    chiu_clamping=500;
+end
+
+if(~exist('chiu_glare'))
+    chiu_glare = 0.8;
+end
+
+if(~exist('chiu_glare_n'))
+    chiu_glare_n = 8;    
+end
+
+if(~exist('chiu_glare_width'))
+    chiu_glare_width=121;
 end
 
 %Check parameters
-if(k<=0) k=8; end
-if(sigma<=0) sigma=round(16*max([r,c])/1024)+1; end
+if(chiu_k<=0)
+    chiu_k = 8;
+end
+
+if(chiu_sigma<=0)
+    chiu_sigma = round(16*max([r,c])/1024)+1;
+end
     
 %Calculating S
-blurred = RemoveSpecials(1./(k*GaussianFilter(L,sigma)));
+blurred = RemoveSpecials(1./(chiu_k*GaussianFilter(L,chiu_sigma)));
 
 %Clamping S
-if(clamping>0)
+if(chiu_clamping>0)
     iL=RemoveSpecials(1./L);
     indx=find(blurred>=iL);
     blurred(indx)=iL(indx);
@@ -70,7 +91,7 @@ if(clamping>0)
         0.113,0.227,0.113;...
         0.080,0.113,0.080];
 
-    for i=1:clamping
+    for i=1:chiu_clamping
         blurred = imfilter(blurred,H2,'replicate');
     end
 end
@@ -78,30 +99,25 @@ end
 %Dynamic range reduction
 Ld=L.*blurred;
 
-if(glare>0)
+if(chiu_glare>0)
     %Calculation of a kernel with a Square Root shape for simulating glare
-    window2=round(glare_width/2);
+    window2=round(chiu_glare_width/2);
     [x,y]=meshgrid(-1:1/window2:1,-1:1/window2:1);
-    H3=(1-glare)*(abs(sqrt(x.^2+y.^2)-1)).^glare_n;    
+    H3=(1-chiu_glare)*(abs(sqrt(x.^2+y.^2)-1)).^chiu_glare_n;    
     H3(window2+1,window2+1)=0;
 
     %Circle of confusion of the kernel
     H3(find(sqrt(x.^2+y.^2)>1))=0;
 
     %Normalization of the kernel
-    H3=H3/sum(sum(H3));
-    H3(window2+1,window2+1)=glare;
+    H3=H3/sum(H3(:));
+    H3(window2+1,window2+1)=chiu_glare;
    
     %Filtering
     Ld = imfilter(Ld,H3,'replicate');
 end
 
-%Removing the old luminance
-imgOut=zeros(size(img));
-for i=1:3
-    imgOut(:,:,i)=img(:,:,i).*Ld./L;
-end
-
-imgOut=RemoveSpecials(imgOut);
+%Changing luminance
+imgOut = ChangeLuminance(img, L, Ld);
 
 end

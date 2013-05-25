@@ -1,4 +1,4 @@
-function imgOut=WardGlobalTMO(img,Ld_Max)
+function imgOut=WardGlobalTMO(img, Ld_Max)
 %
 %       imgOut=Ward1TMO(img,Ld_Max)
 %
@@ -27,14 +27,14 @@ function imgOut=WardGlobalTMO(img,Ld_Max)
 %
 
 %Is it a three color channels image?
-check3Color(img);
-
-%Luminance channel
-L=lum(img);
+check13Color(img);
 
 if(~exist('Ld_Max'))
     Ld_Max=100;
 end
+
+%Luminance channel
+L=lum(img);
 
 %harmonic mean
 Lwa=logMean(L);

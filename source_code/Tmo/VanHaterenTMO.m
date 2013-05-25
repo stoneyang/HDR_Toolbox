@@ -26,8 +26,7 @@ function imgOut = VanHaterenTMO(img)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-%Is it a three colour channels image?
-check3Color(img);
+check13Color(img);
 
 pupil_area = 10; %fixed pupil area 10 mm^2
 k_beta = 1.6e-4; % td/ms
@@ -57,12 +56,7 @@ end
 
 Ld = ClampImg(1-Ios/maxIos,0,1);
 
-%Removing the old luminance
-imgOut=zeros(size(img));
-for i=1:3
-    imgOut(:,:,i)=img(:,:,i).*Ld./Lori;
-end
-
-imgOut=RemoveSpecials(imgOut);
+%Changing luminance
+imgOut = ChangeLuminance(img, Lori, Ld);
 
 end

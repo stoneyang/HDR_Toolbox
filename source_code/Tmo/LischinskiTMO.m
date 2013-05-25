@@ -28,13 +28,15 @@ function imgOut = LischinskiTMO(img, LSC_alpha)
 %
 
 %is it a three color channels image?
-check3Color(img);
+check13Color(img);
+
+%Is alpha defined?
+if(~exist('LSC_alpha'))
+    LSC_alpha=0.5;
+end
 
 %Luminance channel
 L=lum(img);
-
-%Is alpha defined?
-if(~exist('LSC_alpha')) LSC_alpha=0.5; end
 
 %Number of zones in the image
 maxL = max(max(L));
@@ -59,10 +61,9 @@ end
 
 %Minimization process
 fstopMap = LischinskiMinimization(log2(L+epsilon), fstopMap, 0.07*ones(size(L)));
-hdrimwrite(fstopMap,'LC_after_min.pfm');
-
 imgOut = zeros(size(img));
-for i=1:3
+col = size(img,3);
+for i=1:col
     imgOut(:,:,i) = img(:,:,i).*2.^fstopMap;
 end
 

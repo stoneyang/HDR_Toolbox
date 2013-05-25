@@ -27,16 +27,16 @@ function imgOut = FattalTMO(img, fBeta)
 %
 
 %is it a three color channels image?
-check3Color(img);
-
-%Luminance channel
-Lori=lum(img);
+check13Color(img);
 
 if(~exist('fBeta'))
     fBeta = 0.95;
 end
 
-L=log(Lori+1e-6);
+%Luminance channel
+Lori=lum(img);
+
+L = log(Lori+1e-6);
 
 %Computing Gaussian Pyramid + Gradient
 [r,c]=size(L);
@@ -82,11 +82,7 @@ divG = RemoveSpecials(dx+dy);
 Ld = exp(PoissonSolver(divG));
 Ld = ClampImg(Ld/MaxQuart(Ld, 0.99995),0,1);
 
-%Removing the old luminance
-imgOut=zeros(size(img));
-for i=1:3
-     imgOut(:,:,i)=img(:,:,i)./Lori.*Ld;
-end
- 
-imgOut=RemoveSpecials(imgOut);
+%Changing luminance
+imgOut = ChangeLuminance(img, Lori, Ld);
+
 end

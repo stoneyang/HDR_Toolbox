@@ -28,7 +28,9 @@ function imgOut = DurandTMO(img, Lda, CMax)
 %
 
 %is it a three color channels image?
-check3Color(img);
+check13Color(img);
+
+col = size(img,3);
 
 %Luminance channel
 L=lum(img);
@@ -48,14 +50,14 @@ end
 [Lbase,Ldetail]=BilateralSeparation(L);
 
 %Tumblin-Rushmeier TMO
-for i=1:3
+for i=1:col
     img(:,:,i)=img(:,:,i).*Lbase;
 end
 
 imgOut = TumblinRushmeierTMO(img, Lda, CMax);
 
 %Adding details back
-for i=1:3
+for i=1:col
     imgOut(:,:,i)=imgOut(:,:,i).*Ldetail;
 end
 

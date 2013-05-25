@@ -27,19 +27,22 @@ function imgOut=FerwerdaTMO(img, LdMax, Lda)
 %          -imgOut: tone mapped image
 
 %is it a three color channels image?
-check3Color(img);
+check13Color(img);
 
-%Luminance channel
-L=lum(img);
-
-if(~exist('LdMax')|~exist('Lda'))
+if(~exist('LdMax'))
     LdMax = 100;
+end
+
+if(~exist('Lda'))
     Lda   = 30;
 end
 
 if(Lda<0)
     Lda = LdMax/2;
 end
+
+%Luminance channel
+L=lum(img);
 
 %Luminance world adaptation
 Lwa = mean(L(:));
@@ -50,9 +53,10 @@ mC = TsFerwerda(Lda)/TsFerwerda(Lwa);
 k  = ClampImg((1-(Lwa/2-0.01)/(10-0.01))^2,0,1);
 
 %Removing the old luminance
+col = size(img,3);
 imgOut = zeros(size(img));
 vec = [1.05,0.97,1.27];
-for i=1:3
+for i=1:col
     imgOut(:,:,i)=(mC*img(:,:,i)+vec(i)*mR*k*L);
 end
 

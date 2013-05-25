@@ -29,10 +29,7 @@ function [imgOut,Drago_LMax]=DragoTMO(img, Drago_Ld_Max, Drago_b,Drago_LMax)
 %
 
 %Is it a three color channels image?
-check3Color(img);
-
-%Luminance channel
-L=lum(img);
+check13Color(img);
 
 if(~exist('Drago_Ld_Max'))
     Drago_Ld_Max = 100;
@@ -46,6 +43,9 @@ if(~exist('Drago_LMax'))
     Drago_LMax = max(L(:));
 end
 
+%Luminance channel
+L=lum(img);
+
 %Max luminance
 LMax = Drago_LMax*0.5+0.5*max(L(:));
 Drago_LMax = LMax;
@@ -55,12 +55,7 @@ costant2 = (Drago_Ld_Max/100)/(log10(1+LMax));
 
 Ld = costant2*log(1+L)./log(2+8*((L/LMax).^constant));
 
-%Removing the old luminance
-imgOut = zeros(size(img));
-for i=1:3
-    imgOut(:,:,i) = img(:,:,i).*Ld./L;
-end
-
-imgOut=RemoveSpecials(imgOut);
+%Changing luminance
+imgOut = ChangeLuminance(img, L, Ld);
 
 end

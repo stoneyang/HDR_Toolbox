@@ -27,7 +27,7 @@ function imgOut = KrawczykTMO(img)
 %
 
 %is it a three color channels image?
-check3Color(img);
+check13Color(img);
 
 %Calculate the histrogram of the HDR image in Log10 space
 [histo,bound,haverage]=HistogramHDR(img,256,'log10',0);
@@ -180,12 +180,6 @@ Ld=ClampImg(Y,-2,0);
 %Remap values in [0,1]
 Ld=(10.^(Ld+2))/100;
 
-%Removing the old luminance
-imgOut=zeros(size(img));
-for i=1:3
-    imgOut(:,:,i)=img(:,:,i).*Ld./L;
-end
-
-imgOut=RemoveSpecials(imgOut);
-
+%Changing luminance
+imgOut = ChangeLuminance(img, L, Ld);
 end

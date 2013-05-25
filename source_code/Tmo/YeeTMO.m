@@ -31,22 +31,29 @@ function [imgOut,La]=YeeTMO(img, nLayer, CMax, Lda)
 %
 
 %is it a three color channels image?
-check3Color(img);
+check13Color(img);
+
+if(~exist('nLayer'))
+    nLayer=64;
+end
+
+if(~exist('CMax'))
+    CMax=100;
+end
+
+if(~exist('Lda'))
+    Lda=80;
+end
 
 %Luminance channel
 L=lum(img);
 
-if(~exist('nLayer')|~exist('CMax')|~exist('Lda'))
-    nLayer=64;
-    CMax=100;
-    Lda=80;
-end
-
 %calculation of the adaptation
 Llog=log10(L+1e-6);
+
 % Removing noise using the bilateral filter
-minLLog = min(min(Llog));
-maxLLog = max(max(Llog));
+minLLog = min(Llog(:));
+maxLLog = max(Llog(:));
 Llog = bilateralFilter(Llog,[],minLLog,maxLLog,4,0.02);
 LLoge = log(L+2.5*1e-5);
 bin_size1=1;
@@ -65,7 +72,7 @@ for i=0:(nLayer-1)
     end
 end
 La=exp(La/nLayer);
-La(find(La<0))=0;
+La(La<0.0)=0;
 
 %Dynamic Range Reduction
 imgOut = TumblinRushmeierTMO(img, Lda, CMax, La);

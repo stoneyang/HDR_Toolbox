@@ -28,7 +28,7 @@ function imgOut=NormalizeTMO(img)
 %
 
 %is it a three color channels image?
-check3Color(img);
+check13Color(img);
 
 %Luminance channel
 L=lum(img);

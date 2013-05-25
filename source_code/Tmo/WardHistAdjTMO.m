@@ -27,10 +27,7 @@ function imgOut=WardHistAdjTMO(img,nBin)
 %
 
 %Is it a three color channels image?
-check3Color(img);
-
-%Luminance channel
-L=lum(img);
+check13Color(img);
 
 if(~exist('nBin'))
     nBin=256;
@@ -40,20 +37,23 @@ if(nBin<1)
     nBin=256;
 end
 
+%Luminance channel
+L=lum(img);
+
 %The image is downsampled
 [n,m]=size(L);
 maxCoord = max([n,m]);
-viewAngleWidth = 2*atan(m/(2*maxCoord*0.75));
+viewAngleWidth  = 2*atan(m/(2*maxCoord*0.75));
 viewAngleHeight = 2*atan(n/(2*maxCoord*0.75));
 fScaleX = (2*tan(viewAngleWidth/2)/0.01745);
 fScaleY = (2*tan(viewAngleHeight/2)/0.01745);
 
 L2=imresize(L,[round(fScaleY), round(fScaleX)],'bilinear');
-LMax=max(max(L2));
-LMin=min(min(L2));
+LMax=max(L2(:));
+LMin=min(L2(:));
 
 if(LMin<=0.0)
-     LMin=min(L2(find(L2>0.0)));
+     LMin=min(L2(L2>0.0));
 end
 
 %Log space
@@ -86,11 +86,7 @@ x=(LlMin:(LlMax-LlMin)/(nBin-1):LlMax)';
 pps=spline(x,Pcum);      
 Ld=exp(LldMin+(LldMax-LldMin)*ppval(pps,log(L)));
 Ld=(Ld-LdMin)/(LdMax-LdMin);
-%Removing the old luminance
-imgOut=zeros(size(img));
-for i=1:3
-    imgOut(:,:,i)=img(:,:,i).*Ld./L;
-end
-imgOut=RemoveSpecials(imgOut);
 
+%Changing luminance
+imgOut = ChangeLuminance(img, L, Ld);
 end

@@ -28,10 +28,7 @@ function imgOut=TumblinRushmeierTMO(img, Lda, LdMax, CMax, Lwa)
 %
 
 %is it a three color channels image?
-check3Color(img);
-
-%Luminance channel
-L = lum(img);
+check13Color(img);
 
 %default parameters
 if(~exist('Lda'))
@@ -51,6 +48,9 @@ if(~exist('Lwa'))
     Lwa = exp(mean(tmp(:)));
 end
 
+%Luminance channel
+L = lum(img);
+
 %Range compression
 gamma_w  = gammaTumRushTMO(Lwa);
 gamma_d  = gammaTumRushTMO(Lda);
@@ -58,11 +58,8 @@ gamma_wd = gamma_w./(1.855+0.4*log(Lda));
 mLwa     = sqrt(CMax).^(gamma_wd-1);
 Ld = mLwa.*Lda*((L./Lwa).^(gamma_w./gamma_d));
 
-%Removing the old luminance
-imgOut=zeros(size(img));
-for i=1:3
-    imgOut(:,:,i)=img(:,:,i).*Ld./L;
-end
+%Changing luminance
+imgOut = ChangeLuminance(img, L, Ld);
 
 imgOut = imgOut / LdMax;
 

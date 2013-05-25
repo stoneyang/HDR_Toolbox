@@ -115,7 +115,7 @@ end
 
 %Evaluation of Laplacian/Gaussian Pyramids
 imgOut=zeros(r,c,col);
-for i=1:3
+for i=1:col
     imgOut(:,:,i) = pyrVal(tf(i));
 end
 

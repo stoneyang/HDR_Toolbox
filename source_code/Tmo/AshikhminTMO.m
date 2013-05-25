@@ -30,10 +30,7 @@ function imgOut=AshikhminTMO(img, LdMax, pLocal)
 %
 
 %is it a three color channels image?
-check3Color(img);
-
-%Luminance channel
-L=lum(img);
+check13Color(img);
 
 if(~exist('pLocal'))
     pLocal=1;
@@ -42,6 +39,9 @@ end
 if(~exist('LdMax'))
     LdMax=100;
 end
+
+%Luminance channel
+L=lum(img);
 
 %Local calculation?
 if(pLocal)
@@ -91,12 +91,6 @@ if(pLocal)
     Ld=Ld.*Ldetail;
 end
 
-%Removing the old luminance
-imgOut=zeros(size(img));
-for i=1:3
-    imgOut(:,:,i)=img(:,:,i)./lum(img).*Ld;
-end
-
-imgOut=RemoveSpecials(imgOut);
-
+%Changing luminance
+imgOut = ChangeLuminance(img, lum(img), Ld);
 end
