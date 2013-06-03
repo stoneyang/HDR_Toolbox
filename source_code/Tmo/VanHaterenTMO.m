@@ -45,10 +45,11 @@ L= Lori * pupil_area;
 
 %Range reduction
 tmpI = - 1./(C_beta + k_beta *L);
-[r,c]=size(L);
-n= r*c;
+[r,c] = size(L);
+n = r*c;
 Ios = zeros(size(tmpI));
 base = [a_C,1,0,0,0];
+
 for i = 1:n
     tmp = [base, tmpI(i)];
     Ios(i) = max(real(roots(tmp)));
