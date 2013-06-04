@@ -21,11 +21,14 @@ function We = MertensWellExposedness(img)
 %
 
 %sigma for the Well-exposedness weights.
-sigma=0.2; %as in the original paper
-sigma2=2*sigma^2;
-We = exp(-(img(:,:,1)-0.5).^2/sigma2);
-for i=2:3
-    We=We.*exp(-(img(:,:,i)-0.5).^2/sigma2);
+sigma  = 0.2; %as in the original paper
+sigma2 = 2*sigma^2;
+
+[r,c,col] = size(img);
+We = ones(r,c);
+
+for i=1:col
+    We = We .* exp(-(img(:,:,i)-0.5).^2/sigma2);
 end
 
 end

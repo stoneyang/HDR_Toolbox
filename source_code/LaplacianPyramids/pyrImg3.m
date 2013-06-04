@@ -25,14 +25,12 @@ function lstOut=pyrImg3(img,fun)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-%is it a three color channels image?
-check3Color(img);
+[r,c,col] = size(img);
 
 lstOut=[];
 
-for i=1:3
-    p=fun(img(:,:,i));
-    lstOut=[lstOut,p];
+for i=1:col
+    lstOut = [lstOut, fun(img(:,:,i))];
 end
 
 end

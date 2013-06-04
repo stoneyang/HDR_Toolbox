@@ -72,37 +72,37 @@ else
 end
 
 %number of images in the stack
-[r,c,col,n]=size(stack);
+[r,c,col,n] = size(stack);
 
 %Computation of weights for each image
-total=zeros(r,c);
-weight=zeros(r,c,n);
+total  = zeros(r,c);
+weight = zeros(r,c,n);
 for i=1:n
     %calculation of the weights
     L=lum(stack(:,:,:,i));    
-    weightE=MertensWellExposedness(stack(:,:,:,i));
-    weightS=MertensSaturation(stack(:,:,:,i));
-    weightC=MertensContrast(L);
+    weightE = MertensWellExposedness(stack(:,:,:,i));
+    weightS = MertensSaturation(stack(:,:,:,i));
+    weightC = MertensContrast(L);
     %final weight
-    weight(:,:,i)=(weightE.^wE).*(weightC.^wC).*(weightS.^wS);
-    total=total+weight(:,:,i);
+    weight(:,:,i) = (weightE.^wE).*(weightC.^wC).*(weightS.^wS);
+    total = total+weight(:,:,i);
 end
 
-%Normalisation of weights
+%Normalization of weights
 for i=1:n
-    weight(:,:,i)=RemoveSpecials(weight(:,:,i)./total);
+    weight(:,:,i) = RemoveSpecials(weight(:,:,i)./total);
 end
 
 %empty pyramid
 tf=[];
 for i=1:n
     %Laplacian pyramid: image
-    pyrImg=pyrImg3(stack(:,:,:,i),@pyrLapGen);
+    pyrImg = pyrImg3(stack(:,:,:,i),@pyrLapGen);
     %Gaussian pyramid: weight   
-    pyrW=pyrGaussGen(weight(:,:,i));
+    pyrW   = pyrGaussGen(weight(:,:,i));
 
     %Multiplication image times weights
-    tmpVal=pyrLstS2OP(pyrImg,pyrW,@pyrMul);
+    tmpVal = pyrLstS2OP(pyrImg,pyrW,@pyrMul);
    
     if(i==1)
         tf=tmpVal;

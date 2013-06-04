@@ -20,11 +20,23 @@ function Ws = MertensSaturation(img)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-mu = (img(:,:,1)+img(:,:,2)+img(:,:,3))/3;
-sumC = (img(:,:,1)-mu).^2+...
-       (img(:,:,2)-mu).^2+...
-       (img(:,:,3)-mu).^2;
+[r,c,col] = size(img);
 
-Ws= sqrt( sumC/3 );
+if(col==1)
+    Ws = ones(r, c);
+else
+    mu = zeros(r,c);
+    for i=1:col
+        mu = mu + img(:,:,i);
+    end
+    mu = mu/col;
+
+    sumC = zeros(r,c);
+    for i=1:col
+        sumC = sumC + (img(:,:,i)-mu).^2;
+    end
+
+    Ws = sqrt( sumC/col );
+end
 
 end
