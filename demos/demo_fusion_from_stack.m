@@ -13,22 +13,22 @@
 %
 %
 
-disp('1) Apply Fusion Operator by Raman and Chaudhuri at images in stack folder');
+disp('1) Applying Fusion Operator by Raman and Chaudhuri to images in stack folder');
 imgTMO = RamanTMO([],'stack','jpg');
 
-disp('2) Show the image after fusion, note that there is no need of gamma correction!');
+disp('2) Showing the image after fusion, note that there is no need of gamma correction!');
 figure(1);
 GammaTMO(imgTMO, 1.0, 0, 1);
 
-disp('3) Save the tone mapped image as a PNG.');
+disp('3) Saving the tone mapped image as a PNG.');
 hdrimwrite(imgTMO, 'venice_calle_raman_TMO.png');
 
-disp('4) Apply Fusion Operator by Raman and Chaudhuri at images in stack folder');
+disp('4) Applying Fusion Operator by Mertens et al to images in stack folder');
 imgTMO = MertensTMO([],'stack','jpg');
 
-disp('5) Show the image after fusion, note that there is no need of gamma correction!');
+disp('5) Showing the image after fusion, note that there is no need of gamma correction!');
 figure(2);
 GammaTMO(imgTMO, 1.0, 0, 1);
 
-disp('6) Save the tone mapped image as a PNG.');
+disp('6) Saving the tone mapped image as a PNG.');
 hdrimwrite(imgTMO, 'venice_calle_mertens_TMO.png');
