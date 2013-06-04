@@ -37,8 +37,7 @@ function imgOut = RamanTMO( img, directory, format)
 %stack generation
 stack=[];
 
-[r,c,col]=size(img);
-if((r*c)>0)
+if(~isempty(img))
     %Convert the HDR image into a stack
     [stack,stack_exposure] = GenerateExposureBracketing(img,1);
 else

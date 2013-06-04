@@ -1,7 +1,7 @@
-function [histo,bound,haverage]=HistogramHDR(img,nZone,typeLog,bNormalized,debug)
+function [histo,bound,haverage]=HistogramHDR(img,nZone,typeLog,bNormalized,bPlot)
 %
 %
-%        [histo,bound,haverage]=HistogramHDR(img,nZone,typeLog,bNormalized,debug)
+%        [histo,bound,haverage]=HistogramHDR(img,nZone,typeLog,bNormalized,bPlot)
 %
 %
 %        Input:
@@ -11,7 +11,7 @@ function [histo,bound,haverage]=HistogramHDR(img,nZone,typeLog,bNormalized,debug
 %           for linear space, 'log2' for base 2 logarithm space, 'loge', for
 %           natural logarithm space, 'log10' for base 10 logarithm space
 %           -bNormalized: the histogram is normalized
-%           -debug: if it is true the histogram is visualised
+%           -bPlot: if it is true the histogram is visualised
 %
 %        Output:
 %           -histo: the histogram of the image
@@ -49,13 +49,13 @@ if(~exist('bNormalized'))
     bNormalized = 0;
 end
 
-if(~exist('debug'))
-    debug=0;
+if(~exist('bPlot'))
+    bPlot=0;
 end
 
-L=lum(img);
-L=L(:);
-L2=L;
+L  = lum(img);
+L  = L(:);
+L2 = L;
 
 delta=1e-6;
 switch typeLog       
@@ -67,9 +67,9 @@ switch typeLog
     	L=log10(L+delta);
 end
 
-Lmin=min(L);
-Lmax=max(L);
-dMM=(Lmax-Lmin)/nZone;
+Lmin = min(L);
+Lmax = max(L);
+dMM  = (Lmax-Lmin)/nZone;
 
 histo=zeros(nZone,1);
 
@@ -98,7 +98,7 @@ end
 
 haverage=haverage/(total);
 
-if(debug)
+if(bPlot)
     x=((1:nZone)/nZone)*(Lmax-Lmin)+Lmin;
     bar(x,histo);
 end
