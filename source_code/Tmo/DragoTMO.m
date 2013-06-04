@@ -39,12 +39,12 @@ if(~exist('Drago_b'))
     Drago_b = 0.95;
 end
 
-if(~exist('Drago_LMax'))   
-    Drago_LMax = max(L(:));
-end
-
 %Luminance channel
 L=lum(img);
+
+if(~exist('Drago_LMax'))
+    Drago_LMax = max(L(:));
+end
 
 %Max luminance
 LMax = Drago_LMax*0.5+0.5*max(L(:));

@@ -35,7 +35,7 @@ function [histo,bound,haverage]=HistogramHDR(img,nZone,typeLog,bNormalized,debug
 %
 
 %is it a three color channels image?
-check3Color(img);
+check13Color(img);
 
 if(~exist('nZone'))
     nZone = 256;
