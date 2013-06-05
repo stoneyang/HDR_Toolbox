@@ -30,19 +30,22 @@ function imgOut = DurandTMO(img, Lda, CMax)
 %is it a three color channels image?
 check13Color(img);
 
-col = size(img,3);
+%default parameters
+if(~exist('Lda'))
+    Lda=80;
+end
+
+if(~exist('CMax'))
+    CMax=100;
+end
 
 %Luminance channel
 L=lum(img);
 
-%default parameters
-if(~exist('Lda')|~exist('CMax'))
-    Lda=80;
-    CMax=100;
-end
+col = size(img,3);
 
 %Chroma
-for i=1:3
+for i=1:col
     img(:,:,i) = RemoveSpecials(img(:,:,i)./L);
 end
 

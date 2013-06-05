@@ -1,12 +1,12 @@
-function imgOut = RamanTMO( img, directory, format)
+function imgOut = RamanTMO( img, directory, format, imageStack)
 %
 %
-%        imgOut = RamanTMO( img, directory, format)
+%        imgOut = RamanTMO( img, directory, format, imageStack)
 %
 %
 %        Input:
 %           -img: input HDR image
-%           -directory: the directory where to fetch the exposure stack in
+%           -directory: the directory where to fetch the exposure imageStack in
 %           the case img=[]
 %           -format: the format of LDR images ('bmp', 'jpg', etc) in case
 %                    img=[] and the tone mapped images is built from a sequence of
@@ -34,39 +34,43 @@ function imgOut = RamanTMO( img, directory, format)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-%stack generation
-stack=[];
+%imageStack generation
+if(~exist('imageStack'))
+    imageStack = [];
+end
 
 if(~isempty(img))
-    %Convert the HDR image into a stack
-    [stack,stack_exposure] = GenerateExposureBracketing(img,1);
+    %Convert the HDR image into a imageStack
+    [imageStack,imageStack_exposure] = GenerateExposureBracketing(img,1);
 else
-    %load images from the current directory
-    images=dir([directory,'/','*.',format]);
-    n = length(images);
-    for i=1:n
-        stack(:,:,:,i) = single(imread([directory,'/',images(i).name]))/255.0;
+    if(isempty(imageStack))
+        %load images from the current directory
+        images=dir([directory,'/','*.',format]);
+        n = length(images);
+        for i=1:n
+            imageStack(:,:,:,i) = single(imread([directory,'/',images(i).name]))/255.0;
+        end
     end
 end
 
 C = 70.0/255.0; %As reported in Raman and Chaudhuri Eurographics 2009 short paper
 
-%number of images in the stack
-[r,c,col,n]=size(stack);
+%number of images in the imageStack
+[r,c,col,n]=size(imageStack);
 
 K1 = 1.0;%As reported in Raman and Chaudhuri Eurographics 2009 short paper
 K2 = 1.0/10.0;%As reported in Raman and Chaudhuri Eurographics 2009 short paper
 sigma_s = K1 * min([r,c]);
-stackMax = max(stack(:));
-stackMin = min(stack(:));
-sigma_r = K2 * (stackMax-stackMin);
+imageStackMax = max(imageStack(:));
+imageStackMin = min(imageStack(:));
+sigma_r = K2 * (imageStackMax-imageStackMin);
 
 %Computation of weights for each image
 total = zeros(r,c);
 weight = zeros(r,c,n);
 for i=1:n
-    L = lum(stack(:,:,:,i));
-    L_filtered = bilateralFilter(L,[],stackMin,stackMax,sigma_s,sigma_r);
+    L = lum(imageStack(:,:,:,i));
+    L_filtered = bilateralFilter(L,[],imageStackMin,imageStackMax,sigma_s,sigma_r);
     weight(:,:,i) = C + abs(L-L_filtered);
     total = total + weight(:,:,i);
 end
@@ -75,7 +79,7 @@ end
 imgOut = zeros(r,c,col);
 for i=1:n
     for j=1:col
-        tmp = stack(:,:,j,i).*weight(:,:,i)./total;
+        tmp = imageStack(:,:,j,i).*weight(:,:,i)./total;
         imgOut(:,:,j) = imgOut(:,:,j) + RemoveSpecials(tmp);
     end
 end

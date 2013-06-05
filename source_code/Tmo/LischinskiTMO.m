@@ -39,8 +39,8 @@ end
 L=lum(img);
 
 %Number of zones in the image
-maxL = max(max(L));
-minL = min(min(L));
+maxL = max(L(:));
+minL = min(L(:));
 epsilon = 1e-6;
 minLLog = log2(minL+epsilon);
 Z = ceil ( log2(maxL) - minLLog);

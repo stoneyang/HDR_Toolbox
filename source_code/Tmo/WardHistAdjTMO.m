@@ -1,6 +1,6 @@
-function imgOut=WardHistAdjTMO(img,nBin)
+function imgOut=WardHistAdjTMO(img,nBin,bPlotHistogram)
 %
-%        imgOut=WardHistAdjTMO(img,nBin)
+%        imgOut=WardHistAdjTMO(img,nBin,bPlotHistogram)
 %
 %
 %        Input:
@@ -37,6 +37,10 @@ if(nBin<1)
     nBin=256;
 end
 
+if(~exist('bPlotHistogram'))
+    bPlotHistogram = 0;
+end
+
 %Luminance channel
 L=lum(img);
 
@@ -57,9 +61,10 @@ if(LMin<=0.0)
 end
 
 %Log space
-Llog=log(L2);
-LlMax=log(LMax);
-LlMin=log(LMin);
+epsilon = 1e-9;
+Llog  = log(L2);
+LlMax = log(LMax);
+LlMin = log(LMin);
 
 %Display characteristics in cd/m^2
 LdMax=100;    LldMax=log(LdMax);
@@ -75,7 +80,9 @@ end
 
 %Histogram ceiling   
 p=histogram_ceiling(p,delta/(LldMax-LldMin));
-plot(p);
+if(bPlotHistogram)
+    bar(p);
+end
 
 %Calculation of P(x) 
 Pcum=cumsum(p);
@@ -83,8 +90,8 @@ Pcum=Pcum/max(Pcum);
 
 %Calculate tone mapped luminance
 x=(LlMin:(LlMax-LlMin)/(nBin-1):LlMax)';
-pps=spline(x,Pcum);      
-Ld=exp(LldMin+(LldMax-LldMin)*ppval(pps,log(L)));
+pps=spline(x,Pcum);
+Ld=exp(LldMin+(LldMax-LldMin)*ppval(pps,real(log(L))));
 Ld=(Ld-LdMin)/(LdMax-LdMin);
 
 %Changing luminance
