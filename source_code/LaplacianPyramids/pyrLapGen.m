@@ -1,4 +1,4 @@
-function p=pyrLapGen(img)
+function p=pyrLapGen(img, stopDim)
 %
 %
 %        p=pyrLapGen(img)
@@ -24,6 +24,10 @@ function p=pyrLapGen(img)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
+if(~exist('stopDim'))
+    stopDim = 1;
+end
+
 check=1;
 list=[];
 while(check)
@@ -36,7 +40,7 @@ while(check)
     list=[list,ts];  
     
     %is the smallest dimension bigger than 4?
-    check=min(size(img))>4;
+    check=min(size(img))>stopDim;
 end
 
 %Base layer

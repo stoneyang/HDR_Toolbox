@@ -26,7 +26,7 @@ function p=pyrGaussGen(img, stopDim)
 %
 
 if(~exist('stopDim'))
-    stopDim = 4;
+    stopDim = 1;
 end
 
 check=1;
