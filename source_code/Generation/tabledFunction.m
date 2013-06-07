@@ -27,7 +27,9 @@ function img = tabledFunction(img, table)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-for i=1:3
+col = size(img,3);
+
+for i=1:col
     work = zeros(size(img(:,:,i)));
     for j=1:256
         indx = find((img(:,:,i)+1)==j);

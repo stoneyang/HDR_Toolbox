@@ -43,20 +43,20 @@ if(~exist('CMax'))
     CMax = 100;
 end
 
+%Luminance channel
+L = lum(img);
+
 if(~exist('Lwa'))
     tmp = log(L+2.3*1e-5);
     Lwa = exp(mean(tmp(:)));
 end
-
-%Luminance channel
-L = lum(img);
 
 %Range compression
 gamma_w  = gammaTumRushTMO(Lwa);
 gamma_d  = gammaTumRushTMO(Lda);
 gamma_wd = gamma_w./(1.855+0.4*log(Lda));
 mLwa     = sqrt(CMax).^(gamma_wd-1);
-Ld = mLwa.*Lda*((L./Lwa).^(gamma_w./gamma_d));
+Ld       = mLwa.*Lda*((L./Lwa).^(gamma_w./gamma_d));
 
 %Changing luminance
 imgOut = ChangeLuminance(img, L, Ld);
