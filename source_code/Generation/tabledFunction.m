@@ -29,13 +29,20 @@ function img = tabledFunction(img, table)
 
 col = size(img,3);
 
+img = img + 1;
+
 for i=1:col
     work = zeros(size(img(:,:,i)));
-    for j=1:256
-        indx = find((img(:,:,i)+1)==j);
+    
+    values = unique(img(:,:,i));
+    n = length(values);
+    
+    for j=1:n
+        k = values(j);
+        indx = find(img(:,:,i)==k);
         
         if(isempty(indx)==0)
-            work(indx) = table(j,i);
+            work(indx) = table(k,i);
         end
     end
     img(:,:,i) = work;

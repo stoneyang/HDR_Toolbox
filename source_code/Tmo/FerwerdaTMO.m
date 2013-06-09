@@ -56,6 +56,10 @@ k  = ClampImg((1-(Lwa/2-0.01)/(10-0.01))^2,0,1);
 col = size(img,3);
 imgOut = zeros(size(img));
 vec = [1.05,0.97,1.27];
+if(col==1)
+    vec(1) = 1;
+end
+
 for i=1:col
     imgOut(:,:,i)=(mC*img(:,:,i)+vec(i)*mR*k*L);
 end

@@ -113,6 +113,12 @@ for i=1:n
             
         shift_ret = WardGetExpShift(img, imgWork);
         imWork_shifted = imshift(imgWork,shift_ret(1),shift_ret(2));
+% 
+%         rot_ret = WardSimpleRot(img, imgWork)
+%         imWork_rotated = imrotate(imgWork,rot_ret,'bilinear','crop');
+%         
+%         shift_ret = WardGetExpShift(img, imWork_rotated);
+%         imWork_shifted = RemoveSpecials(imshift(imWork_rotated,shift_ret(1),shift_ret(2)));
         
         if(bStackOut)
             stackOut(:,:,:,i) = imWork_shifted;

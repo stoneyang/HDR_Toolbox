@@ -74,8 +74,7 @@ for i=1:n
         
         case 'tabledDeb97'
             weight  = WeightFunction(tmpStack/255, weight_type);
-            img_lin = tabledFunction(tmpStack, lin_fun);
-            
+            img_lin = tabledFunction(tmpStack, lin_fun);            
         otherwise
     end
    
