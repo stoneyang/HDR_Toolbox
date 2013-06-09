@@ -54,9 +54,9 @@ end
 %Range compression
 gamma_w  = gammaTumRushTMO(Lwa);
 gamma_d  = gammaTumRushTMO(Lda);
-gamma_wd = gamma_w./(1.855+0.4*log(Lda));
+gamma_wd = gamma_w/(1.855+0.4*log(Lda));
 mLwa     = sqrt(CMax).^(gamma_wd-1);
-Ld       = mLwa.*Lda*((L./Lwa).^(gamma_w./gamma_d));
+Ld       = Lda*mLwa.*((L/Lwa).^(gamma_w/gamma_d));
 
 %Changing luminance
 imgOut = ChangeLuminance(img, L, Ld);

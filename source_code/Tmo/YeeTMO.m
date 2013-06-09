@@ -42,19 +42,19 @@ if(~exist('CMax'))
 end
 
 if(~exist('Lda'))
-    Lda=80;
+    Lda=20;
 end
 
 %Luminance channel
 L=lum(img);
+if(min(L(:))<0.0)
+    img(img<0.0) = 0.0;
+    L = lum(img);
+end
 
 %calculation of the adaptation
-Llog=log10(L+1e-6);
-
-% Removing noise using the bilateral filter
+Llog = log10(L+1e-6);
 minLLog = min(Llog(:));
-maxLLog = max(Llog(:));
-Llog = bilateralFilter(Llog,[],minLLog,maxLLog,4,0.02);
 LLoge = log(L+2.5*1e-5);
 bin_size1=1;
 bin_size2=0.5;
@@ -62,19 +62,21 @@ La=zeros(size(L));
 for i=0:(nLayer-1)
     bin_size=bin_size1+(bin_size2-bin_size1)*i/(nLayer-1);    
     segments=round((Llog-minLLog)/bin_size)+1; 
+    
     %Calculation of layers
     [imgLabel]=CompoCon(segments,8);    
-    labels = unique(imgLabel);
+    labels = unique(imgLabel);    
     for p=1:length(labels);
         %Group adaptation
-        indx=find(imgLabel==labels(p));
-        La(indx)=La(indx)+mean(mean(LLoge(indx)));
+        indx = find(imgLabel==labels(p));
+        La(indx) = La(indx) + mean(LLoge(indx));
     end
 end
 La=exp(La/nLayer);
 La(La<0.0)=0;
 
 %Dynamic Range Reduction
+hdrimwrite(La,'test.pfm');
 imgOut = TumblinRushmeierTMO(img, Lda, CMax, La);
 
 end
