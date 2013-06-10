@@ -27,9 +27,11 @@ function ret=hdrimwrite(img, filename)
 %
 
 %if it is a gray image we create three channels
-[n,m,color]=size(img);
-if(color==1)
-    imgOut = zeros(size(img));
+col = size(img,3);
+
+if(col==1)
+    [r,c] = size(img);
+    imgOut = zeros(r,c,3);
     for i=1:3
         imgOut(:,:,i)=img;
     end

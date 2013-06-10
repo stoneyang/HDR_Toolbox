@@ -76,7 +76,6 @@ La=exp(La/nLayer);
 La(La<0.0)=0;
 
 %Dynamic Range Reduction
-hdrimwrite(La,'test.pfm');
 imgOut = TumblinRushmeierTMO(img, Lda, CMax, La);
 
 end
