@@ -64,8 +64,8 @@ if(~exist('stack')&&~exist('stack_exposure'))
     stack_exposure = ReadLDRExif(dir_name, format);
 else
     maxStack = max(stack(:));
-    if(maxStack<=1.0)
-        stack = stack * 255;
+    if(maxStack<=(1.0+1e-9))
+        stack = round((stack/maxStack) * 255);
     end   
 end
 
