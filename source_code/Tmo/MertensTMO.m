@@ -45,15 +45,15 @@ function imgOut = MertensTMO( img, directory, format, wE, wS, wC )
 
 %default parameters if they are missing
 if(~exist('wE'))
-    wE=0.75;
+    wE = 1.0;
 end
 
 if(~exist('wS'))
-    wS=0.5;
+    wS = 1.0;
 end
 
 if(~exist('wC'))
-    wC=0.5;
+    wC = 1.0;
 end
 
 %stack generation
@@ -79,13 +79,13 @@ total  = zeros(r,c);
 weight = zeros(r,c,n);
 for i=1:n
     %calculation of the weights
-    L=lum(stack(:,:,:,i));    
+    L = lum(stack(:,:,:,i));    
     weightE = MertensWellExposedness(stack(:,:,:,i));
     weightS = MertensSaturation(stack(:,:,:,i));
     weightC = MertensContrast(L);
     %final weight
     weight(:,:,i) = (weightE.^wE).*(weightC.^wC).*(weightS.^wS);
-    total = total+weight(:,:,i);
+    total = total + weight(:,:,i);
 end
 
 %Normalization of weights
@@ -105,10 +105,10 @@ for i=1:n
     tmpVal = pyrLstS2OP(pyrImg,pyrW,@pyrMul);
    
     if(i==1)
-        tf=tmpVal;
+        tf = tmpVal;
     else
         %accumulation
-        tf=pyrLst2OP(tf,tmpVal,@pyrAdd);    
+        tf = pyrLst2OP(tf,tmpVal,@pyrAdd);    
     end
 end
 
@@ -119,7 +119,7 @@ for i=1:col
 end
 
 %Clamping
-imgOut = ClampImg(imgOut,0,1);
+imgOut = ClampImg(imgOut,0.0,1.0);
 
 disp('This algorithm outputs images with gamma encoding. Inverse gamma is not required to be applied!');
 

@@ -29,22 +29,21 @@ if(~exist('stopDim'))
     stopDim = 1;
 end
 
-check=1;
-list=[];
-while(check)
-    %Calculating detail and base layers
-    [tL0,tB0]=pyrGaussGenAux(img);
-    img=tL0;
-    
+check = 1;
+list = [];
+while(check)  
     %Detail layer
-    ts=struct('detail',tB0);
-    list=[list,ts];  
+    ts   = struct('detail',img);
+    list = [list, ts];  
+
+    %Next level
+    img = pyrGaussGenAux(img);
     
     %is the smallest dimension bigger than 4?
-    check=min(size(img))>stopDim;
+    check = min(size(img))>stopDim;
 end
 
 %Base layer
-p=struct('list',list,'base',tL0);
+p=struct('list',list,'base',img);
 
 end

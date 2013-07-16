@@ -20,6 +20,8 @@ function Wc = MertensContrast(L)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-Wc=abs(LaplacianFilter(L));
+H = [0 1 0; 1 -4 1; 0 1 0];
+imgEdge = imfilter(L,H,'replicate');
+Wc = abs(LaplacianFilter(imgEdge));
 
 end

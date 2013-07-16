@@ -1,7 +1,7 @@
-function [imgOut,imgB]=pyrGaussGenAux(img)
+function imgOut = pyrGaussGenAux(img)
 %
 %
-%        [imgOut,imgB]=pyrGaussGenAux(img)
+%        imgOut = pyrGaussGenAux(img)
 %
 %
 %        Input:
@@ -26,12 +26,12 @@ function [imgOut,imgB]=pyrGaussGenAux(img)
 %
 
 %5x5 Gaussian Kernel
-kernel=[1,4,6,4,1];
-mtx=kernel'*kernel;
-mtx=mtx/sum(mtx(:));
+kernel = [1,4,6,4,1];
+mtx = kernel'*kernel;
+mtx = mtx/sum(mtx(:));
 
 %Convolution
-imgB=conv2(img,mtx,'same');
+imgB = conv2(img,mtx,'same');
 
 %Downsampling
 imgOut = imresize(imgB, 0.5);
