@@ -80,8 +80,7 @@ stack = zeros(r,c,col,n);
 size(stack)
 %calculate exposures
 for i=1:n
-    expo = ClampImg((stack_exposure(:,:,:,i)*img).^inv_gamma,0,1);
-    size(expo)
+    expo = ClampImg((stack_exposure(i)*img).^inv_gamma,0,1);
     stack(:,:,:,i) = expo;
 end
 
