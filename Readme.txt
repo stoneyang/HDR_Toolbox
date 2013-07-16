@@ -21,6 +21,7 @@ for the installation process.
 Run the demos to understand how to use I/O function, visualize images, tone Map Images, etc.
 
 -Update Report:
+16/07/2013: -Fixed an error in GenerateExposureBracketing.m. Thanks to Cheng-Yu Wu.
 24/04/2013: -Fixed BuildHDR.m and aux files. Thanks to Luis Paulo Dos Santos.
 	    -Added Alignment folder for aligning LDR images, and added demo_build_radiance_map.m
 18/04/2013: -Fixed read_rgbe new line in the header. Thanks to Ronan Boitard.
