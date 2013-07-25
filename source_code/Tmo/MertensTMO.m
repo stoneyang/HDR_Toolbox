@@ -76,15 +76,27 @@ end
 
 %Computation of weights for each image
 total  = zeros(r,c);
-weight = zeros(r,c,n);
+weight = ones(r,c,n);
 for i=1:n
     %calculation of the weights
-    L = lum(stack(:,:,:,i));    
-    weightE = MertensWellExposedness(stack(:,:,:,i));
-    weightS = MertensSaturation(stack(:,:,:,i));
-    weightC = MertensContrast(L);
-    %final weight
-    weight(:,:,i) = (weightE.^wE).*(weightC.^wC).*(weightS.^wS);
+    if(wE>0.0)
+        weightE = MertensWellExposedness(stack(:,:,:,i));
+        weight(:,:,i) = weightE.^wE;
+    end
+    
+    if(wC>0.0)
+        L = mean(stack(:,:,:,i),3);  
+        weightC = MertensContrast(L);
+        weight(:,:,i) = weight(:,:,i) .* (weightC.^wC);
+    end
+
+    if(wS>0.0)
+        weightS = MertensSaturation(stack(:,:,:,i));
+        weight(:,:,i) = weight(:,:,i) .* (weightS.^wS);
+    end
+    
+    weight(:,:,i) = weight(:,:,i) + 1e-12;
+    
     total = total + weight(:,:,i);
 end
 

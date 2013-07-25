@@ -35,10 +35,10 @@ for i=1:n
     [r,c]=size(list(ind).detail);
     if(i==1)        
         base = imresize(base, [r,c]);
-        img=base+list(ind).detail;
+        img  = base+list(ind).detail;
     else
         img = imresize(img, [r,c]);
-        img=img+list(ind).detail;        
+        img = img+list(ind).detail;        
     end
 end
 

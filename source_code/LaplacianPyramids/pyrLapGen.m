@@ -32,12 +32,12 @@ check=1;
 list=[];
 while(check)
     %Calculating detail and base layers
-    [tL0,tB0]=pyrLapGenAux(img);
-    img=tL0;
+    [tL0,tB0] = pyrLapGenAux(img);
+    img = tL0;
     
     %Detail layer
-    ts=struct('detail',tB0);
-    list=[list,ts];  
+    ts   = struct('detail',tB0);
+    list = [list,ts];  
     
     %is the smallest dimension bigger than 4?
     check=min(size(img))>stopDim;
