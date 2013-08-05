@@ -34,14 +34,13 @@ alpha = (double(alpha)/255).^gamma;
 
 %Ratio decoding
 RI = 2.^(alpha*32-16)-2^-16;
-RI(find(RI<0))=0;
+RI(RI<0)=0;
 
-L=0.213*img(:,:,1)+0.715*img(:,:,2)+0.072*img(:,:,3);
+L = lum(img);
 
 imgRec = zeros(size(img));
 for i=1:3
-    imgRecCol = (img(:,:,i)./L).^5.0;
-    imgRec(:,:,i) = imgRecCol.*L.*RI;
+    imgRec(:,:,i) = ((img(:,:,i)./L).^5.0).*L.*RI;
 end
 
 end

@@ -1,7 +1,7 @@
 function PNGHDREnc(img, nameHDR, namePNG)
 %
 %
-%       PNGHDREnc(img, name)
+%       PNGHDREnc(img, nameHDR, namePNG)
 %
 %
 %       Input:
@@ -28,44 +28,43 @@ function PNGHDREnc(img, nameHDR, namePNG)
 
 %remove the extension of the file
 if(isempty(img))
-    img = hdrread(nameHDR);
+    if(exist('nameHDR'))
+        img = hdrimread(nameHDR);
+    end
 end
 
+if(~exist('namePNG'))
+    namePNG = [nameHDR(1:(end-4)),'.png'];
+end
+
+check3Color(img);
+
+%Gamma Encoding
 gamma = 2.0;
 invGamma = 1.0/gamma;
 
 %Tone mapping using Reinhard's operator
-L=0.213*img(:,:,1)+0.715*img(:,:,2)+0.072*img(:,:,3);
-Lwa=exp(mean(mean(log(L+1e-6))));
-La = L*0.18/Lwa;
+L = lum(img);
+Lwa= logMean(L);
+La = L*ReinhardAlpha(L)/Lwa;
 Ld = La./(La+1);
 
 imgTMO = zeros(size(img));
 for i=1:3
-    imgTMO(:,:,i)=(img(:,:,i)./L).^0.2;
-    imgTMO(:,:,i) = imgTMO(:,:,i).*Ld;
+    imgTMO(:,:,i) = ((img(:,:,i)./L).^0.2).*Ld;
 end
-imgTMO(find(L<=0))=0;
-
+imgTMO = RemoveSpecials(imgTMO);
 hdrimwrite(imgTMO,'test.pfm');
 
-%maxTMo
-[n,m]=size(imgTMO);
-matrix=sort(reshape(imgTMO,n*m,1));
-maxTMO=matrix(round(n*m*0.999));
-
 %Clamping
-imgTMO = imgTMO/maxTMO;
-imgTMO(find(imgTMO>1))=1;
-imgTMO(find(imgTMO<0))=0;
+maxTMO = MaxQuart(imgTMO, 0.999);
+imgTMO = ClampImg(imgTMO/maxTMO,0.0,1.0);
 
 %Ratio
 RI = L./Ld;
-RI(find(Ld<=0))=0;
-RIenc = log2(RI+2^-16);
-RIenc(find(RIenc>16))=16;
-RIenc(find(RIenc<-16))=-16;
-RIenc = (RIenc+16)/32;
+RI(Ld<=0)=0;
+RIenc = ClampImg(log2(RI+2^-16.0), -16.0, 16.0);
+RIenc = (RIenc+16.0)/32.0;
 
 imwrite(imgTMO.^invGamma,namePNG,'Alpha',RIenc.^invGamma,'Gamma',invGamma,'Comment',['Created using Banterle PNG-HDR: maxTMO: ',num2str(maxTMO)]);
 end
