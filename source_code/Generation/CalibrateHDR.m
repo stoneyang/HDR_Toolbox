@@ -37,8 +37,8 @@ L = lum(img);
 Lavg = mean(mean(log10(L+1e-5)));
     
 if(bRobust)
-	Lmin = MaxQuart(L,0.001);
-	Lmax = MaxQuart(L,0.999);
+	Lmin = MaxQuart(L,0.05);
+	Lmax = MaxQuart(L,0.95);
 else
 	Lmin = min(L(L>0.0));
 	Lmax = max(L(:));
@@ -46,7 +46,7 @@ end
     
 k = (Lavg-log10(Lmin))/(log10(Lmax)-log10(Lmin));
 f = 1e4*k/Lmax;
-Lt = Lmin+(percentage+(1.0-percentage)*(1.0-k))*(Lmax-Lmin);
+Lt = Lmin+(06.+0.4*(1.0-k))*(Lmax-Lmin);
     
 imgOut = img*f;
 end
