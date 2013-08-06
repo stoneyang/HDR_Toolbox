@@ -45,7 +45,7 @@ else
 end
     
 k = (Lavg-log10(Lmin))/(log10(Lmax)-log10(Lmin));
-f = 1e5*k/Lmax;
+f = 1e4*k/Lmax;
 Lt = Lmin+(percentage+(1.0-percentage)*(1.0-k))*(Lmax-Lmin);
     
 imgOut = img*f;
