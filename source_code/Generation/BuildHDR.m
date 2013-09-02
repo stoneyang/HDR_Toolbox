@@ -65,7 +65,7 @@ if(~exist('stack')&&~exist('stack_exposure'))
 else
     maxStack = max(stack(:));
     if(maxStack<=(1.0+1e-9))
-        stack = round((stack/maxStack) * 255);
+        stack = ClampImg(round(stack * 255),0,255);
     end   
 end
 
