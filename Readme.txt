@@ -3,7 +3,7 @@
 
 -License: This software is distributed under GPL v3 license (see license.txt)
 
--Year: Fall 2010-2011
+-Year: Fall 2010-2013
 
 -Title: HDR Toolbox for Matlab
 
@@ -21,6 +21,8 @@ for the installation process.
 Run the demos to understand how to use I/O function, visualize images, tone Map Images, etc.
 
 -Update Report:
+04/09/2013: -Added SIFT LDR images stack alignment based on the VL Feat Library (http://www.vlfeat.org/)
+             The library needs to be installed to use this code.
 02/09/2013: -Added a Hybrid TMO, BanterleTMO.m, based on ACM SAP 2012 Publications:
 	     Francesco Banterle, Alessandro Artusi, Elena Sikudova, Thomas Edward William Bashford-Rogers,
 	     Patrick Ledda, Marina Bloj, Alan Chalmers. ACM Symposium on Applied Perception (SAP) - August 2012 
