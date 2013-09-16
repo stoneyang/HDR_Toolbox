@@ -21,6 +21,7 @@ for the installation process.
 Run the demos to understand how to use I/O function, visualize images, tone Map Images, etc.
 
 -Update Report:
+16/09/2013: -Added Grossberg and Nayar sampling through histograms.
 05/09/2013: -Added the TMQI Index by H. Yeganeh, Z. Wang. Based on the publication:
 	     "Objective Quality Assessment of Tone Mapped Images", Journal of IEEE Transaction on Image Processing, 22 (2), 657-667, 2013
              We thank Hojat Yeganeh for integrating his functions into the Toolbox. Original code can be downloaded at:

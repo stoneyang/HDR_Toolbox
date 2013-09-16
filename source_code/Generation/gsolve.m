@@ -33,10 +33,11 @@ end
 % Fix the curve by setting its middle value to 0
 A(k,129) = 1;
 k=k+1;
-
 % Include the smoothness term
 for i=1:n-2
-    A(k,i)=l*w(i+1); A(k,i+1)=-2*l*w(i+1); A(k,i+2)=l*w(i+1);
+    A(k,i)  =   l*w(i+1);
+    A(k,i+1)=-2*l*w(i+1);
+    A(k,i+2)=   l*w(i+1);
     k=k+1;
 end
 

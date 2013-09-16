@@ -76,15 +76,16 @@ switch lin_type
         %Weight function
         W = WeightFunction(0:(1/255):1,weightFun);
         %Convert the stack into a smaller stack
-        stack2 = StackLowRes(stack);
+        stack_hist = ComputeLDRStackHistogram(stack);
+        stack_samples = GrossbergSampling('', '', stack_hist, 100);%StackLowRes(stack);
         %Linearization process using Debevec and Malik 1998's method
-        [nPixel, nStack, nCol] = size(stack2);
+        [nPixel, nStack, nCol] = size(stack_samples);
         
         lin_fun = zeros(256,nCol);
         log_stack_exposure = log(stack_exposure);
 
         for i=1:nCol
-            g = gsolve(stack2(:,:,i),log_stack_exposure,10,W);
+            g = gsolve(stack_samples(:,:,i),log_stack_exposure,10,W);
             lin_fun(:,i) = (g/max(g));
         end
         

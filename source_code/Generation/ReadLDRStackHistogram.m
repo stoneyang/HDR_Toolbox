@@ -1,16 +1,15 @@
-function stack = ReadLDRStack(dir_name, format)
+function stack = ReadLDRStackHistogram(dir_name, format)
 %
-%       stack = ReadLDRStack(dir_name, format)
+%       stack = ReadLDRStackHistogram(dir_name, format)
 %
 %
 %        Input:
-%           -dir_name: the path where the stack is
 %           -format: an LDR format for reading LDR images in the current directory 
 %
 %        Output:
-%           -stack: a stack of LDR images
+%           -stack: a stack of LDR image histograms
 %
-%     Copyright (C) 2011  Francesco Banterle
+%     Copyright (C) 2013  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -34,15 +33,18 @@ stack = [];
 for i=1:n
     disp(list(i).name);
     %read an image
-    img = single(imread([dir_name,'/',list(i).name]));
+    img = imread([dir_name,'/',list(i).name]);
     
-    [r,c,col]=size(img);  
+    [r,c,col] = size(img);  
+
     if(i==1)
-        stack = zeros(r,c,col,n);
+        stack = zeros(256,col,n);
     end
     
     %store in the stack
-    stack(:,:,:,i) = img;    
+    for j=1:3
+        stack(:,j,i) = imhist(img(:,:,j));
+    end
 end
 
 end
