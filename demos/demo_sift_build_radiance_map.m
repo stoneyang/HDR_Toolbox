@@ -11,7 +11,7 @@
 %
 %
 
-name_folder = 'stack_oxford2';
+name_folder = 'stack_alignment';
 disp('1) Read a stack of LDR images');
 stack = ReadLDRStack(name_folder, 'JPG')/255.0;
 
