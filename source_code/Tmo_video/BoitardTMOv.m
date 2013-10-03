@@ -49,6 +49,7 @@ max_log_mean_LDR = logMean(lum(frame_tmo));
 name = RemoveExt(filename);
 ext = fileExtension(filename);
 for i=1:hdrv.totalFrames
+    disp(['Processing frame ',num2str(i)]);
     [frame, hdrv] = getNextFrame(hdrv, i);
     frameOut = BoitardTMOv_frame(RemoveSpecials(frame), max_log_mean_HDR, max_log_mean_LDR, tmo_operator, tmo_gamma);
 
