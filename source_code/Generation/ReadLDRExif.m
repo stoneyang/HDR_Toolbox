@@ -34,13 +34,13 @@ for i=1:n
     %Read Exif file information
     if(strcmpi(format,'jpg')==1||strcmpi(format,'jpeg')==1)
         try
-            if(exist('exifread'))
-                exifInfo = exifread([dir_name,'/',list(i).name]);
-                exposure(i) = exifInfo.ExposureTime;
+            if(exist('iminfo'))
+                img_info = imfinfo([dir_name,'/',list(i).name]);                    
+                	exposure(i) = img_info.DigitalCamera.ExposureTime;
             else
-                if(exist('iminfo'))
-                    img_info = imfinfo([dir_name,'/',list(i).name]);                    
-                    exposure(i) = img_info.DigitalCamera.ExposureTime;
+                if(exist('exifread'))
+                    exifInfo = exifread([dir_name,'/',list(i).name]);
+                    exposure(i) = exifInfo.ExposureTime;
                 else
                     tmp = hdrimread([dir_name,'/',list(i).name]);
                     L = lum(tmp);
