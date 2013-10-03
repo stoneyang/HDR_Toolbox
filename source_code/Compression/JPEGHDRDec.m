@@ -27,13 +27,7 @@ function imgRec=JPEGHDRDec(name)
 %
 gamma = 2.2;
 
-nameOut = removeExt(name);
-
-if(isempty(ind))
-    error('JPEGHDRDec not a valid JPEG HDR file!');
-end
-
-name = name(1:(ind-1));
+nameOut = RemoveExt(name);
 
 %Read metadata
 info = imfinfo(name);

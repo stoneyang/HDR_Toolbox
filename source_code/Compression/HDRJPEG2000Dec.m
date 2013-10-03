@@ -33,9 +33,11 @@ decoded = sscanf(cell2mat(info.Comments), '%g', 6);
 xMin = zeros(3,1);
 xMax = zeros(3,1);
 
+c = 1;
 for i=1:2:6
-    xMax(i) = decoded(i);
-    xMin(i) = decoded(i+1);
+    xMax(c)   = decoded(i);
+    xMin(c) = decoded(i+1);
+    c = c+1;
 end
 
 %Decompression

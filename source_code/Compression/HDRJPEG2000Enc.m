@@ -50,7 +50,7 @@ imgLog = uint16(imgLog*(2^nBit-1));
 %metadata string
 metadata = [];
 for i = 1:3
-    metadata = [metadata, num2str(xMax(i)),' ',num2str(xMin(i))];
+    metadata = [metadata, num2str(xMax(i)),' ',num2str(xMin(i)),' ']
 end
 
 imwrite(imgLog,name,'CompressionRatio',compRatio,'mode','lossy','Comment',metadata);
