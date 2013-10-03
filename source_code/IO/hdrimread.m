@@ -79,7 +79,14 @@ end
 
 if(isempty(img)&&(bLDR==0))
 	try
-    	img=double(imread(filename))/255;
+        image_info = imfinfo(filename);
+        if(image_info.BitDepth==24)
+        	img=double(imread(filename))/255;
+        end
+        
+        if(bitDepth==48)
+            img=double(imread(filename))/65535;
+        end
     catch
         disp('This format is not supported.');
 	end

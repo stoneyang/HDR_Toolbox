@@ -84,24 +84,24 @@ switch extension
         
     case 'jpg'
         try
-            [dyn,dynClassicLog,dynClassic] = DynamicRange(img+(1/255));
-            if(dynClassic>300)
+%            [dyn,dynClassicLog,dynClassic] = DynamicRange(img+(1/255));
+%            if(dynClassic>300)
                 JPEGHDREnc(img, filename, jpeg_hdr_quality);
-            else
-                imwrite(img, filename, 'Quality', jpeg_hdr_quality);
-            end
+%            else
+%                imwrite(img, filename, 'Quality', jpeg_hdr_quality);
+%            end
         catch
             error('This JPEG file can not be written.');
         end
         
     case 'jp2'
          try
-            [dyn,dynClassicLog,dynClassic] = DynamicRange(img+(1/255));
-            if(dynClassic>300)            
+%            [dyn,dynClassicLog,dynClassic] = DynamicRange(img+(1/255));
+%            if(dynClassic>300)            
                 HDRJPEG2000Enc(img, filename, hdr_jpeg_2000_ratio)
-            else
-                imwrite(img, filename, 'CompressionRatio', hdr_jpeg_2000_ratio);
-            end
+%            else
+%                imwrite(img, filename, 'CompressionRatio', hdr_jpeg_2000_ratio);
+%            end
          catch
              error('This JPEG 2000 file can not be written.');
          end        

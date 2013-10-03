@@ -47,7 +47,9 @@ if(isdir(filename))
     
     list = tmp_list;
 
-    hdrv = struct('type',type,'path',filename,'list',list,'frameCounter',1);
+    totalFrames = length(list);
+    
+    hdrv = struct('type',type,'path',filename,'list',list,'totalFrames',totalFrames,'frameCounter',1);
 else
     
 end

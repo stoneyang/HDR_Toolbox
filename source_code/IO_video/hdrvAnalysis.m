@@ -1,0 +1,47 @@
+function [hm_v, max_v, min_v, mean_v] = hdrvAnalysis(hdrv)
+%
+%         [hm_v, max_v, min_v, mean_v] = hdrvAnalysis(hdrv)
+%
+%
+%        Input:
+%           -hdrv: a HDR video structure
+%
+%        Output:
+%           -hm_v  : harmonic mean of each frame
+%           -max_v : max of each frame
+%           -min_v : min value of each frame
+%           -mean_v: mean of each frame
+%
+%     Copyright (C) 2013  Francesco Banterle
+% 
+%     This program is free software: you can redistribute it and/or modify
+%     it under the terms of the GNU General Public License as published by
+%     the Free Software Foundation, either version 3 of the License, or
+%     (at your option) any later version.
+% 
+%     This program is distributed in the hope that it will be useful,
+%     but WITHOUT ANY WARRANTY; without even the implied warranty of
+%     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%     GNU General Public License for more details.
+% 
+%     You should have received a copy of the GNU General Public License
+%     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+%
+
+hm_v   = [];
+max_v  = [];
+min_v  = [];
+mean_v = [];
+
+for i=1:hdrv.totalFrames
+    [frame, hdrv] = getNextFrame(hdrv, i);
+    
+    L = RemoveSpecials(lum(frame));
+    
+    hm_v   = [hm_v,   logMean(L)];
+    max_v  = [max_v,  max(L(:))];
+    min_v  = [min_v,  min(L(:))];
+    mean_v = [mean_v, mean(L(:))];
+end
+
+end
