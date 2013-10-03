@@ -21,7 +21,7 @@ for the installation process.
 Run the demos to understand how to use I/O function, visualize images, tone Map Images, etc.
 
 -Update Report:
-03/10/2013: -Added input/output for HDR videos: this videos are folder with a sequence of HDR files.
+03/10/2013: -Added input/output for HDR videos: these videos need to be encoded as folders with a sequence of HDR files.
 	    -Integrated JPEGHDR and HDRJPEG 2000 into hdrimwrite and hdrimread.
 16/09/2013: -Added Grossberg and Nayar sampling through histograms.
 05/09/2013: -Added the TMQI Index by H. Yeganeh, Z. Wang. Based on the publication:
