@@ -46,16 +46,16 @@ end
 [h_bins, col, stackSize] = size(stack);
 
 %Compute CDF
-figure(4);
-hold on;
+%figure(4);
+%hold on;
 for i=1:stackSize
     for j=1:col
         h_cdf = cumsum(stack(:,j,i));
         stack(:,j,i) = h_cdf/max(h_cdf(:));
     end
-    plot(stack(:,1,i));
+%    plot(stack(:,1,i));
 end
-figure(1);
+%figure(1);
 stackOut = zeros(nSamples, stackSize, col);
 
 u = 0:(1.0/(nSamples-1)):1;

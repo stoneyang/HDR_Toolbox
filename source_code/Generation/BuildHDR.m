@@ -73,7 +73,7 @@ lin_fun = [];
 switch lin_type
     case 'tabledDeb97' %Estimating the CRF using Debevec and Malik
         %Weight function
-        W = WeightFunction(0:(1/255):1,weightFun);
+        W = WeightFunction(0:(1/255):1,'Deb97');
         %Convert the stack into a smaller stack
         stack_hist = ComputeLDRStackHistogram(stack);
         stack_samples = GrossbergSampling('', '', stack_hist, 100);%StackLowRes(stack);

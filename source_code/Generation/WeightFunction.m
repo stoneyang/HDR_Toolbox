@@ -46,7 +46,7 @@ switch weight_type
         weight(img>=t1&img<=t2) = tmp2(img>=t1&img<=t2);
         
     case 'Gauss'
-        weight = exp(-(img-0.5).^2/(2*(0.3)^2));
+        weight = exp(-(img-0.5).^2/(2*(0.15)^2));
         
     case 'hat'
         weight = 1 - (2*img-1).^12;
