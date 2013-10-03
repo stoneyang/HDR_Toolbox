@@ -6,8 +6,7 @@ function HDRJPEG2000Enc(img, name, compRatio)
 %
 %       Input:
 %           -img: HDR image
-%           -name:  is output name of the image. If img is empty
-%                   an HDR image with filename 'name' is loaded
+%           -name:  is output name of the image
 %           -compRatio: is JPEG output quality in [1,+inf]
 %
 %     Copyright (C) 2011  Francesco Banterle
@@ -25,14 +24,6 @@ function HDRJPEG2000Enc(img, name, compRatio)
 %     You should have received a copy of the GNU General Public License
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
-
-%remove the extension of the file
-if(isempty(img))
-    img = hdrimread(name);
-    nameOut = removeExt(name);
-else
-    nameOut = name;
-end
 
 if(~exist('compRatio'))
     compRatio = 2;
@@ -56,12 +47,11 @@ for i = 1:3
 end
 imgLog = uint16(imgLog*(2^nBit-1));
 
-imwrite(imgLog,[nameOut,'_comp.jp2'],'CompressionRatio',compRatio,'mode','lossy');
-
-%output tone mapping data
-fid = fopen([nameOut,'_data.txt'],'w');
+%metadata string
+metadata = [];
 for i = 1:3
-    fprintf(fid,'xMax: %g xMin: %g\n',xMax(i),xMin(i));
+    metadata = [metadata, num2str(xMax(i)),' ',num2str(xMin(i))];
 end
-fclose(fid);
+
+imwrite(imgLog,name,'CompressionRatio',compRatio,'mode','lossy','Comment',metadata);
 end

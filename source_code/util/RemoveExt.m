@@ -1,16 +1,18 @@
-function imgRec = HDRJPEG2000Dec(name)
+function name = RemoveExt(filename)
 %
 %
-%       imgRec=HDRJPEG2000Dec(name)
+%        name = RemoveExt(filename)
 %
 %
-%       Input:
-%           -name: the prefix of the compressed HDR images using JPEG HDR
+%        Description: remove file extension
 %
-%       Output:
-%           -imgRec: the reconstructed HDR image
+%        Input:
+%           -filename: the name of the file
 %
-%     Copyright (C) 2011  Francesco Banterle
+%        Output:
+%           -name: the filename without extension
+%
+%     Copyright (C) 2013  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -26,26 +28,18 @@ function imgRec = HDRJPEG2000Dec(name)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-%Read tone mapping data
-info = imfinfo(name);
+k=findstr(filename,'.');
 
-decoded = sscanf(cell2mat(info.Comments), '%g', 6);
-xMin = zeros(3,1);
-xMax = zeros(3,1);
-
-for i=1:3
-    xMax(i) = decoded(i*2);
-    xMin(i) = decoded(i*2+1);
+%there is no extension
+if(size(k)==0)
+    name = filename
+else
+    %get the real extension
+    ind = max(size(k));
+    k = k(ind);
+    name = filename(1:(k-1));   
 end
 
-%Decompression
-nBit = 16;
-delta = 1e-6;
-imgRec = double(imread(name))/(2^nBit-1);
-for i = 1:3
-    imgRec(:,:,i) = exp(imgRec(:,:,i)*(xMax(i)-xMin(i))+xMin(i))-delta;
-end
 
-imgRec(imgRec<0.0)=0;
 
 end

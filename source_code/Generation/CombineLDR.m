@@ -79,9 +79,10 @@ for i=1:n
     end
    
     %Calculation of the weight function    
-    imgOut    = imgOut + (weight.*img_lin) / stack_exposure(i);
-    
-    totWeight = totWeight + weight;
+    if(stack_exposure(i)>0.0)
+        imgOut    = imgOut + (weight.*img_lin) / stack_exposure(i);
+        totWeight = totWeight + weight;
+    end
 end
 
 if(~isempty(find(totWeight<=0.0)))

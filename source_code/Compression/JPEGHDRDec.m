@@ -27,18 +27,25 @@ function imgRec=JPEGHDRDec(name)
 %
 gamma = 2.2;
 
-%Read the tone mapped values
-fid = fopen([name,'_data.txt'],'r');
-fscanf(fid,'%s',1);
-maxTMO = fscanf(fid,'%g',1);
-fclose(fid);
+nameOut = removeExt(name);
+
+if(isempty(ind))
+    error('JPEGHDRDec not a valid JPEG HDR file!');
+end
+
+name = name(1:(ind-1));
+
+%Read metadata
+info = imfinfo(name);
+decoded = sscanf(cell2mat(info.Comment), '%g', 3);
+maxTMO = decoded(1);
 
 %Read the tone mapped layer
-imgTMO=maxTMO*((double(imread([name,'_tmo.jpg']))/255).^gamma);
+imgTMO=maxTMO*((double(imread(name))/255).^gamma);
 [r,c,col] = size(imgTMO);
 
 %Read the RI layer
-imgRI=(double(imread([name,'_ratio.jpg']))/255).^gamma;
+imgRI=(double(imread([nameOut,'_ratio.jpg']))/255).^gamma;
 imgRI=ClampImg(imgRI*32-16,-16,16);
 imgRI=2.^imgRI;
 imgRI = imresize(imgRI,[r,c],'bilinear');
@@ -48,6 +55,7 @@ imgRec = zeros(size(imgTMO));
 for i=1:3
     imgRec(:,:,i)=imgTMO(:,:,i).*imgRI;
 end
-imgRec=RemoveSpecials(imgRec);
+
+imgRec = RemoveSpecials(imgRec);
 
 end

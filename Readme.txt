@@ -1,4 +1,4 @@
- -Author: Francesco Banterle
+-Author: Francesco Banterle
 -Contact e-mail: support@advancedhdrbook.com
 
 -License: This software is distributed under GPL v3 license (see license.txt)
@@ -21,6 +21,8 @@ for the installation process.
 Run the demos to understand how to use I/O function, visualize images, tone Map Images, etc.
 
 -Update Report:
+03/10/2013: -Added input/output for HDR videos: this videos are folder with a sequence of HDR files.
+	    -Integrated JPEGHDR and HDRJPEG 2000 into hdrimwrite and hdrimread.
 16/09/2013: -Added Grossberg and Nayar sampling through histograms.
 05/09/2013: -Added the TMQI Index by H. Yeganeh, Z. Wang. Based on the publication:
 	     "Objective Quality Assessment of Tone Mapped Images", Journal of IEEE Transaction on Image Processing, 22 (2), 657-667, 2013

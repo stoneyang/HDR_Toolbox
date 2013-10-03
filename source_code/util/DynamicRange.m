@@ -1,7 +1,7 @@
-function [dyn,dynClassic]=DynamicRange(img)
+function [dyn,dynClassicLog,dynClassic]=DynamicRange(img)
 %
 %
-%        [dyn,dynClassic]=DynamicRange(img)
+%        [dyn,dynClassicLog,dynClassic]=DynamicRange(img)
 %
 %
 %        Input:
@@ -10,8 +10,10 @@ function [dyn,dynClassic]=DynamicRange(img)
 %        Output:
 %           -dyn: dynamic range in base 10 Logarithm space with roboust
 %           maximum and minimum values of the image
-%           -dynClassic: dynamic range in base 10 Logarithm space with
+%           -dynClassicLog: dynamic range in base 10 Logarithm space with
 %           maximum and minimum values of the image
+%           -dynClassic: dynamic range with maximum and minimum values
+%           of the image
 %
 %     Copyright (C) 2011  Francesco Banterle
 % 
@@ -29,13 +31,12 @@ function [dyn,dynClassic]=DynamicRange(img)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-%is it a three color channels image?
-check3Color(img);
+L = lum(img);
 
-L=lum(img);
+dyn = log10(MaxQuart(L,0.999)/MaxQuart(L,0.001));
 
-dyn=log10(MaxQuart(L,0.999)/MaxQuart(L,0.001));
+dynClassic = max(L(:))/min(L(:));
 
-dynClassic=log10(max(max(L))/min(min(L)));
+dynClassicLog = log10(dynClassic);
 
 end

@@ -71,7 +71,6 @@ end
 
 lin_fun = [];
 switch lin_type
-    
     case 'tabledDeb97' %Estimating the CRF using Debevec and Malik
         %Weight function
         W = WeightFunction(0:(1/255):1,weightFun);

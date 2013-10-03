@@ -37,6 +37,7 @@ d15 = 'BatchFunctions';
 d16 = 'Metrics';
 d17 = 'Metrics/util';
 d18 = 'Alignment';
+d19 = 'IO_video';
 
 cp = pwd();
 
@@ -59,6 +60,7 @@ addpath([cp,tmpStr,d15],'-begin');
 addpath([cp,tmpStr,d16],'-begin');
 addpath([cp,tmpStr,d17],'-begin');
 addpath([cp,tmpStr,d18],'-begin');
+addpath([cp,tmpStr,d19],'-begin');
 addpath([cp,'/demos/'], '-begin');
 
 savepath
@@ -82,6 +84,7 @@ clear('d15');
 clear('d16');
 clear('d17');
 clear('d18');
+clear('d19');
 clear('cp');
 
 disp('Check demo1.m and demo2.m on basics for how using the HDR Toolbox!');

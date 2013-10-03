@@ -6,8 +6,7 @@ function JPEGHDREnc(img, name, quality)
 %
 %       Input:
 %           -img: HDR image
-%           -name:  is output name of the image. If img is empty
-%                   an HDR image with filename 'name' is loaded
+%           -name:  is output name of the image
 %           -quality: is JPEG output quality in [0,100]
 %
 %     Copyright (C) 2011  Francesco Banterle
@@ -27,14 +26,13 @@ function JPEGHDREnc(img, name, quality)
 %
 
 %remove the extension of the file
-if(isempty(img))
-    img = hdrimread(name);
-    nameOut = removeExt(name);
-else
-    nameOut = name;
-end
+nameOut = RemoveExt(name);
 
 if(~exist('quality'))
+    quality = 95;
+end
+
+if(quality<1)
     quality = 95;
 end
 
@@ -79,12 +77,9 @@ imgTMO=RemoveSpecials(imgTMO);
 %Clamping using the 0.999th percentile
 maxTMO=MaxQuart(imgTMO,0.999);
 imgTMO=ClampImg(imgTMO/maxTMO,0,1);
-imwrite(imgTMO.^invGamma,[nameOut,'_tmo.jpg'],'Quality',quality);
 
-%output tone mapping data
-fid = fopen([nameOut,'_data.txt'],'w');
-fprintf(fid,'maxTMO: %g\n',maxTMO);
-fclose(fid);
+metatadata = num2str(maxTMO);
+imwrite(imgTMO.^invGamma,name,'Quality',quality,'Comment',metatadata);
 end
 
 

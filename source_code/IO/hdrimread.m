@@ -32,6 +32,7 @@ if(strcmpi(extension,'pic')==1)
 end
 
 img=[];
+bLDR = 0;
 
 switch extension
     
@@ -52,16 +53,38 @@ switch extension
         catch
             disp('This PFM file can not be read.');
         end
-       
-    otherwise
-        %try to open as LDR image
+        
+    case 'jp2'
         try
+            img = HDRJPEG2000Dec(filename);
+        catch
+            disp('Tried to read it as HDRJPEG 2000.');
+        end        
+        
+    case 'jpg'
+        try
+            img = JPEGHDRDec(filename);
+        catch
+            disp('Tried to read it as JPEG HDR.');
+        end
+       
+    otherwise %try to open as LDR image
+        try
+            bLDR = 1;
             img=double(imread(filename))/255;
         catch
             disp('This format is not supported.');
         end
 end
 
+if(isempty(img)&&(bLDR==0))
+	try
+    	img=double(imread(filename))/255;
+    catch
+        disp('This format is not supported.');
+	end
+end
+
 %Remove specials
-img=RemoveSpecials(img);
+img = RemoveSpecials(img);
 end
