@@ -34,7 +34,7 @@ for i=1:n
     %Read Exif file information
     if(strcmpi(format,'jpg')==1||strcmpi(format,'jpeg')==1)
         try
-            if(exist('iminfo'))
+            if(exist('imfinfo'))
                 img_info = imfinfo([dir_name,'/',list(i).name]);                    
                 	exposure(i) = img_info.DigitalCamera.ExposureTime;
             else
