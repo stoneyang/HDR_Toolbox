@@ -11,7 +11,7 @@
 %
 %
 disp('1) Load "Venice01.png" LDR image');
-img = hdrimread('Venice01.png');
+img = double(imread('Venice01.png'))/255.0;
 
 disp('2) Apply Banterle et al. 2008 Expansion Operator:');
 disp('   - the image is assumed to be encoded with gamma = 2.2');

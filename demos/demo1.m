@@ -34,7 +34,7 @@ imgTMO = ColorCorrection(imgTMO,0.8);
 GammaTMO(imgTMO, 2.2, 0, 1);
 
 disp('6) Save the tone mapped image as a PNG.');
-hdrimwrite(GammaTMO(imgTMO, 2.2, 0, 0), 'Bottles_Small_TMO.png');
+imwrite(GammaTMO(imgTMO, 2.2, 0, 0), 'Bottles_Small_TMO.png');
 
 
 
