@@ -28,6 +28,7 @@ function [frame, hdrv] = hdrvGetFrame(hdrv, frameCounter)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
+%which frame?
 maxFrames = length(hdrv.list);
 
 if(~exist('frameCounter'))
@@ -42,8 +43,19 @@ else
     end
 end
 
-frame = hdrimread([hdrv.path,'/',hdrv.list(frameCounter).name]);
+%reading the actual frame
+switch hdrv.type
+    case 'TYPE_HDR_PFM'
+        frame = hdrimread([hdrv.path,'/',hdrv.list(frameCounter).name]);
+    case 'TYPE_HDR_RGBE'
+        frame = hdrimread([hdrv.path,'/',hdrv.list(frameCounter).name]);
+    case 'TYPE_HDR_JPEG'
+        frame = hdrimread([hdrv.path,'/',hdrv.list(frameCounter).name]);
+    case 'TYPE_HDR_JPEG_2000'
+        frame = hdrimread([hdrv.path,'/',hdrv.list(frameCounter).name]);
+end
 
+%updating the counter
 hdrv.frameCounter = mod(frameCounter + 1, maxFrames+1);
 
 end
