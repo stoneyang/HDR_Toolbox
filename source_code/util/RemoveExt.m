@@ -32,7 +32,7 @@ k=findstr(filename,'.');
 
 %there is no extension
 if(size(k)==0)
-    name = filename
+    name = filename;
 else
     %get the real extension
     ind = max(size(k));

@@ -1,6 +1,6 @@
-function [frame, hdrv] = getNextFrame(hdrv, frameCounter)
+function [frame, hdrv] = hdrvGetFrame(hdrv, frameCounter)
 %
-%       [frame, hdrv] = hdrimread(filename)
+%       [frame, hdrv] = hdrvGetFrame(filename)
 %
 %
 %        Input:

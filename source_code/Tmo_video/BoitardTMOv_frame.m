@@ -1,4 +1,4 @@
-function frameOut = BoitardTMOv_frame(frame, max_log_mean_HDR, max_log_mean_LDR, tmo_operator, tmo_gamma)
+function frameOut = BoitardTMOv_frame(frame, max_log_mean_HDR, max_log_mean_LDR, tmo_operator, tmo_gamma, tmo_zeta)
 %
 %
 %       frameOut = BoitardTMOv_frame(frame, max_hm_HDR, max_hm_LDR, tmo_operator)
@@ -12,6 +12,8 @@ function frameOut = BoitardTMOv_frame(frame, max_log_mean_HDR, max_log_mean_LDR,
 %           video
 %           -tmo_operator: the tone mapping operator to use
 %           -tmo_gamma: gamma for encoding the frame
+%           -tmo_zeta: it is the "Minscale" parameter of the original paper,
+%           please see Equation 8 of it.
 %
 %       Output:
 %           -frameOut: the tone mapped frame
@@ -31,6 +33,16 @@ function frameOut = BoitardTMOv_frame(frame, max_log_mean_HDR, max_log_mean_LDR,
 %     You should have received a copy of the GNU General Public License
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
+%
+%     The paper describing this operator is:
+%     "Temporal Coherency for Video Tone Mapping"
+%     by R. Boitard, K. Bouatouch, R. Cozot, D. Thoreau, A. Gruson
+%     Proc. SPIE 8499, Applications of Digital Image Processing XXXV
+%
+%     DOI: 10.1117/12.929600 
+%
+%     Link : http://people.irisa.fr/Ronan.Boitard/articles/2012/TCVTM2012.pdf
+%
 
 if(~exist('tmo_operator'))
     tmo_operator = @ReinhardTMO;
@@ -38,6 +50,10 @@ end
 
 if(~exist('tmo_gamma'))
     tmo_gamma = 2.2;
+end
+
+if(~exist('tmo_zeta'))
+    tmo_zeta = 0.1;
 end
 
 %Tone mapping + Gamma encoding

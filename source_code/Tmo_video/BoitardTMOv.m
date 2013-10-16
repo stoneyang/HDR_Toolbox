@@ -1,7 +1,7 @@
-function BoitardTMOv(hdrv, filename, tmo_operator, tmo_gamma)
+function BoitardTMOv(hdrv, filename, tmo_operator, tmo_gamma, tmo_zeta)
 %
 %
-%       BoitardTMOv(hdrv, filename, tmo_operator, tmo_gamma)
+%       BoitardTMOv(hdrv, filename, tmo_operator, tmo_gamma, tmo_zeta)
 %
 %
 %       Input:
@@ -10,6 +10,8 @@ function BoitardTMOv(hdrv, filename, tmo_operator, tmo_gamma)
 %           single files will be generated)
 %           -tmo_operator: the tone mapping operator to use
 %           -tmo_gamma: gamma for encoding the frame
+%           -tmo_zeta: it is the "Minscale" parameter of the original paper,
+%           please see Equation 8 of it.
 %
 %       Output:
 %           -frameOut: the tone mapped frame
@@ -29,6 +31,16 @@ function BoitardTMOv(hdrv, filename, tmo_operator, tmo_gamma)
 %     You should have received a copy of the GNU General Public License
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
+%
+%     The paper describing this operator is:
+%     "Temporal Coherency for Video Tone Mapping"
+%     by R. Boitard, K. Bouatouch, R. Cozot, D. Thoreau, A. Gruson
+%     Proc. SPIE 8499, Applications of Digital Image Processing XXXV
+%
+%     DOI: 10.1117/12.929600 
+%
+%     Link : http://people.irisa.fr/Ronan.Boitard/articles/2012/TCVTM2012.pdf
+%
 
 if(~exist('tmo_operator'))
     tmo_operator = @ReinhardTMO;
@@ -36,6 +48,10 @@ end
 
 if(~exist('tmo_gamma'))
     tmo_gamma = 2.2;
+end
+
+if(~exist('tmo_zeta'))
+    tmo_zeta = 0.1;
 end
 
 [hm_v, max_v, min_v, mean_v] = hdrvAnalysis(hdrv);
@@ -50,8 +66,8 @@ name = RemoveExt(filename);
 ext = fileExtension(filename);
 for i=1:hdrv.totalFrames
     disp(['Processing frame ',num2str(i)]);
-    [frame, hdrv] = getNextFrame(hdrv, i);
-    frameOut = BoitardTMOv_frame(RemoveSpecials(frame), max_log_mean_HDR, max_log_mean_LDR, tmo_operator, tmo_gamma);
+    [frame, hdrv] = hdrvGetFrame(hdrv, i);
+    frameOut = BoitardTMOv_frame(RemoveSpecials(frame), max_log_mean_HDR, max_log_mean_LDR, tmo_operator, tmo_gamma, tmo_zeta);
 
     imwrite(frameOut,[name,num2str(1000+i),'.',ext]);
     

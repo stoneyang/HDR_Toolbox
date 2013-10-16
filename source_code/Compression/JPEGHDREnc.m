@@ -68,6 +68,11 @@ imgRI=ClampImg(imgRI*32-16,-16,16);
 imgRI=2.^imgRI;
 imgRI=imresize(imgRI,[r,c],'bilinear');
 
+file = fopen(nameRatio);
+A = fread(file);
+size(A)
+fclose(file);
+
 %Tone mapped image
 for i=1:3
     imgTMO(:,:,i)=img(:,:,i)./imgRI;

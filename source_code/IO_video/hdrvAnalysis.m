@@ -34,7 +34,7 @@ min_v  = [];
 mean_v = [];
 
 for i=1:hdrv.totalFrames
-    [frame, hdrv] = getNextFrame(hdrv, i);
+    [frame, hdrv] = hdrvGetFrame(hdrv, i);
     
     L = RemoveSpecials(lum(frame));
     
