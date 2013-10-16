@@ -61,7 +61,7 @@ frame_tmo = tmo_operator(frame);
 
 k_f_HDR = logMean(lum(frame));
 k_f_LDR = logMean(lum(frame_tmo));
-scale = (k_f_HDR*max_log_mean_LDR)/(max_log_mean_HDR*k_f_LDR);
+scale = tmo_zeta + (k_f_HDR*max_log_mean_LDR)/(max_log_mean_HDR*k_f_LDR);
 
 frameOut = GammaTMO(frame_tmo*scale,tmo_gamma,0.0,0);
 
