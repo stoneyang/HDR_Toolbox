@@ -54,24 +54,51 @@ if(~exist('tmo_zeta'))
     tmo_zeta = 0.1;
 end
 
-[hm_v, max_v, min_v, mean_v] = hdrvAnalysis(hdrv);
+[hdrv_hm, hdrv_max, hdrv_min, hdrv_mean] = hdrvAnalysis(hdrv);
+save('tmo_stream_info.dat','hdrv_hm','hdrv_max','hdrv_min','hdrv_mean');
 
-[max_log_mean_HDR,index] = max(hm_v);
-[frame, hdrv] = getNextFrame(hdrv, index);
+[max_log_mean_HDR,index] = max(hdrv_hm);
+[frame, hdrv] = hdrvGetFrame(hdrv, index);
 
 frame_tmo = tmo_operator(RemoveSpecials(frame));
 max_log_mean_LDR = logMean(lum(frame_tmo));
 
 name = RemoveExt(filename);
 ext = fileExtension(filename);
+
+bVideo = 0;
+writerObj = 0;
+
+if(strfind(ext,'avi')||strfind(ext,'mp4'))
+    bVideo = 1;
+    writerObj = VideoWriter(filename);
+    writerObj.FrameRate = hdrv.FrameRate;
+    open(writerObj);
+end
+
+hdrv = hdrvopen(hdrv);
+
+disp('Tone Mapping...');
 for i=1:hdrv.totalFrames
     disp(['Processing frame ',num2str(i)]);
     [frame, hdrv] = hdrvGetFrame(hdrv, i);
-    frameOut = BoitardTMOv_frame(RemoveSpecials(frame), max_log_mean_HDR, max_log_mean_LDR, tmo_operator, tmo_gamma, tmo_zeta);
+    frameOut = BoitardTMOv_frame(RemoveSpecials(frame), max_log_mean_HDR, max_log_mean_LDR, tmo_operator, tmo_zeta);
 
-    imwrite(frameOut,[name,num2str(1000+i),'.',ext]);
+    frameOut_gamma = GammaTMO(frameOut,tmo_gamma,0.0,0);
+    
+    if(bVideo)
+        writeVideo(writerObj,i);
+    else
+        imwrite(frameOut_gamma,[name,num2str(1000+i),'.',ext]);
+    end
     
 end
+disp('OK');
 
+if(bVideo)
+    close(writerObj);
+end
+
+hdrv = hdrvclose(hdrv);
 
 end

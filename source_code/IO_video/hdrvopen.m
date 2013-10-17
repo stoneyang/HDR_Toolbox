@@ -1,13 +1,15 @@
-function hdrv = hdrvread(filename)
+function hdrv = hdrvopen(hdrv)
 %
 %        hdrv = hdrvread(filename)
 %
 %
 %        Input:
-%           -filename: the name or the folder path of the HDR video to open
+%           -hdrv: a HDR video structure
 %
 %        Output:
 %           -hdrv: a HDR video structure
+%
+%        This function opens the video stream for reading frames
 %
 %     Copyright (C) 2013  Francesco Banterle
 % 
@@ -25,33 +27,10 @@ function hdrv = hdrvread(filename)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-hdrv = [];
-if(isdir(filename))
-    tmp_list = dir([filename,'/','*.hdr']);
-    type = 'TYPE_HDR_RGBE';
-    
-    if(isempty(tmp_list))
-        tmp_list = dir([filename,'/','*.pfm']);
-        type = 'TYPE_HDR_PFM';
+if(strfind(hdrv.type,'TYPE_HDR_VIDEO')==1)
+    if(~hdrv.streamOpen)
+        open(hdrv.stream);
     end
-    
-    if(isempty(tmp_list))%assuming frames compressed with jpeg HDR
-        tmp_list = dir([filename,'/','*.jpg']);
-        type = 'TYPE_HDR_JPEG';
-    end
-
-    if(isempty(tmp_list))%assuming frames compressed with HDR jpeg 2000
-        tmp_list = dir([filename,'/','*.jp2']);
-        type = 'TYPE_HDR_JPEG_2000';
-    end
-    
-    list = tmp_list;
-
-    totalFrames = length(list);
-    
-    hdrv = struct('type',type,'path',filename,'list',list,'totalFrames',totalFrames,'FrameRate',30,'frameCounter',1,'streamOpen',0);
-else
-    
 end
 
 end

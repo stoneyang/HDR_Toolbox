@@ -1,4 +1,4 @@
-function frameOut = BoitardTMOv_frame(frame, max_log_mean_HDR, max_log_mean_LDR, tmo_operator, tmo_gamma, tmo_zeta)
+function frameOut = BoitardTMOv_frame(frame, max_log_mean_HDR, max_log_mean_LDR, tmo_operator, tmo_zeta)
 %
 %
 %       frameOut = BoitardTMOv_frame(frame, max_hm_HDR, max_hm_LDR, tmo_operator)
@@ -11,7 +11,6 @@ function frameOut = BoitardTMOv_frame(frame, max_log_mean_HDR, max_log_mean_LDR,
 %           -max_log_mean_LDR: the maximum logarithmic mean in LDR of the
 %           video
 %           -tmo_operator: the tone mapping operator to use
-%           -tmo_gamma: gamma for encoding the frame
 %           -tmo_zeta: it is the "Minscale" parameter of the original paper,
 %           please see Equation 8 of it.
 %
@@ -48,10 +47,6 @@ if(~exist('tmo_operator'))
     tmo_operator = @ReinhardTMO;
 end
 
-if(~exist('tmo_gamma'))
-    tmo_gamma = 2.2;
-end
-
 if(~exist('tmo_zeta'))
     tmo_zeta = 0.1;
 end
@@ -63,6 +58,6 @@ k_f_HDR = logMean(lum(frame));
 k_f_LDR = logMean(lum(frame_tmo));
 scale = tmo_zeta + (k_f_HDR*max_log_mean_LDR)/(max_log_mean_HDR*k_f_LDR);
 
-frameOut = GammaTMO(frame_tmo*scale,tmo_gamma,0.0,0);
+frameOut = (frame_tmo*scale);
 
 end

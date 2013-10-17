@@ -4,7 +4,7 @@ function [hm_v, max_v, min_v, mean_v] = hdrvAnalysis(hdrv)
 %
 %
 %        Input:
-%           -hdrv: a HDR video structure
+%           -hdrv: a open HDR video structure
 %
 %        Output:
 %           -hm_v  : harmonic mean of each frame
@@ -33,15 +33,30 @@ max_v  = [];
 min_v  = [];
 mean_v = [];
 
+bClose = 0;
+
+if(hdrv.streamOpen==0)
+    hdrv = hdrvopen(hdrv);
+    bClose = 1;
+end
+
+disp('Video Analysis...');
 for i=1:hdrv.totalFrames
+    disp(['Frame: ',num2str(i)]);
     [frame, hdrv] = hdrvGetFrame(hdrv, i);
     
     L = RemoveSpecials(lum(frame));
+    L(L<0.0) = 0;
     
     hm_v   = [hm_v,   logMean(L)];
     max_v  = [max_v,  max(L(:))];
     min_v  = [min_v,  min(L(:))];
     mean_v = [mean_v, mean(L(:))];
+end
+disp('done');
+
+if(bClose)
+    hdrv = hdrvclose(hdrv);
 end
 
 end
