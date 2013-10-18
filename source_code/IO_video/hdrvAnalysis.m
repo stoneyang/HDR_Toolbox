@@ -42,7 +42,7 @@ end
 
 disp('Video Analysis...');
 for i=1:hdrv.totalFrames
-    disp(['Frame: ',num2str(i)]);
+    disp(['Processing Frame: ',num2str(i)]);
     [frame, hdrv] = hdrvGetFrame(hdrv, i);
     
     L = RemoveSpecials(lum(frame));

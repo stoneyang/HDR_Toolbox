@@ -87,7 +87,7 @@ for i=1:hdrv.totalFrames
     frameOut_gamma = GammaTMO(frameOut,tmo_gamma,0.0,0);
     
     if(bVideo)
-        writeVideo(writerObj,i);
+        writeVideo(writerObj,frameOut_gamma);
     else
         imwrite(frameOut_gamma,[name,num2str(1000+i),'.',ext]);
     end
