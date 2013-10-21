@@ -55,22 +55,28 @@ while(flag)
     RItmp = imresize(RI,scale,'bilinear');    
     RIenc = log2(RItmp+2^-16);
     RIenc = (ClampImg(RIenc,-16,16)+16)/32;
+    maxRIenc = max(RIenc(:));
+    minRIenc = min(RIenc(:));
+    RIenc = (RIenc-minRIenc)/(maxRIenc-minRIenc);
     %Ratio images are stored with maximum quality
-    imwrite(RIenc.^invGamma,nameRatio,'Quality',100);
+    metatadata = [num2str(maxRIenc),' ',num2str(minRIenc)];
+    imwrite(RIenc.^invGamma,nameRatio,'Quality',100,'Comment',metatadata);
     scale = scale - 0.005;
     %stop?
     valueDir = dir(nameRatio);
     flag = (valueDir.bytes/1024)>64;
 end
 
-imgRI=(double(imread(nameRatio))/255).^gamma;
-imgRI=ClampImg(imgRI*32-16,-16,16);
-imgRI=2.^imgRI;
-imgRI=imresize(imgRI,[r,c],'bilinear');
+imgRI = double(imread(nameRatio))/255;
+imgRI = imgRI.^gamma;
+imgRI = imgRI*(maxRIenc-minRIenc)+minRIenc;
+imgRI = ClampImg(imgRI*32-16,-16,16);
+imgRI = 2.^imgRI;
+imgRI = imresize(imgRI,[r,c],'bilinear');
 
 %Tone mapped image
 for i=1:3
-    imgTMO(:,:,i)=img(:,:,i)./imgRI;
+    imgTMO(:,:,i) = img(:,:,i)./imgRI;
 end
 imgTMO=RemoveSpecials(imgTMO);
 

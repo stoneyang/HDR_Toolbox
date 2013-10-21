@@ -54,7 +54,6 @@ for i=1:3
     imgTMO(:,:,i) = ((img(:,:,i)./L).^0.2).*Ld;
 end
 imgTMO = RemoveSpecials(imgTMO);
-hdrimwrite(imgTMO,'test.pfm');
 
 %Clamping
 maxTMO = MaxQuart(imgTMO, 0.999);

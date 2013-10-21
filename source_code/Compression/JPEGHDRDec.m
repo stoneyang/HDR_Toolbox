@@ -28,20 +28,27 @@ function imgRec=JPEGHDRDec(name)
 gamma = 2.2;
 
 nameOut = RemoveExt(name);
+nameRatio = [nameOut,'_ratio.jpg'];
 
 %Read metadata
 info = imfinfo(name);
 decoded = sscanf(cell2mat(info.Comment), '%g', 3);
 maxTMO = decoded(1);
 
+info_ratio = imfinfo(nameRatio);
+decoded_ratio = sscanf(cell2mat(info_ratio.Comment), '%g %g', 3);
+maxRIenc = decoded_ratio(1);
+minRIenc = decoded_ratio(2);
+    
 %Read the tone mapped layer
-imgTMO=maxTMO*((double(imread(name))/255).^gamma);
+imgTMO = maxTMO*((double(imread(name))/255).^gamma);
 [r,c,col] = size(imgTMO);
 
 %Read the RI layer
-imgRI=(double(imread([nameOut,'_ratio.jpg']))/255).^gamma;
-imgRI=ClampImg(imgRI*32-16,-16,16);
-imgRI=2.^imgRI;
+imgRI = (double(imread(nameRatio))/255).^gamma;
+imgRI = imgRI*(maxRIenc-minRIenc)+minRIenc;
+imgRI = ClampImg(imgRI*32-16,-16,16);
+imgRI = 2.^imgRI;
 imgRI = imresize(imgRI,[r,c],'bilinear');
 
 %Decoded image
