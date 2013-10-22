@@ -1,4 +1,4 @@
-function imgR = MantiukResidualImage(Ld, Lw)
+function [imgR, RF, Q] = MantiukResidualImage(Ld, Lw)
 %
 %
 %       imgR = MantiukResidualImage(Ld, Lw)
@@ -11,6 +11,8 @@ function imgR = MantiukResidualImage(Ld, Lw)
 %       Output:
 %           -imgR: residual image between reconstructed Lw from Ld and Lw,
 %           at 8-bit in the range [-127,127]
+%           -RF: Mantiuk's reconstruction function
+%           -Q: quantization factors
 %
 %     Copyright (C) 2013  Francesco Banterle
 % 
@@ -28,13 +30,11 @@ function imgR = MantiukResidualImage(Ld, Lw)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-if(~exist('Mantiuk_RF'))
-    Mantiuk_RF = MantiukReconstructionFunction(Ld, Lw);
-end
+RF = MantiukReconstructionFunction(Ld, Lw);
 
 Lw_rec = zeros(size(Lw));
 for i=1:256
-    Lw_rec(Ld==(i-1)) = Mantiuk_RF(i);
+    Lw_rec(Ld==(i-1)) = RF(i);
 end
 
 rl = Lw - Lw_rec; %residuals
@@ -42,10 +42,11 @@ rl = Lw - Lw_rec; %residuals
 %quantization
 Qmin = 1; %as suggested in the original paper
 imgR = zeros(size(rl));
+Q = zeros(256,1);
 for i=1:256
     rl_bin_i = abs(rl(Ld==(i-1)));
     Qtmp = max(rl_bin_i(:))/127;
-    Q = max(Qmin,Qtmp);
+    Q(i) = max(Qmin,Qtmp);
     
     imgR(Ld==(i-1)) = round(rl(Ld==(i-1))/Q);
 end
