@@ -28,7 +28,14 @@ function imgOut = BanterleTMO(img)
 %     You should have received a copy of the GNU General Public License
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
-
+%     The paper describing this technique is:
+%     "Dynamic Range Compression by Differential Zone Mapping Based on 
+%     Psychophysical Experiments"
+% 	  by Francesco Banterle, Alessandro Artusi, Elena Sikudova, 
+%     Thomas Edward William Bashford-Rogers, Patrick Ledda, Marina Bloj, Alan Chalmers 
+%     in ACM Symposium on Applied Perception (SAP) - August 2012 
+%
+%
 if(~exist('bFast'))
     bFast = 0;
 end
