@@ -32,7 +32,7 @@ check13Color(img);
 
 %Is alpha defined?
 if(~exist('LSC_alpha'))
-    LSC_alpha=0.5;
+    LSC_alpha = 0.5;
 end
 
 %Luminance channel
@@ -63,8 +63,9 @@ end
 fstopMap = LischinskiMinimization(log2(L+epsilon), fstopMap, 0.07*ones(size(L)));
 imgOut = zeros(size(img));
 col = size(img,3);
+
 for i=1:col
-    imgOut(:,:,i) = img(:,:,i).*2.^fstopMap;
+    imgOut(:,:,i) = (img(:,:,i)*LSC_alpha).*2.^fstopMap;
 end
 
 end
