@@ -30,11 +30,11 @@ function imgOut=WardHistAdjTMO(img,nBin,bPlotHistogram)
 check13Color(img);
 
 if(~exist('nBin'))
-    nBin=256;
+    nBin = 256;
 end
 
 if(nBin<1)
-    nBin=256;
+    nBin = 256;
 end
 
 if(~exist('bPlotHistogram'))
@@ -52,16 +52,15 @@ viewAngleHeight = 2*atan(n/(2*maxCoord*0.75));
 fScaleX = (2*tan(viewAngleWidth/2)/0.01745);
 fScaleY = (2*tan(viewAngleHeight/2)/0.01745);
 
-L2=imresize(L,[round(fScaleY), round(fScaleX)],'bilinear');
-LMax=max(L2(:));
-LMin=min(L2(:));
+L2 = imresize(L,[round(fScaleY), round(fScaleX)],'bilinear');
+LMax = max(L2(:));
+LMin = min(L2(:));
 
 if(LMin<=0.0)
      LMin=min(L2(L2>0.0));
 end
 
 %Log space
-epsilon = 1e-9;
 Llog  = log(L2);
 LlMax = log(LMax);
 LlMin = log(LMin);
@@ -85,14 +84,16 @@ if(bPlotHistogram)
 end
 
 %Calculation of P(x) 
-Pcum=cumsum(p);
-Pcum=Pcum/max(Pcum);
+Pcum = cumsum(p);
+Pcum = Pcum/max(Pcum);
 
 %Calculate tone mapped luminance
-x=(LlMin:(LlMax-LlMin)/(nBin-1):LlMax)';
-pps=spline(x,Pcum);
-Ld=exp(LldMin+(LldMax-LldMin)*ppval(pps,real(log(L))));
-Ld=(Ld-LdMin)/(LdMax-LdMin);
+L(L>LMax) = LMax;
+x=(LlMin:((LlMax-LlMin)/(nBin-1)):LlMax)';
+pps = spline(x,Pcum);
+Ld  = exp(LldMin+(LldMax-LldMin)*ppval(pps,real(log(L))));
+hdrimwrite(Ld,'ld.pfm');
+Ld  = (Ld-LdMin)/(LdMax-LdMin);
 
 %Changing luminance
 imgOut = ChangeLuminance(img, L, Ld);
