@@ -48,7 +48,7 @@ for i=1:256
     Qtmp = max(rl_bin_i(:))/127;
     Q(i) = max(Qmin,Qtmp);
     
-    imgR(Ld==(i-1)) = round(rl(Ld==(i-1))/Q);
+    imgR(Ld==(i-1)) = round(rl(Ld==(i-1))/Q(i));
 end
 
 imgR = ClampImg(imgR,-127,127);
