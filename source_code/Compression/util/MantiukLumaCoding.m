@@ -1,14 +1,18 @@
-function lw = MantiukLumaCoding(Lw)
+function Lout = MantiukLumaCoding(Lin, inverse)
 %
 %
-%       lw = MantiukLumaCoding(Lw)
+%       Lout = MantiukLumaCoding(Lin, inverse)
 %
 %
 %       Input:
-%           -Lw: input HDR luminance
+%           -Lin: input HDR luminance if inverse = 0 
+%                 input HDR Luma otherwise
+%           -inverse: if inverse = 1; the function converts from luminance
+%           to luma, otherwise the inverse
 %
 %       Output:
-%           -lw: luma; compressed luminance for MPEG-HDR Algorithm
+%           -Lout: luma if inverse = 0
+%                  luminance otherwise
 %
 %     Copyright (C) 2013  Francesco Banterle
 % 
@@ -26,10 +30,18 @@ function lw = MantiukLumaCoding(Lw)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-lw = Lw;
+if(inverse==0)
+    Lout = Lin;
 
-lw(Lw<5.604) = 17.554*lw(Lw<5.604);
-lw((Lw>=5.604)&(Lw<10469)) = 826.8*(lw((Lw>=5.604)&(Lw<10469)).^0.10013)-884.17;
-lw(Lw>=10469) = 209.16*log(lw(Lw>=10469))-731.28;
+    Lout( Lin<5.604) = 17.554*Lout(Lin<5.604);
+    Lout((Lin>=5.604)&(Lin<10469)) = 826.8*(Lout((Lin>=5.604)&(Lin<10469)).^0.10013)-884.17;
+    Lout( Lin>=10469) = 209.16*log(Lout(Lin>=10469))-731.28;
+else
+    Lout = Lin;
+
+    Lout( Lin<98.381) = 0.056968*Lout(Lin<98.381);
+    Lout((Lin>=98.381)&(Lin<1204.7)) = 7.3014e-30*(Lout((Lin>=98.381)&(Lin<1204.7)).^9.9872);
+    Lout( Lin>=1204.7) = 32.994*exp(Lout(Lin>=1204.7)*0.0047811);    
+end
 
 end
