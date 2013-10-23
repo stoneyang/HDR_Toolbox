@@ -34,7 +34,11 @@ RF = MantiukReconstructionFunction(Ld, Lw);
 
 Lw_rec = zeros(size(Lw));
 for i=1:256
-    Lw_rec(Ld==(i-1)) = RF(i);
+    indx = find(Ld==(i-1));
+
+    if(~isempty(indx))
+        Lw_rec(indx) = RF(i);
+    end
 end
 
 rl = Lw - Lw_rec; %residuals
@@ -44,11 +48,16 @@ Qmin = 1; %as suggested in the original paper
 imgR = zeros(size(rl));
 Q = zeros(256,1);
 for i=1:256
-    rl_bin_i = abs(rl(Ld==(i-1)));
-    Qtmp = max(rl_bin_i(:))/127;
-    Q(i) = max(Qmin,Qtmp);
-    
-    imgR(Ld==(i-1)) = round(rl(Ld==(i-1))/Q(i));
+    indx = find(Ld==(i-1));
+    if(~isempty(indx))
+        rl_bin_i = abs(rl(indx));
+        Qtmp = max(rl_bin_i(:))/127;
+        Q(i) = max(Qmin,Qtmp);
+
+        imgR(Ld==(i-1)) = round(rl(Ld==(i-1))/Q(i));
+    else
+        Q(i) = Qmin;
+    end
 end
 
 imgR = ClampImg(imgR,-127,127);

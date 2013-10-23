@@ -30,8 +30,11 @@ function RF = MantiukReconstructionFunction(Ld, Lw)
 RF = zeros(256,1);
 
 for i=1:256
-    tmpLw = Lw(Ld==(i-1));
-    RF(i) = mean(tmpLw(:));
+    indx = find(Ld==(i-1));
+    if(~isempty(indx))
+        tmpLw = Lw(Ld==(i-1));
+        RF(i) = mean(tmpLw(:));
+    end
 end
 
 end
