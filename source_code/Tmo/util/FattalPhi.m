@@ -28,8 +28,18 @@ function imgOut = FattalPhi(gradX, gradY, fAlpha, fBeta)
 %     You should have received a copy of the GNU General Public License
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
+
 grad = sqrt(gradX.^2+gradY.^2);
 
-imgOut = (grad/fAlpha).^(fBeta-1);
+t = (grad/fAlpha).^(fBeta-1);
+
+indx = find(t==inf);
+
+if(~isempty(indx))
+    imgOut = RemoveSpecials(t);
+    imgOut(indx) = mean(imgOut(:));
+else
+    imgOut = t;
+end
 
 end
