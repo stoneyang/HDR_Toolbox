@@ -31,15 +31,14 @@ mtx=kernel'*kernel;
 mtx=mtx/sum(sum(mtx));
 
 %Convolution
-imgB=conv2(img,mtx,'same');
+imgB = imfilter(img,mtx,'replicate');
 
 %Downsampling
-L0 = imresize(imgB, 0.5, 'bilinear');
+L0 = imresize(imgB, 0.5);
 
 %Upsampling
 [r,c]=size(img);
-imgE=imresize(L0, [r,c], 'bilinear');
-%imgEB=conv2(imgE,mtx,'same');
+imgE = imresize(L0, [r,c], 'bilinear');
 
 %Difference between the two levels
 B0 = img - imgE;

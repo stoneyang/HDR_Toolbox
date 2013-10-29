@@ -34,10 +34,10 @@ for i=1:n
     ind=n-i+1;
     [r,c]=size(list(ind).detail);
     if(i==1)        
-        base = imresize(base, [r,c]);
+        base = imresize(base, [r,c], 'bilinear');
         img  = base+list(ind).detail;
     else
-        img = imresize(img, [r,c]);
+        img = imresize(img, [r,c], 'bilinear');
         img = img+list(ind).detail;        
     end
 end
