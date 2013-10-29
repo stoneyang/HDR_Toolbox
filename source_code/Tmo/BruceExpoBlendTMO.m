@@ -11,7 +11,8 @@ function imgOut = BruceExpoBlendTMO(img, directory, format, imageStack, beb_R, b
 %           -format: the format of LDR images ('bmp', 'jpg', etc) in case
 %                    img=[] and the tone mapped images is built from a sequence of
 %                    images in the current directory
-%           -beb_R: radius in pixels for computing entropy
+%           -beb_R: radius in pixels for computing entropy, R parameter
+%           from the original paper
 %           -beb_beta: beta parameter from the original paper
 %
 %        Output:
@@ -78,7 +79,7 @@ totalE1 = zeros(r,c);
 
 kernel = zeros(beb_R*2+1);
 [X,Y] = meshgrid(1:(beb_R*2+1),1:(beb_R*2+1));
-kernel((((X-beb_R-1).^2+(Y-beb_R-1).^2)<(beb_R.^2))) = 1;
+kernel((((X-beb_R-1).^2+(Y-beb_R-1).^2)<=(beb_R.^2))) = 1;
 
 for i=1:n   
     logI = log(imageStack(:,:,:,i)+1);
@@ -109,7 +110,6 @@ imgOut = exp(imgOut);
 maxL = max(imgOut(:));
 minL = min(imgOut(:));
 imgOut = (imgOut-minL)/(maxL-minL);
-%ClampImg(exp(imgOut),0.0,1.0);
 
 disp('This algorithm outputs images with gamma encoding. Inverse gamma is not required to be applied!');
 end
