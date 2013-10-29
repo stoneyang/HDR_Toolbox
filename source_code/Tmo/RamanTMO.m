@@ -11,6 +11,7 @@ function imgOut = RamanTMO( img, directory, format, imageStack)
 %           -format: the format of LDR images ('bmp', 'jpg', etc) in case
 %                    img=[] and the tone mapped images is built from a sequence of
 %                    images in the current directory
+%           -imageStack: an image stack already in memory
 %
 %        Output:
 %           -imgOut: tone mapped image

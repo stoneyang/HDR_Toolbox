@@ -11,6 +11,7 @@ function imgOut = ZhangChamGradientTMO(img, directory, format, imageStack, bStat
 %           -format: the format of LDR images ('bmp', 'jpg', etc) in case
 %                    img=[] and the tone mapped images is built from a sequence of
 %                    images in the current directory
+%           -imageStack:
 %           -bStatic: determing if the scene is static or not
 %
 %        Output:

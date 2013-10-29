@@ -1,4 +1,4 @@
-function imgOut = MertensTMO( img, directory, format, wE, wS, wC )
+function imgOut = MertensTMO( img, directory, format, imageStack, wE, wS, wC )
 %
 %
 %        imgOut = MertensTMO( img, format, wE, wS, wC )
@@ -11,6 +11,7 @@ function imgOut = MertensTMO( img, directory, format, wE, wS, wC )
 %           -format: the format of LDR images ('bmp', 'jpg', etc) in case
 %                    img=[] and the tone mapped images is built from a sequence of
 %                    images in the current directory
+%           -imageStack: an image stack already in memory
 %           -wE: the weight for the well exposedness in [0,1]. Well exposed
 %                pixels are taken more into account if the wE is near 1
 %                otherwise they are not taken into account.
@@ -56,23 +57,28 @@ if(~exist('wC'))
     wC = 1.0;
 end
 
-%stack generation
-stack=[];
+%imageStack generation
+if(~exist('imageStack'))
+    imageStack = [];
+end
 
 if(~isempty(img))
-    %Convert the HDR image into a stack
-    [stack,stack_exposure] = GenerateExposureBracketing(img,1);
+    %Convert the HDR image into a imageStack
+    [imageStack,imageStack_exposure] = GenerateExposureBracketing(img,1);
 else
-    %load images from the current directory
-    images=dir([directory,'/','*.',format]);
-    n = length(images);
-    for i=1:n
-        stack(:,:,:,i) = single(imread([directory,'/',images(i).name]))/255.0;
+    if(isempty(imageStack))
+        %load images from the current directory
+        images=dir([directory,'/','*.',format]);
+        n = length(images);
+        for i=1:n
+            imageStack(:,:,:,i) = single(imread([directory,'/',images(i).name]))/255.0;
+        end
     end
 end
 
+
 %number of images in the stack
-[r,c,col,n] = size(stack);
+[r,c,col,n] = size(imageStack);
 
 %Computation of weights for each image
 total  = zeros(r,c);
@@ -80,18 +86,18 @@ weight = ones(r,c,n);
 for i=1:n
     %calculation of the weights
     if(wE>0.0)
-        weightE = MertensWellExposedness(stack(:,:,:,i));
+        weightE = MertensWellExposedness(imageStack(:,:,:,i));
         weight(:,:,i) = weightE.^wE;
     end
     
     if(wC>0.0)
-        L = mean(stack(:,:,:,i),3);  
+        L = mean(imageStack(:,:,:,i),3);  
         weightC = MertensContrast(L);
         weight(:,:,i) = weight(:,:,i) .* (weightC.^wC);
     end
 
     if(wS>0.0)
-        weightS = MertensSaturation(stack(:,:,:,i));
+        weightS = MertensSaturation(imageStack(:,:,:,i));
         weight(:,:,i) = weight(:,:,i) .* (weightS.^wS);
     end
     
@@ -109,7 +115,7 @@ end
 tf=[];
 for i=1:n
     %Laplacian pyramid: image
-    pyrImg = pyrImg3(stack(:,:,:,i),@pyrLapGen);
+    pyrImg = pyrImg3(imageStack(:,:,:,i),@pyrLapGen);
     %Gaussian pyramid: weight   
     pyrW   = pyrGaussGen(weight(:,:,i));
 
