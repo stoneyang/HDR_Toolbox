@@ -1,4 +1,4 @@
-function p=pyrGaussGen(img, stopDim)
+function p=pyrGaussGen(img)
 %
 %
 %        p=pyrGaussGen(img)
@@ -6,7 +6,6 @@ function p=pyrGaussGen(img, stopDim)
 %
 %        Input:
 %           -img: an image
-%           -stopDim: minimum dimension
 %
 %        Output:
 %           -p: a Gaussian pyramid of img
@@ -25,22 +24,16 @@ function p=pyrGaussGen(img, stopDim)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-if(~exist('stopDim'))
-    stopDim = 1;
-end
-
-check = 1;
+[r,c,col] = size(img);
+levels = floor(log(min(r,c)) / log(2));
 list = [];
-while(check)  
+for i=1:levels
     %Detail layer
     ts   = struct('detail',img);
     list = [list, ts];  
 
     %Next level
     img = pyrGaussGenAux(img);
-    
-    %is the smallest dimension bigger than 4?
-    check = min(size(img))>stopDim;
 end
 
 %Base layer

@@ -31,8 +31,8 @@ n = length(lstIn);
 lstOut=[];
 
 for i=1:n
-    p=fun(lstIn(i),pyrImg);
-    lstOut=[lstOut,p];
+    p = fun(lstIn(i),pyrImg);
+    lstOut = [lstOut,p];
 end
 
 end

@@ -22,7 +22,7 @@ function We = MertensWellExposedness(img)
 
 %sigma for the Well-exposedness weights.
 sigma  = 0.2; %as in the original paper
-sigma2 = 2*sigma^2;
+sigma2 = 2.0*sigma^2;
 
 [r,c,col] = size(img);
 We = ones(r,c);

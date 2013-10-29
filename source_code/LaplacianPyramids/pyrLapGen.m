@@ -1,4 +1,4 @@
-function p=pyrLapGen(img, stopDim)
+function p=pyrLapGen(img)
 %
 %
 %        p=pyrLapGen(img)
@@ -24,13 +24,10 @@ function p=pyrLapGen(img, stopDim)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-if(~exist('stopDim'))
-    stopDim = 1;
-end
-
-check=1;
-list=[];
-while(check)
+[r,c,col] = size(img);
+levels = floor(log(min(r,c)) / log(2));
+list = [];
+for i=1:levels
     %Calculating detail and base layers
     [tL0,tB0] = pyrLapGenAux(img);
     img = tL0;
@@ -38,9 +35,6 @@ while(check)
     %Detail layer
     ts   = struct('detail',tB0);
     list = [list,ts];  
-    
-    %is the smallest dimension bigger than 4?
-    check=min(size(img))>stopDim;
 end
 
 %Base layer

@@ -87,7 +87,7 @@ for i=1:n
     %calculation of the weights
     if(wE>0.0)
         weightE = MertensWellExposedness(imageStack(:,:,:,i));
-        weight(:,:,i) = weightE.^wE;
+        weight(:,:,i) = weight(:,:,i) .* weightE.^wE;
     end
     
     if(wC>0.0)
@@ -101,14 +101,14 @@ for i=1:n
         weight(:,:,i) = weight(:,:,i) .* (weightS.^wS);
     end
     
-    weight(:,:,i) = weight(:,:,i) + 1e-12;
+    weight(:,:,i) = weight(:,:,i)+1e-12;
     
     total = total + weight(:,:,i);
 end
 
 %Normalization of weights
 for i=1:n
-    weight(:,:,i) = RemoveSpecials(weight(:,:,i)./total);
+    weight(:,:,i) = weight(:,:,i)./total;
 end
 
 %empty pyramid
