@@ -25,7 +25,7 @@ function p=pyrLapGen(img)
 %
 
 [r,c,col] = size(img);
-levels = floor(log(min(r,c)) / log(2));
+levels = floor(log(min(r,c)) / log(2))-1;
 list = [];
 for i=1:levels
     %Calculating detail and base layers

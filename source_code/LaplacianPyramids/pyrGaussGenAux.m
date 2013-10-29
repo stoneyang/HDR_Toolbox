@@ -31,9 +31,9 @@ mtx = kernel'*kernel;
 mtx = mtx/sum(mtx(:));
 
 %Convolution
-imgB = imfilter(img,mtx,'same');
+imgB = imfilter(img,mtx,'replicate');
 
 %Downsampling
-imgOut = imresize(imgB, 0.5);
+imgOut = imresize(imgB, 0.5,'bilinear');
 
 end

@@ -31,7 +31,7 @@ n = length(list);
 
 img=[];
 for i=1:n
-    ind=n-i+1;
+    ind = n-i+1;
     [r,c]=size(list(ind).detail);
     if(i==1)        
         base = imresize(base, [r,c], 'bilinear');
