@@ -1,7 +1,7 @@
 function imgOut = MertensTMO( img, directory, format, imageStack, wE, wS, wC )
 %
 %
-%        imgOut = MertensTMO( img, format, wE, wS, wC )
+%        imgOut = MertensTMO( img, directory, format, imageStack, wE, wS, wC )
 %
 %
 %        Input:
