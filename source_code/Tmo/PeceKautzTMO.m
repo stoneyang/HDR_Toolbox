@@ -41,7 +41,6 @@ function imgOut = PeceKautzTMO( img, directory, format, imageStack, iterations, 
 %     The paper describing this technique is:
 %     "Bitmap Movement Detection: HDR for Dynamic Scenes"
 % 	  by Fabrizio Pece, Jan Kautz
-%
 %     in Conference on Visual Media Production (CVMP)
 %     London, UK, November 2010
 %
