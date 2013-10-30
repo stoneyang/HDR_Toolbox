@@ -11,7 +11,8 @@ function imgOut = MertensTMO( img, directory, format, imageStack, wE, wS, wC )
 %           -format: the format of LDR images ('bmp', 'jpg', etc) in case
 %                    img=[] and the tone mapped images is built from a sequence of
 %                    images in the current directory
-%           -imageStack: an image stack already in memory
+%           -imageStack: an exposure stack of LDR images; in case img=[],
+%                        and directory='' and format=''
 %           -wE: the weight for the well exposedness in [0,1]. Well exposed
 %                pixels are taken more into account if the wE is near 1
 %                otherwise they are not taken into account.
@@ -67,12 +68,7 @@ if(~isempty(img))
     [imageStack,imageStack_exposure] = GenerateExposureBracketing(img,1);
 else
     if(isempty(imageStack))
-        %load images from the current directory
-        images=dir([directory,'/','*.',format]);
-        n = length(images);
-        for i=1:n
-            imageStack(:,:,:,i) = single(imread([directory,'/',images(i).name]))/255.0;
-        end
+        imageStack = ReadLDRStack(directory, format)/255.0;
     end
 end
 
@@ -137,7 +133,7 @@ for i=1:col
 end
 
 %Clamping
-imgOut = ClampImg(imgOut,0.0,1.0);
+imgOut = ClampImg(imgOut/max(imgOut(:)),0.0,1.0);
 
 disp('This algorithm outputs images with gamma encoding. Inverse gamma is not required to be applied!');
 

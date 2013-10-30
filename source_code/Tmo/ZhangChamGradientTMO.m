@@ -50,12 +50,7 @@ if(~isempty(img))
     [imageStack,imageStack_exposure] = GenerateExposureBracketing(img,1);
 else
     if(isempty(imageStack))
-        %load images from the current directory
-        images=dir([directory,'/','*.',format]);
-        n = length(images);
-        for i=1:n
-            imageStack(:,:,:,i) = single(imread([directory,'/',images(i).name]))/255.0;
-        end
+        imageStack = ReadLDRStack(directory, format)/255.0;
     end
 end
 

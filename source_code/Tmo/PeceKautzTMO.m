@@ -1,7 +1,7 @@
-function imgOut = BruceExpoBlendTMO(img, directory, format, imageStack, beb_R, beb_beta)
+function imgOut = PeceKautzTMO( img, directory, format, imageStack, iterations, kernelSize)
 %
 %
-%        imgOut = BruceExpoBlendTMO(img, directory, format, imageStack, beb_R, beb_beta)
+%        imgOut = PeceKautzTMO( img, directory, format, imageStack, iterations, kernelSize)
 %
 %
 %        Input:
@@ -13,9 +13,9 @@ function imgOut = BruceExpoBlendTMO(img, directory, format, imageStack, beb_R, b
 %                    images in the current directory
 %           -imageStack: an exposure stack of LDR images; in case img=[],
 %                        and directory='' and format=''
-%           -beb_R: radius in pixels for computing entropy, R parameter
-%           from the original paper
-%           -beb_beta: beta parameter from the original paper
+%           -iterations: number of iterations for improving the movements'
+%           mask
+%           -kernelSize: size of the kernel for improving the movements' mask
 %
 %        Output:
 %           -imgOut: tone mapped image
@@ -51,14 +51,6 @@ if(~exist('imageStack'))
     imageStack = [];
 end
 
-if(~exist('beb_beta'))
-    beb_beta = 6;
-end
-
-if(~exist('beb_R'))
-    beb_R = 29;
-end
-
 if(~isempty(img))
     %Convert the HDR image into a imageStack
     [imageStack,imageStack_exposure] = GenerateExposureBracketing(img,1);
@@ -68,45 +60,80 @@ else
     end
 end
 
-%number of images in the imageStack
-[r,c,col,n]=size(imageStack);
-
-H_local = zeros(r,c,n);
-totalE1 = zeros(r,c);
-
-kernel = zeros(beb_R*2+1);
-[X,Y] = meshgrid(1:(beb_R*2+1),1:(beb_R*2+1));
-kernel((((X-beb_R-1).^2+(Y-beb_R-1).^2)<=(beb_R.^2))) = 1;
-
-for i=1:n   
-    logI = log(imageStack(:,:,:,i)+1);
-    H_local(:,:,i) = entropyfilt(lum(logI), kernel);
-    totalE1 = totalE1 + H_local(:,:,i);
+if(~exist('iterations'))
+    iterations = 15;
 end
 
-totalE2 = zeros(r,c);
+if(~exist('kernelSize'))
+    kernelSize = 5;
+end
+
+%number of images in the stack
+[r,c,col,n] = size(imageStack);
+
+%Computation of weights for each image
+total  = zeros(r,c);
+weight = ones(r,c,n);
 for i=1:n
-    H_norm = H_local(:,:,i)./totalE1;
-    H_local(:,:,i) = exp(beb_beta*H_norm);
-    totalE2 = totalE2 + H_local(:,:,i);
+    %calculation of the weights
+    weight(:,:,i) = MertensWellExposedness(imageStack(:,:,:,i));
 end
 
-imgOut = zeros(r,c,col);
-for i=1:n    
-    H_norm = H_local(:,:,i)./totalE2;
-    logI   = log(1+imageStack(:,:,:,i));
+[moveMask,num] = PeceMoveMask(imageStack, iterations, kernelSize);
+
+weight_move = zeros(r,c,n);
+for i=0:num
+    indx = find(moveMask==i);
     
-    for j=1:col
-        logI(:,:,j) = logI(:,:,j).*H_norm;
+    Wvec = zeros(n,1);
+    for j=1:n
+        W = weight(:,:,j);
+        Wvec(j) = mean(W(indx));
     end
-    
-    imgOut = imgOut + logI;
+    [val,j] = max(Wvec);
+
+    W = zeros(r,c);
+    W(indx) = 1;
+    weight_move(:,:,j) = weight_move(:,:,j) + W;
 end
 
-imgOut = exp(imgOut); 
-maxL = max(imgOut(:));
-minL = min(imgOut(:));
-imgOut = (imgOut-minL)/(maxL-minL);
+%Normalization of weights
+for i=1:n
+    total = total + weight_move(:,:,i);
+end
+
+for i=1:n
+    weight_move(:,:,i) = RemoveSpecials(weight_move(:,:,i)./total);
+end
+
+%empty pyramid
+tf=[];
+for i=1:n
+    %Laplacian pyramid: image
+    pyrImg = pyrImg3(imageStack(:,:,:,i),@pyrLapGen);
+    %Gaussian pyramid: weight   
+    pyrW   = pyrGaussGen(weight_move(:,:,i));
+
+    %Multiplication image times weights
+    tmpVal = pyrLstS2OP(pyrImg,pyrW,@pyrMul);
+   
+    if(i==1)
+        tf = tmpVal;
+    else
+        %accumulation
+        tf = pyrLst2OP(tf,tmpVal,@pyrAdd);    
+    end
+end
+
+%Evaluation of Laplacian/Gaussian Pyramids
+imgOut=zeros(r,c,col);
+for i=1:col
+    imgOut(:,:,i) = pyrVal(tf(i));
+end
+
+%Clamping
+imgOut = ClampImg(imgOut/max(imgOut(:)),0.0,1.0);
 
 disp('This algorithm outputs images with gamma encoding. Inverse gamma is not required to be applied!');
 end
+
