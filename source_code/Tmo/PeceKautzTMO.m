@@ -39,11 +39,11 @@ function imgOut = PeceKautzTMO( img, directory, format, imageStack, iterations, 
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 %     The paper describing this technique is:
-%     "ExpoBlend: Information preserving exposure blending based on
-%                 normalized log-domain entropy"
-% 	  by Neil D. B. Bruce
-%     in Elsevier Computer&Graphics, 2013
+%     "Bitmap Movement Detection: HDR for Dynamic Scenes"
+% 	  by Fabrizio Pece, Jan Kautz
 %
+%     in Conference on Visual Media Production (CVMP)
+%     London, UK, November 2010
 %
 
 %imageStack generation
@@ -79,7 +79,7 @@ for i=1:n
     weight(:,:,i) = MertensWellExposedness(imageStack(:,:,:,i));
 end
 
-[moveMask,num] = PeceMoveMask(imageStack, iterations, kernelSize);
+[moveMask,num] = PeceKautzMoveMask(imageStack, iterations, kernelSize);
 
 weight_move = zeros(r,c,n);
 for i=0:num
