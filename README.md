@@ -22,14 +22,8 @@ HDR Toolbox for processing High Dynamic Range (HDR) images into MATLAB and Octav
 
 
 -How To Install:
-
-1) Unzip the file HDRToolbox.zip in a FOLDER on your PC/MAC;
-
+1) Unzip the file HDRToolbox.zip in a FOLDER on your PC/MAC
 2) Run Matlab
-
 3) Set the FOLDER as current directory
-
-4) Write the command:
-installHDRToolbox
-
+4) Write the command:    installHDRToolbox
 in the Command Window, and wait for the installation process.
