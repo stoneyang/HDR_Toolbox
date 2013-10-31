@@ -16,25 +16,26 @@ disp('1) Load the image Bottles_Small.pfm using hdrimread');
 img = hdrimread('Bottles_Small.hdr');
 
 disp('2) Show the image Bottles_Small.pfm in linear mode using imshow');
-figure(1);
+h = figure(1);
 GammaTMO(img, 1.0, 0, 1);
+set(h,'Name','HDR visualization in Linear mode at F-stop 0');
 
 disp('3) Show the image Bottles_Small.hdr applying gamma');
-figure(2);
+h = figure(2);
 GammaTMO(img, 2.2, 0, 1);
+set(h,'Name','HDR visualization with gamma correction, 2.2, at F-stop 0');
 
 disp('4) Show the image Bottles_Small.hdr applying Reinhard''s Tmo');
-figure(3);
+h = figure(3);
 imgTMO = ReinhardTMO(img);
 GammaTMO(imgTMO, 2.2, 0, 1);
+set(h,'Name','Tone mapped image using ReinhardTMO');
 
 disp('5) Show and Apply Color Correction to the tone mapped image');
-figure(4);
+h = figure(4);
 imgTMO = ColorCorrection(imgTMO,0.8);
 GammaTMO(imgTMO, 2.2, 0, 1);
+set(h,'Name','Tone mapped image (ReinhardTMO) with color correction');
 
 disp('6) Save the tone mapped image as a PNG.');
 imwrite(GammaTMO(imgTMO, 2.2, 0, 0), 'Bottles_Small_TMO.png');
-
-
-

@@ -24,7 +24,7 @@ disp('3) Saving the tone mapped image as a PNG.');
 hdrimwrite(imgTMO, 'venice_calle_raman_TMO.png');
 
 disp('4) Applying Fusion Operator by Mertens et al to images in stack folder');
-imgTMO = MertensTMO([],'stack','jpg');
+imgTMO = MertensTMO([],'stack','jpg',[],1,1,1);
 
 disp('5) Showing the image after fusion, note that there is no need of gamma correction!');
 figure(2);

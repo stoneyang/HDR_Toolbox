@@ -41,7 +41,7 @@ function [imgOut, expand_map] = BanterleEO(img, expansion_operator, eo_parameter
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-check3Color(img);
+check13Color(img);
 
 %Gamma removal
 if(gammaRemoval>0.0)
@@ -56,9 +56,11 @@ if(~exist('bNoiseRemoval'))
     bNoiseRemoval = 0;
 end
 
+col = size(img,3);
+
 %Apply a gentle bilateral filter for removing noise
 if(bNoiseRemoval)
-    for i=1:3
+    for i=1:col
         img(:,:,i) = bilateralFilter(img(:,:,i),[],0.0,1.0,16.0,0.0125);
     end
 end
@@ -71,7 +73,7 @@ Lexp = expansion_operator(img,eo_parameters);
 expand_map = BanterleExpandMap(img, bColorRec, bclampingThreshold, 0.95, 'gaussian', 0);
 
 LFinal = zeros(size(img));
-for i=1:3
+for i=1:col
     LFinal(:,:,i) = L.*(1-expand_map(:,:,i))+Lexp.*expand_map(:,:,i);
     LFinal(:,:,i) = RemoveSpecials(LFinal(:,:,i));
 end
@@ -80,7 +82,7 @@ clear('Lexp');
 
 %Generate the final image with the new luminance
 imgOut = zeros(size(img));
-for i=1:3
+for i=1:col
     imgOut(:,:,i)=(img(:,:,i).*LFinal(:,:,i))./L;
 end
 imgOut = RemoveSpecials(imgOut);

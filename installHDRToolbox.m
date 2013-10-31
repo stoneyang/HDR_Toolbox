@@ -91,4 +91,23 @@ clear('d20');
 clear('cp');
 clear('tmpStr');
 
+result = lower(input('Do you want to download HDR videos from hdrv.org; the LiU HDRv Repository? (Yes/No)','s'));
+bDownload = 0;
+switch result
+    case 'y'
+        bDownload = 1;
+    case 'yes'
+        bDownload = 1;
+end
+
+if(bDownload)
+    filename = 'window.zip';
+    
+    str = [cp,'/demos/hdrv_org/',filename];
+    disp(['Downloading ',filename,' file']);
+    urlwrite(['http://hdrv.org/clips/',filename],str);
+    disp(['Unzipping ',filename,' file']);
+    unzip(str);
+end
+
 disp('Check demo1.m and demo2.m on basics for how using the HDR Toolbox!');

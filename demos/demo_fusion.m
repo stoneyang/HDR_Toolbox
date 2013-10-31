@@ -7,7 +7,7 @@
 %	   4) Save the tone mapped image as PNG
 %
 %       Author: Francesco Banterle
-%       Copyright June 2012 (c)
+%       Copyright June 2012-13 (c)
 %
 %
 
@@ -18,8 +18,9 @@ disp('2) Apply Fusion Operator by Mertens et al.');
 imgTMO = MertensTMO(img);
 
 disp('3) Show the image after fusion, note that there is no need of gamma correction!');
-figure(1);
-GammaTMO(imgTMO, 1.0, 0, 1);
+h = figure(1);
+set(h,'Name','Exposure fusion by Mertens et al.');
+GammaTMO(imgTMO, 1.0, 0.5, 1);
 
 disp('4) Save the tone mapped image as a PNG.');
-hdrimwrite(imgTMO, 'Bottles_Small_Fusion_TMO.png');
+imwrite(imgTMO, 'Bottles_Small_Fusion_TMO.png');
