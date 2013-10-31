@@ -17,18 +17,19 @@ disp('1) Applying Fusion Operator by Raman and Chaudhuri to images in stack fold
 imgTMO = RamanTMO([],'stack','jpg');
 
 disp('2) Showing the image after fusion, note that there is no need of gamma correction!');
-figure(1);
+h = figure(1);
+set(h,'Name','Raman and Chaudhuri exposure fusion (no need of gamma encoding)');
 GammaTMO(imgTMO, 1.0, 0, 1);
 
 disp('3) Saving the tone mapped image as a PNG.');
-hdrimwrite(imgTMO, 'venice_calle_raman_TMO.png');
+imwrite(imgTMO, 'venice_calle_raman_TMO.png');
 
 disp('4) Applying Fusion Operator by Mertens et al to images in stack folder');
 imgTMO = MertensTMO([],'stack','jpg',[],1,1,1);
 
 disp('5) Showing the image after fusion, note that there is no need of gamma correction!');
-figure(2);
+h = figure(2);
+set(h,'Name','Mertens et al. exposure fusion (no need of gamma encoding)');
 GammaTMO(imgTMO, 1.0, 0, 1);
-
 disp('6) Saving the tone mapped image as a PNG.');
-hdrimwrite(imgTMO, 'venice_calle_mertens_TMO.png');
+imwrite(imgTMO, 'venice_calle_mertens_TMO.png');

@@ -1,4 +1,4 @@
-function [imgOut, FC_MAX_L] = FalseColor(img, FC_compress, FC_Vis, FC_LMax)
+function [imgOut, FC_MAX_L] = FalseColor(img, FC_compress, FC_Vis, FC_LMax, FC_figure, FC_title)
 %
 %
 %       [imgOut, FC_MAX_L] = FalseColor(img, compress, FC_Vis, LMax)
@@ -24,6 +24,8 @@ function [imgOut, FC_MAX_L] = FalseColor(img, FC_compress, FC_Vis, FC_LMax)
 %           the image as a complete figure including the visualization bar
 %           -FC_LMax: the maximum luminance for the color re-mapping functions.
 %               This needs to be used when creating false color images with the same scale. 
+%           -FC_figure: index for the figure
+%           -FC_title: title for the false color window
 %           
 %       Output:
 %           -imgOut: the false color LDR and RGB image (no gamma is
@@ -66,18 +68,30 @@ if(~exist('FC_compress'))
     FC_compress = 'log';
 end
 
+if(~exist('FC_figure'))
+    FC_figure = 1;
+end
+
+if(~exist('FC_title'))
+    FC_title = 'False color visualization';
+end
+
 %Minimum luminance
-LMin = min(min(L));
+LMin = min(L(:));
 
 %Maximum luminance
 if(~exist('FC_LMax'))
-    LMax = max(max(L));
+    LMax = max(L(:));
 else
-    tLMax = max(max(L));
-    if(FC_LMax<tLMax)
-        LMax = tLMax;
+    if(FC_LMax<0)
+        LMax = max(L(:));
     else
-        LMax = FC_LMax - MinL;
+        tLMax = max(L(:));
+        if(FC_LMax<tLMax)
+            LMax = tLMax;
+        else
+            LMax = FC_LMax - MinL;
+        end
     end
 end
 
@@ -140,7 +154,8 @@ L = ClampImg(round(L*res),1,res);
 imgOut = ind2rgb(L,color_map);
 
 if(FC_Vis)%Visualization  
-    figure(1);
+    h = figure(FC_figure);
+    set(h, 'Name', FC_title);
     imshow(imgOut,'InitialMagnification','fit');
     colormap(color_map);
     

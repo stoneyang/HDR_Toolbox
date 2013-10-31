@@ -28,4 +28,6 @@ disp('5) Save the radiance map in the .hdr format');
 hdrimwrite(imgHDR,'example_build_alignment.hdr');
 
 disp('6) Show the tone mapped version of the radiance map');
+h = figure(1);
+set(h,'Name','Tone mapped built HDR Image from stack_alignment');
 GammaTMO(ReinhardBilTMO(imgHDR), 2.2, 0, 1);
