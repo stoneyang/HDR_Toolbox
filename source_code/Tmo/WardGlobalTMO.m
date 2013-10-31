@@ -1,6 +1,6 @@
-function imgOut=WardGlobalTMO(img, Ld_Max)
+function imgOut = WardGlobalTMO(img, Ld_Max)
 %
-%       imgOut=Ward1TMO(img,Ld_Max)
+%       imgOut = Ward1TMO(img,Ld_Max)
 %
 %
 %       Input:
@@ -30,18 +30,23 @@ function imgOut=WardGlobalTMO(img, Ld_Max)
 check13Color(img);
 
 if(~exist('Ld_Max'))
-    Ld_Max=100;
+    Ld_Max = 100;
+end
+
+if(Ld_Max<0)
+    Ld_Max = 100;
 end
 
 %Luminance channel
-L=lum(img);
+L = lum(img);
 
 %harmonic mean
-Lwa=logMean(L);
+Lwa = logMean(L);
 
 %contrast scale
-m=(((1.219+(Ld_Max/2)^0.4)/(1.219+Lwa^0.4))^2.5)/Ld_Max;
+m = (((1.219+(Ld_Max/2)^0.4)/(1.219+Lwa^0.4))^2.5);
 
-imgOut=img*m;
+imgOut = (img*m);
+imgOut = RemoveSpecials(imgOut / Ld_Max); %Just to have values in [0,1]
 
 end
