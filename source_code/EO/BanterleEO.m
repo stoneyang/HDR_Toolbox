@@ -66,12 +66,13 @@ if(bNoiseRemoval)
 end
 
 %Luminance expansion
-L = lum(img);
+hdrimwrite(img,'img.pfm');
 Lexp = expansion_operator(img,eo_parameters);
-
+hdrimwrite(Lexp,'lexp.pfm');
 %Combining expanded and unexpanded luminance channels
 expand_map = BanterleExpandMap(img, bColorRec, bclampingThreshold, 0.95, 'gaussian', 0);
 
+L = lum(img);
 LFinal = zeros(size(img));
 for i=1:col
     LFinal(:,:,i) = L.*(1-expand_map(:,:,i))+Lexp.*expand_map(:,:,i);
@@ -85,6 +86,7 @@ imgOut = zeros(size(img));
 for i=1:col
     imgOut(:,:,i)=(img(:,:,i).*LFinal(:,:,i))./L;
 end
+
 imgOut = RemoveSpecials(imgOut);
 
 end
