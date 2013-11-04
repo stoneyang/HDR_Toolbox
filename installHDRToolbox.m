@@ -23,22 +23,23 @@ d1  = 'ColorSpace';
 d2  = 'Compression';
 d3  = 'EnvironmentMaps';
 d4  = 'EO';
-d5  = 'Formats';
-d6  = 'Generation';
-d7  = 'IBL';
-d8  = 'IBL/util';
-d9  = 'IO';
-d10 = 'LaplacianPyramids';
-d11 = 'NativeVisualization';
-d12 = 'Tmo';
-d13 = 'Tmo/util';
-d14 = 'util';
-d15 = 'BatchFunctions';
-d16 = 'Metrics';
-d17 = 'Metrics/util';
-d18 = 'Alignment';
-d19 = 'IO_video';
-d20 = 'Tmo_video';
+d5  = 'EO/util';
+d6  = 'Formats';
+d7  = 'Generation';
+d8  = 'IBL';
+d9  = 'IBL/util';
+d10 = 'IO';
+d11 = 'LaplacianPyramids';
+d12 = 'NativeVisualization';
+d13 = 'Tmo';
+d14 = 'Tmo/util';
+d15 = 'util';
+d16 = 'BatchFunctions';
+d17 = 'Metrics';
+d18 = 'Metrics/util';
+d19 = 'Alignment';
+d20 = 'IO_video';
+d21 = 'Tmo_video';
 
 cp = pwd();
 
@@ -63,6 +64,7 @@ addpath([cp,tmpStr,d17],'-begin');
 addpath([cp,tmpStr,d18],'-begin');
 addpath([cp,tmpStr,d19],'-begin');
 addpath([cp,tmpStr,d20],'-begin');
+addpath([cp,tmpStr,d21],'-begin');
 addpath([cp,'/demos/'], '-begin');
 
 savepath
@@ -88,26 +90,8 @@ clear('d17');
 clear('d18');
 clear('d19');
 clear('d20');
+clear('d21');
 clear('cp');
 clear('tmpStr');
-
-result = lower(input('Do you want to download HDR videos from hdrv.org; the LiU HDRv Repository? (Yes/No)','s'));
-bDownload = 0;
-switch result
-    case 'y'
-        bDownload = 1;
-    case 'yes'
-        bDownload = 1;
-end
-
-if(bDownload)
-    filename = 'window.zip';
-    
-    str = [cp,'/demos/hdrv_org/',filename];
-    disp(['Downloading ',filename,' file']);
-    urlwrite(['http://hdrv.org/clips/',filename],str);
-    disp(['Unzipping ',filename,' file']);
-    unzip(str);
-end
 
 disp('Check demo1.m and demo2.m on basics for how using the HDR Toolbox!');
