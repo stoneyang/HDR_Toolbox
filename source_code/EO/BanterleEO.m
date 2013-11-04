@@ -1,6 +1,6 @@
 function [imgOut, expand_map] = BanterleEO(img, expansion_operator, eo_parameters, bclampingThreshold, bColorRec, gammaRemoval, bNoiseRemoval)
 %
-%       [imgOut, expand_map] = BanterleEO(img, expansion_operator, params, colorRec, gammaRemoval)
+%       [imgOut, expand_map] =  BanterleEO(img, expansion_operator, eo_parameters, bclampingThreshold, bColorRec, gammaRemoval, bNoiseRemoval)
 %
 %
 %        Input:
@@ -70,7 +70,7 @@ hdrimwrite(img,'img.pfm');
 Lexp = expansion_operator(img,eo_parameters);
 hdrimwrite(Lexp,'lexp.pfm');
 %Combining expanded and unexpanded luminance channels
-expand_map = BanterleExpandMap(img, bColorRec, bclampingThreshold, 0.95, 'gaussian', 0);
+expand_map = BanterleExpandMap(img, bColorRec, bclampingThreshold, 0.95, 'gaussian');
 
 L = lum(img);
 LFinal = zeros(size(img));
