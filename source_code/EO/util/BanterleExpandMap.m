@@ -1,6 +1,6 @@
 function expand_map = BanterleExpandMap(img, BEM_bColorRec, BEM_clamping_threshold, BEM_percent, BEM_density_estimation_kernel, BEM_bHighQuality)
 %
-%		 expand_map = BanterleExpandMap(img, BEM_percent)
+%		 expand_map = BanterleExpandMap(img, BEM_bColorRec, BEM_clamping_threshold, BEM_percent, BEM_density_estimation_kernel, BEM_bHighQuality)
 %
 %
 %		 Input:
@@ -24,7 +24,7 @@ function expand_map = BanterleExpandMap(img, BEM_bColorRec, BEM_clamping_thresho
 %		 Output:
 %			-expand_map: the final expand map
 %
-%     Copyright (C) 2011  Francesco Banterle
+%     Copyright (C) 2011-13  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -54,82 +54,19 @@ if(~exist('BEM_bHighQuality'))
     BEM_bHighQuality = 1;
 end
 
-%Median-cut for sampling img
-[r,c,col]=size(img);
-L = lum(img);
-nLights = 2.^(round(log2(min([r,c]))+2));
-[imgOut,lights] = MedianCut(img,nLights,0);
+[r,c,col] = size(img);
 
-%Determing the samples clamping
-window = round(max([r,c])/(2.0*sqrt(nLights)));
-Lout = lum(imgOut);
-
-if(BEM_clamping_threshold>=0)
-    thresholdSamples = BEM_clamping_threshold;
-else
-    %Create the histogram
-    H = zeros(length(lights),1);
-    for i=1:length(lights)
-        [X0,X1,Y0,Y1]=GenerateBBox(lights(i).x,lights(i).y,r,c,window);
-        indx = find(Lout(Y0:Y1,X0:X1)>0);
-        H(i) = length(indx);
-    end
-
-    %Sort H
-    H = sort(H);
-    Hcum = cumsum(H);
-    percentile = round(nLights*BEM_percent);
-    [val,indx] = min(abs(Hcum-percentile));
-    thresholdSamples = H(indx);
-end
-
-%samples' clamping
-if(thresholdSamples>0)
-    imgOut_tmp = imgOut;
-    Lout_tmp = Lout;
-    for i=1:length(lights)
-        [X0,X1,Y0,Y1] = GenerateBBox(lights(i).x,lights(i).y,r,c,window*3);
-        indx = find(Lout(Y0:Y1,X0:X1)>0);    
-        if(length(indx)<thresholdSamples)
-            X=ClampImg(round(lights(i).x*c),1,c);
-            Y=ClampImg(round(lights(i).y*r),1,r);
-            imgOut_tmp(Y,X,:) = 0;
-            Lout_tmp(Y,X) = 0;
-        end
-    end
-    Lout = Lout_tmp;
-    imgOut = imgOut_tmp;
-end
-
+%Computing samples with median cut
+[splat_pos, splat_power, window] = BanterleExpandMapSamples(img, BEM_bColorRec, BEM_clamping_threshold, BEM_percent);
+  
 %Density estimation thorugh splatting
 window_scale = 8;
 scaled_widow = window * window_scale;
 H = fspecial(BEM_density_estimation_kernel,scaled_widow,GKSigma(scaled_widow));
-
-[y,x] = find(Lout>0.0);
-splat_pos = [x';y'];
-
-if(BEM_bColorRec)   
-    fcol = 3;
-    splat_power = zeros(length(x),col);
-    for i=1:length(x)
-        for j=1:col
-            splat_power(i,j) = imgOut(y(i),x(i),j);
-        end
-    end
-else
-    fcol = 1;
-    splat_power = zeros(length(x),1);
-    for i=1:length(x)
-        splat_power(i,1) = Lout(y(i),x(i));
-    end    
-end
-    
-clear('imgOut');
-clear('Lout');
-    
 [img_density,counter_map] = imSplat(r,c,H,splat_pos,splat_power); 
     
+%Filtering the expand map
+fcol = size(img_density,3);
 expand_map_de = zeros(r,c,fcol);
 for i=1:fcol
     img_density(:,:,i) = img_density(:,:,i)./counter_map;

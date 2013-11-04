@@ -35,12 +35,12 @@ if(isdir(filename))
         type = 'TYPE_HDR_PFM';
     end
     
-    if(isempty(tmp_list))%assuming frames compressed with jpeg HDR
+    if(isempty(tmp_list))%assuming frames compressed with JPEG HDR
         tmp_list = dir([filename,'/','*.jpg']);
         type = 'TYPE_HDR_JPEG';
     end
 
-    if(isempty(tmp_list))%assuming frames compressed with HDR jpeg 2000
+    if(isempty(tmp_list))%assuming frames compressed with HDR JPEG 2000
         tmp_list = dir([filename,'/','*.jp2']);
         type = 'TYPE_HDR_JPEG_2000';
     end
