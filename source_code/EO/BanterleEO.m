@@ -75,7 +75,7 @@ hdrimwrite(img,'img.pfm');
 Lexp = expansion_operator(img,eo_parameters);
 hdrimwrite(Lexp,'lexp.pfm');
 %Combining expanded and unexpanded luminance channels
-expand_map = BanterleExpandMap(img, bColorRec, bclampingThreshold, 0.95, 'gaussian');
+expand_map = BanterleExpandMap(img, bColorRec, bclampingThreshold, 0.95, 'gaussian', BEM_bHighQuality);
 
 L = lum(img);
 LFinal = zeros(size(img));
