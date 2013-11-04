@@ -32,7 +32,7 @@ function Lexp = InverseReinhard(img, eo_parameters)
 
 %parameters extraction
 LMaxOut = eo_parameters(1);
-LWhite = eo_parameters(2);
+LWhite  = eo_parameters(2);
 bNormalization = 1;
 
 if(length(eo_parameters)>2)
@@ -42,13 +42,21 @@ end
 %Luminance channel
 L = lum(img);
 
+maxL = max(L(:));
+minL = min(L(:));
+
 if(bNormalization)
-    maxL = max(L(:));
-    minL = min(L(:));
     L = (L-minL)/(maxL-minL);
 end
 
 %Luminance expansion
 LWhite2 = LWhite^2;
-Lexp = LWhite*(LMaxOut/2)*(L-1+sqrt((1-L).^2+4*L/LWhite2));
+
+if(bNormalization|((maxL==1.0)&(minL==0)))
+    Lexp = ((LWhite*LMaxOut)*(L-1+sqrt((1-L).^2+4*L/LWhite2)))/2;
+else
+    beta = LMaxOut/((maxL-1+sqrt((1-maxL).^2+4*maxL/LWhite2)));
+    Lexp = beta*(L-1+sqrt((1-L).^2+4*L/LWhite2));
+end
+
 end
