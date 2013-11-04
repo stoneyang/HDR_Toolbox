@@ -1,6 +1,6 @@
-function [imgOut, expand_map] = BanterleEO(img, expansion_operator, eo_parameters, bclampingThreshold, bColorRec, gammaRemoval, bNoiseRemoval)
+function [imgOut, expand_map] = BanterleEO(img, expansion_operator, eo_parameters, bclampingThreshold, bColorRec, gammaRemoval, bNoiseRemoval, BEM_bHighQuality)
 %
-%       [imgOut, expand_map] =  BanterleEO(img, expansion_operator, eo_parameters, bclampingThreshold, bColorRec, gammaRemoval, bNoiseRemoval)
+%       [imgOut, expand_map] =  BanterleEO(img, expansion_operator, eo_parameters, bclampingThreshold, bColorRec, gammaRemoval, bNoiseRemoval, BEM_bHighQuality)
 %
 %
 %        Input:
@@ -20,6 +20,11 @@ function [imgOut, expand_map] = BanterleEO(img, expansion_operator, eo_parameter
 %           using gamme encoding
 %           -bNoiseRemoval: a boolean value. If it is set 1 it will apply a
 %           gentle bilateral filter to the image in order to remove noise.
+%           -BEM_bHighQuality: a boolean value. If it is set to 1,
+%           LischinskiMinimization will be used for better quality. This
+%           takes more than using the bilateral filter. You may need MATLAB
+%           at 64-bit for running high quality edge transer at HD
+%           resolution (1920x1080).
 %
 %        Output:
 %           -imgOut: inverse tone mapped image

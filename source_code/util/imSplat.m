@@ -29,7 +29,8 @@ function [imgOut,counter_map] = imSplat(r,c,imSprite,splat_pos,splat_power)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-[rS,cS,col] = size(imSprite);
+col = size(splat_power,2);
+[rS,cS] = size(imSprite);
 
 if(~exist('splat_power'))
     splat_power = ones(1,size(splat_pos,2),col);
@@ -75,8 +76,9 @@ for i=1:n
     x_coord = (minX:maxX)-minX+1+diff_x;
     
     for j=1:col
-        imgOut(minY:maxY,minX:maxX,j) = imgOut(minY:maxY,minX:maxX,j) + splat_power(i,j).*imSprite(y_coord,x_coord,j);
+        imgOut(minY:maxY,minX:maxX,j) = imgOut(minY:maxY,minX:maxX,j) + splat_power(i,j).*imSprite(y_coord,x_coord);
     end
+    
     counter_map(minY:maxY,minX:maxX,:) = counter_map(minY:maxY,minX:maxX,:) + imSprite_counting(y_coord,x_coord,:);
 end
 

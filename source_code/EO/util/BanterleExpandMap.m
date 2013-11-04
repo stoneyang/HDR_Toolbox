@@ -109,50 +109,35 @@ H = fspecial(BEM_density_estimation_kernel,scaled_widow,GKSigma(scaled_widow));
 [y,x] = find(Lout>0.0);
 splat_pos = [x';y'];
 
-if(BEM_bColorRec)
-    [rH,cH] = size(H);
-    H_col = zeros(rH,cH,col);
-    for i=1:col
-        H_col(:,:,i) = H;        
-    end
-    
+if(BEM_bColorRec)   
+    fcol = 3;
     splat_power = zeros(length(x),col);
     for i=1:length(x)
         for j=1:col
             splat_power(i,j) = imgOut(y(i),x(i),j);
         end
     end
-    
-    clear('imgOut');
-    clear('Lout');
-    
-    [img_density,counter_map] = imSplat(r,c,H_col,splat_pos,splat_power); 
-    
-    expand_map_de = zeros(r,c,col);
-    for i=1:col
-        img_density(:,:,i) = img_density(:,:,i)./counter_map;
-        expand_map_de(:,:,i) = GaussianFilterWindow(img_density(:,:,i), scaled_widow);
-    end
-    clear('img_density');
-    clear('counter_map');
 else
-    size(Lout);
+    fcol = 1;
     splat_power = zeros(length(x),1);
     for i=1:length(x)
         splat_power(i,1) = Lout(y(i),x(i));
     end    
-    
-    clear('imgOut');
-    clear('Lout');
-
-    [img_density,counter_map] = imSplat(r,c,H,splat_pos,splat_power);
-    img_density = img_density./counter_map;
-
-    expand_map_de = GaussianFilterWindow(img_density, scaled_widow);
-    
-    clear('img_density');
-    clear('counter_map');
 end
+    
+clear('imgOut');
+clear('Lout');
+    
+[img_density,counter_map] = imSplat(r,c,H,splat_pos,splat_power); 
+    
+expand_map_de = zeros(r,c,fcol);
+for i=1:fcol
+    img_density(:,:,i) = img_density(:,:,i)./counter_map;
+    expand_map_de(:,:,i) = GaussianFilterWindow(img_density(:,:,i), scaled_widow);
+end
+
+clear('img_density');
+clear('counter_map');
 
 %Edge transfer
 expand_map = BanterleExpandMapEdgeTransfer(expand_map_de, img, BEM_bColorRec, BEM_bHighQuality);
