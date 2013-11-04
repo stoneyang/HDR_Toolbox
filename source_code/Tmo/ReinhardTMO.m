@@ -36,7 +36,7 @@ function [imgOut,pAlpha,pWhite]=ReinhardTMO(img, pAlpha, pWhite, pLocal, pPhi)
 check13Color(img);
 
 %Luminance channel
-L=lum(img);
+L = lum(img);
 
 if(~exist('pLocal'))
     pLocal = 0;
@@ -62,39 +62,7 @@ L=(pAlpha*L)/Lwa;
 
 %Local calculation?
 if(pLocal)
-    %precomputation of 9 filtered images
-    sMax=9; 
-    [r,c]=size(L);
-    Lfiltered=zeros(r,c,sMax); 
-    LC=zeros(r,c,sMax);
-    alpha1=1/(2*sqrt(2));
-    alpha2=alpha1*1.6;
-    
-    constant=(2^pPhi)*pAlpha;
-    sizeWindow=1;
-    for i=1:sMax        
-        s = round(sizeWindow);
-        V1=ReinhardGaussianFilter(L,s,alpha1);    
-        V2=ReinhardGaussianFilter(L,s,alpha2);       
-        
-        %normalized difference of Gaussian levels
-        LC(:,:,i)=RemoveSpecials((V1-V2)./(constant/(s^2)+V1)); 
-        Lfiltered(:,:,i)=V1;
-        sizeWindow=sizeWindow*1.6;
-    end  
-    
-    %threshold is a constant for solving the band-limited 
-    %local contrast LC at a given image location.
-    epsilon=0.0001;
-    
-    %adaptation image
-    L_adapt=L;
-    for i=sMax:-1:1
-        ind=find(LC(:,:,i)<epsilon);
-        if(~isempty(ind))
-            L_adapt(ind)=Lfiltered(r*c*(i-1)+ind);
-        end
-    end
+    L_adapt = ReinhardFiltering(L, pAlpha, pPhi);
 end
 
 pWhite2=pWhite*pWhite;
