@@ -1,6 +1,6 @@
 function hdrv = hdrvclose(hdrv)
 %
-%        hdrv = hdrvclose(filename)
+%        hdrv = hdrvclose(hdrv)
 %
 %
 %        Input:
@@ -27,7 +27,7 @@ function hdrv = hdrvclose(hdrv)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-if(strfind('TYPE_HDR_VIDEO_MP4','TYPE_HDR_VIDEO')==1)
+if((strfind(hdrv.type,'TYPE_HDR_VIDEO')==1)|(strfind(hdrv.type,'TYPE_HDR_VIDEO_MP4')==1))
     if(hdrv.streamOpen)
         close(hdrv.stream);
     end

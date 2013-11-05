@@ -1,6 +1,6 @@
 function hdrv = hdrvopen(hdrv)
 %
-%        hdrv = hdrvread(filename)
+%        hdrv = hdrvread(hdrv)
 %
 %
 %        Input:
@@ -27,7 +27,7 @@ function hdrv = hdrvopen(hdrv)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-if(strfind(hdrv.type,'TYPE_HDR_VIDEO')==1)
+if((strfind(hdrv.type,'TYPE_HDR_VIDEO')==1)|(strfind(hdrv.type,'TYPE_HDR_VIDEO_MP4')==1))
     if(~hdrv.streamOpen)
         open(hdrv.stream);
     end

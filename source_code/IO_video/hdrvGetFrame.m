@@ -1,6 +1,6 @@
 function [frame, hdrv] = hdrvGetFrame(hdrv, frameCounter)
 %
-%       [frame, hdrv] = hdrvGetFrame(filename)
+%       [frame, hdrv] = hdrvGetFrame(hdrv, frameCounter)
 %
 %
 %        Input:
@@ -31,7 +31,7 @@ function [frame, hdrv] = hdrvGetFrame(hdrv, frameCounter)
 %which frame?
 maxFrames = length(hdrv.list);
 
-if(~exist('frameCounter'))
+if(~exist('frameCounter','var'))
     frameCounter = hdrv.frameCounter;
 else
     if(frameCounter<1)
