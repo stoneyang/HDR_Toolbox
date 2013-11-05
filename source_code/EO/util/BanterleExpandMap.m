@@ -46,11 +46,11 @@ else
     BEM_percent = ClampImg(BEM_percent,0.01,1.0);
 end
 
-if(~exist('BEM_density_estimation_kernel'))
+if(~exist('BEM_density_estimation_kernel','var'))
     BEM_density_estimation_kernel = 'gaussian';
 end
 
-if(~exist('BEM_bHighQuality'))
+if(~exist('BEM_bHighQuality','var'))
     BEM_bHighQuality = 1;
 end
 
@@ -68,6 +68,7 @@ H = fspecial(BEM_density_estimation_kernel,scaled_widow,GKSigma(scaled_widow));
 %Filtering the expand map
 fcol = size(img_density,3);
 expand_map_de = zeros(r,c,fcol);
+
 for i=1:fcol
     img_density(:,:,i) = img_density(:,:,i)./counter_map;
     expand_map_de(:,:,i) = GaussianFilterWindow(img_density(:,:,i), scaled_widow);

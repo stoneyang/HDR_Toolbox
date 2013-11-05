@@ -48,16 +48,20 @@ function [imgOut, expand_map] = BanterleEO(img, expansion_operator, eo_parameter
 
 check13Color(img);
 
+if(~exist('gammaRemoval','var'))
+    gammaRemoval = 2.2;
+end
+
 %Gamma removal
 if(gammaRemoval>0.0)
     img=img.^gammaRemoval;
 end
 
-if(~exist('expansion_operator'))
+if(~exist('expansion_operator','var'))
     expansion_operator = @InverseReinhard;
 end
 
-if(~exist('bNoiseRemoval'))
+if(~exist('bNoiseRemoval','var'))
     bNoiseRemoval = 0;
 end
 
@@ -71,9 +75,8 @@ if(bNoiseRemoval)
 end
 
 %Luminance expansion
-hdrimwrite(img,'img.pfm');
-Lexp = expansion_operator(img,eo_parameters);
-hdrimwrite(Lexp,'lexp.pfm');
+Lexp = expansion_operator(img, eo_parameters);
+
 %Combining expanded and unexpanded luminance channels
 expand_map = BanterleExpandMap(img, bColorRec, bclampingThreshold, 0.95, 'gaussian', BEM_bHighQuality);
 

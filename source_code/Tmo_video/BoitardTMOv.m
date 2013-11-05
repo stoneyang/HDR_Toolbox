@@ -1,12 +1,13 @@
-function BoitardTMOv(hdrv, filename, tmo_operator, tmo_gamma, tmo_zeta)
+function BoitardTMOv(hdrv, filenameOutput, tmo_operator, tmo_gamma, tmo_zeta)
 %
 %
-%       BoitardTMOv(hdrv, filename, tmo_operator, tmo_gamma, tmo_zeta)
+%       BoitardTMOv(hdrv, filenameOutput, tmo_operator, tmo_gamma, tmo_zeta)
 %
 %
 %       Input:
-%           -hdrv: a HDR video structure
-%           -filename: output filename (if it has an image extension,
+%           -hdrv: a HDR video structure; use hdrvread to create a hdrv
+%           structure
+%           -filenameOutput: output filename (if it has an image extension,
 %           single files will be generated)
 %           -tmo_operator: the tone mapping operator to use
 %           -tmo_gamma: gamma for encoding the frame
@@ -42,19 +43,19 @@ function BoitardTMOv(hdrv, filename, tmo_operator, tmo_gamma, tmo_zeta)
 %     Link : http://people.irisa.fr/Ronan.Boitard/articles/2012/TCVTM2012.pdf
 %
 
-if(~exist('tmo_operator'))
+if(~exist('tmo_operator','var'))
     tmo_operator = @ReinhardTMO;
 end
 
-if(~exist('tmo_gamma'))
+if(~exist('tmo_gamma','var'))
     tmo_gamma = 2.2;
 end
 
-if(~exist('tmo_zeta'))
+if(~exist('tmo_zeta','var'))
     tmo_zeta = 0.1;
 end
 
-[hdrv_hm, hdrv_max, hdrv_min, hdrv_mean] = hdrvAnalysis(hdrv);
+[hdrv_hm, ~, ~, ~] = hdrvAnalysis(hdrv);
 save('tmo_stream_info.dat','hdrv_hm','hdrv_max','hdrv_min','hdrv_mean');
 
 [max_log_mean_HDR,index] = max(hdrv_hm);
@@ -63,8 +64,8 @@ save('tmo_stream_info.dat','hdrv_hm','hdrv_max','hdrv_min','hdrv_mean');
 frame_tmo = tmo_operator(RemoveSpecials(frame));
 max_log_mean_LDR = logMean(lum(frame_tmo));
 
-name = RemoveExt(filename);
-ext = fileExtension(filename);
+name = RemoveExt(filenameOutput);
+ext = fileExtension(filenameOutput);
 
 bVideo = 0;
 writerObj = 0;
@@ -89,7 +90,7 @@ for i=1:hdrv.totalFrames
     if(bVideo)
         writeVideo(writerObj,frameOut_gamma);
     else
-        imwrite(frameOut_gamma,[name,num2str(1000+i),'.',ext]);
+        imwrite(frameOut_gamma,[name,sprintf('%.10d',i),'.',ext]);
     end
     
 end

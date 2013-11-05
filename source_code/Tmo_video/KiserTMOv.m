@@ -1,12 +1,13 @@
-function KiserTMOv(hdrv, filename, tmo_alpha_coeff, tmo_dn_clamping, tmo_gamma)
+function KiserTMOv(hdrv, filenameOutput, tmo_alpha_coeff, tmo_dn_clamping, tmo_gamma)
 %
 %
-%      KiserTMOv(hdrv, filename, tmo_alpha_coeff,  tmo_gamma)
+%      KiserTMOv(hdrv, filenameOutput, tmo_alpha_coeff,  tmo_gamma)
 %
 %
 %       Input:
-%           -hdrv: a HDR video structure
-%           -filename: output filename (if it has an image extension,
+%           -hdrv: a HDR video structure; use hdrvread to create a hdrv
+%           structure
+%           -filenameOutput: output filename (if it has an image extension,
 %           single files will be generated)
 %           -tmo_alpha_coeff: \alpha_A, \alpha_B, \alpha_C coefficients
 %           costants in the paper (Equation 3a, 3b, and 3c)
@@ -53,15 +54,15 @@ if(~exist('tmo_gamma'))
     tmo_gamma = 2.2;
 end
 
-name = RemoveExt(filename);
-ext  = fileExtension(filename);
+name = RemoveExt(filenameOutput);
+ext  = fileExtension(filenameOutput);
 
 bVideo = 0;
 writerObj = 0;
 
 if(strfind(ext,'avi')||strfind(ext,'mp4'))
     bVideo = 1;
-    writerObj = VideoWriter(filename);
+    writerObj = VideoWriter(filenameOutput);
     writerObj.FrameRate = hdrv.FrameRate;
     open(writerObj);
 end
@@ -122,7 +123,7 @@ for i=1:hdrv.totalFrames
     if(bVideo)
         writeVideo(writerObj,frameOut_gamma);
     else
-        imwrite(frameOut_gamma,[name,num2str(1000+i),'.',ext]);
+        imwrite(frameOut_gamma,[name,sprintf('%.10d',i),'.',ext]);
     end
     
     %updating for the next frame
