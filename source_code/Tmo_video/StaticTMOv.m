@@ -1,7 +1,7 @@
-function BoitardTMOv(hdrv, filenameOutput, tmo_operator, tmo_gamma, tmo_zeta)
+function StaticTMOv(hdrv, filenameOutput, tmo_operator, tmo_gamma)
 %
 %
-%       BoitardTMOv(hdrv, filenameOutput, tmo_operator, tmo_gamma, tmo_zeta)
+%       StaticTMOv(hdrv, filenameOutput, tmo_operator, tmo_gamma)
 %
 %
 %       Input:
@@ -11,8 +11,6 @@ function BoitardTMOv(hdrv, filenameOutput, tmo_operator, tmo_gamma, tmo_zeta)
 %           single files will be generated)
 %           -tmo_operator: the tone mapping operator to use
 %           -tmo_gamma: gamma for encoding the frame
-%           -tmo_zeta: it is the "Minscale" parameter of the original paper,
-%           please see Equation 8 of it.
 %
 %       Output:
 %           -frameOut: the tone mapped frame
@@ -33,36 +31,23 @@ function BoitardTMOv(hdrv, filenameOutput, tmo_operator, tmo_gamma, tmo_zeta)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 %
-%     The paper describing this operator is:
-%     "Temporal Coherency for Video Tone Mapping"
-%     by R. Boitard, K. Bouatouch, R. Cozot, D. Thoreau, A. Gruson
-%     Proc. SPIE 8499, Applications of Digital Image Processing XXXV
-%
-%     DOI: 10.1117/12.929600 
-%
-%     Link : http://people.irisa.fr/Ronan.Boitard/articles/2012/TCVTM2012.pdf
+%     This function applies a static TMO to an operator without taking into
+%     account for temporal coherency
 %
 
+if(~exist('filenameOutput','var'))
+    date_str = strrep(datestr(now()),' ','_');
+    date_str = strrep(date_str,':','_');
+    filenameOutput = ['static_tmo_output_',date_str,'.avi'];
+end
+
 if(~exist('tmo_operator','var'))
-    tmo_operator = @ReinhardTMO;
+    tmo_operator = @ReinhardBilTMO;
 end
 
 if(~exist('tmo_gamma','var'))
     tmo_gamma = 2.2;
 end
-
-if(~exist('tmo_zeta','var'))
-    tmo_zeta = 0.1;
-end
-
-[hdrv_hm, ~, ~, ~] = hdrvAnalysis(hdrv);
-save('tmo_stream_info.dat','hdrv_hm','hdrv_max','hdrv_min','hdrv_mean');
-
-[max_log_mean_HDR,index] = max(hdrv_hm);
-[frame, hdrv] = hdrvGetFrame(hdrv, index);
-
-frame_tmo = tmo_operator(RemoveSpecials(frame));
-max_log_mean_LDR = logMean(lum(frame_tmo));
 
 name = RemoveExt(filenameOutput);
 ext = fileExtension(filenameOutput);
@@ -83,10 +68,12 @@ disp('Tone Mapping...');
 for i=1:hdrv.totalFrames
     disp(['Processing frame ',num2str(i)]);
     [frame, hdrv] = hdrvGetFrame(hdrv, i);
-    frameOut = BoitardTMOv_frame(RemoveSpecials(frame), max_log_mean_HDR, max_log_mean_LDR, tmo_operator, tmo_zeta);
 
+    %Tone mapping
+    frameOut = RemoveSpecials(tmo_operator(frame)); 
     frameOut_gamma = GammaTMO(frameOut,tmo_gamma,0.0,0);
     
+    %Storing 
     if(bVideo)
         writeVideo(writerObj,frameOut_gamma);
     else

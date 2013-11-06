@@ -71,7 +71,7 @@ fcol = size(img_density,3);
 expand_map_de = zeros(r,c,fcol);
 
 for i=1:fcol
-    img_density(:,:,i) = img_density(:,:,i)./counter_map;
+    img_density(:,:,i)   = img_density(:,:,i)./counter_map;
     expand_map_de(:,:,i) = GaussianFilterWindow(img_density(:,:,i), scaled_widow);
 end
 

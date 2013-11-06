@@ -61,8 +61,12 @@ if(~exist('expansion_operator','var'))
     expansion_operator = @InverseReinhard;
 end
 
+if(~exist('eo_parameters','var'))
+    eo_parameters = [3000,3000]; %assuming DR37p HDR monitor
+end
+
 if(~exist('bNoiseRemoval','var'))
-    bNoiseRemoval = 0;
+    bNoiseRemoval = 1;
 end
 
 if(~exist('BEM_bHighQuality','var'))

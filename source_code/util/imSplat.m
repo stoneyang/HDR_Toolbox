@@ -33,7 +33,7 @@ col = size(splat_power,2);
 [rS,cS] = size(imSprite);
 
 if(~exist('splat_power'))
-    splat_power = ones(1,size(splat_pos,2),col);
+    splat_power = ones(size(splat_pos,2),col);
 end
 
 imgOut = zeros(r,c,col);

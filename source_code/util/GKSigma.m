@@ -27,6 +27,6 @@ function sigma=GKSigma(window)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-sigma=window/5;
+sigma = window/5;
 
 end

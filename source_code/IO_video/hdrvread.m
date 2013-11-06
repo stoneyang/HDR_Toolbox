@@ -45,11 +45,11 @@ if(isdir(filename))
         type = 'TYPE_HDR_JPEG_2000';
     end
     
-    list = tmp_list;
-
-    totalFrames = length(list);
+    if(isempty(tmp_list))
+        type = 'TYPE_HDR_FAIL';
+    end
     
-    hdrv = struct('type',type,'path',filename,'list',list,'totalFrames',totalFrames,'FrameRate',30,'frameCounter',1,'streamOpen',0);
+    hdrv = struct('type',type,'path',filename,'list',tmp_list,'totalFrames',length(tmp_list),'FrameRate',30,'frameCounter',1,'streamOpen',0);
 else
     
 end
