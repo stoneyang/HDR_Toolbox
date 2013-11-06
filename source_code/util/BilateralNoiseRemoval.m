@@ -30,7 +30,7 @@ function imgOut = BilateralNoiseRemoval(img, sigma_s, sigma_r)
 
 col = size(img,3);
 
-if(~exist('sigma_s','var')
+if(~exist('sigma_s','var'))
     sigma_r = 4;
 end
 
@@ -38,7 +38,7 @@ if(sigma_s<4)
     sigma_s = 4;
 end
 
-if(~exist('sigma_r','var')
+if(~exist('sigma_r','var'))
     sigma_r = 0.01;
 end
 
