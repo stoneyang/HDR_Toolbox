@@ -73,30 +73,7 @@ col = size(img,3);
 
 %Apply a gentle bilateral filter for removing noise
 if(bNoiseRemoval)
-    sigma_r = 0.01;
-
-    switch col
-        case 1
-            img = bilateralFilter(img,[],0.0,1.0,4.0,sigma_r);            
-        
-        case 3
-            imgLab = ConvertXYZtoCIELab(ConvertRGBXYZ(img,0),0);
-
-            for i=1:col
-                tmp = imgLab(:,:,i);
-                minC = min(tmp(:));
-                maxC = max(tmp(:));
-                tmp = (tmp-minC)/(maxC-minC);
-                imgLab(:,:,i) = bilateralFilter(tmp,[],0.0,1.0,4.0,sigma_r)*(maxC-minC)+minC;
-            end 
-            
-            img = ConvertRGBXYZ(ConvertXYZtoCIELab(imgLab,1),1);
-            
-        otherwise
-            for i=1:col
-                img(:,:,i) = bilateralFilter(img(:,:,i),[],0.0,1.0,4.0,sigma_r);
-            end           
-    end
+    img = BilateralNoiseRemoval(img, 4.0, 0.01);
 end
 
 %Luminance expansion
