@@ -99,7 +99,6 @@ if(bNoiseRemoval)
     end
 end
 
-hdrimwrite(img,'img.pfm');
 %Luminance expansion
 Lexp = expansion_operator(img, eo_parameters);
 
