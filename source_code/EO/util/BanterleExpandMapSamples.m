@@ -34,6 +34,12 @@ function [splat_pos, splat_power, window] = BanterleExpandMapSamples(img, BEM_bC
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
+if(~exist('BEM_percent','var'))
+    BEM_percent = 0.95;
+else
+    BEM_percent = ClampImg(BEM_percent,0.01,1.0);
+end
+
 %Median-cut for sampling img
 [r,c,col] = size(img);
 nLights = 2.^(round(log2(min([r,c]))+2));

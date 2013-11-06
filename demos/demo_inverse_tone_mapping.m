@@ -22,7 +22,7 @@ disp('   - colored expand map is turned on');
 disp('   - manual samples clamping set to 5');
 disp('   - Inverse Reinhard et al. 2002 operator is used');
 disp('   - High Quality edge-aware filtering is used (LischinskiMinimization.m)');
-[imgOut,expand_map] = BanterleEO(img, @InverseReinhard, [2000.0,2000.0], 5, 1, 2.2, 1, 1);
+[imgOut,expand_map] = BanterleEO(img, @InverseReinhard, [2000.0,1000.0], 1, 5, 1, 2.2, 1);
 
 disp('3) Show the expanded image in false color');
 FalseColor(imgOut,'log',1,-1,2,'Inverse tone mapped LDR image in false color');

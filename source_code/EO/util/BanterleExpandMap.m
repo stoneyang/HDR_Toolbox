@@ -54,7 +54,8 @@ if(~exist('BEM_bHighQuality','var'))
     BEM_bHighQuality = 1;
 end
 
-[r,c,col] = size(img);
+r = size(img, 1);
+c = size(img, 2);
 
 %Computing samples with median cut
 [splat_pos, splat_power, window] = BanterleExpandMapSamples(img, BEM_bColorRec, BEM_clamping_threshold, BEM_percent);
