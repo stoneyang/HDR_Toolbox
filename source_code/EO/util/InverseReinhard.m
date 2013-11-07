@@ -52,7 +52,7 @@ end
 %Luminance expansion
 LWhite2 = LWhite^2;
 
-if(bNormalization|((maxL==1.0)&(minL==0)))
+if(bNormalization|((maxL==1.0)&(minL==0.0)))
     Lexp = ((LWhite*LMaxOut)*(L-1+sqrt((1-L).^2+4*L/LWhite2)))/2;
 else
     beta = LMaxOut/((maxL-1+sqrt((1-maxL).^2+4*maxL/LWhite2)));

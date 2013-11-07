@@ -87,13 +87,10 @@ Lexp = expansion_operator(img, eo_parameters);
 expand_map = BanterleExpandMap(img, BEM_bColorRec, BEM_clamping_threshold, 0.95, 'gaussian', BEM_bHighQuality);
 
 L = lum(img);
-LFinal = zeros(size(img));
+LFinal = zeros(size(expand_map));
 for i=1:col
     LFinal(:,:,i) = L.*(1-expand_map(:,:,i))+Lexp.*expand_map(:,:,i);
-    LFinal(:,:,i) = RemoveSpecials(LFinal(:,:,i));
 end
-
-clear('Lexp');
 
 %Generate the final image with the new luminance
 imgOut = zeros(size(img));

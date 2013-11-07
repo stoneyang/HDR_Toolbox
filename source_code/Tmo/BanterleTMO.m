@@ -5,7 +5,9 @@ function imgOut = BanterleTMO(img)
 %
 %
 %       Input:
-%           -img: an HDR image
+%           -img: an HDR image with calibrated data in cd/m^2.
+%           Note that this algorithm was tested with values
+%           from 0.015cd/m^2 to 3,000 cd/m^2.
 %
 %       Output:
 %           -imgOut: the tone mapped image using the HybridTMO
@@ -36,9 +38,6 @@ function imgOut = BanterleTMO(img)
 %     in ACM Symposium on Applied Perception (SAP) - August 2012 
 %
 %
-if(~exist('bFast'))
-    bFast = 0;
-end
 
 %Segmentation
 segments = CreateSegments(img);
@@ -78,8 +77,10 @@ if(isempty(indx1))
 end
 
 if(~isempty(indx0)&&~isempty(indx1))%pyramid blending in gamma space
-    imgA   = ClampImg(img_rei_tmo.^(1.0/2.2),0,1);
-    imgB   = ClampImg(img_dra_tmo.^(1.0/2.2),0,1);
+    invGamma = 1.0/2.2;
+    imgA   = img_rei_tmo.^invGamma;
+    imgB   = img_dra_tmo.^invGamma;
+    
     imgOut = pyrBlend(imgA,imgB,mask).^2.2;
 end
 

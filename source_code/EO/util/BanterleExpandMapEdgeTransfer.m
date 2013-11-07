@@ -58,7 +58,7 @@ switch col
             minI = min(tmpImg(:));
             maxI = max(tmpImg(:));
             tmpImg = (tmpImg-minI)/(maxI-minI);
-            
+           
             tmpEmap = expand_map_de_Lab(:,:,i);
             minE = min(tmpEmap(:));
             maxE = max(tmpEmap(:));
