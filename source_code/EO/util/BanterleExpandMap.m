@@ -79,7 +79,7 @@ clear('img_density');
 clear('counter_map');
 
 %Edge transfer
-expand_map = BanterleExpandMapEdgeTransfer(expand_map_de, img, BEM_bColorRec, BEM_bHighQuality);
+expand_map = BanterleExpandMapEdgeTransfer(expand_map_de, img, BEM_bHighQuality);
 
 %Expand map normalization
 max_em = max(expand_map(:));

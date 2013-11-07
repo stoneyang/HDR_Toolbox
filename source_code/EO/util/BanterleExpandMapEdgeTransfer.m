@@ -1,14 +1,12 @@
-function expand_map = BanterleExpandMapEdgeTransfer(expand_map_de, img, BEM_bColorRec, BEM_bHighQuality)
+function expand_map = BanterleExpandMapEdgeTransfer(expand_map_de, img, BEM_bHighQuality)
 %
-%		 expand_map = BanterleExpandMapEdgeTransfer(expand_map_de, img, BEM_bColorRec, BEM_bHighQuality)
+%		 expand_map = BanterleExpandMapEdgeTransfer(expand_map_de, img, BEM_bHighQuality)
 %
 %
 %		 Input:
 %           -expand_map_de: expand map after density estimation; i.e.
 %           without strong edges
 %			-img: an input image LDR image in the linear domain
-%           -BEM_bColorRec: a boolean value. If it is set 1 the expand
-%           map will be calculated for each color channel
 %           -BEM_bHighQuality: a boolean value. If it is set to 1,
 %           LischinskiMinimization will be used for better quality. This
 %           takes more than using the bilateral filter. You may need MATLAB
@@ -34,31 +32,58 @@ function expand_map = BanterleExpandMapEdgeTransfer(expand_map_de, img, BEM_bCol
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-L = lum(img);
+if(~exist('BEM_bHighQuality','var'))
+    BEM_bHighQuality = 0;
+end
 
 %Edge transfer
-[r,c,col] = size(img);
+[r,c,col] = size(expand_map_de);
 
 expand_map = zeros(r,c,col);
 
-if(BEM_bColorRec)
-    for i=1:col
+switch col
+    case 1%Grayscale case
         if(BEM_bHighQuality)
-            expand_map(:,:,i) = LischinskiMinimization(img(:,:,i),expand_map_de(:,:,i),0.07*ones(r,c));
+            expand_map = LischinskiMinimization(img, expand_map_de, 0.07*ones(r,c));
         else
-            expand_map(:,:,i) = bilateralFilter(expand_map_de(:,:,i),img(:,:,i));
+            expand_map = bilateralfilter(expand_map_de, img);
+        end    
+        
+    case 3%RGB Colors
+        imgLab = ConvertXYZtoCIELab(ConvertRGBXYZ(img,0),0);
+        expand_map_de_Lab = ConvertXYZtoCIELab(ConvertRGBXYZ(expand_map_de,0),0);
+        
+        for i=1:col
+            tmpImg = imgLab(:,:,i);
+            minI = min(tmpImg(:));
+            maxI = max(tmpImg(:));
+            tmpImg = (tmpImg-minI)/(maxI-minI);
+            
+            tmpEmap = expand_map_de_Lab(:,:,i);
+            minE = min(tmpEmap(:));
+            maxE = max(tmpEmap(:));
+            tmpEmap = (tmpEmap-minE)/(maxE-minE);  
+            
+            if(BEM_bHighQuality)
+                expand_map(:,:,i) = LischinskiMinimization(tmpImg,tmpEmap,0.07*ones(r,c))*(maxE-minE)+minE;
+            else
+                expand_map(:,:,i) = bilateralFilter(tmpEmap,tmpImg)*(maxE-minE)+minE;                
+            end
         end
-    end
-else    
-    if(BEM_bHighQuality)
-        tmp_expand_map = LischinskiMinimization(L,expand_map_de,0.07*ones(r,c));
-    else
-        tmp_expand_map = bilateralfilter(expand_map_de, L);
-    end
-    
-    for i=1:col
-        expand_map(:,:,i) = tmp_expand_map;
-    end      
+            
+        expand_map = ConvertRGBXYZ(ConvertXYZtoCIELab(expand_map,1),1);        
+        
+    otherwise%2,4 and more colors
+        for i=1:col
+            if(BEM_bHighQuality)
+                expand_map(:,:,i) = LischinskiMinimization(img(:,:,i),expand_map_de(:,:,i),0.07*ones(r,c));
+            else
+                expand_map(:,:,i) = bilateralFilter(expand_map_de(:,:,i),img(:,:,i));
+            end
+        end        
 end
+
+%Check
+expand_map(expand_map<0) = 0;
 
 end
