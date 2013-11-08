@@ -52,7 +52,7 @@ LumZone     = [-2, -1, 0, 1, 2, 3, 4];
 TMOForZone =  [ 0,  0, 1, 0, 1, 0, 0];
 
 %Tone mapping
-img_dra_tmo = DragoTMO(img, 100, 0.85);
+img_dra_tmo = DragoTMO(img);
 img_rei_tmo = ReinhardBilTMO(img);
 
 %mask

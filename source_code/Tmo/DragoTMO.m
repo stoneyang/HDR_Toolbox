@@ -1,18 +1,21 @@
-function [imgOut,Drago_LMax]=DragoTMO(img, Drago_Ld_Max, Drago_b,Drago_LMax)
+function [imgOut, Drago_LMax] = DragoTMO(img, Drago_Ld_Max, Drago_b, Drago_LMax)
 %
 %
-%        imgOut=DragoTMO(img, Drago_Ld_Max, Drago_b)
+%        [imgOut, Drago_LMax] = DragoTMO(img, Drago_Ld_Max, Drago_b, Drago_LMax)
 %
 %
 %        Input:
 %           -img: input HDR image
 %           -Drago_Ld_Max: maximum output luminance of the LDR display
-%           -Drago_b: bias parameter (0,1]. 
+%           -Drago_b: bias parameter to be in (0,1]. The default value is 0.85 
+%           -Drago_LMax: maximum luminance to be used in case of tone
+%           mapping HDR videos
 %
 %        Output:
 %           -imgOut: tone mapped image
+%           -Drago_LMax: max luminance in img
 % 
-%     Copyright (C) 2010 Francesco Banterle
+%     Copyright (C) 2010-13 Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -31,24 +34,25 @@ function [imgOut,Drago_LMax]=DragoTMO(img, Drago_Ld_Max, Drago_b,Drago_LMax)
 %Is it a three color channels image?
 check13Color(img);
 
-if(~exist('Drago_Ld_Max'))
-    Drago_Ld_Max = 100;
+if(~exist('Drago_Ld_Max','var'))
+    Drago_Ld_Max = 100; %cd/m^2
 end
 
-if(~exist('Drago_b'))   
-    Drago_b = 0.95;
+if(~exist('Drago_b','var'))   
+    Drago_b = 0.85;
 end
 
 %Luminance channel
 L=lum(img);
 
-if(~exist('Drago_LMax'))
-    Drago_LMax = max(L(:));
-end
+LMax = 0;
 
-%Max luminance
-LMax = Drago_LMax*0.5+0.5*max(L(:));
-Drago_LMax = LMax;
+if(~exist('Drago_LMax','var'))
+    LMax = max(L(:));
+else
+    LMax = Drago_LMax*0.5+0.5*max(L(:));%smoothing in case of videos
+    Drago_LMax = LMax;
+end
 
 constant = log(Drago_b)/log(0.5);
 costant2 = (Drago_Ld_Max/100)/(log10(1+LMax));
