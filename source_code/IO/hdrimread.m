@@ -42,8 +42,12 @@ switch extension
 		 %Uncompressed RGBE Image
             img=read_rgbe(filename);  
         catch
-            %RLE compressed image
-            img=double(hdrread(filename));
+            try 
+                %RLE compressed image
+                img=double(hdrread(filename));
+            catch
+                disp('This HDR file can not be read.');
+            end
         end
         
     %Portable float map

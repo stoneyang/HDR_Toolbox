@@ -1,4 +1,4 @@
-function [imgOut,pAlpha,pWhite]=ReinhardBilTMO(img, pAlpha, pWhite)
+function [imgOut,pAlpha,pWhite]=ReinhardBilTMO(img, pAlpha, pWhite, pPhi)
 %
 %
 %      imgOut=ReinhardBilTMO(img, pAlpha, pWhite, pLocal)
@@ -8,6 +8,7 @@ function [imgOut,pAlpha,pWhite]=ReinhardBilTMO(img, pAlpha, pWhite)
 %           -img: input HDR image
 %           -pAlpha: value of exposure of the image
 %           -pWhite: the white point 
+%           -pPhi: a parameter which controls the sharpening
 %
 %       Output:
 %           -imgOut: output tone mapped image in linear domain
@@ -35,12 +36,16 @@ check13Color(img);
 %Luminance channel
 L = lum(img);
 
-if(~exist('pAlpha'))
+if(~exist('pAlpha','var'))
     pAlpha = ReinhardAlpha(L);
 end
 
-if(~exist('pWhite'))
+if(~exist('pWhite','var'))
     pWhite = ReinhardWhitePoint(L);
+end
+
+if(~exist('pPhi','var'))
+    pPhi = 8;
 end
 
 %Logarithmic mean calcultaion
@@ -50,14 +55,14 @@ Lwa = logMean(L);
 Lscaled = (pAlpha*L)/Lwa;
 
 %Local calculation?
-sMax    = 9;     
-alpha1  = 1/(2*sqrt(2));
-alpha2  = 1.6^sMax;    
+sMax    = 8;     
+alpha1  = (((2^pPhi)*pAlpha)/(sMax^2));
+alpha2  = round(1.6^sMax);    
+
 L_adapt = bilateralFilter(Lscaled,[],min(Lscaled(:)),max(Lscaled(:)),alpha2,alpha1);
 
-pWhite2 = pWhite*pWhite;
-
 %Range compression
+pWhite2 = pWhite*pWhite;
 Ld = (Lscaled.*(1+Lscaled/pWhite2))./(1+L_adapt);
 
 %Changing luminance

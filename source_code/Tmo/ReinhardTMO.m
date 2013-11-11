@@ -38,19 +38,19 @@ check13Color(img);
 %Luminance channel
 L = lum(img);
 
-if(~exist('pLocal'))
+if(~exist('pLocal','var'))
     pLocal = 0;
 end
 
-if(~exist('pAlpha'))
+if(~exist('pAlpha','var'))
     pAlpha = ReinhardAlpha(L);
 end
 
-if(~exist('pWhite'))
+if(~exist('pWhite','var'))
     pWhite = ReinhardWhitePoint(L);
 end
 
-if(~exist('pPhi'))
+if(~exist('pPhi','var'))
     pPhi = 8;
 end
 
@@ -58,23 +58,23 @@ end
 Lwa=logMean(L);
 
 %Scale luminance using alpha and logarithmic mean
-L=(pAlpha*L)/Lwa;
+Lscaled=(pAlpha*L)/Lwa;
 
 %Local calculation?
+
 if(pLocal)
-    L_adapt = ReinhardFiltering(L, pAlpha, pPhi);
+    L_adapt = ReinhardFiltering(Lscaled, pAlpha, pPhi);
 end
 
-pWhite2=pWhite*pWhite;
-
 %Range compression
+pWhite2 = pWhite*pWhite;
 if(pLocal)
-    Ld=(L.*(1+L/pWhite2))./(1+L_adapt);
+    Ld=(Lscaled.*(1+Lscaled/pWhite2))./(1+L_adapt);
 else
-    Ld=(L.*(1+L/pWhite2))./(1+L);
+    Ld=(Lscaled.*(1+Lscaled/pWhite2))./(1+Lscaled);
 end
 
 %Changing luminance
-imgOut = ChangeLuminance(img, lum(img), Ld);
+imgOut = ChangeLuminance(img, L, Ld);
 
 end

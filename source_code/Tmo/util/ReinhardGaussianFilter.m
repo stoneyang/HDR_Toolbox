@@ -1,13 +1,13 @@
-function imgOut = ReinhardGaussianFilter(img, s, alpha)
+function imgOut = ReinhardGaussianFilter(img, s, alpha_i)
 %
 %
-%      imgOut = ReinhardGaussianFilter(img, s, alpha)
+%      imgOut = ReinhardGaussianFilter(img, s, alpha_i)
 %
 %
 %      Input:
 %          -img: an image to be filtered
 %          -s: size of the filter in pixel
-%          -alpha: 
+%          -alpha_i: 
 %
 %      Output:
 %          -imgOut: the filtered image
@@ -30,7 +30,7 @@ function imgOut = ReinhardGaussianFilter(img, s, alpha)
 
 %Kernel of the filter
 [X,Y] = meshgrid(-s:s, -s:s);
-alphaS2=(alpha*s)^2;
+alphaS2 = (alpha_i*s)^2;
 H = exp(-(X.^2+Y.^2)/alphaS2)/(pi*alphaS2);
 %Filtering
 imgOut = imfilter(img,H,'replicate');

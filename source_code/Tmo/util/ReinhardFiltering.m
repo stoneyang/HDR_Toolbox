@@ -28,19 +28,19 @@ function L_adapt = ReinhardFiltering(L, pAlpha, pPhi)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-if(~exist('pAlpha'))
+if(~exist('pAlpha','var'))
     pAlpha = ReinhardAlpha(L);
 end
 
-if(~exist('pPhi'))
+if(~exist('pPhi','var'))
     pPhi = 8;
 end
 
 %precomputation of 9 filtered images
-sMax = 9; 
+sMax = 8; 
 [r,c] = size(L);
-Lfiltered = zeros(r,c,sMax); 
-LC = zeros(r,c,sMax);
+V1_vec = zeros(r,c,sMax); 
+V_vec = zeros(r,c,sMax);
 
 alpha1 = 1/(2*sqrt(2));
 alpha2 = alpha1*1.6;
@@ -50,26 +50,28 @@ sizeWindow = 1;
 
 for i=1:sMax        
     s = round(sizeWindow);
-    V1=ReinhardGaussianFilter(L,s,alpha1);    
-    V2=ReinhardGaussianFilter(L,s,alpha2);       
+    V1 = ReinhardGaussianFilter(L,s,alpha1);    
+    V2 = ReinhardGaussianFilter(L,s,alpha2);       
      
     %normalized difference of Gaussian levels
-    LC(:,:,i)=RemoveSpecials((V1-V2)./(constant/(s^2)+V1)); 
-    Lfiltered(:,:,i)=V1;
-    sizeWindow=sizeWindow*1.6;
+    V = (V1-V2)./(constant/(s^2)+V1);
+    V_vec(:,:,i) = RemoveSpecials(abs(V)); 
+    V1_vec(:,:,i) = V1;
+    sizeWindow = sizeWindow*1.6;
 end  
     
 %threshold is a constant for solving the band-limited 
 %local contrast LC at a given image location.
-epsilon = 1e-4;
+epsilon = 0.05;
     
 %adaptation image
 L_adapt = L;
-for i=sMax:-1:1
-    ind = find(LC(:,:,i)<epsilon);
-    if(~isempty(ind))
-        L_adapt(ind) = Lfiltered(r*c*(i-1)+ind);
-    end
+mask = zeros(r,c);
+for i=1:sMax
+    V  = V_vec(:,:,i);
+    V1 = V1_vec(:,:,i);
+    mask(V>epsilon) = mask(V>epsilon)+1;
+    L_adapt(mask==1) = V1(mask==1);
 end
-    
+
 end
