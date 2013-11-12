@@ -84,5 +84,5 @@ for i=1:sMax
         L_adapt(prevMask==1) = V1(prevMask==1);
     end
 end
-hdrimwrite(L_adapt,'L_adapt.pfm');
+
 end
