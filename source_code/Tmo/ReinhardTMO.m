@@ -55,24 +55,22 @@ if(~exist('pPhi','var'))
 end
 
 %Logarithmic mean calcultaion
-Lwa=logMean(L);
+Lwa = logMean(L);
 
 %Scale luminance using alpha and logarithmic mean
-Lscaled=(pAlpha*L)/Lwa;
+Lscaled = (pAlpha*L)/Lwa;
 
 %Local calculation?
 
 if(pLocal)
     L_adapt = ReinhardFiltering(Lscaled, pAlpha, pPhi);
+else
+    L_adapt = Lscaled;
 end
 
 %Range compression
 pWhite2 = pWhite*pWhite;
-if(pLocal)
-    Ld=(Lscaled.*(1+Lscaled/pWhite2))./(1+L_adapt);
-else
-    Ld=(Lscaled.*(1+Lscaled/pWhite2))./(1+Lscaled);
-end
+Ld = (Lscaled.*(1+Lscaled/pWhite2))./(1+L_adapt);
 
 %Changing luminance
 imgOut = ChangeLuminance(img, L, Ld);

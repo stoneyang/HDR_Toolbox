@@ -56,10 +56,13 @@ Lscaled = (pAlpha*L)/Lwa;
 
 %Local calculation?
 sMax    = 8;     
-alpha1  = (((2^pPhi)*pAlpha)/(sMax^2));
+epsilon = 0.05;
+alpha1  = (((2^pPhi)*pAlpha)/(sMax^2))*epsilon;
 alpha2  = round(1.6^sMax);    
 
-L_adapt = bilateralFilter(Lscaled,[],min(Lscaled(:)),max(Lscaled(:)),alpha2,alpha1);
+L_tmp = Lscaled./(Lscaled+1);
+L_adapt = bilateralFilter(L_tmp,[],0,1,alpha2,alpha1);
+L_adapt = L_adapt./(1-L_adapt);
 
 %Range compression
 pWhite2 = pWhite*pWhite;

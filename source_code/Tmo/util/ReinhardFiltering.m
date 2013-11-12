@@ -1,13 +1,14 @@
-function L_adapt = ReinhardFiltering(L, pAlpha, pPhi)  
+function L_adapt = ReinhardFiltering(L, pAlpha, pPhi, pEpsilon)  
 %
 %
-%      L_adapt = ReinhardFiltering(L, pAlpha, pPhi)  
+%      L_adapt = ReinhardFiltering(L, pAlpha, pPhi, pEpsilon)  
 %
 %
 %       Input:
 %           -L: input grayscale image
 %           -pAlpha: value of exposure of the image
 %           -pPhi: a parameter which controls the sharpening
+%           -pEpsilon: smoothing threshold
 %
 %       Output:
 %           -L_adapt: filtered image
@@ -36,6 +37,10 @@ if(~exist('pPhi','var'))
     pPhi = 8;
 end
 
+if(~exist('pEpsilon','var'))
+    pEpsilon = 0.05;%as in the original paper
+end
+
 %precomputation of 9 filtered images
 sMax = 8; 
 [r,c] = size(L);
@@ -62,16 +67,22 @@ end
     
 %threshold is a constant for solving the band-limited 
 %local contrast LC at a given image location.
-epsilon = 0.05;
     
 %adaptation image
 L_adapt = L;
 mask = zeros(r,c);
+prevMask = zeros(r,c);
 for i=1:sMax
     V  = V_vec(:,:,i);
-    V1 = V1_vec(:,:,i);
-    mask(V>epsilon) = mask(V>epsilon)+1;
-    L_adapt(mask==1) = V1(mask==1);
+   
+    indx = find(V>pEpsilon);
+    if(~isempty(indx))
+        V1 = V1_vec(:,:,i);
+        mask(V>pEpsilon) = mask(V>pEpsilon)+1;
+       
+        prevMask = mask - prevMask; 
+        L_adapt(prevMask==1) = V1(prevMask==1);
+    end
 end
-
+hdrimwrite(L_adapt,'L_adapt.pfm');
 end
