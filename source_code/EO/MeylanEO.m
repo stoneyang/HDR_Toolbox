@@ -13,7 +13,7 @@ function imgOut = MeylanEO(img, Meylan_Max, Meylan_lambda, gammaRemoval)
 %        Output:
 %           -imgOut: an expanded image
 %
-%     Copyright (C) 2011  Francesco Banterle
+%     Copyright (C) 2011-13  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -30,16 +30,19 @@ function imgOut = MeylanEO(img, Meylan_Max, Meylan_lambda, gammaRemoval)
 %
 
 %is it a three color channels image?
-check3Color(img);
+check13Color(img);
 
 %default parameters
-if(~exist('Meylan_Max')|~exist('Meylan_lambda')|~exist('gammaRemoval'))
-    %Maximum value of DR-37P: 3000 cd/m^2 
-    Meylan_Max=3000.0;   
-    %standard diffuse part range
-    Meylan_lambda=0.67;
-    %no gamma removal
-    gammaRemoval=-1;
+if(~exist('Meylan_Max','var'))    
+    Meylan_Max=3000.0;   %Maximum value of DR-37P: 3000 cd/m^2 
+end
+
+if(~exist('Meylan_lambda','var'))
+    Meylan_lambda=0.67; %standard diffuse part range
+end
+
+if(~exist('gammaRemoval','var'))
+    gammaRemoval = -1;    %no gamma removal
 end
 
 %Gamma removal
@@ -48,84 +51,84 @@ if(gammaRemoval>0.0)
 end
 
 %Luminance channel
-l=lum(img);
-lmax=max(max(l));
+Y = lum(img);
+lmax = max(Y(:));
+
+m = round(size(Y,1)/50);
 
 %Filtering with a box filter of size m+1
-vS=max(size(l)); %max(width,height)
-kSize=round(vS/50)+1;
-h = fspecial('average',kSize);
-Lfiltered=imfilter(l,h);
-t1=max(max(Lfiltered));
+Y_flt = imfilter(Y, fspecial('average',m));
+t1    = max(Y_flt(:));
 
 %Filtering with a box filter of size 2m+1
-kSize=round(vS/25)+1;
-h = fspecial('average',kSize);
-Lfiltered=imfilter(l,h);
-t2=max(max(Lfiltered));
+Y_flt = imfilter(Y, fspecial('average',2*m+1));
+t2    = max(Y_flt(:));
 
 %Thresholding the image luminance channel with threshold t1
-mask=zeros(size(l));
-indx=find(l>t1);
-mask(indx)=1;
+mask = zeros(size(Y));
+mask(Y>t1) = 1;
 
 %Removing single pixels
-mask=bwmorph(mask,'clean');
+mask = bwmorph(mask,'clean');
 
 %n step Erosion and Dilatation
-H_iter=[1,1,1;1,0,1;1,1,1];
-n=3;
-for i=1:n
+H=[1,1,1;1,0,1;1,1,1];
+for i=1:1000
     %Mask2
-    tmpMask2=imfilter(mask,H_iter);
-    Mask2=ones(size(l));
-    Mask2(find(mask==0))=0;
-    Mask2(find(tmpMask2<1))=0;
+    M1_conv_H = imfilter(mask, H);
+    mask2 = ones(size(Y));
+    mask2((mask==0)|(M1_conv_H<1)) = 0;
 
     %Mask3
-    tmpMask2=imfilter(Mask2,H_iter);
-    Mask3=zeros(size(l));
-    Mask3(find(Mask2==1))=1;
-    Mask3(find(Mask2>3))=1;
-    Mask3(find(l>t2))=1;
+    M2_conv_H = imfilter(mask2, H);
+    mask3 = zeros(size(Y));
+    mask3((mask2==1)|((M2_conv_H>3)&(Y>t2))) = 1;
 
-    mask=Mask3;
+    check = sum(sum(abs(mask-mask3)));%is the solution stable?    
+    mask = mask3;
+    if(check<1)
+        break;
+    end    
 end
 
-itD=find(mask==0); %Diffuse part
-itS=find(mask==1); %Specular part
+itD = find(mask==0); %Diffuse part
+itS = find(mask==1); %Specular part
 
 %Calculation of the curve constants
-omega=min(min(l(mask==1)));
-s1=Meylan_Max*Meylan_lambda/omega;
-s2=Meylan_Max*(1.0-Meylan_lambda)/(lmax-omega);
-
-L=zeros(size(l));
-L(itD)=l(itD)*s1; 				%Diffuse expansion
-L(itS)=omega*s1+(l(itS)-omega)*s2;	%Specular expansion
-
-%Filtered luminance
-h5 = fspecial('average',5);
-LFiltered=imfilter(L,h5);
-
-%Smoothing mask
-smask=zeros(size(l));
-smask(l>omega)=1;
-
-tmpSmask2=imfilter(smask,H_iter);
-smask2=smask;
-smask2(find(tmpSmask2>1))=1;
-smask3=imfilter(smask2,h5);
-
-%The expanded part and its filtered version are blended using the mask 
-Lfinal=L.*(1-smask3)+smask3.*LFiltered;
-
-%Removing the old luminance
-imgOut=zeros(size(img));
-for i=1:3
-    imgOut(:,:,i)=img(:,:,i).*Lfinal./l;
+omega = min(Y(mask==1));
+if(abs(1.0-omega)<1e6)%not in the original paper but to avoid singularities
+    omega = 0.99;
 end
 
-imgOut=RemoveSpecials(imgOut);
+s1 = Meylan_Max*Meylan_lambda/omega;
+s2 = Meylan_Max*(1.0-Meylan_lambda)/(lmax-omega);
+
+L = zeros(size(Y));
+L(itD) = Y(itD)*s1;                   %Diffuse expansion
+L(itS) = omega*s1+(Y(itS)-omega)*s2;	%Specular expansion
+
+%Filtered luminance
+F5 = fspecial('average',5);
+LFiltered=imfilter(L, F5);
+
+%Smoothing mask
+smask = zeros(size(Y));
+smask(Y>omega) = 1;
+
+tmpSmask2 = imfilter(smask,H);
+smask2 = smask;
+smask2(tmpSmask2>1) = 1;
+smask3 = imfilter(smask2, F5);
+
+%The expanded part and its filtered version are blended using the mask 
+Lfinal = L.*(1-smask3)+smask3.*LFiltered;
+
+%Removing the old luminance
+imgOut = zeros(size(img));
+for i=1:size(img,3)
+    imgOut(:,:,i) = img(:,:,i).*Lfinal./Y;
+end
+
+imgOut = RemoveSpecials(imgOut);
 
 end
