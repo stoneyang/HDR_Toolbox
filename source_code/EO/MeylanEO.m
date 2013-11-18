@@ -125,11 +125,6 @@ B_lp = imfilter(B_2, F5);
 I_final = I_new.*(1-B_lp) + I_lp.*B_lp;
 
 %Removing the old luminance
-imgOut = zeros(size(img));
-for i=1:size(img,3)
-    imgOut(:,:,i) = (img(:,:,i).*I_final)./Y;
-end
-
-imgOut = RemoveSpecials(imgOut);
+imgOut = ChangeLuminance(img, Y, I_final);
 
 end

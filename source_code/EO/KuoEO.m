@@ -31,15 +31,15 @@ function imgOut = KuoEO(img, LMax, LMin, gammaRemoval)
 %is it a three color channels image?
 check3Color(img);
 
-if(~exist('LMax'))
+if(~exist('LMax','var'))
     LMax = 3000.0;%The maximum output of a Brightside DR37p
 end
 
-if(~exist('LMin'))
+if(~exist('LMin','var'))
     LMin = 0.015;  %The minimum output of a Brightside DR37p
 end
 
-if(~exist('gammaRemoval'))
+if(~exist('gammaRemoval','var'))
     gammaRemoval = -1.0;
 end
 
@@ -56,9 +56,7 @@ expand_map = KuoExpandMap(L);
 
 Lexp = Lexp.*expand_map + (1.0-expand_map).*L;
 
-imgOut = zeros(size(img));
-for i=1:3
-    imgOut(:,:,i) = (img(:,:,i).*Lexp)./L;
-end
-imgOut = RemoveSpecials(imgOut);
+%Changing luminance
+imgOut = ChangeLuminance(img, L, Lexp);
+
 end

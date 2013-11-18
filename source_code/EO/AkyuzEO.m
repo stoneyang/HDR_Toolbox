@@ -47,18 +47,13 @@ if(gammaRemoval>0.0)
     img=img.^gammaRemoval;
 end
 
-l=lum(img);
-lmax=max(max(l));
-lmin=min(min(l));
+L = lum(img);
+L_max = max(L(:));
+L_min = min(L(:));
 
-l2=Akyuz_Max*(((l-lmin)/(lmax-lmin)).^Akyuz_gamma);
+Lexp = Akyuz_Max*(((L-L_min)/(L_max-L_min)).^Akyuz_gamma);
 
 %Removing the old luminance
-imgOut=zeros(size(img));
-for i=1:3
-    imgOut(:,:,i)=img(:,:,i).*l2./l;
-end
-
-imgOut=RemoveSpecials(imgOut);
+imgOut = ChangeLuminance(img, L, Lexp);
 
 end

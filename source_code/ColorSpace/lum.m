@@ -1,6 +1,6 @@
-function l=lum(img)
+function l = lum(img)
 %
-%       l=lum(img)
+%       l = lum(img)
 %
 %       This function calculates the luminance
 %
@@ -11,7 +11,7 @@ function l=lum(img)
 %       output:
 %           l: luminance as XYZ color 
 %
-%     Copyright (C) 2011  Francesco Banterle
+%     Copyright (C) 2011-13  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -32,10 +32,13 @@ col = size(img,3);
 switch col
     case 1
         l = img;
+        
     case 3
         l=0.213*img(:,:,1)+0.715*img(:,:,2)+0.072*img(:,:,3);
+        
     otherwise
-         error('The input image is not an RGB or luminance image!');
+        l = mean(img,3); 
+        disp('Mean of channels was computed; the input image is not an RGB or luminance image!');
 end
 
 end

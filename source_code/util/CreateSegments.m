@@ -63,7 +63,6 @@ imgBin = zeros(size(L));
 
 [n,m]   = size(L);
 nLevels = l10Max-l10Min+1;
-layer   = zeros([n,m,nLevels]);
 
 for i=l10Min:l10Max %skimming levels
     bMin = 10^i;
@@ -85,7 +84,7 @@ for LOOP=1:100
     layer = GenerateMasks(imgBin, nLevels);
 
     for i=1:nLevels%for each luminance level
-        comp=layer(:,:,i);
+        comp = layer(:,:,i);
         nc = max(comp(:));
 
         for j=1:nc %For each connected component (CC)
@@ -99,7 +98,7 @@ for LOOP=1:100
                 [imgBin,nlv] = FusionMask(listOfNeighbors,comp,imgBin,j);
                 
                 if(nlv>0)%Update
-                    clear('layer');
+                    %clear('layer');
                     layer = GenerateMasks(imgBin,nLevels);
                     comp  = layer(:,:,i);
                 end
@@ -111,7 +110,7 @@ for LOOP=1:100
     delta = imgBinOld-imgBin;    
     val   = abs(sum(delta(:)));
     if(val<1e-4)
-        disp([val,LOOP]);
+        %disp([val,LOOP]);
         break;
     else
         imgBinOld = imgBin;
@@ -124,12 +123,12 @@ for i=1:nLevels
     if(~isempty(indx))
         val = round(mean(imgOri(indx)));
         imgBin(indx) = val;
-        disp([i,val]);
+        %disp([i,val]);
     end
 end
 
-clear('layer');
-clear('comp');
+%clear('layer');
+%clear('comp');
 
 imgBin = imgBin+l10Min-1;
 

@@ -93,11 +93,6 @@ for i=1:col
 end
 
 %Generate the final image with the new luminance
-imgOut = zeros(size(img));
-for i=1:col
-    imgOut(:,:,i)=(img(:,:,i).*LFinal(:,:,i))./L;
-end
-
-imgOut = RemoveSpecials(imgOut);
+imgOut = ChangeLuminance(img, L, LFinal);
 
 end

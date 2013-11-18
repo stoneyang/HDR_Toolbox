@@ -28,11 +28,35 @@ function imgOut = ChangeLuminance(img, Lold, Lnew)
 %
 
 %Removing the old luminance
-[r,c,col] = size(img);
-imgOut = zeros(r,c,col);
+col = size(img,3);
+col_new = size(Lnew,3);
 
-for i=1:col
-    imgOut(:,:,i) = (img(:,:,i).*Lnew)./Lold;
+imgOut = zeros(size(img));
+
+switch col_new
+    case 1
+        for i=1:col
+            imgOut(:,:,i) = (img(:,:,i).*Lnew)./Lold;
+        end
+        
+    case 3
+        if(col==col_new)%same color channels
+            for i=1:col
+                imgOut(:,:,i) = (img(:,:,i).*Lnew(:,:,i))./Lold;
+            end    
+        else
+            Lnew = lum(Lnew);
+            for i=1:col
+                imgOut(:,:,i) = (img(:,:,i).*Lnew)./Lold;
+            end             
+        end
+        
+    otherwise
+        Lnew = lum(Lnew);
+
+        for i=1:col
+            imgOut(:,:,i) = (img(:,:,i).*Lnew)./Lold;
+        end            
 end
 
 imgOut = RemoveSpecials(imgOut);

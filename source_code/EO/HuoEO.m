@@ -34,15 +34,15 @@ function imgOut = HuoEO(img, hou_s, hou_theta, gammaRemoval)
 %is it a three color channels image?
 check3Color(img);
 
-if(~exist('gammaRemoval'))
+if(~exist('gammaRemoval','var'))
     gammaRemoval = -1.0;
 end
 
-if(~exist('hou_s'))
+if(~exist('hou_s','var'))
     hou_s = 1.6; %default parameter from the original paper
 end
 
-if(~exist('hou_theta'))
+if(~exist('hou_theta','var'))
     hou_theta = 1e-5;
 end
 

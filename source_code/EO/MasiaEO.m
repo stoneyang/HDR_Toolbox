@@ -33,15 +33,15 @@ function [imgOut,bWarning] = MasiaEO(img, Masia_Max, Masia_noise_removal, gammaR
 %is it a three color channels image?
 check3Color(img);
 
-if(~exist('Masia_Max'))
+if(~exist('Masia_Max','var'))
     Masia_Max = 3000.0;%The maximum output of a Brightside DR37p
 end
 
-if(~exist('gammaRemoval'))
+if(~exist('gammaRemoval','var'))
     gammaRemoval = -1.0;
 end
 
-if(~exist('Masia_noise_removal'))
+if(~exist('Masia_noise_removal','var'))
     Masia_noise_removal = 1;
 end
 
@@ -52,13 +52,12 @@ end
 bWarning = 0;
 
 %Calculate luminance
-L=lum(img);
+L = lum(img);
 
 %Calculate image statistics
-Lav=logMean(L);
-[r,c]=size(L);
+Lav  = logMean(L);
 maxL = MaxQuart(L,0.99);
-minL = MaxQuart(L(find(L>0)),0.01);
+minL = MaxQuart(L(L>0),0.01);
 
 imageKey = (log(Lav) - log(minL))/(log(maxL) - log(minL));
 
@@ -82,9 +81,7 @@ else
     Lexp = L.^gamma_cor;
 end
 
-imgOut = zeros(size(img));
-for i=1:3
-    imgOut(:,:,i) = (img(:,:,i).*Lexp)./L;
-end
-imgOut = Masia_Max*RemoveSpecials(imgOut);
+%Changing luminance
+imgOut = ChangeLuminance(img, L, Lexp*Masia_Max);
+
 end

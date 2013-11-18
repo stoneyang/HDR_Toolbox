@@ -1,19 +1,19 @@
-function imgOut = LandisEO(img, Landis_alpha, dynRangeStartLum,  Landis_Max_Luminance, gammaRemoval)
+function imgOut = LandisEO(img, Landis_alpha, Landis_dynRangeStartLum,  Landis_Max_Luminance, gammaRemoval)
 %
-%       imgOut = LandisEO(img, Landis_alpha, dynRangeStartLum, Landis_Max_Luminance, gammaRemoval)
+%       imgOut = LandisEO(img, Landis_alpha, Landis_dynRangeStartLum, Landis_Max_Luminance, gammaRemoval)
 %
 %
 %        Input:
 %           -img: input LDR image
 %           -Landis_alpha: this value defines the 
-%           -dynRangeStartLum: threshold for applying the iTMO
+%           -Landis_dynRangeStartLum: threshold for applying the iTMO
 %           -Landis_Max_Luminance: maximum output luminance
 %           -gammaRemoval: the gamma value to be removed if known
 %
 %        Output:
 %           -imgOut: an expanded image
 %
-%     Copyright (C) 2011  Francesco Banterle
+%     Copyright (C) 2011-13  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -32,10 +32,19 @@ function imgOut = LandisEO(img, Landis_alpha, dynRangeStartLum,  Landis_Max_Lumi
 %is it a three color channels image?
 check3Color(img);
 
-if(~exist('Landis_alpha')|~exist('dynRangeStartLum')|~exist('Landis_Max_Luminance')|~exist('gammaRemoval'))
+if(~exist('Landis_alpha','var'))
     Landis_alpha = 2.0;   
-    dynRangeStartLum = 0.5;
-    Landis_Max_Luminance = 3000.0;   
+end
+
+if(~exist('Landis_dynRangeStartLum','var'))
+    Landis_dynRangeStartLum = 0.5;
+end
+
+if(~exist('Landis_Max_Luminance','var'))
+    Landis_Max_Luminance = 3000.0;      
+end
+
+if(~exist('gammaRemoval','var'))
     gammaRemoval = -1;
 end
 
@@ -48,26 +57,21 @@ end
 L = lum(img);
 
 %Expanding from the mean value
-if(dynRangeStartLum<0)
-    dynRangeStartLum = mean(mean(L));
+if(Landis_dynRangeStartLum<=0)
+    Landis_dynRangeStartLum = mean(L(:));
 end
 
 %Finding pixels needed to be expanded
-toExpand = find(L>=dynRangeStartLum);
+toExpand = find(L>=Landis_dynRangeStartLum);
 
 %Exapnsion using a power function
-maxValL = max(max(L)); %generalization in the case of unnormalized data
+maxValL = max(L(:)); %generalization in the case of unnormalized data
 weights = ((L(toExpand)-dynRangeStartLum)/(maxValL-dynRangeStartLum)).^Landis_alpha;
 
-L2 = L;
-L2(toExpand) = L(toExpand).*(1-weights)+Landis_Max_Luminance*L(toExpand).*weights;
+Lexp = L;
+Lexp(toExpand) = L(toExpand).*(1-weights)+Landis_Max_Luminance*L(toExpand).*weights;
 
 %Removing the old luminance
-imgOut = zeros(size(img));
-for i=1:3
-    imgOut(:,:,i) = (img(:,:,i).*L2)./L;
-end
-
-imgOut = RemoveSpecials(imgOut);
+imgOut = ChangeLuminance(img, L, Lexp);
 
 end
