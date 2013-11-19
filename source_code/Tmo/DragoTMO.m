@@ -31,7 +31,7 @@ function [imgOut, Drago_LMax] = DragoTMO(img, Drago_Ld_Max, Drago_b, Drago_LMax)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-%Is it a three color channels image?
+%Is it a luminance or a three color channels image?
 check13Color(img);
 
 if(~exist('Drago_Ld_Max','var'))
@@ -43,21 +43,18 @@ if(~exist('Drago_b','var'))
 end
 
 %Luminance channel
-L=lum(img);
+L = lum(img);
+LMax = max(L(:));
 
-LMax = 0;
-
-if(~exist('Drago_LMax','var'))
-    LMax = max(L(:));
-else
-    LMax = Drago_LMax*0.5+0.5*max(L(:));%smoothing in case of videos
+if(exist('Drago_LMax','var'))
+    LMax = LMax*0.5 + Drago_LMax*0.5;%smoothing in case of videos
     Drago_LMax = LMax;
 end
 
-constant = log(Drago_b)/log(0.5);
-costant2 = (Drago_Ld_Max/100)/(log10(1+LMax));
+c1 = log(Drago_b)/log(0.5);
+c2 = (Drago_Ld_Max/100.0)/(log10(1+LMax));
 
-Ld = costant2*log(1+L)./log(2+8*((L/LMax).^constant));
+Ld = c2*log(1.0+L)./log(2.0+8.0*((L/LMax).^c1));
 
 %Changing luminance
 imgOut = ChangeLuminance(img, L, Ld);
