@@ -44,14 +44,26 @@ end
 
 if(~exist('pAlpha','var'))
     pAlpha = ReinhardAlpha(L);
+else
+    if(pAlpha<=0)
+        pAlpha = ReinhardAlpha(L);
+    end
 end
 
 if(~exist('pWhite','var'))
     pWhite = ReinhardWhitePoint(L);
+else
+    if(pWhite<=0)
+        pWhite = ReinhardWhitePoint(L);
+    end
 end
 
 if(~exist('pPhi','var'))
     pPhi = 8;
+else
+    if(pPhi<0)
+        pPhi = 8;
+    end
 end
 
 %Logarithmic mean calcultaion

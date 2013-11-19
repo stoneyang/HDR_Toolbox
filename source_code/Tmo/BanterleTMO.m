@@ -53,7 +53,7 @@ TMOForZone =  [ 0,  0, 1, 0, 1, 0, 0];
 
 %Tone mapping
 img_dra_tmo = DragoTMO(img);
-img_rei_tmo = ReinhardBilTMO(img);
+img_rei_tmo = ReinhardTMO(img,-1,-1,1);
 
 %mask
 mask = zeros(size(img(:,:,1)));
