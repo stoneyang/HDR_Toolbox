@@ -30,15 +30,15 @@ function imgOut=ColorCorrection(img, correction)
 %
 
 %is it a three color channels image?
-check3Color(img);
+check13Color(img);
 
 if(correction<=0)
     correction = 1.0;
 end
 
-L=lum(img);
+L = lum(img);
 imgOut = zeros(size(img));
-for i=1:3
+for i=1:size(img,3);
     imgOut(:,:,i) = ((img(:,:,i)./L).^correction).*L;
 end
 

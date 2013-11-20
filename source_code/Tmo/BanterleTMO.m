@@ -1,16 +1,21 @@
-function imgOut = BanterleTMO(img)
+function [imgOut, BTMO_segments] = BanterleTMO(img, BTMO_segments)
 %
 %
-%        imgOut = BanterleTMO(img)
+%        [imgOut, BTMO_segments] = BanterleTMO(img, BTMO_segments)
 %
 %
 %       Input:
 %           -img: an HDR image with calibrated data in cd/m^2.
 %           Note that this algorithm was tested with values
-%           from 0.015cd/m^2 to 3,000 cd/m^2.
+%           from 0.015cd/m^2 to 3,000 cd/m^2
+%           -BTMO_segments: a segmented image, each value in a segment is a
+%           dynamic range zone; i.e. integer values in [-6,9]. If it is not
+%           provided this will be computed with the function CreateSegments
 %
 %       Output:
 %           -imgOut: the tone mapped image using the HybridTMO
+%           -BTMO_segments: output the segmentation; the input image is
+%           segmented into different zones of dynamic range
 % 
 %       This TMO is an hybrid operator which merges different
 %       Tone Mapping Operators: DragoTMO and ReinhardTMO
@@ -40,7 +45,11 @@ function imgOut = BanterleTMO(img)
 %
 
 %Segmentation
-segments = CreateSegments(img);
+if(~exist('BTMO_segments','var'))
+    BTMO_segments = CreateSegments(img);
+else    
+    BTMO_segments = round(BTMO_segments);
+end
 
 %TMO look-up table for determing the best
 %TMO depending on the luminance zone. These
@@ -53,35 +62,36 @@ TMOForZone =  [ 0,  0, 1, 0, 1, 0, 0];
 
 %Tone mapping
 img_dra_tmo = DragoTMO(img);
-img_rei_tmo = ReinhardTMO(img,-1,-1,1);
+img_rei_tmo = ReinhardBilTMO(img);
 
 %mask
-mask = zeros(size(img(:,:,1)));
+mask = zeros(size(BTMO_segments));
 
 for i=1:length(LumZone)
-    mask(segments==LumZone(i)) = TMOForZone(i);
+    mask(BTMO_segments==LumZone(i)) = TMOForZone(i);
 end
 
 %Check if only DragoTMO is used
 indx0 = find(mask==1);
 if(isempty(indx0))
     imgOut = img_dra_tmo;
-    disp('The HybridTMO is using only the Drago TMO');
+    disp('The HybridTMO is using only the Drago TMO only');
 end
 
 %Check if only ReinhardBilTMO is used
 indx1 = find(mask==0);
 if(isempty(indx1))
     imgOut = img_rei_tmo;
-    disp('The HybridTMO is using Reinhard TMO');
+    disp('The HybridTMO is using Reinhard TMO only');
 end
 
 if(~isempty(indx0)&&~isempty(indx1))%pyramid blending in gamma space
-    invGamma = 1.0/2.2;
+    gamma = 2.2;
+    invGamma = 1.0/gamma;
     imgA   = img_rei_tmo.^invGamma;
     imgB   = img_dra_tmo.^invGamma;
     
-    imgOut = pyrBlend(imgA,imgB,mask).^2.2;
+    imgOut = pyrBlend(imgA,imgB,mask).^gamma;
 end
 
 end
