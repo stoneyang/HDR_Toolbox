@@ -8,7 +8,10 @@ function stack = ReadLDRStack(dir_name, format)
 %           -format: an LDR format for reading LDR images in the current directory 
 %
 %        Output:
-%           -stack: a stack of LDR images
+%           -stack: a stack of LDR images, in floating point (single)
+%           format. No normalization is applied.
+%
+%     This function reads a stack of images from the disk
 %
 %     Copyright (C) 2011  Francesco Banterle
 % 
@@ -26,23 +29,24 @@ function stack = ReadLDRStack(dir_name, format)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-%Create a stack of images from the disk
 list = dir([dir_name,'/*.',format]);
 n = length(list);
 
-stack = [];
-for i=1:n
-    disp(list(i).name);
-    %read an image
-    img = single(imread([dir_name,'/',list(i).name]));
-    
-    [r,c,col]=size(img);  
-    if(i==1)
-        stack = zeros(r,c,col,n);
+if(n>1)
+    info = imfinfo(list(1).name);
+    stack = zeros(info.Height, info.Width, info.NumberOfSamples, n);
+
+    for i=1:n
+        disp(list(i).name);
+        %read an image, and convert it into floating-point
+        img = single(imread([dir_name,'/',list(i).name]));  
+
+        %store in the stack
+        stack(:,:,:,i) = img;    
     end
-    
-    %store in the stack
-    stack(:,:,:,i) = img;    
+else
+    disp('The stack is empy!');
+    stack = [];
 end
 
 end

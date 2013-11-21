@@ -46,20 +46,20 @@ function imgOut = MertensTMO( img, directory, format, imageStack, wE, wS, wC )
 %
 
 %default parameters if they are missing
-if(~exist('wE'))
+if(~exist('wE','var'))
     wE = 1.0;
 end
 
-if(~exist('wS'))
+if(~exist('wS','var'))
     wS = 1.0;
 end
 
-if(~exist('wC'))
+if(~exist('wC','var'))
     wC = 1.0;
 end
 
 %imageStack generation
-if(~exist('imageStack'))
+if(~exist('imageStack','var'))
     imageStack = [];
 end
 

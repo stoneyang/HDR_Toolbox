@@ -49,16 +49,16 @@ function imgHDR = BuildHDR(dir_name, format, lin_type, weightFun, stack, stack_e
 %
 
 %is a weight function defined?
-if(~exist('weightFun'))
+if(~exist('weightFun','var'))
     weightFun = 'all';
 end
 
 %is the linearization type of the images defined?
-if(~exist('lin_type'))
+if(~exist('lin_type','var'))
     lin_type = 'gamma2.2';
 end
 
-if(~exist('stack')&&~exist('stack_exposure'))
+if(~exist('stack','var')&&~exist('stack_exposure','var'))
     %Read images from the current directory
     stack = ReadLDRStack(dir_name, format);
     stack_exposure = ReadLDRExif(dir_name, format);

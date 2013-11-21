@@ -53,7 +53,8 @@ for i=1:n
                     end
                 end
             end
-        catch
+        catch err
+            disp(err);
             exposure(i) = 1;
         end
     else
