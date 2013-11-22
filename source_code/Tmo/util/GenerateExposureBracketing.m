@@ -35,20 +35,20 @@ function [stack, stack_exposure] = GenerateExposureBracketing( img, fstopDistanc
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-[r,c,col]=size(img);
+[r,c,col] = size(img);
 
-if(~exist('fstopDistance'))
+if(~exist('fstopDistance','var'))
     fstopDistance = 1;
 end
 
 %inverse gamma
-if(~exist('geb_gamma'))
+if(~exist('geb_gamma','var'))
     inv_gamma = 1.0/2.2;
 else
     inv_gamma = 1.0/geb_gamma;
 end
 
-if(~exist('geb_mode'))
+if(~exist('geb_mode','var'))
     geb_mode = 'histogram';
 end
 
@@ -69,6 +69,7 @@ switch(geb_mode)
         tMax = -(maxExposure-1);
         tMin = -(minExposure+1);
         stack_exposure = 2.^(tMin:fstopDistance:tMax);
+        
     otherwise
         error('wrong mode for sampling the HDR image');
 end

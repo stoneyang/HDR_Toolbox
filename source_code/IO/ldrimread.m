@@ -1,17 +1,15 @@
-function y = TMQI_normpdf(x, tmqi_mu, tmqi_sigma)
+function img = ldrimread(filename)
 %
-%       y = TMQI_normpdf(x, tmqi_mu, tmqi_sigma)
+%       img = ldrimread(filename)
 %
 %
 %        Input:
-%           -x: value where to evaluate the normal distribution
-%           -tmqi_mu: is the mean of the normal distribution
-%           -tmqi_sigma: is the standard deviation of the normal deviation
+%           -filename: the name of the file to open
 %
 %        Output:
-%           -y: evaluation of the normal distribution
+%           -img: the opened image
 %
-%     Copyright (C) 2013  Francesco Banterle
+%     Copyright (C) 2011-13  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -27,14 +25,6 @@ function y = TMQI_normpdf(x, tmqi_mu, tmqi_sigma)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-if(~exist('tmqi_mu'))
-    tmqi_mu = 0.0;
-end
-
-if(~exist('tmqi_sigma'))
-    tmqi_sigma = 1.0;
-end
-
-y = exp(-(x-tmqi_mu).^2/(2*tmqi_sigma^2))/(tmqi_sigma*sqrt(2*pi));
+img = double(imread(filename))/255.0;
 
 end

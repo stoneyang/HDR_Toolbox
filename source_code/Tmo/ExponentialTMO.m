@@ -30,11 +30,11 @@ function imgOut=ExponentialTMO(img, q_exponential, k_exponential)
 %is it a three color channels image?
 check13Color(img);
 
-if(~exist('q_exponential'))
+if(~exist('q_exponential','var'))
     q_exponential = 1;
 end
 
-if(~exist('k_exponential'))
+if(~exist('k_exponential','var'))
     k_exponential = 1;
 end
 
@@ -52,10 +52,10 @@ end
 L = lum(img);
 
 %Logarithmic mean calculation
-Lwa=logMean(L);
+Lwa = logMean(L);
 
 %Dynamic Range Reduction
-Ld=1-exp(-(L*q_exponential)/(Lwa*k_exponential));
+Ld = 1-exp(-(L*q_exponential)/(Lwa*k_exponential));
 
 %Changing luminance
 imgOut = ChangeLuminance(img, L, Ld);

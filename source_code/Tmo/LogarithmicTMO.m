@@ -32,29 +32,29 @@ function imgOut=LogarithmicTMO(img, q_logarithmic, k_logarithmic)
 %Is it a three color channels image?
 check13Color(img);
 
-if(~exist('q_logarithmic'))
-    q_logarithmic=1;
+if(~exist('q_logarithmic','var'))
+    q_logarithmic = 1;
 end
 
-if(~exist('k_logarithmic'))
-    k_logarithmic=1;
+if(~exist('k_logarithmic','var'))
+    k_logarithmic = 1;
 end
 
 %check for q_logarithmic>=1
 if(q_logarithmic<1)
-    q_logarithmic=1;
+    q_logarithmic = 1;
 end
 
 %check for q_logarithmic>=1
 if(k_logarithmic<1)
-    k_logarithmic=1;
+    k_logarithmic = 1;
 end
 
 %Luminance channel
-L=lum(img);
+L = lum(img);
 
 %Maximum luminance value
-LMax=max(L(:));
+LMax = max(L(:));
 
 %Dynamic Range Reduction
 Ld=log10(1+L*q_logarithmic)/log10(1+LMax*k_logarithmic);

@@ -46,7 +46,7 @@ function imgOut = PeceKautzTMO( img, directory, format, imageStack, iterations, 
 %
 
 %imageStack generation
-if(~exist('imageStack'))
+if(~exist('imageStack','var'))
     imageStack = [];
 end
 

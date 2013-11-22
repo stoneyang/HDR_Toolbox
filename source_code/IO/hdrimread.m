@@ -41,11 +41,11 @@ switch extension
         try
 		 %Uncompressed RGBE Image
             img=read_rgbe(filename);  
-        catch
+        catch err  
             try 
                 %RLE compressed image
                 img=double(hdrread(filename));
-            catch
+            catch err
                 disp('This HDR file can not be read.');
             end
         end
@@ -61,14 +61,14 @@ switch extension
     case 'jp2'
         try
             img = HDRJPEG2000Dec(filename);
-        catch
+        catch err
             disp('Tried to read it as HDRJPEG 2000.');
         end        
         
     case 'jpg'
         try
             img = JPEGHDRDec(filename);
-        catch
+        catch err
             disp('Tried to read it as JPEG HDR.');
         end
        
@@ -76,7 +76,7 @@ switch extension
         try
             bLDR = 1;
             img=double(imread(filename))/255;
-        catch
+        catch err
             disp('This format is not supported.');
         end
 end
@@ -91,7 +91,7 @@ if(isempty(img)&&(bLDR==0))
         if(bitDepth==48)
             img=double(imread(filename))/65535;
         end
-    catch
+    catch err
         disp('This format is not supported.');
 	end
 end

@@ -37,7 +37,7 @@ function imgOut = RamanTMO( img, directory, format, imageStack)
 %
 
 %imageStack generation
-if(~exist('imageStack'))
+if(~exist('imageStack','var'))
     imageStack = [];
 end
 
