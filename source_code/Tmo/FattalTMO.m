@@ -29,7 +29,7 @@ function imgOut = FattalTMO(img, fBeta)
 %is it a three color channels image?
 check13Color(img);
 
-if(~exist('fBeta'))
+if(~exist('fBeta','var'))
     fBeta = 0.95;
 end
 
@@ -70,8 +70,6 @@ for k=numPyr:-1:1
     Phi_k = FattalPhi(G(k).fx, G(k).fy, fAlpha, fBeta);
     Phi_kp1 = imresize(Phi_kp1,[r,c],'bilinear').*Phi_k;
 end
-
-hdrimwrite(Phi_kp1,'Phi_kp1.pfm');
 
 %Calculating the divergence with backward differences
 G = struct('fx',G(1).fx.*Phi_kp1,'fy',G(1).fy.*Phi_kp1);

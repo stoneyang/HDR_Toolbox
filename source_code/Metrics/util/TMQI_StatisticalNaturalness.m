@@ -30,20 +30,10 @@ fun = @(x) std(x(:))*ones(size(x));
 I1 = blkproc(L_ldr,[11 11],fun);
 sig = (mean2(I1));
 
-if(exist('beta_mode')==0)
-end
-
-if(exist('normpdf')==0)
-
-end
-
 %------------------ Contrast ----------
 phat(1) = 4.4;
 phat(2) = 10.1;
 beta_mode = (phat(1) - 1)/(phat(1) + phat(2) - 2);
-
-C_0 = 0;
-C   = 0;
 
 if(exist('betapdf')==2)
     C_0 = betapdf(beta_mode, phat(1),phat(2));
@@ -52,14 +42,11 @@ else
     C_0 = TMQI_betapdf(beta_mode, phat(1),phat(2));
     C   = TMQI_betapdf(sig./64.29,phat(1),phat(2));
 end
-
 pc  = C./C_0;
-%----------------  Brightness ---------
-muhat = 115.94;
-sigmahat = 27.99;
 
-B   = 0;
-B_0 = 0;
+%----------------  Brightness ---------
+muhat    = 115.94;
+sigmahat = 27.99;
 
 if(exist('normpdf')==2)
     B   = normpdf(u,muhat,sigmahat);
@@ -68,8 +55,8 @@ else
     B   = TMQI_normpdf(u,muhat,sigmahat);
     B_0 = TMQI_normpdf(muhat,muhat,sigmahat);
 end
-
 pb  = B./B_0;
+
 %-------------------------------
 N = pb*pc;
 

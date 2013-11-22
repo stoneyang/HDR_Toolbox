@@ -44,5 +44,6 @@ for l = 1:level
     L_hdr = filtered_im1(1:2:end, 1:2:end);
     L_ldr = filtered_im2(1:2:end, 1:2:end);
 end
+
 S = prod(s_local.^weight);
 end

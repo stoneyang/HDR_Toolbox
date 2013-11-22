@@ -27,11 +27,11 @@ function y = TMQI_normpdf(x, tmqi_mu, tmqi_sigma)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-if(~exist('tmqi_mu'))
+if(~exist('tmqi_mu','var'))
     tmqi_mu = 0.0;
 end
 
-if(~exist('tmqi_sigma'))
+if(~exist('tmqi_sigma','var'))
     tmqi_sigma = 1.0;
 end
 
