@@ -30,9 +30,14 @@ function imgOut = HuoEO(img, hou_s, hou_theta, gammaRemoval)
 %     You should have received a copy of the GNU General Public License
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
+%     The paper describing this technique is:
+%     "Dodging and Burning Inspired Inverse Tone Mapping Algorithm"
+% 	  by Yongqing HUO, Fan YANG, Vincent BROST 
+%     in Journal of Computational Information Systems 9: 9 (2013) 3461–3468
+%
 
 %is it a three color channels image?
-check3Color(img);
+check13Color(img);
 
 if(~exist('gammaRemoval','var'))
     gammaRemoval = -1.0;
@@ -60,7 +65,8 @@ Lla = bilateralFilter(L,[],0.0,1.0,16.0,(3.0/255.0));%as in the original paper
 Lexp = Lm./Lla;
 
 imgOut = zeros(size(img));
-for i=1:3
+
+for i=1:size(img,3)
     imgOut(:,:,i) = img(:,:,i).*Lexp;
 end
 
