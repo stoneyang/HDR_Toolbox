@@ -4,7 +4,7 @@ function imgOut = RempelEO(img, gammaRemoval, noiseReduction)
 %
 %
 %        Input:
-%           -img: input LDR image
+%           -img: input LDR image with values in [0,1]
 %           -gammaRemoval: the gamma value to be removed if known
 %           -noiseReduction: a boolean flag for activating the noise
 %           reduction

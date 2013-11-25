@@ -4,7 +4,7 @@ function imgOut = KuoEO(img, LMax, LMin, gammaRemoval)
 %
 %
 %        Input:
-%           -img: input LDR image
+%           -img:  input LDR image with values in [0,1]
 %           -LMax: maximum luminance output in cd/m^2
 %           -LMin: minimum luminance output in cd/m^2
 %           -gammaRemoval: the gamma value to be removed if known

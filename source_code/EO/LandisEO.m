@@ -4,7 +4,7 @@ function imgOut = LandisEO(img, Landis_alpha, Landis_dynRangeStartLum,  Landis_M
 %
 %
 %        Input:
-%           -img: input LDR image
+%           -img:  input LDR image with values in [0,1]
 %           -Landis_alpha: this value defines the 
 %           -Landis_dynRangeStartLum: threshold for applying the iTMO
 %           -Landis_Max_Luminance: maximum output luminance

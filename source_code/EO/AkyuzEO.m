@@ -4,7 +4,7 @@ function imgOut = AkyuzEO(img, Akyuz_Max, Akyuz_gamma, gammaRemoval)
 %
 %
 %        Input:
-%           -img: input LDR image
+%           -img: input LDR image with values in [0,1]
 %           -Akyuz_Max: the maximum output luminance value defines the 
 %           -Akyuz_gamma: this value defines the appearance
 %           -gammaRemoval: the gamma value to be removed if known

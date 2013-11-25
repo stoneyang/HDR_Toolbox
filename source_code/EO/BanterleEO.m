@@ -4,7 +4,7 @@ function [imgOut, expand_map] = BanterleEO(img, expansion_operator, eo_parameter
 %
 %
 %        Input:
-%           -img: input LDR image. There is no assumption about the
+%           -img: input LDR image with values in [0,1]. There is no assumption about the
 %           linearization of the image. If the gamma was encoded using
 %           inverse gamma, this should be removed using the paramter
 %           gammaRemoval.

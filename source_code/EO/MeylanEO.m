@@ -4,7 +4,7 @@ function imgOut = MeylanEO(img, Meylan_Max, Meylan_lambda, gammaRemoval)
 %
 %
 %        Input:
-%           -img: input LDR image
+%           -img: input LDR image with values in [0,1]
 %           -Meylan_Max: this value defines the maximum luminance output of
 %           the final expanded image in cd/m^2
 %           -Meylan_lambda: threshold for applying the iTMO

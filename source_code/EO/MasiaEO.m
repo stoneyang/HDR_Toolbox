@@ -4,7 +4,7 @@ function [imgOut,bWarning] = MasiaEO(img, Masia_Max, Masia_noise_removal, gammaR
 %
 %
 %        Input:
-%           -img: input LDR image
+%           -img: input LDR image with values in [0,1]
 %           -Masia_Max: maximum luminance output in cd/m^2
 %           -Masia_noise_removal: if set to 1 it removes noise or artifacts
 %           using the bilateral filter
