@@ -37,19 +37,19 @@ function [histo,bound,haverage]=HistogramHDR(img,nZone,typeLog,bNormalized,bPlot
 %is it a three color channels image?
 check13Color(img);
 
-if(~exist('nZone'))
+if(~exist('nZone','var'))
     nZone = 256;
 end
 
-if(~exist('typeLog'))
+if(~exist('typeLog','var'))
     typeLog = 'log10';
 end
 
-if(~exist('bNormalized'))
+if(~exist('bNormalized','var'))
     bNormalized = 0;
 end
 
-if(~exist('bPlot'))
+if(~exist('bPlot','var'))
     bPlot=0;
 end
 
@@ -69,23 +69,22 @@ end
 
 Lmin = min(L);
 Lmax = max(L);
-dMM  = (Lmax-Lmin)/nZone;
+dMM  = (Lmax-Lmin)/(nZone-1);
 
 histo=zeros(nZone,1);
 
-bound(1)=Lmin;
-bound(2)=Lmax;
+bound(1) = Lmin;
+bound(2) = Lmax;
 
-haverage=0;
-total=0;
+haverage = 0;
+total = 0;
 for i=1:nZone
-    indx=find(L>=(dMM*(i-1)+Lmin)&L<(dMM*i+Lmin));
-    [n2,m2]=size(indx);
-    count=n2*m2;
+    indx  = find(L>=(dMM*(i-1)+Lmin)&L<(dMM*i+Lmin));
+    count = length(indx);
     if(count>0)
-        histo(i)=count;
-        haverage=haverage+MaxQuart(L2(indx),0.5)*count;
-        total=total+count;
+        histo(i) = count;
+        haverage = haverage+MaxQuart(L2(indx),0.5)*count;
+        total    = total+count;
     end
 end
 
@@ -96,7 +95,7 @@ if(bNormalized)
     end
 end
 
-haverage=haverage/(total);
+haverage = haverage/(total);
 
 if(bPlot)
     x=((1:nZone)/nZone)*(Lmax-Lmin)+Lmin;
