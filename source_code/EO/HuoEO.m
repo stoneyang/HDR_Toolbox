@@ -52,7 +52,7 @@ if(~exist('hou_theta','var'))
 end
 
 if(gammaRemoval>0.0)
-    img=img.^gammaRemoval;
+    img = img.^gammaRemoval;
 end
 
 %Calculate luminance

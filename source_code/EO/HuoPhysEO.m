@@ -30,7 +30,7 @@ function imgOut = HuoPhysEO(img, hou_max_luminance, hou_n, gammaRemoval)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 %     The paper describing this technique is:
-%     "Dodging and Burning Inspired Inverse Tone Mapping Algorithm"
+%     "Physiological inverse tone mapping based on retina response"
 % 	  by Yongqing HUO, Fan YANG, Le DONG, Vincent BROST 
 %     in The Visual Computer September (2013)
 %
