@@ -29,7 +29,7 @@ function imgOut = KuoEO(img, LMax, LMin, gammaRemoval)
 %
 
 %is it a three color channels image?
-check3Color(img);
+check13Color(img);
 
 if(~exist('LMax','var'))
     LMax = 3000.0;%The maximum output of a Brightside DR37p

@@ -9,8 +9,6 @@ function imgOut = HuoPhysEO(img, hou_max_luminance, hou_n, gammaRemoval)
 %           -hou_n: a value which determines the dynamic range percentage
 %            of the expanded image allocated to the high luminance level 
 %            and low luminance level of the LDR image.
-%           -hou_theta: a small value to avoid singularities. Note that
-%           this drives the maximum output luminance
 %           -gammaRemoval: the gamma value to be removed if known
 %
 %        Output:
@@ -62,15 +60,15 @@ max_L_l = max(L_l(:));
 sigma_l = logMean(L_l);
 
 %iterative bilateral filter: 2 passes as in the original paper
-L_s_l_1 = bilateralFilter(L_l  , [], 0.0, 1.0, 16.0, 0.3);
-L_s_l = bilateralFilter(L_s_l_1, [], 0.0, 1.0, 10.0, 0.1);
+L_s_l_1 = bilateralFilter(L_l  ,   [], 0.0, 1.0, 16.0, 0.3);
+L_s_l   = bilateralFilter(L_s_l_1, [], 0.0, 1.0, 10.0, 0.1);
 
 %Computing parameters
 sigma = hou_max_luminance*sigma_l;
 L_s_h = hou_max_luminance*L_s_l;
 
 %Expanding luminance
-L_h = ((L_l/max_L_l).*(L_s_h.^hou_n+sigma^hou_n)).^(1.0/hou_n);
+L_h = ((L_l/max_L_l).*((L_s_h.^hou_n+sigma^hou_n)).^(1.0/hou_n));
 
 %Generate the final image with the new luminance
 imgOut = ChangeLuminance(img, L_l, L_h);
