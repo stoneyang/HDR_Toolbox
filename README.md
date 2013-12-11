@@ -27,3 +27,15 @@ HDR Toolbox for processing High Dynamic Range (HDR) images into MATLAB and Octav
 3) Set the FOLDER as current directory
 4) Write the command:    installHDRToolbox
 in the Command Window, and wait for the installation process.
+
+
+Please reference the book in your work or papers if you this toolbox:
+
+@book{Banterle:2011,
+ author = {Banterle, Francesco and Artusi, Alessandro and Debattista, Kurt and Chalmers, Alan},
+ title = {Advanced High Dynamic Range Imaging: Theory and Practice},
+ year = {2011},
+ isbn = {9781568817194},
+ publisher = {AK Peters (CRC Press)},
+ address = {Natick, MA, USA},
+} 
