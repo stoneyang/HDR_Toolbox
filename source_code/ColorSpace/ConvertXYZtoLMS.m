@@ -28,17 +28,15 @@ function imgOut = ConvertXYZtoLMS(img, inverse)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-%XYZ to LMS matrix conversion
-mtxXYZ2LMS = [  0.8951,  0.2664, -0.1614;...
-               -0.7502,  1.7135,  0.0367;...
-                0.0389, -0.0685,  1.0296];
+%XYZ to LMS matrix conversion: HPE transformation matrix
+mtxXZYtoLMS = [0.4002 0.7075 -0.0807; -0.2280 1.1500 0.0612; 0.0 0.0 0.9184];
 
 if(inverse==0)
-    imgOut = ConvertLinearSpace(img, mtxXYZ2LMS);
+    imgOut = ConvertLinearSpace(img, mtxXZYtoLMS);
 else
 
 if(inverse==1)
-    imgOut = ConvertLinearSpace(img, inv(mtxXYZ2LMS));
+    imgOut = ConvertLinearSpace(img, inv(mtxXZYtoLMS));
 end
             
 end

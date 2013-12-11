@@ -60,19 +60,19 @@ switch col
         error('No valid image');
 end
 
-if(~exist('FC_Vis'))
+if(~exist('FC_Vis','var'))
     FC_Vis = 1;
 end
 
-if(~exist('FC_compress'))
+if(~exist('FC_compress','var'))
     FC_compress = 'log';
 end
 
-if(~exist('FC_figure'))
+if(~exist('FC_figure','var'))
     FC_figure = 1;
 end
 
-if(~exist('FC_title'))
+if(~exist('FC_title','var'))
     FC_title = 'False color visualization';
 end
 
@@ -80,7 +80,7 @@ end
 LMin = min(L(:));
 
 %Maximum luminance
-if(~exist('FC_LMax'))
+if(~exist('FC_LMax','var'))
     LMax = max(L(:));
 else
     if(FC_LMax<0)
@@ -96,8 +96,6 @@ else
 end
 
 FC_MAX_L = LMax;
-LMaxOri = LMax;
-LMinOri = LMin;
 
 %Luminance compression
 epsilon = 1e-6; %for avoiding singularities

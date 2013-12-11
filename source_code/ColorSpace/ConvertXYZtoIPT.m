@@ -29,14 +29,33 @@ function imgOut = ConvertXYZtoIPT(img, inverse)
 %
 
 %matrix conversion from XYZ to IPT
-mtxXZYtoIPT = [ 0.3971 0.68898 -0.07868; -0.22981 1.18340 0.04641; 0.0 0.0 1.0];
+mtxLMStoIPT = [0.4000 0.4000 0.2000; 4.4550 4.8510 0.3960; 0.8056 0.3572 1.1628];
+
 
 if(inverse==0)
-    imgOut = ConvertLinearSpace(img, mtxXZYtoIPT);
+    gamma = 0.43;
+    
+    imgLMS = ConvertXYZtoLMS(img, 0);
+    
+    ind0 = find(imgLMS>=0.0);    
+    ind1 = find(imgLMS<0.0);
+    imgLMS(ind0) = imgLMS(ind0).^gamma;
+    imgLMS(ind1) = -(-imgLMS(ind1)).^gamma;
+    
+    imgOut = ConvertLinearSpace(imgLMS, mtxLMStoIPT);
 else
 
 if(inverse==1)
-    imgOut = ConvertLinearSpace(img, inv(mtxXZYtoIPT));
+    invGamma = 1.0/0.43;
+    
+    imgLMS = ConvertLinearSpace(img, inv(mtxLMStoIPT));
+
+    ind0 = find(imgLMS>=0.0);    
+    ind1 = find(imgLMS<0.0);
+    imgLMS(ind0) = imgLMS(ind0).^invGamma;
+    imgLMS(ind1) = -(-imgLMS(ind1)).^invGamma;
+    
+    img = ConvertXYZtoLMS(imgLMS, 1);
 end
             
 end
