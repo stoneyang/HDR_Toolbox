@@ -5,7 +5,7 @@ function imgOut = ConvertLMStoLAlphaBeta(img, inverse)
 %
 %        Input:
 %           -img: image to convert from LMS to l-alpha-beta or from l-alpha-beta to LMS.
-%           -inverse: takes as values 0 or 1. If it is set to 1 the
+%           -inverse: takes as values 0 or 1. If it is set to 0 the
 %                     transformation from LMS to l-alpha-beta is applied,
 %                     otherwise the transformation from l-alpha-beta to LMS.
 %

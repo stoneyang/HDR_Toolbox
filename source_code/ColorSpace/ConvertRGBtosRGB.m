@@ -6,7 +6,7 @@ function imgOut = ConvertRGBtosRGB(img, inverse)
 %        Input:
 %           -img: image to convert from linear RGB to sRGB or from sRGB to
 %                 linear RGB.
-%           -inverse: takes as values 0 or 1. If it is set to 1 the
+%           -inverse: takes as values 0 or 1. If it is set to 0 the
 %                     transformation from sRGB to linear RGB is applied,
 %                     otherwise the transformation from linear RGB to sRGB.
 %

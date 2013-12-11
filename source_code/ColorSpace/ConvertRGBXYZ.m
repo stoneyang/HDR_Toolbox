@@ -5,7 +5,7 @@ function imgOut = ConvertRGBXYZ(img, inverse)
 %
 %        Input:
 %           -img: image to convert from RGB to XYZ or from XYZ to RGB.
-%           -inverse: takes as values 0 or 1. If it is set to 1 the
+%           -inverse: takes as values 0 or 1. If it is set to 0 the
 %                     transformation from XYZ to RGB is applied, otherwise
 %                     the transformation from RGB to XYZ.
 %
@@ -29,16 +29,16 @@ function imgOut = ConvertRGBXYZ(img, inverse)
 %
 
 %ITU-R BT.709 matrix conversion from RGB to XYZ
-mtxRGB2XYZ = [  0.4124, 0.3576, 0.1805;...
+mtxRGBtoXYZ = [  0.4124, 0.3576, 0.1805;...
                 0.2126, 0.7152, 0.0722;...
                 0.0193, 0.1192, 0.9505];
 
 if(inverse==0)
-    imgOut = ConvertLinearSpace(img, mtxRGB2XYZ);
+    imgOut = ConvertLinearSpace(img, mtxRGBtoXYZ);
 else
 
 if(inverse==1)
-    imgOut = ConvertLinearSpace(img, inv(mtxRGB2XYZ));
+    imgOut = ConvertLinearSpace(img, inv(mtxRGBtoXYZ));
 end
             
 end

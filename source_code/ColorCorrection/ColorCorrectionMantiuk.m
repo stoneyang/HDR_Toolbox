@@ -35,14 +35,13 @@ function imgOut = ColorCorrectionMantiuk(img, mantiuk_p)
 %
 
 %is it a three color channels image?
-check13Color(img);
+check3Color(img);
 
 if(~exist('mantiuk_p','var'))
     mantiuk_p = 0.5;
 end
 
 mantiuk_p = ClampImg(mantiuk_p, 0.0, 1.0);
-
 
 L = lum(img);
 imgOut = zeros(size(img));

@@ -5,7 +5,7 @@ function imgOut = ConvertXYZtoYxy(img, inverse)
 %
 %        Input:
 %           -img: image to convert from XYZ to Yxy or from Yxy to XYZ.
-%           -inverse: takes as values 0 or 1. If it is set to 1 the
+%           -inverse: takes as values 0 or 1. If it is set to 0 the
 %                     transformation from XYZ to Yxy is applied, otherwise
 %                     the transformation from Yxy to XYZ.
 %

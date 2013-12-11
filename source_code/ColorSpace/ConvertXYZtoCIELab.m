@@ -5,7 +5,7 @@ function imgOut = ConvertXYZtoCIELab(img, inverse, conv_whitePoint)
 %
 %        Input:
 %           -img: image to convert from XYZ to CIE Lab or from Luv to XYZ
-%           -inverse: takes as values 0 or 1. If it is set to 1 the
+%           -inverse: takes as values 0 or 1. If it is set to 0 the
 %                     transformation from XYZ to CIE Lab is applied, otherwise
 %                     the transformation from CIE Lab to XYZ
 %           -conv_whitePoint: the white point in XYZ coordiantes
@@ -33,7 +33,7 @@ check3Color(img);
 [r,c,col] = size(img);
 imgOut = zeros(r,c,col);
 
-if(~exist('conv_whitePoint'))
+if(~exist('conv_whitePoint','var'))
     conv_whitePoint = [1,1,1];
 end
 

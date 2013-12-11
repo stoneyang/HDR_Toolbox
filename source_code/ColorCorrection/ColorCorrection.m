@@ -31,7 +31,7 @@ function imgOut = ColorCorrection(img, schlick_correction)
 %
 
 %is it a three color channels image?
-check13Color(img);
+check3Color(img);
 
 if(~exist('schlick_correction','var')
     schlick_correction = 0.5;
