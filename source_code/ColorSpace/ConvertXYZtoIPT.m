@@ -55,7 +55,7 @@ if(inverse==1)
     imgLMS(ind0) = imgLMS(ind0).^invGamma;
     imgLMS(ind1) = -(-imgLMS(ind1)).^invGamma;
     
-    img = ConvertXYZtoLMS(imgLMS, 1);
+    imgOut = ConvertXYZtoLMS(imgLMS, 1);
 end
             
 end
