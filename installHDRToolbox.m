@@ -96,5 +96,8 @@ clear('d21');
 clear('d22');
 clear('cp');
 clear('tmpStr');
-
-disp('Check demo1.m and demo2.m on basics for how using the HDR Toolbox!');
+disp(' ');
+disp('Check demos in the folder ''demos'' for learning how to use the HDR Toolbox!');
+disp(' ');
+disp('If you use the toolbox for research, please reference the book in your papers:');
+disp('Advanced High Dynamic Range Imaging: Theory and Practice');
