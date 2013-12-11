@@ -1,6 +1,6 @@
-function imgOut = ConvertRGBXYZ(img, inverse)
+function imgOut = ConvertRGBtoXYZ(img, inverse)
 %
-%       imgOut = ConvertRGBXYZ(img, inverse)
+%       imgOut = ConvertRGBtoXYZ(img, inverse)
 %
 %
 %        Input:
