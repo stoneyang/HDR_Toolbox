@@ -50,8 +50,8 @@ switch col
         end    
         
     case 3%RGB Colors
-        imgLab = ConvertXYZtoCIELab(ConvertRGBXYZ(img,0),0);
-        expand_map_de_Lab = ConvertXYZtoCIELab(ConvertRGBXYZ(expand_map_de,0),0);
+        imgLab = ConvertXYZtoCIELab(ConvertRGBtoXYZ(img,0),0);
+        expand_map_de_Lab = ConvertXYZtoCIELab(ConvertRGBtoXYZ(expand_map_de,0),0);
         
         for i=1:col
             tmpImg = imgLab(:,:,i);
@@ -71,7 +71,7 @@ switch col
             end
         end
             
-        expand_map = ConvertRGBXYZ(ConvertXYZtoCIELab(expand_map,1),1);        
+        expand_map = ConvertRGBtoXYZ(ConvertXYZtoCIELab(expand_map,1),1);        
         
     otherwise%2,4 and more colors
         for i=1:col

@@ -54,7 +54,7 @@ switch col
         imgOut = bilateralFilter(img,[],0.0,1.0,sigma_s,sigma_r)*(maxC-minC)+minC;
             
     case 3
-        imgLab = ConvertXYZtoCIELab(ConvertRGBXYZ(img,0),0);
+        imgLab = ConvertXYZtoCIELab(ConvertRGBtoXYZ(img,0),0);
             
         for i=1:col
             tmp = imgLab(:,:,i);
@@ -64,7 +64,7 @@ switch col
             imgLab(:,:,i) = bilateralFilter(tmp,[],0.0,1.0,sigma_s,sigma_r)*(maxC-minC)+minC;
         end
             
-        imgOut = ConvertRGBXYZ(ConvertXYZtoCIELab(imgLab,1),1);
+        imgOut = ConvertRGBtoXYZ(ConvertXYZtoCIELab(imgLab,1),1);
             
     otherwise
         imgOut = zeros(size(img));

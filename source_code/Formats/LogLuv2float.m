@@ -48,6 +48,6 @@ imgXYZ(:,:,1) = x.*norm;
 imgXYZ(:,:,3) = z.*norm;
 
 %Conversion from XYZ to RGB
-imgRGB = ConvertRGBXYZ(imgXYZ, 1);
+imgRGB = ConvertRGBtoXYZ(imgXYZ, 1);
 
 end

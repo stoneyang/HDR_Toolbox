@@ -117,7 +117,7 @@ Beta = 0.7088;
 level = 5;
 weight = [0.0448 0.2856 0.3001 0.2363 0.1333];
 %--------------------
-HDR = ConvertXYZtoYxy(ConvertRGBXYZ(hdrImage,0),0);
+HDR = ConvertXYZtoYxy(ConvertRGBtoXYZ(hdrImage,0),0);
 
 L_hdr = HDR(:,:,1);
 lmin = min(L_hdr(:));
@@ -125,7 +125,7 @@ lmax = max(L_hdr(:));
 L_hdr = double(round((2^32 - 1)/(lmax - lmin)).*(L_hdr - lmin));
 %-------------------------------------------
 
-L_ldr = ConvertXYZtoYxy(ConvertRGBXYZ(double(ldrImage),0),0);
+L_ldr = ConvertXYZtoYxy(ConvertRGBtoXYZ(double(ldrImage),0),0);
 L_ldr = double(L_ldr(:,:,1));
 %----------- structural fidelity -----------------
 [S s_local s_maps] = TMQI_StructuralFidelity(L_hdr, L_ldr,level,weight, window);

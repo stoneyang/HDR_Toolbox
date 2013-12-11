@@ -29,7 +29,7 @@ function imgLogLuv = float2LogLuv(img)
 check3Color(img);
 
 %Conversion from RGB to XYZ
-imgXYZ = ConvertRGBXYZ(img, 0);
+imgXYZ = ConvertRGBtoXYZ(img, 0);
 
 imgLogLuv = zeros(size(img));
 

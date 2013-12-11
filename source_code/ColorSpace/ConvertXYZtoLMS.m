@@ -1,6 +1,6 @@
-function imgOut = ConvertXYZLMS(img, inverse)
+function imgOut = ConvertXYZtoLMS(img, inverse)
 %
-%       imgOut = ConvertXYZLMS(img, inverse)
+%       imgOut = ConvertXYZtoLMS(img, inverse)
 %
 %
 %        Input:
