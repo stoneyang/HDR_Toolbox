@@ -40,6 +40,7 @@ d18 = 'Metrics/util';
 d19 = 'Alignment';
 d20 = 'IO_video';
 d21 = 'Tmo_video';
+d22 = 'ColorCorrection';
 
 cp = pwd();
 
@@ -65,6 +66,7 @@ addpath([cp,tmpStr,d18],'-begin');
 addpath([cp,tmpStr,d19],'-begin');
 addpath([cp,tmpStr,d20],'-begin');
 addpath([cp,tmpStr,d21],'-begin');
+addpath([cp,tmpStr,d22],'-begin');
 addpath([cp,'/demos/'], '-begin');
 
 savepath
@@ -91,6 +93,7 @@ clear('d18');
 clear('d19');
 clear('d20');
 clear('d21');
+clear('d22');
 clear('cp');
 clear('tmpStr');
 
