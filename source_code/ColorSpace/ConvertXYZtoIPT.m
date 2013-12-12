@@ -29,8 +29,7 @@ function imgOut = ConvertXYZtoIPT(img, inverse)
 %
 
 %matrix conversion from XYZ to IPT
-mtxLMStoIPT = [0.4000 0.4000 0.2000; 4.4550 4.8510 0.3960; 0.8056 0.3572 1.1628];
-
+mtxLMStoIPT = [0.4000 0.4000 0.2000; 4.4550 -4.8510 0.3960; 0.8056 0.3572 -1.1628];
 
 if(inverse==0)
     gamma = 0.43;
