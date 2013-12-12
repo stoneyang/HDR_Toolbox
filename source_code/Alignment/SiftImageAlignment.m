@@ -52,7 +52,7 @@ if(~exist('vl_imwbackward')||~exist('vl_colsubset')||~exist('vl_sift')||~exist('
     error('This function needs VL Fleat. Please download it from http://www.vlfeat.org/');
 end
 
-if(~exist('maxIterations'))
+if(~exist('maxIterations','var'))
     maxIterations = 64;
 end
 
@@ -65,8 +65,14 @@ ratio_2_1 = RemoveSpecials(img2./img1);
 scale = mean(ratio_2_1(:));
 img1 = ClampImg(img1*scale,0.0,1.0);
 
-im1g = single(lum(img1));
-im2g = single(lum(img2));
+try
+    im1g = single(ColorToGreyFusion(img1));
+    im2g = single(ColorToGreyFusion(img2));
+catch e
+    disp(e);
+    im1g = single(lum(img1));
+    im2g = single(lum(img2));
+end
 
 %SIFT matches
 [f1,d1] = vl_sift(im1g) ;

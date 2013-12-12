@@ -13,7 +13,7 @@
 
 name_folder = 'stack_alignment';
 disp('1) Read a stack of LDR images');
-stack = ReadLDRStack(name_folder, 'JPG')/255.0;
+stack = ReadLDRStack(name_folder, 'jpg')/255.0;
 
 disp('2) Align the stack');
 stackOut = SiftAlignment(stack, 1, '', '');

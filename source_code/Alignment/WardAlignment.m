@@ -55,7 +55,7 @@ if(n<=1)
     return;
 end
 
-if(~exist('target_exposure'))
+if(~exist('target_exposure','var'))
     disp('Finding the best target exposure...');
     values = zeros(n,1);
     for i=1:n

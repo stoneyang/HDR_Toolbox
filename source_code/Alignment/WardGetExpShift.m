@@ -28,11 +28,11 @@ function cur_shift = WardGetExpShift(img1, img2, shift_bits, wardPercentile)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-if(~exist('wardPercentile'))
+if(~exist('wardPercentile','var'))
     wardPercentile = 0.5;
 end
 
-if(~exist('shift_bits'))
+if(~exist('shift_bits','var'))
     shift_bits = 6;
 end
 

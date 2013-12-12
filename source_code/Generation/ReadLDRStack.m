@@ -33,7 +33,7 @@ list = dir([dir_name,'/*.',format]);
 n = length(list);
 
 if(n>1)
-    info = imfinfo(list(1).name);
+    info = imfinfo([dir_name,'/',list(1).name]);
     stack = zeros(info.Height, info.Width, info.NumberOfSamples, n);
 
     for i=1:n
