@@ -28,7 +28,7 @@ function extOut=fileExtension(filename)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-k=findstr(filename,'.');
+k = strfind(filename,'.');
 
 %there is no extension
 if(size(k)==0)
@@ -36,9 +36,8 @@ if(size(k)==0)
 end
 
 %get the real extension
-ind=max(size(k));
-k=k(ind);
+k = k(end);
 
-extOut=filename((k+1):max(size(filename)));
+extOut = filename((k+1):max(size(filename)));
 
 end

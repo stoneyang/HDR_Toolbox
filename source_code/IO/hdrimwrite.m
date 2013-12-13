@@ -42,11 +42,11 @@ end
 
 ret = 0;
 
-if(~exist('jpeg_hdr_quality'))
+if(~exist('jpeg_hdr_quality','var'))
     jpeg_hdr_quality = 95;
 end
 
-if(~exist('hdr_jpeg_2000_ratio'))
+if(~exist('hdr_jpeg_2000_ratio','var'))
     hdr_jpeg_2000_ratio = 2;
 end
 
