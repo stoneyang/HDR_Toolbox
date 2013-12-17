@@ -28,18 +28,13 @@ function name = RemoveExt(filename)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-k=findstr(filename,'.');
+k = strfind(filename,'.');
 
-%there is no extension
-if(size(k)==0)
+if(size(k)==0)%no extension
     name = filename;
-else
-    %get the real extension
-    ind = max(size(k));
-    k = k(ind);
+else    
+    k = k(end);%get the real extension
     name = filename(1:(k-1));   
 end
-
-
 
 end

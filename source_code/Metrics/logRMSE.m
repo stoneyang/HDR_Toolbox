@@ -34,7 +34,7 @@ end
 
 subImage = img1./img2;
 acc = zeros(size(img1,1),size(img1,2));
-for i=1:3
+for i=1:size(img,3)
     tmp = RemoveSpecials(log2(subImage(:,:,i)));
     acc = acc+tmp.^2;
 end

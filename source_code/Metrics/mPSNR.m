@@ -36,11 +36,11 @@ function [val, eMax, eMin] = mPSNR(img1, img2, eMin, eMax)
 
 [r,c,col]=size(img1);
 
-if(~exist('eMin')||~exist('eMax'))
+if(~exist('eMin','var')||~exist('eMax','var'))
     L     = lum(img2);
     LLog2 = log2(L+1e-6);
-    minL  = min(min(LLog2));
-    maxL  = max(max(LLog2));
+    minL  = min(LLog2(:));
+    maxL  = max(LLog2(:));
 
     if(minL<0)
         eMin = floor(minL);
@@ -85,8 +85,8 @@ for i=eMin:eMax
         delta = 255*(tImg1-tImg2);        
         deltaSquared = sum(delta.^2, 3); 
         
-        MSE=MSE+mean(deltaSquared(:));
-        acc=acc+1;
+        MSE = MSE+mean(deltaSquared(:));
+        acc = acc+1;
     end
 end
 
@@ -97,7 +97,7 @@ val = -1;
 
 if(acc>0)
     MSE = MSE/acc;
-    val = 10*log10(3*255^2/MSE);
+    val = 10*log10(col*255^2/MSE);
 end
 
 end
