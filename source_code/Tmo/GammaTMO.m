@@ -31,15 +31,15 @@ function imgOut=GammaTMO(img, TMO_gamma, TMO_fstop, TMO_view)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-if(~exist('TMO_gamma'))
+if(~exist('TMO_gamma','var'))
     TMO_gamma = 2.2;
 end
 
-if(~exist('TMO_fstop'))
+if(~exist('TMO_fstop','var'))
     TMO_fstop = 0.0;
 end
 
-if(~exist('TMO_view'))
+if(~exist('TMO_view','var'))
     TMO_view = 0;
 end
 

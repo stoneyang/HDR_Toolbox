@@ -1,6 +1,6 @@
 function [img_cur_exp, exposure] = InteractiveHDRVis(img)
 %
-%        exposure = InteractiveHDRVis(img)
+%        [img_cur_exp, exposure] = InteractiveHDRVis(img)
 %
 %        This function allows to explore the dynamic range in an image,
 %        img. This is achieved by clicking with the left mouse button into
@@ -14,7 +14,7 @@ function [img_cur_exp, exposure] = InteractiveHDRVis(img)
 %           -img_cur_exp: the input image with the last selected exposure
 %           -exposure: the last click exposure
 %
-%     Copyright (C) 2012  Francesco Banterle
+%     Copyright (C) 2012-13  Francesco Banterle
 %
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -29,8 +29,6 @@ function [img_cur_exp, exposure] = InteractiveHDRVis(img)
 %     You should have received a copy of the GNU General Public License
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
-
-%get(0,'Screensize') 
 
 L = lum(img);
 
