@@ -29,17 +29,17 @@ function imgOut = AkyuzEO(img, Akyuz_Max, Akyuz_gamma, gammaRemoval)
 %
 
 %is it a three color channels image?
-check3Color(img);
+check13Color(img);
 
-if(~exist('Akyuz_Max'))
+if(~exist('Akyuz_Max','var'))
     Akyuz_Max = 3000;
 end
 
-if(~exist('Akyuz_gamma'))
+if(~exist('Akyuz_gamma','var'))
     Akyuz_gamma = 1.0;
 end
 
-if(~exist('gammaRemoval'))
+if(~exist('gammaRemoval','var'))
     gammaRemoval=-1;
 end
 
