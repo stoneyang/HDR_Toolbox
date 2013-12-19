@@ -42,6 +42,7 @@ Run the demos to understand how to use I/O function, visualize images, tone Map 
 
 
 ==Update Report:
+19/12/2013: -Many fixes including: ReinhardTMO, DragoTMO, RGBE2Float and many more... 
 31/10/2013: -Added different fusion operator/tone mapping operator, improved demos, enhanced the toolbox.
 
 03/10/2013: -Added input/output for HDR videos: these videos need to be encoded as folders with a sequence of HDR files.
