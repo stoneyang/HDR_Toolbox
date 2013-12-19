@@ -1,6 +1,6 @@
-function imgOut = GammaDragoTMO(img, drago_gamma, drago_slope, drago_start)
+function imgOut = GammaDrago(img, drago_gamma, drago_slope, drago_start)
 %
-%        imgOut = GammaDragoTMO(img, drago_gamma, drago_slope, drago_start)
+%        imgOut = GammaDrago(img, drago_gamma, drago_slope, drago_start)
 %
 %        This function applies gamma correction for the Drago et al.'s TMO,
 %        please see DragoTMO.m
