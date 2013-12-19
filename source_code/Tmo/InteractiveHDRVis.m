@@ -35,7 +35,7 @@ L = lum(img);
 bFlag = 1;
 
 invGamma = 1.0/2.2;
-exposure = 1.0;
+exposure = 0.25/(mean(L(:))+1e-6);
 kernelSize = 7;
 
 img_cur_exp = (img*exposure);
