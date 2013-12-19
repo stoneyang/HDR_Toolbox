@@ -25,6 +25,20 @@ function img = ldrimread(filename)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-img = double(imread(filename))/255.0;
+img = [];
+
+try    
+    image_info = imfinfo(filename);
+    if((image_info.BitDepth==24)||(image_info.BitDepth==8))
+        img = double(imread(filename))/255;
+    end
+        
+    if(image_info.BitDepth==48)
+        img = double(imread(filename))/65535;
+    end
+    
+catch err
+    disp('This format is not supported.');
+end
 
 end

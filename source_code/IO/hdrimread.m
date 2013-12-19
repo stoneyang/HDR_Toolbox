@@ -1,7 +1,13 @@
-function img=hdrimread(filename)
+function img = hdrimread(filename)
 %
-%       img=hdrimread(filename)
+%       img = hdrimread(filename)
 %
+%       This function reads from a file with name filename an HDR image, if
+%       the format can not be opened, it tries to open it as it was an LDR
+%       image using imread from MATLAB Image Processing Toolbox.
+%
+%       JPEG and JPEG2000 files passed as input are meant to be compressed
+%       using respectively JPEG-HDR or HDR JPEG-2000. 
 %
 %        Input:
 %           -filename: the name of the file to open
@@ -9,7 +15,7 @@ function img=hdrimread(filename)
 %        Output:
 %           -img: the opened image
 %
-%     Copyright (C) 2011  Francesco Banterle
+%     Copyright (C) 2011-13  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -25,10 +31,11 @@ function img=hdrimread(filename)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-extension=lower(fileExtension(filename));
+extension = lower(fileExtension(filename));
 
-if(strcmpi(extension,'pic')==1)
-    extension='hdr';
+%Radiance format can have different extensions: .hdr, .rgbe and .pic
+if((strcmpi(extension,'pic')==1)||(strcmpi(extension,'rgbe')==1))
+    extension = 'hdr';
 end
 
 img=[];
@@ -75,25 +82,14 @@ switch extension
     otherwise %try to open as LDR image
         try
             bLDR = 1;
-            img=double(imread(filename))/255;
+            img = ldrimread(filename);
         catch err
             disp('This format is not supported.');
         end
 end
 
 if(isempty(img)&&(bLDR==0))
-	try
-        image_info = imfinfo(filename);
-        if(image_info.BitDepth==24)
-        	img=double(imread(filename))/255;
-        end
-        
-        if(bitDepth==48)
-            img=double(imread(filename))/65535;
-        end
-    catch err
-        disp('This format is not supported.');
-	end
+    img = ldrimread(filename);
 end
 
 %Remove specials

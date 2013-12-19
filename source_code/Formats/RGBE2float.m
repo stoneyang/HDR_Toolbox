@@ -25,15 +25,21 @@ function img=RGBE2float(imgRGBE)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-[m,n,c]=size(imgRGBE);
-img=zeros(m,n,3);
+[m,n,c] = size(imgRGBE);
 
-E=double(imgRGBE(:,:,4)-128-8);
-f=pow2(1.0,E);
-f(find(imgRGBE(:,:,4)==0))=0;
+if(c~=4)
+    error('imgRGBE needs to have four color channel.');
+end
+
+img = zeros(m,n,3);
+
+E = double(imgRGBE(:,:,4)-128-8);
+f = pow2(1.0,E);
+f(imgRGBE(:,:,4)==0)=0;
 
 for i=1:3
-    img(:,:,i)=double(imgRGBE(:,:,i)).*f;
+    %note that this + 0.5 is for being compliant with Greg Ward code
+    img(:,:,i) = double(imgRGBE(:,:,i)+0.5).*f;
 end
 
 end

@@ -76,7 +76,7 @@ height = len(1);
 width  = len(2);
 
 %uncompressed?
-if(~RLE|(count==(width*height*4)))
+if(~RLE||(count==(width*height*4)))
     tmpImg2 = zeros(width,height,4);
     for i=1:4
         tmpImg2(:,:,i)=reshape(tmpImg(i:4:(width*height*4)),width,height);
@@ -126,12 +126,12 @@ end
 fclose(fid);
 
 %apply gamma
-if(gamma~=1.0)
+if((gamma~=1.0)&&(gamma>0.0))
     imgOut = imgOut.^gamma;
 end
 
 %apply exposure
-if(exposure~=1.0&&exposure>0.0)
+if((exposure~=1.0)&&(exposure>0.0))
     imgOut = imgOut/exposure;
 end
 
