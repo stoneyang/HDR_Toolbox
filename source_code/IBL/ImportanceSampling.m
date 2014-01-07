@@ -15,7 +15,7 @@ function [imgOut,samples]=ImportanceSampling(img, falloff, nSamples)
 %           placed)
 %           -samples: a list of the sampled points of img
 %
-%     Copyright (C) 2011  Francesco Banterle
+%     Copyright (C) 2011-13  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -30,6 +30,14 @@ function [imgOut,samples]=ImportanceSampling(img, falloff, nSamples)
 %     You should have received a copy of the GNU General Public License
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
+
+if(~exist('nSamples','var'))
+    nSamples = 1024;
+end
+
+if(~exist('falloff','var'))
+    falloff = 0;
+end
 
 %falloff compensation
 if(falloff)
