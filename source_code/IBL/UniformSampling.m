@@ -1,7 +1,7 @@
-function [imgOut,lights]=MedianCut(img,nlights,falloff)
+function [imgOut,lights]=UniformSampling(img,nlights,falloff)
 %
 %
-%        [imgOut,lights]=MedianCut(img,nlights,falloff)
+%        [imgOut,lights]=UniformSampling(img,nlights,falloff)
 %
 %
 %        Input:
@@ -14,7 +14,7 @@ function [imgOut,lights]=MedianCut(img,nlights,falloff)
 %           -imgOut: an image with sampled points
 %           -lights: a list of directional lights
 %
-%     Copyright (C) 2011  Francesco Banterle
+%     Copyright (C) 2013  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -38,32 +38,36 @@ if(~exist('falloff','var'))
     falloff = 0;
 end
 
-global L;
-global imgWork;
-global limitSize;
-global nLights;
-global lights;
-
-
 %falloff compensation
 if(falloff)
-    img=FallOffEnvMap(img);
+    img = FallOffEnvMap(img);
 end
 
 %Global variables initialization
 L=lum(img);
-imgWork=img;
-nLights=round(log2(nlights));
+[r,c] = size(L);
+n = round(sqrt(nlights));
 
-[r,c]=size(L);
-limitSize=2;%limitSize=max([c,r])/2^nluce;
+c1 = ceil(c/n);
+r1 = ceil(r/n);
 
-lights=[];
+limitSize = 2;
 
-if(c>r)
-    MedianCutAux(1,c,1,r,0,1);
-else
-    MedianCutAux(1,c,1,r,0,0);
+if((c1<limitSize)||(r1<limitSize))
+    error('Error');
+end
+
+lights = [];
+for i=1:r1
+    for j=1:c1
+        xMin = (j-1)*n+1;
+        xMax = min(j*n,c);
+        
+        yMin = (i-1)*n+1;
+        yMax = min(i*n,r);
+        
+        lights = [lights, CreateLight(xMin,xMax,yMin,yMax,L,img)];
+    end
 end
 
 imgOut = GenerateLightMap(lights,c,r);
