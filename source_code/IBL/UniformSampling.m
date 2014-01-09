@@ -59,12 +59,12 @@ end
 
 lights = [];
 for i=1:r1
+    yMin = (i-1)*n+1;
+    yMax = min(i*n,r);
+    
     for j=1:c1
         xMin = (j-1)*n+1;
         xMax = min(j*n,c);
-        
-        yMin = (i-1)*n+1;
-        yMax = min(i*n,r);
         
         lights = [lights, CreateLight(xMin,xMax,yMin,yMax,L,img)];
     end

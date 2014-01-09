@@ -54,7 +54,7 @@ values=zeros(c,1);
 for i=1:c
     %1D Distribution
     tmpDistr = Create1DDistribution(L(:,i));
-    cDistr=[cDistr,tmpDistr];
+    cDistr = [cDistr, tmpDistr];
     values(i)=tmpDistr.maxCDF;
 end
 rDistr = Create1DDistribution(values);

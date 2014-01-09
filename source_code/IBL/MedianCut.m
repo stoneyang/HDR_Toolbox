@@ -27,7 +27,7 @@ function [imgOut,lights]=MedianCut(img,nlights,falloff)
 %     GNU General Public License for more details.
 % 
 %     You should have received a copy of the GNU General Public License
-%     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+%     along with this program. If not, see <http://www.gnu.org/licenses/>.
 %
 
 if(~exist('nlights','var'))
@@ -43,7 +43,6 @@ global imgWork;
 global limitSize;
 global nLights;
 global lights;
-
 
 %falloff compensation
 if(falloff)
