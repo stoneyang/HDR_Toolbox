@@ -1,18 +1,18 @@
-function val=PSNR(img1,img2)
+function val = SNR(imgReference, imgDistorted)
 %
 %
-%      val=PSNR(img1,img2)
+%      val = SNR(imgReference, imgDistorted)
 %
 %
 %       Input:
-%           -img1: input source image
-%           -img2: input target image
+%           -imgReference: input reference image
+%           -imgDistorted: input distoreted image
 %
 %       Output:
-%           -val: classic PSNR for images in [0,1]. Higher values means
-%           better quality.
+%           -val: classic SNR (signal-to-noise ratio) for images.
+%           Higher values, in decibel (dB) means better quality.
 % 
-%     Copyright (C) 2006  Francesco Banterle
+%     Copyright (C) 2014  Francesco Banterle
 %
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -28,13 +28,16 @@ function val=PSNR(img1,img2)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-disp('PSNR is not very meaningful for HDR images/videos, please consider mPSNR instead!');
+imgR = RemoveSpecials(imgReference);
+imgD = RemoveSpecials(imgDistorted);
 
-img1 = ClampImg(img1,0,1);
-img2 = ClampImg(img2,0,1);
+imgN = imgD-imgR;
 
-valueMSE = MSE(img1,img2);
+A_signal = mean(imgR(:).^2);
+A_noise  = mean(imgN(:).^2);
 
-val = 10*log10(1.0/valueMSE);
+ratio = A_signal/A_noise;
+
+val = 10*log10(ratio);
 
 end
