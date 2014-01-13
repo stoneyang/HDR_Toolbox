@@ -18,7 +18,7 @@ function [val, eMax, eMin] = mPSNR(img1, img2, eMin, eMax)
 %           -eMax: the maximum exposure for computing mPSNR
 %           -eMin: the minimum exposure for computing mPSNR
 % 
-%     Copyright (C) 2006  Francesco Banterle
+%     Copyright (C) 2006-14  Francesco Banterle
 %
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -34,7 +34,11 @@ function [val, eMax, eMin] = mPSNR(img1, img2, eMin, eMax)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-[r,c,col]=size(img1);
+if(CheckSameImage(img1,img2)==0)
+    error('The two images are different they can not be used.');
+end
+
+col = size(img1,3);
 
 if(~exist('eMin','var')||~exist('eMax','var'))
     L     = lum(img2);

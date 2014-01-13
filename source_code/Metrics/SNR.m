@@ -28,6 +28,10 @@ function val = SNR(imgReference, imgDistorted)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
+if(CheckSameImage(imgReference, imgDistorted)==0)
+    error('The two images are different they can not be used.');
+end
+
 imgR = RemoveSpecials(imgReference);
 imgD = RemoveSpecials(imgDistorted);
 
