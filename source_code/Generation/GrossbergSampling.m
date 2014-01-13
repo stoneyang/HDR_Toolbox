@@ -30,12 +30,12 @@ function stackOut = GrossbergSampling(dir_name, format, stack, nSamples)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-if(~exist('stack')&&~exist('stack_exposure'))
+if(~exist('stack','var')&&~exist('stack_exposure','var'))
     %Read images from the current directory
     stack = ReadLDRStackHistogram(dir_name, format);
 end
 
-if(~exist('nSamples'))
+if(~exist('nSamples','var'))
     nSamples = 100;
 end
 
