@@ -31,11 +31,11 @@ function imgOut = DurandTMO(img, Lda, CMax)
 check13Color(img);
 
 %default parameters
-if(~exist('Lda'))
+if(~exist('Lda','var'))
     Lda=80;
 end
 
-if(~exist('CMax'))
+if(~exist('CMax','var'))
     CMax=100;
 end
 
@@ -61,7 +61,7 @@ imgOut = TumblinRushmeierTMO(img, Lda, CMax);
 
 %Adding details back
 for i=1:col
-    imgOut(:,:,i)=imgOut(:,:,i).*Ldetail;
+    imgOut(:,:,i) = imgOut(:,:,i).*Ldetail;
 end
 
 end

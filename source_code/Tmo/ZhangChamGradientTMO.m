@@ -37,11 +37,11 @@ function imgOut = ZhangChamGradientTMO(img, directory, format, imageStack, bStat
 %
 
 %imageStack generation
-if(~exist('imageStack'))
+if(~exist('imageStack','var'))
     imageStack = [];
 end
 
-if(~exist('bStatic'))
+if(~exist('bStatic','var'))
     bStatic = 1;
 end
 

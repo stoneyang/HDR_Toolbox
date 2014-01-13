@@ -9,6 +9,9 @@ function imgOut = VanHaterenTMO(img)
 %
 %        Output:
 %           -imgOut: tone mapped image
+%
+%     This is the stable version of the Van Hateren 2006 algorithm, this is
+%     not suitable for HDR videos.
 % 
 %     Copyright (C) 2010  Francesco Banterle
 %

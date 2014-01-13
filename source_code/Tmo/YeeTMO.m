@@ -33,15 +33,15 @@ function [imgOut,La]=YeeTMO(img, nLayer, CMax, Lda)
 %is it a three color channels image?
 check13Color(img);
 
-if(~exist('nLayer'))
+if(~exist('nLayer','var'))
     nLayer=64;
 end
 
-if(~exist('CMax'))
+if(~exist('CMax','var'))
     CMax=100;
 end
 
-if(~exist('Lda'))
+if(~exist('Lda','var'))
     Lda=20;
 end
 

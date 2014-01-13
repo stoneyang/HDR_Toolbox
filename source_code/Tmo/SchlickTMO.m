@@ -32,28 +32,28 @@ function imgOut=SchlickTMO(img, schlick_mode, schlick_p, schlick_bit, schlick_dL
 
 check13Color(img);
 
-if(~exist('schlick_mode'))
+if(~exist('schlick_mode','var'))
     schlick_mode = 'nonuniform';
 end
 
-if(~exist('schlick_bit'))
+if(~exist('schlick_bit','var'))
     schlick_bit = 8;
 end
 
-if(~exist('schlick_dL0'))
+if(~exist('schlick_dL0','var'))
     schlick_dL0 = 1;
 end
 
-if(~exist('schlick_k'))
+if(~exist('schlick_k','var'))
     schlick_k = 0.5;
 end
 
-if(~exist('schlick_p'))
+if(~exist('schlick_p','var'))
     schlick_p=1/0.005;
 end
 
 %Luminance channel
-L=lum(img);
+L = lum(img);
 
 %Max Luminance value 
 LMax = max(L(:));
@@ -82,6 +82,7 @@ end
 
 %Dynamic Range Reduction
 Ld=p.*L./((p-1).*L+LMax);
+
 %Changing luminance
 imgOut = ChangeLuminance(img, L, Ld);
 

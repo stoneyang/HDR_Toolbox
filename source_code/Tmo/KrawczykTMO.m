@@ -83,8 +83,8 @@ for p=1:iter
     end
     
     %Remove empty frameworks
-    C=C(find(full==1));
-    totPixels=totPixels(find(full==1));
+    C=C(full==1);
+    totPixels=totPixels(full==1);
     K=length(C);
     
     %is a fix point reached?
@@ -157,6 +157,7 @@ for i=1:K
 end
 
 %Calculating probability maps
+bDebug = 0;
 Y=LLog10;
 [height,width,col] = size(img);
 for i=1:K
@@ -166,8 +167,11 @@ for i=1:K
         P=exp(-(C(i)-LLog10).^2/sigma2);
         P=RemoveSpecials(P./tot);
         P = bilateralFilter(P,[],0,1,min([height,width])/2,0.4);
-        figure(i)
-        imshow(P);
+
+        if(bDebug)
+            figure(i)
+            imshow(P);
+        end
         %Anchoring
         W=MaxQuart(LLog10(indx),0.95);
         Y=Y-W*A(i)*P;

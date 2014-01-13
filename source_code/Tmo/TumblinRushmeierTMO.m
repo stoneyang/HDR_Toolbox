@@ -31,22 +31,22 @@ function imgOut=TumblinRushmeierTMO(img, Lda, LdMax, CMax, Lwa)
 check13Color(img);
 
 %default parameters
-if(~exist('Lda'))
+if(~exist('Lda','var'))
     Lda = 20;
 end
 
-if(~exist('LdMax'))
+if(~exist('LdMax','var'))
     LdMax = 100;
 end
 
-if(~exist('CMax'))
+if(~exist('CMax','var'))
     CMax = 100;
 end
 
 %Luminance channel
 L = lum(img);
 
-if(~exist('Lwa'))
+if(~exist('Lwa','var'))
     tmp = log(L+2.3*1e-5);
     Lwa = exp(mean(tmp(:)));
 end

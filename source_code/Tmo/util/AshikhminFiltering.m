@@ -43,15 +43,15 @@ LC=zeros(r,c,Ashikhmin_sMax);
 for i=1:Ashikhmin_sMax
     Lfiltered(:,:,i) = GaussianFilterWindow(L,i); 
     %normalized difference of Gaussian levels
-    LC(:,:,i)=RemoveSpecials(abs(Lfiltered(:,:,i)-GaussianFilterWindow(L,i*2))./Lfiltered(:,:,i)); 
+    LC(:,:,i) = RemoveSpecials(abs(Lfiltered(:,:,i)-GaussianFilterWindow(L,i*2))./Lfiltered(:,:,i)); 
 end  
   
 %threshold is a constant for solving the band-limited local contrast LC at a given
 %image location. This is kept as in the original paper
-threshold=0.5;
+threshold = 0.5;
     
 %adaptation image
-L_adapt=-ones(size(L));
+L_adapt = -ones(size(L));
 for i=1:Ashikhmin_sMax
     LC_i = LC(:,:,i);
     ind = find(LC_i<threshold);
@@ -66,8 +66,8 @@ ind=find(L_adapt<0);
 L_adapt(ind) = Lfiltered(r*c*(Ashikhmin_sMax-1)+ind);
     
 %Remove the detail layer
-Ldetail=RemoveSpecials(L./L_adapt);
-L=L_adapt;
+Ldetail = RemoveSpecials(L./L_adapt);
+L = L_adapt;
 
 end
     

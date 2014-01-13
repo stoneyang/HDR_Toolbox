@@ -47,15 +47,15 @@ function imgOut = BruceExpoBlendTMO(img, directory, format, imageStack, beb_R, b
 %
 
 %imageStack generation
-if(~exist('imageStack'))
+if(~exist('imageStack','var'))
     imageStack = [];
 end
 
-if(~exist('beb_beta'))
+if(~exist('beb_beta','var'))
     beb_beta = 6;
 end
 
-if(~exist('beb_R'))
+if(~exist('beb_R','var'))
     beb_R = 29;
 end
 

@@ -43,19 +43,19 @@ function imgOut = KimKautzConsistentTMO(img, Ld_max, Ld_min, KK_c1, KK_c2)
 %     International Conference on Computer Graphics and Imaging  2008
 %
 
-if(~exist('Ld_max'))
+if(~exist('Ld_max','var'))
     Ld_max = 300; %300 cd/m^2
 end
 
-if(~exist('Ld_min'))
+if(~exist('Ld_min','var'))
     Ld_min = 0.3; %0.3 cd/m^2
 end
 
-if(~exist('KK_c1'))
+if(~exist('KK_c1','var'))
     KK_c1 = 3.0; %as in the original paper
 end
 
-if(~exist('KK_c2'))
+if(~exist('KK_c2','var'))
     KK_c2 = 0.5; %as in the original paper
 end
 

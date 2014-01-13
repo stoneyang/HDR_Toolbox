@@ -1,4 +1,4 @@
-function imgOut=NormalizeTMO(img)
+function imgOut=NormalizeTMO(img, bRobust)
 %
 %        NormalizeTMO(img)
 %
@@ -7,6 +7,7 @@ function imgOut=NormalizeTMO(img)
 %
 %        Input:
 %           -img: input HDR image
+%           -bRobust: to enable the use of robust statistics
 %
 %        Output:
 %           -imgOut: tone mapped image
@@ -30,12 +31,22 @@ function imgOut=NormalizeTMO(img)
 %is it a three color channels image?
 check13Color(img);
 
+if(~exist('bRobust','var'))
+    bRobust = 1;
+end
+
 %Luminance channel
 L=lum(img);
 
-%Roboust max
-MaxQ95=MaxQuart(L,0.999);
+%Computing the maximum
+maxValue = 1;
 
-imgOut=img/MaxQ95;
+if(bRobust)
+    maxValue = MaxQuart(L,0.999);
+else
+    maxValue = max(L(:));
+end
+
+imgOut=img/maxValue;
 
 end

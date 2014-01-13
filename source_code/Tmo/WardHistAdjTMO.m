@@ -29,16 +29,16 @@ function imgOut=WardHistAdjTMO(img,nBin,bPlotHistogram)
 %Is it a three color channels image?
 check13Color(img);
 
-if(~exist('nBin'))
+if(~exist('nBin','var'))
     nBin = 256;
+end
+
+if(~exist('bPlotHistogram','var'))
+    bPlotHistogram = 0;
 end
 
 if(nBin<1)
     nBin = 256;
-end
-
-if(~exist('bPlotHistogram'))
-    bPlotHistogram = 0;
 end
 
 %Luminance channel

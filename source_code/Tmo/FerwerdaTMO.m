@@ -29,11 +29,11 @@ function imgOut=FerwerdaTMO(img, LdMax, Lda)
 %is it a three color channels image?
 check13Color(img);
 
-if(~exist('LdMax'))
+if(~exist('LdMax','var'))
     LdMax = 100;
 end
 
-if(~exist('Lda'))
+if(~exist('Lda','var'))
     Lda   = 30;
 end
 
