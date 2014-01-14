@@ -56,6 +56,5 @@ switch hdrv.type
 end
 
 %updating the counter
-hdrv.frameCounter = mod(frameCounter + 1, maxFrames+1);
-
+ldrv.frameCounter = mod( frameCounter + 1, maxFrames+1 );
 end

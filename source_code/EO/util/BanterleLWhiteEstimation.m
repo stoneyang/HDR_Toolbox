@@ -1,17 +1,16 @@
-function Lav=logMean(img)
+function LWhite = BanterleLWhiteEstimation(Lwa)
 %
-%
-%        Lav=logMean(img)
+%       LWhite = BanterleLWhiteEstimation(Lwa)
 %
 %
 %        Input:
-%           -img: an single channel image
+%           -Lwa: log average of luminance
 %
 %        Output:
-%           -Lav: the logarithmic mean of img
+%           -LWhite: LWhite (eo_parameter(2)) of InverseReinhard 
+%
+%     Copyright (C) 2013-14 Francesco Banterle
 % 
-%     Copyright (C) 2010-13 Francesco Banterle
-%  
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
 %     the Free Software Foundation, either version 3 of the License, or
@@ -25,10 +24,10 @@ function Lav=logMean(img)
 %     You should have received a copy of the GNU General Public License
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
+%     BanterleEO for videos
+%
 
-delta = 1e-6;
-img_delta = img+delta;
-
-Lav = exp(mean(img_delta(:)));
+LWhite = 19.21*Lwa+2.079;
 
 end
+

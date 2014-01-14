@@ -54,6 +54,5 @@ switch ldrv.type
 end
 
 %updating the counter
-ldrv.frameCounter = mod(frameCounter + 1, maxFrames+1);
-
+ldrv.frameCounter = mod( frameCounter + 1, maxFrames+1 );
 end
