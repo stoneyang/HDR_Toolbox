@@ -1,32 +1,25 @@
-function ret = ConvHDRtoLDR(fmtIn, fmtOut, tonemapper, ldr_gamma)
+function ret = ConvHDRtoHDR(fmtIn, fmtOut)
 %
-%        iret = ConvHDRtoLDR(fmtIn, fmtOut)
+%        iret = ConvHDRtoHDR(fmtIn, fmtOut)
 %
-%        This batch function converts LDR images in the current directory
-%        from a format, fmtIn, to another LDR format, fmtOut.
+%        This batch function converts HDR images in the current directory
+%        from a format, fmtIn, to another HDR format, fmtOut.
 %        
 %        For example:
-%           ConvLDRtoLDR('hdr', 'jpg', @ReinhardTMO, 2.2);
+%           ConvHDRtoHDR('pfm','hdr');
 %
-%        This lines tonemaps all the .hdr files in the folder using the 
-%        Reinhard et al.'s operator and it saves them as .jpg files using
-%        gamma 2.2
+%        This lines converts .pfm files in the folder into .hdr files
 %
 %        Input:
 %           -fmtIn: an input string represeting the LDR format of the images
-%           to be converted. This can be: 'hdr', 'pfm'
+%           to be converted. This can be: 'jpeg', 'jpg', 'png', etc.
 %           -fmtOut: an input string represeting the LDR format of
 %           converted images. This can be: 'jpeg', 'jpg', 'png', etc.
-%           -tonemapper: the tone mapping function to be used for tone
-%           mapping the input HDR images. The default value is the
-%           Reinhard et al.'s operator
-%           -ldr_gamma: the encoding gamma for the LDR images. The default
-%           value is 2.2
 %
 %        Output:
 %           -ret: a boolean value, true or 1 if the method succeeds
 %
-%     Copyright (C) 2012  Francesco Banterle
+%     Copyright (C) 2014  Francesco Banterle
 %
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -42,16 +35,7 @@ function ret = ConvHDRtoLDR(fmtIn, fmtOut, tonemapper, ldr_gamma)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-
 ret = 0;
-
-if(~exist('ldr_gamma','var'))
-    ldr_gamma = 2.2;
-end
-
-if(~exist('tonemapper','var'))
-    tonemapper = @ReinhardTMO;
-end
 
 lst = dir(['*.',fmtIn]);
 
@@ -60,11 +44,8 @@ for i=1:length(lst)
     disp(tmpName);
     
     img = hdrimread(tmpName);
-    
-    img_tmo = GammaTMO(tonemapper(img),ldr_gamma);
-    
     tmpName_we = tmpName(1:(end-3));
-    imwrite(img_tmo,[tmpName_we, fmtOut]);
+    hdrimwrite(img,[tmpName_we, fmtOut]);
 end
 
 ret = 1;
