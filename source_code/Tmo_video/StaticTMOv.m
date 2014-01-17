@@ -1,7 +1,7 @@
-function StaticTMOv(hdrv, filenameOutput, tmo_operator, tmo_gamma)
+function StaticTMOv(hdrv, filenameOutput, tmo_operator, tmo_gamma, tmo_quality, tmo_video_profile)
 %
 %
-%       StaticTMOv(hdrv, filenameOutput, tmo_operator, tmo_gamma)
+%       StaticTMOv(hdrv, filenameOutput, tmo_operator, tmo_gamma, tmo_quality, tmo_video_profile)
 %
 %
 %       Input:
@@ -10,12 +10,15 @@ function StaticTMOv(hdrv, filenameOutput, tmo_operator, tmo_gamma)
 %           -filenameOutput: output filename (if it has an image extension,
 %           single files will be generated)
 %           -tmo_operator: the tone mapping operator to use
-%           -tmo_gamma: gamma for encoding the frame
+%           -tmo_gamma: gamma for encoding the frame. If it is negative,
+%           sRGB econding is applied
+%           -tmo_quality: quality of the output stream
+%           -tmo_video_profile: compression econder to choose
 %
 %       Output:
 %           -frameOut: the tone mapped frame
 %
-%     Copyright (C) 2013  Francesco Banterle
+%     Copyright (C) 2013-14  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -49,6 +52,16 @@ if(~exist('tmo_gamma','var'))
     tmo_gamma = 2.2;
 end
 
+if(~exist('tmo_video_profile','var'))
+    tmo_video_profile = 'Motion JPEG AVI';
+end
+
+if(tmo_gamma<0)
+    bsRGB = 1;
+else
+    bsRGB = 0;
+end
+
 name = RemoveExt(filenameOutput);
 ext = fileExtension(filenameOutput);
 
@@ -57,8 +70,9 @@ writerObj = 0;
 
 if(strfind(ext,'avi')||strfind(ext,'mp4'))
     bVideo = 1;
-    writerObj = VideoWriter(filenameOutput);
+    writerObj = VideoWriter(filenameOutput, tmo_video_profile);
     writerObj.FrameRate = hdrv.FrameRate;
+    writerObj.Quality = tmo_quality;
     open(writerObj);
 end
 
@@ -71,13 +85,20 @@ for i=1:hdrv.totalFrames
 
     %Tone mapping
     frameOut = RemoveSpecials(tmo_operator(frame)); 
-    frameOut_gamma = GammaTMO(frameOut,tmo_gamma,0.0,0);
+    
+    %Gamma/sRGB encoding
+    if(bsRGB)
+        frameOutLDR = ClampImg(ConvertRGBtosRGB(frameOut, 0), 0, 1);
+    else
+        frameOutLDR = ClampImg(GammaTMO(img, tmo_gamma, 0, 0), 0, 1);
+    end
     
     %Storing 
     if(bVideo)
-        writeVideo(writerObj,frameOut_gamma);
+        writeVideo(writerObj,frameOutLDR);
     else
-        imwrite(frameOut_gamma,[name,sprintf('%.10d',i),'.',ext]);
+        nameOut = [name,sprintf('%.10d',i),'.',ext];
+        imwrite(frameOutLDR, nameOut);
     end
     
 end
@@ -87,6 +108,6 @@ if(bVideo)
     close(writerObj);
 end
 
-hdrv = hdrvclose(hdrv);
+hdrvclose(hdrv);
 
 end
