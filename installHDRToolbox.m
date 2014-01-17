@@ -19,28 +19,30 @@
 
 disp('Installing the HDR Toolbox...');
 
-d1  = 'ColorSpace';
-d2  = 'Compression';
-d3  = 'EnvironmentMaps';
-d4  = 'EO';
-d5  = 'EO/util';
-d6  = 'Formats';
-d7  = 'Generation';
-d8  = 'IBL';
-d9  = 'IBL/util';
-d10 = 'IO';
-d11 = 'LaplacianPyramids';
-d12 = 'NativeVisualization';
-d13 = 'Tmo';
-d14 = 'Tmo/util';
-d15 = 'util';
-d16 = 'BatchFunctions';
-d17 = 'Metrics';
-d18 = 'Metrics/util';
-d19 = 'Alignment';
-d20 = 'IO_video';
-d21 = 'Tmo_video';
-d22 = 'ColorCorrection';
+d0  = 'ColorSpace';
+d1  = 'Compression';
+d2  = 'Compression_video';
+d3  = 'Compression_video/util';
+d4  = 'EnvironmentMaps';
+d5  = 'EO';
+d6  = 'EO/util';
+d7  = 'Formats';
+d8  = 'Alignment';
+d9  = 'Generation';
+d10 = 'IBL';
+d11 = 'IBL/util';
+d12 = 'IO';
+d13 = 'IO_video';
+d14 = 'LaplacianPyramids';
+d15 = 'NativeVisualization';
+d16 = 'Tmo';
+d17 = 'Tmo_video';
+d18 = 'Tmo/util';
+d19 = 'ColorCorrection';
+d20 = 'util';
+d21 = 'BatchFunctions';
+d22 = 'Metrics';
+d23 = 'Metrics/util';
 
 cp = pwd();
 
@@ -67,6 +69,7 @@ addpath([cp,tmpStr,d19],'-begin');
 addpath([cp,tmpStr,d20],'-begin');
 addpath([cp,tmpStr,d21],'-begin');
 addpath([cp,tmpStr,d22],'-begin');
+addpath([cp,tmpStr,d23],'-begin');
 addpath([cp,'/demos/'], '-begin');
 
 savepath
@@ -94,6 +97,7 @@ clear('d19');
 clear('d20');
 clear('d21');
 clear('d22');
+clear('d23');
 clear('cp');
 clear('tmpStr');
 disp(' ');
