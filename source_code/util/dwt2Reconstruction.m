@@ -8,7 +8,7 @@ function imgOut = dwt2Reconstruction(pyr, filterType)
 %           -pyr: the DWT decomposition 
 %           -filterType: the type of filter to use in the DWT:
 %            'db1' or 'haar', 'db2', ... ,'db10', ... , 'db45'
-%           Please have a look to the MATLAB reference for dwt2.
+%            Please have a look to the MATLAB reference for dwt2.
 %
 %       Output:
 %           -imgOut: the reconstructed image from pyr

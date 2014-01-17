@@ -1,4 +1,4 @@
-function pyr = dwt2Decomposition(img, filterType)
+function pyr = dwt2Decomposition(img, filterType, maxBand)
 %
 %
 %      pyr = dwt2Decomposition(img, mode)
@@ -8,7 +8,9 @@ function pyr = dwt2Decomposition(img, filterType)
 %           -img: an image
 %           -filterType: the type of filter to use in the DWT:
 %            'db1' or 'haar', 'db2', ... ,'db10', ... , 'db45'
-%           Please have a look to the MATLAB reference for dwt2.
+%            Please have a look to the MATLAB reference for dwt2.
+%           -maxBand: how many bands to have
+%
 %
 %       Output:
 %           -pyr: the DWT decomposition 
@@ -32,16 +34,20 @@ function pyr = dwt2Decomposition(img, filterType)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-lmin = min([size(img,1),size(img,2)]);
+if(~exist('maxBand','var'))
+    maxBand = -1;
+end
+
+if(maxBand== -1)
+    maxBand = floor(log2(min([size(img,1),size(img,2)])));
+end
 
 pyr = [];
 
-while(lmin>2)
-    [img, cH, cV, cD] = dwt2(img, filterType);
-    
+for i=1:maxBand
+    [img, cH, cV, cD] = dwt2(img, filterType);    
     cur = struct('cA',[],'cH',cH,'cV',cV,'cD',cD);
     pyr = [pyr, cur];
-    lmin = min([size(img,1),size(img,2)]);
 end
 
 n = length(pyr);
