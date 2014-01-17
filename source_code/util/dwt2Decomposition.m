@@ -44,9 +44,22 @@ end
 
 pyr = [];
 
+bCDF97 = strcmp(filterType,'CDF97');
+
+if(bCDF97)
+    [analysisLow, analysisHigh, ~, ~] = CDF97Filters();
+end
+
 for i=1:maxBand
-    [img, cH, cV, cD] = dwt2(img, filterType);    
-    cur = struct('cA',[],'cH',cH,'cV',cV,'cD',cD);
+    S = size(img);
+    
+    if(bCDF97)
+        [img, cH, cV, cD] = dwt2(img, analysisLow, analysisHigh);   
+    else
+        [img, cH, cV, cD] = dwt2(img, filterType);       
+    end
+    
+    cur = struct('cA',[],'cH',cH,'cV',cV,'cD',cD,'S',S);
     pyr = [pyr, cur];
 end
 
