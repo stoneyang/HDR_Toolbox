@@ -27,7 +27,7 @@ function imgRFlt = MantiukResidualsFiltering(img, imgR)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-filterType = 'db1';
+filterType = 'db3';
 
 %Computing DWT2 transform
 pyr  = dwt2Decomposition(img,  filterType, 3);
