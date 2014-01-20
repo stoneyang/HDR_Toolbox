@@ -1,4 +1,4 @@
-function KiserTMOv(hdrv, filenameOutput, tmo_alpha_coeff, tmo_dn_clamping, tmo_gamma)
+function KiserTMOv(hdrv, filenameOutput, tmo_alpha_coeff, tmo_dn_clamping, tmo_gamma, tmo_quality, tmo_video_profile)
 %
 %
 %      KiserTMOv(hdrv, filenameOutput, tmo_alpha_coeff,  tmo_gamma)
@@ -14,11 +14,8 @@ function KiserTMOv(hdrv, filenameOutput, tmo_alpha_coeff, tmo_dn_clamping, tmo_g
 %           -tmo_dn_clamping: a boolean value (0 or 1) for setting black
 %           and white levels clamping
 %           -tmo_gamma: gamma for encoding the frame
-%
-%       Output:
-%           -imgOut: output tone mapped image in linear domain
-%           -pAlpha: as in input
-%           -pLocal: as in input 
+%           -tmo_quality: quality of the output stream
+%           -tmo_video_profile: compression econder to choose
 %
 %     Copyright (C) 2013  Francesco Banterle
 % 
@@ -42,16 +39,24 @@ function KiserTMOv(hdrv, filenameOutput, tmo_alpha_coeff, tmo_dn_clamping, tmo_g
 %
 %
 
-if(~exist('tmo_alpha_coeff'))
+if(~exist('tmo_alpha_coeff','var'))
     tmo_alpha_coeff = 0.98;
 end
 
-if(~exist('tmo_dn_clamping'))
+if(~exist('tmo_dn_clamping','var'))
     tmo_dn_clamping = 0;
 end
 
-if(~exist('tmo_gamma'))
+if(~exist('tmo_gamma','var'))
     tmo_gamma = 2.2;
+end
+
+if(~exist('tmo_quality','var'))
+    tmo_quality = 95;
+end
+
+if(~exist('tmo_video_profile','var'))
+    tmo_video_profile = 'Motion JPEG AVI';
 end
 
 name = RemoveExt(filenameOutput);
@@ -62,8 +67,9 @@ writerObj = 0;
 
 if(strfind(ext,'avi')||strfind(ext,'mp4'))
     bVideo = 1;
-    writerObj = VideoWriter(filenameOutput);
+    writerObj = VideoWriter(filenameOutput, tmo_video_profile);
     writerObj.FrameRate = hdrv.FrameRate;
+    writerObj.Quality = tmo_quality;
     open(writerObj);
 end
 
@@ -82,7 +88,7 @@ for i=1:hdrv.totalFrames
     if(tmo_dn_clamping)%Clamping black and white levels
         L = RemoveSpecials(lum(frame));
         %computing CDF's histogram 
-        [histo,bound,haverage] = HistogramHDR(L,256,'log10',1);  
+        [histo,bound,~] = HistogramHDR(L,256,'log10',1);  
         histo_cdf = cumsum(histo);
         histo_cdf = histo_cdf/max(histo_cdf(:));
         [Y,ind] = min(abs(histo_cdf-beta_clamping));
@@ -116,7 +122,7 @@ for i=1:hdrv.totalFrames
     an = tmo_alpha_coeff_c * aprev + tmo_alpha_coeff * a;
     
     %tone mapping
-    [frameOut,pAlpha,pWhite]=ReinhardTMO(frame, an);
+    [frameOut,~,~]=ReinhardTMO(frame, an);
     
     frameOut_gamma = GammaTMO(frameOut,tmo_gamma,0.0,0);
     
@@ -137,6 +143,6 @@ if(bVideo)
     close(writerObj);
 end
 
-hdrv = hdrvclose(hdrv);
+hdrvclose(hdrv);
 
 end

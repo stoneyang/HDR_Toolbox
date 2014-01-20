@@ -52,6 +52,10 @@ if(~exist('tmo_gamma','var'))
     tmo_gamma = 2.2;
 end
 
+if(~exist('tmo_quality','var'))
+    tmo_quality = 95;
+end
+
 if(~exist('tmo_video_profile','var'))
     tmo_video_profile = 'Motion JPEG AVI';
 end

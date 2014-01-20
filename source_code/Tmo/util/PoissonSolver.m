@@ -1,6 +1,6 @@
-function x = PoissonSolver(f)
+function x = PoissonSolver(f, smoothingCost)
 %
-%       x = PoissonSolver(f)
+%       x = PoissonSolver(f, smoothingCost)
 %
 %
 %       Input:
@@ -25,6 +25,10 @@ function x = PoissonSolver(f)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
+if(~exist('smoothingCost','var'))
+    smoothingCost = 0;
+end
+
 [r,c]=size(f);
 n = r*c;
 
@@ -32,7 +36,7 @@ n = r*c;
 b = -reshape(f,r*c,1);
 
 %Build A matrix
-A = spdiags(4*ones(n,1),0,n,n);
+A = spdiags((4+smoothingCost)*ones(n,1),0,n,n);
 T = ones(n,1);
 O = T;
 T(1:r:n) = 0;

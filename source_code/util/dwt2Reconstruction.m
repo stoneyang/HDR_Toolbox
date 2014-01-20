@@ -32,19 +32,10 @@ function imgOut = dwt2Reconstruction(pyr, filterType)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-%bCDF97 = strcmp(filterType,'CDF97');
-%if(bCDF97)
-%    [~, ~, SynthLow, SynthHigh] = CDF97Filters();
-%end
-
 imgOut = pyr(length(pyr)).cA;
+
 for i=length(pyr):-1:1
-    
-%    if(bCDF97)
-%        imgOut = idwt2(imgOut, pyr(i).cH, pyr(i).cV, pyr(i).cD, SynthLow, SynthHigh, pyr(i).S);   
-%    else
-        imgOut = idwt2(imgOut, pyr(i).cH, pyr(i).cV, pyr(i).cD, filterType);       
-%    end    
+    imgOut = idwt2(imgOut, pyr(i).cH, pyr(i).cV, pyr(i).cD, filterType);       
 end
 
 end

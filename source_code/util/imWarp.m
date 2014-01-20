@@ -1,11 +1,11 @@
-function imgOut = imWarp(img1, offset_map, bAbs)
+function imgOut = imWarp(img, offset_map, bAbs)
 %
-%     imgOut = imWarp(img1, offset_map, bAbs)
+%     imgOut = imWarp(img, offset_map, bAbs)
 %
 %     This functions warps an image, img1, using offset vectors, offset_map.
 %
 %     Input:
-%       -img1: input image to be warped
+%       -img: input image to be warped
 %       -offset_map: (x,y) vectors for the offset.
 %       -bAbs: if true it assumes that offset_map is 
 %
@@ -30,24 +30,25 @@ function imgOut = imWarp(img1, offset_map, bAbs)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-if(~exist('bAbs'))
+if(~exist('bAbs','var'))
     bAbs = 0;
 end
 
+[r,c,col] = size(img);
+[X,Y] = meshgrid(1:c,1:r);
+    
 if(bAbs)
     XI = offset_map(:,:,1);
     YI = offset_map(:,:,2);
 else
-    [r,c,col] = size(img1);
-    [X,Y] = meshgrid(1:c,1:r);
     XI = X+offset_map(:,:,1);
     YI = Y+offset_map(:,:,2);
 end
 
 imgOut = zeros(r,c,col);
 
-for i=1:3
-    imgOut(:,:,i) = interp2(X,Y,img1(:,:,i),XI,YI);
+for i=1:col
+    imgOut(:,:,i) = interp2(X,Y,img(:,:,i),XI,YI);
 end
 
 end

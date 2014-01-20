@@ -1,24 +1,21 @@
-function BoitardTMOv(hdrv, filenameOutput, tmo_operator, tmo_gamma, tmo_zeta, tmo_quality, tmo_video_profile)
+function LeeKimTMOv(hdrv, filenameOutput, fBeta, fLambda, fSaturation, tmo_gamma, tmo_quality, tmo_video_profile)
 %
-%
-%       BoitardTMOv(hdrv, filenameOutput, tmo_operator, tmo_gamma, tmo_zeta, tmo_quality, tmo_video_profile)
-%
+%       LeeKimTMOv(hdrv, filenameOutput, fBeta, fLambda, fSaturation, tmo_gamma, tmo_quality, tmo_video_profile)
 %
 %       Input:
 %           -hdrv: a HDR video structure; use hdrvread to create a hdrv
 %           structure
 %           -filenameOutput: output filename (if it has an image extension,
 %           single files will be generated)
-%           -tmo_operator: the tone mapping operator to use
+%           -fBeta: coefficient from the paper by Fattal and Lischinski  (Equation 3a, 3b, and 3c)
+%           -fSaturaion: a value (0,1] for reducing the saturation in the
+%           tonemapped image
 %           -tmo_gamma: gamma for encoding the frame
-%           -tmo_zeta: it is the "Minscale" parameter of the original paper,
-%           please see Equation 8 of it.
 %           -tmo_quality: quality of the output stream
 %           -tmo_video_profile: compression econder to choose
-%
-%
-%     Copyright (C) 2013  Francesco Banterle
 % 
+%     Copyright (C) 2013-14 Francesco Banterle
+%  
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
 %     the Free Software Foundation, either version 3 of the License, or
@@ -32,27 +29,23 @@ function BoitardTMOv(hdrv, filenameOutput, tmo_operator, tmo_gamma, tmo_zeta, tm
 %     You should have received a copy of the GNU General Public License
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
-%
-%     The paper describing this operator is:
-%     "Temporal Coherency for Video Tone Mapping"
-%     by R. Boitard, K. Bouatouch, R. Cozot, D. Thoreau, A. Gruson
-%     Proc. SPIE 8499, Applications of Digital Image Processing XXXV
-%
-%     DOI: 10.1117/12.929600 
-%
-%     Link : http://people.irisa.fr/Ronan.Boitard/articles/2012/TCVTM2012.pdf
-%
 
-if(~exist('tmo_operator','var'))
-    tmo_operator = @ReinhardTMO;
+if(~exist('fBeta','var'))
+    fBeta = 0.92;
 end
+
+if(~exist('fLambda','var'))
+    fLambda = 0.3;
+end
+
+if(~exist('fSaturation','var'))
+    fSaturation = 0.6;
+end
+
+fSaturation = ClampImg(fSaturation, 1e-3 , 1);
 
 if(~exist('tmo_gamma','var'))
     tmo_gamma = 2.2;
-end
-
-if(~exist('tmo_zeta','var'))
-    tmo_zeta = 0.1;
 end
 
 if(~exist('tmo_quality','var'))
@@ -63,22 +56,13 @@ if(~exist('tmo_video_profile','var'))
     tmo_video_profile = 'Motion JPEG AVI';
 end
 
-[hdrv_hm, ~, ~, ~] = hdrvAnalysis(hdrv);
-save('tmo_stream_info.dat','hdrv_hm','hdrv_max','hdrv_min','hdrv_mean');
-
-[max_log_mean_HDR,index] = max(hdrv_hm);
-[frame, hdrv] = hdrvGetFrame(hdrv, index);
-
-frame_tmo = tmo_operator(RemoveSpecials(frame));
-max_log_mean_LDR = logMean(lum(frame_tmo));
-
 name = RemoveExt(filenameOutput);
-ext = fileExtension(filenameOutput);
+ext  = fileExtension(filenameOutput);
 
 bVideo = 0;
 writerObj = 0;
 
-if(strfind(ext,'avi')||strfind(ext,'mp4'))
+if(strfind(ext,'avi')|strfind(ext,'mp4'))
     bVideo = 1;
     writerObj = VideoWriter(filenameOutput, tmo_video_profile);
     writerObj.FrameRate = hdrv.FrameRate;
@@ -89,26 +73,44 @@ end
 hdrv = hdrvopen(hdrv);
 
 disp('Tone Mapping...');
+
 for i=1:hdrv.totalFrames
     disp(['Processing frame ',num2str(i)]);
     [frame, hdrv] = hdrvGetFrame(hdrv, i);
-    frameOut = BoitardTMOv_frame(RemoveSpecials(frame), max_log_mean_HDR, max_log_mean_LDR, tmo_operator, tmo_zeta);
-
+    frame = frame/512;
+    
+    if(i==1)
+        frameOut = FattalTMO(frame, fBeta);
+    else
+        %Computing optical flow between frame and framePrev
+        offset_map = OpticalFlowSlow(frame, framePrev, 7, 5);
+        %Warping
+        imgWarped = imWarp(frameOutPrev, offset_map, 0);
+        frameOut = LeeKimTMOv_frame(frame, imgWarped, fBeta, fLambda); 
+    end
+    
+    frameOutPrev = frameOut;        
+    framePrev = frame;
+    
+    %Color correction
+    frameOut = ColorCorrection(frameOut, fSaturation);
+    
+    %Gamma encoding
     frameOut_gamma = GammaTMO(frameOut,tmo_gamma,0.0,0);
     
     if(bVideo)
         writeVideo(writerObj,frameOut_gamma);
     else
         imwrite(frameOut_gamma,[name,sprintf('%.10d',i),'.',ext]);
-    end
-    
+    end    
 end
+
 disp('OK');
 
 if(bVideo)
     close(writerObj);
 end
 
-hdrv = hdrvclose(hdrv);
+hdrvclose(hdrv);
 
 end

@@ -1,14 +1,14 @@
-function T_e = MantiukThresholdElevation(img)
+function QP_Ratio = LeeKimQuality(QP_LDR)
 %
 %
-%       T_e = MantiukThresholdElevation(img)
+%       QP_Ratio = LeeKimQuality(QP_LDR)
 %
 %
 %       Input:
-%           -img: DWT coefficients
-%
+%           -QP_LDR: quality of the LDR (tone mapped) stream
+%       
 %       Output:
-%           -T_e: threshold elevation function
+%           -QP_Ratio: quality of the residuals stream
 %
 %     Copyright (C) 2013-14  Francesco Banterle
 % 
@@ -25,18 +25,23 @@ function T_e = MantiukThresholdElevation(img)
 %     You should have received a copy of the GNU General Public License
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
+%     The paper describing this technique is:
+%     "RATE-DISTORTION OPTIMIZED COMPRESSION OF HIGH DYNAMIC RANGE VIDEOS"
+% 	  by Chul Lee and Chang-Su Kim
+%     in 16th European Signal Processing Conference (EUSIPCO 2008),
+%     Lausanne, Switzerland, August 25-29, 2008, copyright by EURASIP
+%
+%
 
-n = 13;%as in the original paper
-L_CSF = abs(img).^0.2;
-L_CSF = imfilter(L_CSF, ones(n)/(n*n),'replicate');
-L_CSF = L_CSF.^(1.0/0.2);
+if(QP_LDR<1.0)
+    %quality value is assumed to be in [0,1] so it is scaled in [0,100]
+    QP_LDR = round(QP_LDR*100);
+end
 
-%Threshold elevation
-a = 0.093071;
-b = 1.0299;
-c = 11.535;
+QP_Ratio = 0.77*QP_LDR+13.42; %Equation 6 of the original paper
 
-T_e = ones(size(img));
-T_e(L_CSF>a) = c*(L_CSF(L_CSF>a).^b); 
+if(QP_Ratio>100)
+    QP_Ratio = 100;
+end
 
 end
