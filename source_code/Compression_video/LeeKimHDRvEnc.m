@@ -1,12 +1,14 @@
-function LeeKimHDRvEnc(hdrv, name, hdrv_profile, hdrv_quality)
+function LeeKimHDRvEnc(hdrv, name, bCrossBilateralFilter, hdrv_profile, hdrv_quality)
 %
 %
-%       LeeKimHDRvEnc(hdrv, name, hdrv_profile, hdrv_quality)
+%       LeeKimHDRvEnc(hdrv, name, bCrossBilateralFilter, hdrv_profile, hdrv_quality)
 %
 %
 %       Input:
 %           -hdrv: HDR image
 %           -name: is output name of the image
+%           -bCrossBilateralFilter: if it is set to 1 the cross bilateral
+%           filtering is used to remove noise from the residuals
 %           -hdrv_profile: 
 %           -hdrv_quality: is JPEG output quality in [0,100]
 %
@@ -39,6 +41,10 @@ end
 
 if(hdrv_quality<1)
     hdrv_quality = 95;
+end
+
+if(~exist('bCrossBilateralFilter','var'))
+    bCrossBilateralFilter = 1;
 end
 
 if(~exist('hdrv_profile','var'))
@@ -86,7 +92,9 @@ for i=1:hdrv.totalFrames
     r = (r-r_min(i))/(r_max(i)-r_min(i));
     
     %Residuals cross bilateral filtering
-    r = bilateralFilter(r, h, min(h(:)), max(h(:)), 8.0, 0.1 ); %as in the original paper
+    if(bCrossBilateralFilter)
+        r = bilateralFilter(r, h, min(h(:)), max(h(:)), 8.0, 0.1 ); %as in the original paper
+    end
         
     %writing residuals
     writeVideo(writerObj_residuals, r);
