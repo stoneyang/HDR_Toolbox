@@ -1,7 +1,7 @@
-function LeeKimHDRvEnc(hdrv, name, hdrv_profile, hdrv_quality)
+function MantiukBackwardHDRvEnc(hdrv, name, hdrv_profile, hdrv_quality)
 %
 %
-%       LeeKimHDRvEnc(hdrv, name, hdrv_profile, hdrv_quality)
+%       MantiukBackwardHDRvEnc(hdrv, name, hdrv_profile, hdrv_quality)
 %
 %
 %       Input:
@@ -10,7 +10,7 @@ function LeeKimHDRvEnc(hdrv, name, hdrv_profile, hdrv_quality)
 %           -hdrv_profile: 
 %           -hdrv_quality: is JPEG output quality in [0,100]
 %
-%     Copyright (C) 2013-14  Francesco Banterle
+%     Copyright (C) 2013  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -26,13 +26,11 @@ function LeeKimHDRvEnc(hdrv, name, hdrv_profile, hdrv_quality)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 %     The paper describing this technique is:
-%     "RATE-DISTORTION OPTIMIZED COMPRESSION OF HIGH DYNAMIC RANGE VIDEOS"
-% 	  by Chul Lee and Chang-Su Kim
-%     in 16th European Signal Processing Conference (EUSIPCO 2008),
-%     Lausanne, Switzerland, August 25-29, 2008, copyright by EURASIP
+%     "Backward Compatible High Dynamic Range MPEG Video Compression"
+% 	  by Rafal Mantiuk, Alexander Efremov, Karol Myszkowski, and Hans-Peter Seidel 
+%     in ACM SIGGRAPH 2006
 %
 %
-
 if(~exist('hdrv_quality','var'))
     hdrv_quality = 95;
 end
@@ -52,49 +50,43 @@ nameResiduals = [nameOut,'_residuals.',fileExt];
 %Opening hdr stream
 hdrv = hdrvopen(hdrv);
 
-%Lee and Kim TMO
-LeeKimTMOv(hdrv, filenameOutput, fBeta, fLambda, fSaturation, tmo_gamma, hdrv_quality, hdrv_profile);
+%Opening compression streams
+StaticTMOv(hdrv, name, @ReinhardTMO, -1.0, hdrv_quality, hdrv_profile);
 
 %video Residuals pass
 readerObj = VideoReader(name);
 
 writerObj_residuals = VideoWriter(nameResiduals, hdrv_profile);
-writerObj_residuals.Quality = LeeKimQuality(hdrv_quality);
+writerObj_residuals.Quality = hdrv_quality;
 open(writerObj_residuals);
 
-epsilon = 0.05;%as in the original paper
-r_min = zeros(1,hdrv.totalFrames);
-r_max = zeros(1,hdrv.totalFrames);
+RFv = zeros(256,hdrv.totalFrames);
+Qv  = zeros(256,hdrv.totalFrames);
 
 for i=1:hdrv.totalFrames
     disp(['Processing frame ',num2str(i)]);
     
     %HDR frame
     [frame, hdrv] = hdrvGetFrame(hdrv, i);
-    h = lum(frame);
+    frame_Y = lum(frame);
+    frame_luma = MantiukLumaCoding(frame_Y, 0);
     
     %Tone mapped frame
-    frameTMO = double(read(readerObj, i))/255;  
+    frameTMO = double(read(readerObj, i));  
  
     %Residuals
-    l = lum(frameTMO);
-    r = RemoveSpecials(log(h./(l+epsilon)));%equation 4 of the original paper
+    Ld = round(lum(frameTMO));
+    [imgR, RF, Q] = MantiukResidualImage(Ld, frame_luma);
     
-    %Normalize in [0,1]
-    r_min(i) = min(r(:));
-    r_max(i) = max(r(:));    
-    r = (r-r_min(i))/(r_max(i)-r_min(i));
-    
-    %Residuals cross bilateral filtering
-    r = bilateralFilter(r, h, min(h(:)), max(h(:)), 8.0, 0.1 ); %as in the original paper
-        
-    %writing residuals
-    writeVideo(writerObj_residuals, r);
+    %Residuals filtering    
+    writeVideo(writerObj_residuals, (imgR + 127)/255);
+    RFv(:,i) = RF;
+    Qv(:,i) = Q;
 end
 
 close(writerObj_residuals);
 
-save([nameOut,'_r.dat'], 'r_min','r_max');
+save([nameOut,'_RF.dat'], 'RFv','Qv');
 
 hdrvclose(hdrv);
 
