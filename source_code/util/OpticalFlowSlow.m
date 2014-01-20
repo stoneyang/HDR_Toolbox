@@ -33,21 +33,24 @@ end
 
 [r,c,~] = size(img1);
 
-halfPatchSize = round(patchSize/2);
+halfPatchSize = ceil(patchSize/2);
 
 offsetMap = zeros(r,c,3);
 
-for i=(halfPatchSize+1):(r-halfPatchSize-1)
+for i=(patchSize+1):(r-patchSize-1)
     
-    for j=(halfPatchSize+1):(c-halfPatchSize-1)
+    for j=(patchSize+1):(c-patchSize-1)
         
         err = 1e30;
-        patch1 = img1((i-halfPatchSize):i:(i+halfPatchSize),(j-halfPatchSize):j:(j+halfPatchSize),:);
-        for k=-halfPatchSize:halfPatchSize
+        patch1 = img1((i-halfPatchSize):(i+halfPatchSize), (j-halfPatchSize):(j+halfPatchSize), :);
+        
+        for k=(-halfPatchSize+1):halfPatchSize
             tmp_i = i+k;
-            for l=-halfPatchSize:halfPatchSize
+            
+            for l=(-halfPatchSize+1):halfPatchSize
                 tmp_j = j+l;
-                patch2 = img2((tmp_i-halfPatchSize):tmp_i:(tmp_i+halfPatchSize),(tmp_j-halfPatchSize):tmp_j:(tmp_j+halfPatchSize),:);
+
+                patch2 = img2((tmp_i-halfPatchSize):(tmp_i+halfPatchSize), (tmp_j-halfPatchSize):(tmp_j+halfPatchSize), :);
                 
                 tmp_err = (patch1-patch2).^2;
                 tmp_err = sum(tmp_err(:));
