@@ -77,8 +77,7 @@ disp('Tone Mapping...');
 for i=1:hdrv.totalFrames
     disp(['Processing frame ',num2str(i)]);
     [frame, hdrv] = hdrvGetFrame(hdrv, i);
-    frame = frame/512;
-    
+
     if(i==1)
         frameOut = FattalTMO(frame, fBeta);
     else
