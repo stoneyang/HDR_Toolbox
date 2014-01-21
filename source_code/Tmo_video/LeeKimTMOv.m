@@ -83,9 +83,9 @@ for i=1:hdrv.totalFrames
         frameOut = FattalTMO(frame, fBeta);
     else
         %Computing optical flow between frame and framePrev
-        offset_map = OpticalFlowSlow(frame, framePrev, 7, 5);
+        offset_map = OpticalFlowSlow(framePrev, frame, 7, 5);
         %Warping
-        imgWarped = imWarp(frameOutPrev, offset_map, 0);
+        imgWarped = imWarp(frameOutPrev, offset_map, 1);
         frameOut = LeeKimTMOv_frame(frame, imgWarped, fBeta, fLambda); 
     end
     
