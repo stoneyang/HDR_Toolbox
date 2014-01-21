@@ -36,7 +36,7 @@ if(~exist('fBeta','var'))
 end
 
 if(~exist('fLambda','var'))
-    fLambda = 0.1;
+    fLambda = 0.3;
 end
 
 %Luminance channel
