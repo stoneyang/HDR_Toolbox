@@ -53,13 +53,13 @@ end
 
 nameOut = RemoveExt(name);
 fileExt = fileExtension(name);
-nameResiduals = [nameOut,'_residuals.',fileExt];
+nameResiduals = [nameOut,'_lee_kim_residuals.',fileExt];
 
 %Opening hdr stream
 hdrv = hdrvopen(hdrv);
 
 %Lee and Kim TMO
-LeeKimTMOv(hdrv, filenameOutput, fBeta, fLambda, fSaturation, tmo_gamma, hdrv_quality, hdrv_profile);
+LeeKimTMOv(hdrv, [nameOut,'_lee_kim_tmo.',fileExt], fBeta, fLambda, fSaturation, tmo_gamma, hdrv_quality, hdrv_profile);
 
 %video Residuals pass
 readerObj = VideoReader(name);
@@ -102,7 +102,7 @@ end
 
 close(writerObj_residuals);
 
-save([nameOut,'_r.dat'], 'r_min','r_max');
+save([nameOut,'_lee_kim_residuals.dat'], 'r_min','r_max');
 
 hdrvclose(hdrv);
 
