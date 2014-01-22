@@ -6,9 +6,14 @@ function MantiukBackwardHDRvEnc(hdrv, name, hdrv_profile, hdrv_quality)
 %
 %       Input:
 %           -hdrv: HDR image
-%           -name: is output name of the image
-%           -hdrv_profile: 
-%           -hdrv_quality: is JPEG output quality in [0,100]
+%           -name: is output name of the stream. For example "video_hdr.avi" or
+%           "video_hdr.mp4"
+%           -hdrv_profile: the compression profile (encoder) for compressing the stream.
+%           Please have a look to the profile of VideoWriter from the MATLAB
+%           help. Depending on the version of MATLAB some profiles may be not
+%           be present.
+%           -hdrv_quality: the output quality in [1,100]. 100 is the best quality
+%           1 is the lowest quality.
 %
 %     Copyright (C) 2013  Francesco Banterle
 % 
@@ -31,6 +36,7 @@ function MantiukBackwardHDRvEnc(hdrv, name, hdrv_profile, hdrv_quality)
 %     in ACM SIGGRAPH 2006
 %
 %
+
 if(~exist('hdrv_quality','var'))
     hdrv_quality = 95;
 end
@@ -51,7 +57,7 @@ nameResiduals = [nameOut,'_residuals.',fileExt];
 hdrv = hdrvopen(hdrv);
 
 %Opening compression streams
-StaticTMOv(hdrv, name, @ReinhardTMO, -1.0, hdrv_quality, hdrv_profile);
+KiserTMOv(hdrv, name, 0.95, 0, -1, hdrv_quality, hdrv_profile)
 
 %video Residuals pass
 readerObj = VideoReader(name);
