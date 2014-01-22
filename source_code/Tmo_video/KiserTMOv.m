@@ -14,8 +14,12 @@ function KiserTMOv(hdrv, filenameOutput, tmo_alpha_coeff, tmo_dn_clamping, tmo_g
 %           -tmo_dn_clamping: a boolean value (0 or 1) for setting black
 %           and white levels clamping
 %           -tmo_gamma: gamma for encoding the frame
-%           -tmo_quality: quality of the output stream
-%           -tmo_video_profile: compression econder to choose
+%           -tmo_quality: the output quality in [1,100]. 100 is the best quality
+%           1 is the lowest quality.%
+%           -tmo_video_profile: the compression profile (encoder) for compressing the stream.
+%           Please have a look to the profile of VideoWriter from the MATLAB
+%           help. Depending on the version of MATLAB some profiles may be not
+%           be present.
 %
 %     Copyright (C) 2013  Francesco Banterle
 % 
