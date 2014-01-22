@@ -11,8 +11,12 @@ function LeeKimTMOv(hdrv, filenameOutput, fBeta, fLambda, fSaturation, tmo_gamma
 %           -fSaturaion: a value (0,1] for reducing the saturation in the
 %           tonemapped image
 %           -tmo_gamma: gamma for encoding the frame
-%           -tmo_quality: quality of the output stream
-%           -tmo_video_profile: compression econder to choose
+%           -tmo_quality: the output quality in [1,100]. 100 is the best quality
+%           1 is the lowest quality.%
+%           -tmo_video_profile: the compression profile (encoder) for compressing the stream.
+%           Please have a look to the profile of VideoWriter from the MATLAB
+%           help. Depending on the version of MATLAB some profiles may be not
+%           be present.
 % 
 %     Copyright (C) 2013-14 Francesco Banterle
 %  
