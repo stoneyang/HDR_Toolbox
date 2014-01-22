@@ -3,6 +3,8 @@ function StaticTMOv(hdrv, filenameOutput, tmo_operator, tmo_gamma, tmo_quality, 
 %
 %       StaticTMOv(hdrv, filenameOutput, tmo_operator, tmo_gamma, tmo_quality, tmo_video_profile)
 %
+%       A static TMO is applied to an HDR stream. This method does not take into account temporal
+%       coherency, so it may introduce flickering.
 %
 %       Input:
 %           -hdrv: a HDR video structure; use hdrvread to create a hdrv
@@ -12,8 +14,12 @@ function StaticTMOv(hdrv, filenameOutput, tmo_operator, tmo_gamma, tmo_quality, 
 %           -tmo_operator: the tone mapping operator to use
 %           -tmo_gamma: gamma for encoding the frame. If it is negative,
 %           sRGB econding is applied
-%           -tmo_quality: quality of the output stream
-%           -tmo_video_profile: compression econder to choose
+%           -tmo_quality: the output quality in [1,100]. 100 is the best quality
+%           1 is the lowest quality.%
+%           -tmo_video_profile: the compression profile (encoder) for compressing the stream.
+%           Please have a look to the profile of VideoWriter from the MATLAB
+%           help. Depending on the version of MATLAB some profiles may be not
+%           be present.
 %
 %       Output:
 %           -frameOut: the tone mapped frame
