@@ -51,6 +51,12 @@ if(~exist('tmo_gamma','var'))
     tmo_gamma = 2.2;
 end
 
+if(tmo_gamma<0)
+    bsRGB = 1;
+else
+    bsRGB = 0;
+end
+
 if(~exist('tmo_zeta','var'))
     tmo_zeta = 0.1;
 end
@@ -94,7 +100,12 @@ for i=1:hdrv.totalFrames
     [frame, hdrv] = hdrvGetFrame(hdrv, i);
     frameOut = BoitardTMOv_frame(RemoveSpecials(frame), max_log_mean_HDR, max_log_mean_LDR, tmo_operator, tmo_zeta);
 
-    frameOut_gamma = GammaTMO(frameOut,tmo_gamma,0.0,0);
+    %Gamma/sRGB encoding
+    if(bsRGB)
+        frameOutLDR = ClampImg(ConvertRGBtosRGB(frameOut, 0), 0, 1);
+    else
+        frameOutLDR = ClampImg(GammaTMO(img, tmo_gamma, 0, 0), 0, 1);
+    end
     
     if(bVideo)
         writeVideo(writerObj,frameOut_gamma);
