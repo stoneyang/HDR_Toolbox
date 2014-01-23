@@ -30,7 +30,9 @@ function [imgALogLuv, param_a, param_b] = float2ALogLuv(img, n_bits)
 
 
 %check n_bits
-if(~exist('n_bits')) n_bits = 16; end
+if(~exist('n_bits','var'))
+    n_bits = 16;
+end
 
 if(n_bits<=0)
     n_bits = 16;

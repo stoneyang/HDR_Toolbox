@@ -29,8 +29,8 @@ function [eMin, eMax] = getFstops(img)
 
 L = lum(img);
 
-maxL = max(L(:));
-minL = min(L(:));
+maxL = MaxQuart(L,0.999);
+minL = MaxQuart(L,0.001);
 
 eMin = round(log2(minL+1e-6));
 eMax = round(log2(maxL+1e-6));
