@@ -72,17 +72,17 @@ if(~exist('tmo_video_profile','var'))
     tmo_video_profile = 'Motion JPEG AVI';
 end
 
-[hdrv_hm, ~, ~, ~] = hdrvAnalysis(hdrv);
-save('tmo_stream_info.dat','hdrv_hm','hdrv_max','hdrv_min','hdrv_mean');
+name = RemoveExt(filenameOutput);
+ext = fileExtension(filenameOutput);
+
+[hdrv_hm, hdrv_max, hdrv_min, hdrv_mean] = hdrvAnalysis(hdrv);
+save([name,'_tmo_stream_info.dat'],'hdrv_hm','hdrv_max','hdrv_min','hdrv_mean');
 
 [max_log_mean_HDR,index] = max(hdrv_hm);
 [frame, hdrv] = hdrvGetFrame(hdrv, index);
 
 frame_tmo = tmo_operator(RemoveSpecials(frame));
 max_log_mean_LDR = logMean(lum(frame_tmo));
-
-name = RemoveExt(filenameOutput);
-ext = fileExtension(filenameOutput);
 
 bVideo = 0;
 writerObj = 0;
