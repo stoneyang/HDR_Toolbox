@@ -1,7 +1,7 @@
 function val = SNR(imgReference, imgDistorted)
 %
 %
-%      val = PSNR(img1, img2)
+%      val = SNR(img1, img2)
 %
 %
 %       Input:
