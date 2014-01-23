@@ -38,14 +38,32 @@ if(CheckSameImage(img1,img2)==0)
     error('The two images are different they can not be used or there are more than one channel.');
 end
 
-col = size(img1,3);
-
 if(~exist('eMin','var')||~exist('eMax','var'))
-    [eMin, eMax] = getFstops(img1);
+    L1 = lum(img1);
+    L2 = lum(img2);
+    
+    ind1 = find(L1>0);
+    ind2 = find(L2>0);
+    
+    cMin = min([min(L1(ind1)),min(L2(ind2))]); 
+    cMax = max([max(L1(ind1)),max(L2(ind2))]); 
+    
+    minFstop = round(log2(cMin));
+    maxFstop = round(log2(cMax));
+    
+    halfStops = (maxFstop-minFstop+1)/2;
+    
+    eMin = -halfStops + 1;
+    eMax =  halfStops - 1;
 end
 
-if(eMax<=eMin)
-    error('eMin can be bigger than eMax!');
+if(eMax==eMin)
+    eMin = eMin-1;
+    eMax = eMax+1;
+end
+
+if(eMax<eMin)
+    error('It cannot be');
 end
 
 invGamma = 1.0/2.2;%inverse gamma value
@@ -79,11 +97,13 @@ end
 eMax = max(eVec);
 eMin = min(eVec);
 
-val = -1;
+col = size(img1,3);
 
 if(acc>0)
     MSE = MSE/acc;
-    val = 10*log10(col*255^2/MSE);
+    val = 10*log10((col*255^2)/MSE);
+else
+    val = -1;
 end
 
 end

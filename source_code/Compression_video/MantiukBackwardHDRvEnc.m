@@ -51,16 +51,17 @@ end
 
 nameOut = RemoveExt(name);
 fileExt = fileExtension(name);
-nameResiduals = [nameOut,'_residuals.',fileExt];
+nameTMO = [nameOut,'_MB06_tmo',fileExt];
+nameResiduals = [nameOut,'_MB06_residuals.',fileExt];
 
 %Opening hdr stream
 hdrv = hdrvopen(hdrv);
 
 %Opening compression streams
-KiserTMOv(hdrv, name, 0.95, 0, -1, hdrv_quality, hdrv_profile)
+KiserTMOv(hdrv, nameTMO, 0.95, 0, -1, hdrv_quality, hdrv_profile)
 
 %video Residuals pass
-readerObj = VideoReader(name);
+readerObj = VideoReader(nameTMO);
 
 writerObj_residuals = VideoWriter(nameResiduals, hdrv_profile);
 writerObj_residuals.Quality = hdrv_quality;
@@ -92,7 +93,7 @@ end
 
 close(writerObj_residuals);
 
-save([nameOut,'_RF.dat'], 'RFv','Qv');
+save([nameOut,'_MB06_RF.dat'], 'RFv','Qv');
 
 hdrvclose(hdrv);
 

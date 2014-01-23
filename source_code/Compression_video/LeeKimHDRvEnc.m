@@ -53,6 +53,7 @@ end
 
 nameOut = RemoveExt(name);
 fileExt = fileExtension(name);
+nameTMO = [nameOut,'_lee_kim_tmo.',fileExt];
 nameResiduals = [nameOut,'_lee_kim_residuals.',fileExt];
 
 %Opening hdr stream
@@ -62,10 +63,10 @@ hdrv = hdrvopen(hdrv);
 tmo_gamma = 2.2;   %as in the original paper
 fSaturation = 0.6; %as in the original paper
 
-LeeKimTMOv(hdrv, [nameOut,'_lee_kim_tmo.',fileExt], fBeta, fLambda, fSaturation, tmo_gamma, hdrv_quality, hdrv_profile);
+LeeKimTMOv(hdrv, nameTMO, fBeta, fLambda, fSaturation, tmo_gamma, hdrv_quality, hdrv_profile);
 
 %video Residuals pass
-readerObj = VideoReader(name);
+readerObj = VideoReader(nameTMO);
 
 writerObj_residuals = VideoWriter(nameResiduals, hdrv_profile);
 writerObj_residuals.Quality = LeeKimQuality(hdrv_quality);
