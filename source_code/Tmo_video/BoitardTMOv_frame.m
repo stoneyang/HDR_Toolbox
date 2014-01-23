@@ -43,11 +43,11 @@ function frameOut = BoitardTMOv_frame(frame, max_log_mean_HDR, max_log_mean_LDR,
 %     Link : http://people.irisa.fr/Ronan.Boitard/articles/2012/TCVTM2012.pdf
 %
 
-if(~exist('tmo_operator'))
+if(~exist('tmo_operator','var'))
     tmo_operator = @ReinhardTMO;
 end
 
-if(~exist('tmo_zeta'))
+if(~exist('tmo_zeta','var'))
     tmo_zeta = 0.1;
 end
 

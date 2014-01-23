@@ -105,15 +105,15 @@ for i=1:hdrv.totalFrames
 
     %Gamma/sRGB encoding
     if(bsRGB)
-        frameOutLDR = ClampImg(ConvertRGBtosRGB(frameOut, 0), 0, 1);
+        frameOut = ClampImg(ConvertRGBtosRGB(frameOut, 0), 0, 1);
     else
-        frameOutLDR = ClampImg(GammaTMO(img, tmo_gamma, 0, 0), 0, 1);
+        frameOut = ClampImg(GammaTMO(frameOut, tmo_gamma, 0, 0), 0, 1);
     end
     
     if(bVideo)
-        writeVideo(writerObj,frameOut_gamma);
+        writeVideo(writerObj,frameOut);
     else
-        imwrite(frameOut_gamma,[name,sprintf('%.10d',i),'.',ext]);
+        imwrite(frameOut,[name,sprintf('%.10d',i),'.',ext]);
     end
     
 end
