@@ -35,35 +35,16 @@ function [val, eMax, eMin] = mPSNR(img1, img2, eMin, eMax)
 %
 
 if(CheckSameImage(img1,img2)==0)
-    error('The two images are different they can not be used.');
+    error('The two images are different they can not be used or there are more than one channel.');
 end
 
 col = size(img1,3);
 
 if(~exist('eMin','var')||~exist('eMax','var'))
-    L     = lum(img2);
-    LLog2 = log2(L+1e-6);
-    minL  = min(LLog2(:));
-    maxL  = max(LLog2(:));
-
-    if(minL<0)
-        eMin = floor(minL);
-    else
-        eMin = ceil(minL);
-    end
-
-    if(maxL<0)
-        eMax = floor(maxL);
-    else
-        eMax = ceil(maxL);
-    end
+    [eMin, eMax] = getFstops(img1);
 end
 
-if(CheckSameImage(img1,img2)==0)
-    error('The two images are different they can not be used or there are more than one channel.');
-end
-
-if((eMax-eMin)<=0)
+if(eMax<=eMin)
     error('eMin can be bigger than eMax!');
 end
 
@@ -72,8 +53,9 @@ invGamma = 1.0/2.2;%inverse gamma value
 eVec =[];
 eMean=[];
 
-MSE=0;
-acc=0;
+MSE = 0;
+acc = 0;
+
 for i=eMin:eMax
     espo=2^i;%Exposure
    
