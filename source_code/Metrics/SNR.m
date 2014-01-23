@@ -31,22 +31,17 @@ if(CheckSameImage(imgReference, imgDistorted)==0)
     error('The two images are different they can not be used.');
 end
 
-disp('PSNR is not very meaningful for HDR images/videos, please consider mPSNR instead!');
+imgNoise2 = (imgReference-imgDistorted).^2;
+imgReference2 = imgReference.^2;
 
-imgNoise = imgDistorted-imgReference;
+tmp1 = sum(imgReference2(:));
+tmp2 = sum(imgNoise2(:));
 
-tmp = (imgReference.^2);
-A_signal = mean(tmp(:));
-
-tmp = (imgNoise.^2);
-A_noise  = mean(tmp(:));
-
-if(A_noise>0)
-    SNR = A_signal/A_noise;
-    SNR = 10.0*log10(SNR);
+if(tmp2>0.0)
+    val = 10*log10(tmp1/tmp2);
 else
-    disp('The two images are the same');
-    val = -1;
+    disp('the images are the same');
+    val = 1000.0;
 end
 
 end
