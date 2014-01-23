@@ -27,12 +27,12 @@ function [eMin, eMax] = getFstops(img)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-L     = lum(img);
-LLog2 = log2(L+1e-6);
-minL  = min(LLog2(:));
-maxL  = max(LLog2(:));
+L = lum(img);
 
-eMin = floor(minL);
-eMax = ceil(maxL);
+maxL = max(L(:));
+minL = min(L(:));
+
+eMin = round(log2(minL+1e-6));
+eMax = round(log2(maxL+1e-6));
 
 end
