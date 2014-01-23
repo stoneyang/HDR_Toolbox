@@ -34,6 +34,6 @@ end
 
 delta = abs(img1-img2);
 
-val = mean(relErr(indx));
+val = mean(delta(:));
 
 end

@@ -32,7 +32,7 @@ if(CheckSameImage(img1,img2)==0)
     error('The two images are different they can not be used.');
 end
 
-delta = abs(img1-igm2);
+delta = abs(img1-img2);
 
 val = max(delta(:));
 
