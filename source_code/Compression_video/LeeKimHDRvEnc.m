@@ -84,8 +84,8 @@ for i=1:hdrv.totalFrames
     
     %Tone mapped frame
     frameTMO = double(read(readerObj, i))/255;
-    frameTMO = GammaTMO(frameOut,1.0/tmo_gamma,0.0,0);
-    farmeTMO = ColorCorrection(frameTMO, 1.0/fSaturation);
+    frameTMO = GammaTMO(frameTMO,1.0/tmo_gamma,0.0,0);
+    frameTMO = ColorCorrection(frameTMO, 1.0/fSaturation);
  
     %Residuals
     l = lum(frameTMO);
