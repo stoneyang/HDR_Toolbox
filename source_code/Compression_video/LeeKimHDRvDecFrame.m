@@ -5,8 +5,8 @@ function frameHDR = LeeKimHDRvDecFrame(frameTMO, frameR, r_min, r_max)
 %
 %
 %       Input:
-%           -frameTMO: a tone mapped frame from the video stream with values in [0,1]
-%           -frameR: a residual frame from the residuals stream with values in [0,1]
+%           -frameTMO: a tone mapped frame from the video stream with values in [0,255] at 8-bit
+%           -frameR: a residual frame from the residuals stream with values in [0,255] at 8-bit
 %           -r_min: the minimum value of frameR
 %           -r_max: the maximum value of frameR
 %
@@ -37,12 +37,14 @@ function frameHDR = LeeKimHDRvDecFrame(frameTMO, frameR, r_min, r_max)
 %
 
 %decompression of the residuals frame
+frameR = double(frameR)/255.0;
 frameR = frameR*(r_max-r_min) + r_min;
 
 %decompression of the tone mapped frame
 tmo_gamma = 2.2;   %as in the original paper
 fSaturation = 0.6; %as in the original paper
 
+frameTMO = double(frameTMO)/255.0;
 frameTMO = GammaTMO(frameTMO, 1.0/tmo_gamma, 0.0, 0);
 frameTMO = ColorCorrection(frameTMO, 1.0/fSaturation);
 
