@@ -35,9 +35,11 @@ disp('PSNR is not very meaningful for HDR images/videos, please consider mPSNR i
 
 imgNoise = imgDistorted-imgReference;
 
-A_signal = MSE(imgReference);
-A_noise  = MSE(imgNoise);
+tmp = (imgReference.^2);
+A_signal = mean(tmp(:));
 
+tmp = (imgNoise.^2);
+A_noise  = mean(tmp(:));
 
 if(A_noise>0)
     SNR = A_signal/A_noise;
