@@ -45,6 +45,10 @@ for i=1:hdrv.totalFrames
     disp(['Processing Frame: ',num2str(i)]);
     [frame, hdrv] = hdrvGetFrame(hdrv, i);
     
+    %Only physical values
+    frame = RemoveSpecials(frame);
+    frame(frame<0) = 0;   
+    
     L = RemoveSpecials(lum(frame));
     L(L<0.0) = 0;
     

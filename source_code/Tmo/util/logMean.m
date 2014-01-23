@@ -27,7 +27,7 @@ function Lav=logMean(img)
 %
 
 delta = 1e-6;
-img_delta = img+delta;
+img_delta = log(img+delta);
 
 Lav = exp(mean(img_delta(:)));
 

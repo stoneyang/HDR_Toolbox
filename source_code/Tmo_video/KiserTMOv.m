@@ -89,11 +89,15 @@ disp('Tone Mapping...');
 tmo_alpha_coeff_c = 1.0 - tmo_alpha_coeff;
 
 beta_clamping   = 0.999;
-beta_clamping_c = (1.0-beta_clamping)
+beta_clamping_c = (1.0-beta_clamping);
 
 for i=1:hdrv.totalFrames
     disp(['Processing frame ',num2str(i)]);
     [frame, hdrv] = hdrvGetFrame(hdrv, i);
+    
+    %Only physical values
+    frame = RemoveSpecials(frame);
+    frame(frame<0) = 0;
     
     if(tmo_dn_clamping)%Clamping black and white levels
         L = RemoveSpecials(lum(frame));
@@ -132,8 +136,8 @@ for i=1:hdrv.totalFrames
     an = tmo_alpha_coeff_c * aprev + tmo_alpha_coeff * a;
     
     %tone mapping
-    [frameOut,~,~]=ReinhardTMO(frame, an);
-    
+    [frameOut,~,~] = ReinhardTMO(frame, an);
+
     %Gamma/sRGB encoding
     if(bsRGB)
         frameOut = ClampImg(ConvertRGBtosRGB(frameOut, 0), 0, 1);
@@ -142,9 +146,9 @@ for i=1:hdrv.totalFrames
     end
     
     if(bVideo)
-        writeVideo(writerObj,frameOut);
+        writeVideo(writerObj, frameOut);
     else
-        imwrite(frameOut,[name,sprintf('%.10d',i),'.',ext]);
+        imwrite(frameOut, [name,sprintf('%.10d',i),'.',ext]);
     end
     
     %updating for the next frame

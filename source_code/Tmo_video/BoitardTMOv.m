@@ -101,6 +101,11 @@ disp('Tone Mapping...');
 for i=1:hdrv.totalFrames
     disp(['Processing frame ',num2str(i)]);
     [frame, hdrv] = hdrvGetFrame(hdrv, i);
+    
+    %Only physical values
+    frame = RemoveSpecials(frame);
+    frame(frame<0) = 0;
+        
     frameOut = BoitardTMOv_frame(RemoveSpecials(frame), max_log_mean_HDR, max_log_mean_LDR, tmo_operator, tmo_zeta);
 
     %Gamma/sRGB encoding
