@@ -29,7 +29,7 @@ function [frame, hdrv] = hdrvGetFrame(hdrv, frameCounter)
 %
 
 %which frame?
-maxFrames = length(hdrv.list);
+maxFrames = hdrv.totalFrames;
 
 if(~exist('frameCounter','var'))
     frameCounter = hdrv.frameCounter;
@@ -60,12 +60,12 @@ switch hdrv.type
     case 'TYPE_HDRV_MB06'
         frameTMO = read(hdrv.streamTMO, frameCounter); 
         frameR   = read(hdrv.streamR, frameCounter);       
-        frame = MantiukBackwardHDRvDecFrame(frameTMO, frameR, Rinfo.RFv(:,frameCounter), Rinfo.Qv(:,frameCounter));
+        frame = MantiukBackwardHDRvDecFrame(frameTMO, frameR, hdrv.Rinfo.RFv(:,frameCounter), hdrv.Rinfo.Qv(:,frameCounter));
 
     case 'TYPE_HDRV_LK08'
         frameTMO = read(hdrv.streamTMO, frameCounter); 
         frameR   = read(hdrv.streamR, frameCounter);       
-        frame = MantiukBackwardHDRvDecFrame(frameTMO, frameR, Rinfo.r_min(frameCounter), Rinfo.r_max(:,frameCounter));
+        frame = MantiukBackwardHDRvDecFrame(frameTMO, frameR, hdrv.Rinfo.r_min(frameCounter), hdrv.Rinfo.r_max(:,frameCounter));
 end
 
 %updating the counter

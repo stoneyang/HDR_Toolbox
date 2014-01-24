@@ -61,7 +61,7 @@ else
         name = nameOut(1:(pos-1));        
         streamTMO = VideoReader([name,'_MB06_tmo.',fileExt]);
         streamR   = VideoReader([name,'_MB06_residuals.',fileExt]);
-        Rinfo     = load([name,'_MB06_Rinfo.dat']);
+        Rinfo     = load([name,'_MB06_Rinfo.mat']);
         hdrv = struct('type',type,'path',nameOut,'totalFrames',streamTMO.NumberOfFrames,'FrameRate',streamTMO.FrameRate,'frameCounter',1,'streamOpen',0,'streamTMO',streamTMO,'streamR',streamR,'Rinfo',Rinfo);
     end
     
@@ -72,7 +72,7 @@ else
         name = nameOut(1:(pos-1));        
         streamTMO = VideoReader([name,'_LK08_tmo.',fileExt]);
         streamR   = VideoReader([name,'_LK08_residuals.',fileExt]);
-        Rinfo     = load([name,'_LK08_Rinfo.dat']);
+        Rinfo     = load([name,'_LK08_Rinfo.mat']);
         hdrv = struct('type',type,'path',nameOut,'totalFrames',streamTMO.NumberOfFrames,'FrameRate',streamTMO.FrameRate,'frameCounter',1,'streamOpen',0,'streamTMO',streamTMO,'streamR',streamR,'Rinfo',Rinfo);
     end        
 end

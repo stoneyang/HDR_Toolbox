@@ -108,7 +108,7 @@ end
 
 close(writerObj_residuals);
 
-save([nameOut,'_LK08_Rinfo.dat'], 'r_min','r_max');
+save([nameOut,'_LK08_Rinfo.mat'], 'r_min','r_max');
 
 hdrvclose(hdrv);
 

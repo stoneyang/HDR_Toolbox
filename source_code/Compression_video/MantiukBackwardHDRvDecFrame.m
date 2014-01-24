@@ -50,11 +50,12 @@ end
 
 %decompression of the residuals
 frameR = double(frameR)-127; %values in [-127, 127]
+frameR = frameR(:,:,1);
 rl = zeros(size(frameR));
 for i=1:256
     indx = find(Ld==(i-1));
     if(~isempty(indx))
-        rl(Ld==(i-1)) = imgR(Ld==(i-1))*Q(i);
+        rl(Ld==(i-1)) = frameR(Ld==(i-1))*Q(i);
     end
 end
 
