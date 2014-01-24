@@ -51,7 +51,7 @@ end
 
 nameOut = RemoveExt(name);
 fileExt = fileExtension(name);
-nameTMO = [nameOut,'_MB06_tmo',fileExt];
+nameTMO = [nameOut,'_MB06_tmo.',fileExt];
 nameResiduals = [nameOut,'_MB06_residuals.',fileExt];
 
 %Opening hdr stream
