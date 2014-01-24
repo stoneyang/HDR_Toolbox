@@ -93,7 +93,7 @@ end
 
 close(writerObj_residuals);
 
-save([nameOut,'_MB06_RF.dat'], 'RFv','Qv');
+save([nameOut,'_MB06_Rinfo.dat'], 'RFv','Qv');
 
 hdrvclose(hdrv);
 

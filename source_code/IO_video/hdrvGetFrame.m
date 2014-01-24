@@ -47,14 +47,27 @@ end
 switch hdrv.type
     case 'TYPE_HDR_PFM'
         frame = hdrimread([hdrv.path,'/',hdrv.list(frameCounter).name]);
+   
     case 'TYPE_HDR_RGBE'
         frame = hdrimread([hdrv.path,'/',hdrv.list(frameCounter).name]);
+    
     case 'TYPE_HDR_JPEG'
         frame = hdrimread([hdrv.path,'/',hdrv.list(frameCounter).name]);
+    
     case 'TYPE_HDR_JPEG_2000'
         frame = hdrimread([hdrv.path,'/',hdrv.list(frameCounter).name]);
+    
+    case 'TYPE_HDRV_MB06'
+        frameTMO = read(hdrv.streamTMO, frameCounter); 
+        frameR   = read(hdrv.streamR, frameCounter);       
+        frame = MantiukBackwardHDRvDecFrame(frameTMO, frameR, Rinfo.RFv(:,frameCounter), Rinfo.Qv(:,frameCounter));
+
+    case 'TYPE_HDRV_LK08'
+        frameTMO = read(hdrv.streamTMO, frameCounter); 
+        frameR   = read(hdrv.streamR, frameCounter);       
+        frame = MantiukBackwardHDRvDecFrame(frameTMO, frameR, Rinfo.r_min(frameCounter), Rinfo.r_max(:,frameCounter));
 end
 
 %updating the counter
-ldrv.frameCounter = mod( frameCounter + 1, maxFrames+1 );
+hdrv.frameCounter = mod( frameCounter + 1, maxFrames+1 );
 end

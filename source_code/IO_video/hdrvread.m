@@ -51,7 +51,30 @@ if(isdir(filename))
     
     hdrv = struct('type',type,'path',filename,'list',tmp_list,'totalFrames',length(tmp_list),'FrameRate',30,'frameCounter',1,'streamOpen',0);
 else
+    nameOut = RemoveExt(filename);
+    fileExt = fileExtension(filename);
     
+    if(findstr(nameOut,'_MB06_'))%is it a Mantiuk Backward 2006 HDRv stream?
+        type = 'TYPE_HDRV_MB06';
+        
+        pos = findstr(nameOut,'_MB06_');
+        name = nameOut(1:(pos-1));        
+        streamTMO = VideoReader([name,'_MB06_tmo.',fileExt]);
+        streamR   = VideoReader([name,'_MB06_residuals.',fileExt]);
+        Rinfo     = load([name,'_MB06_Rinfo.dat']);
+        hdrv = struct('type',type,'path',nameOut,'totalFrames',streamTMO.NumberOfFrames,'FrameRate',streamTMO.FrameRate,'frameCounter',1,'streamOpen',0,'streamTMO',streamTMO,'streamR',streamR,'Rinfo',Rinfo);
+    end
+    
+    if(findstr(nameOut,'_LK08_'))%is it a Lee and Kim 2008 HDRv stream?
+        type = 'TYPE_HDRV_LK08';
+
+        pos = findstr(nameOut,'_LK08_');
+        name = nameOut(1:(pos-1));        
+        streamTMO = VideoReader([name,'_LK08_tmo.',fileExt]);
+        streamR   = VideoReader([name,'_LK08_residuals.',fileExt]);
+        Rinfo     = load([name,'_LK08_Rinfo.dat']);
+        hdrv = struct('type',type,'path',nameOut,'totalFrames',streamTMO.NumberOfFrames,'FrameRate',streamTMO.FrameRate,'frameCounter',1,'streamOpen',0,'streamTMO',streamTMO,'streamR',streamR,'Rinfo',Rinfo);
+    end        
 end
 
 end

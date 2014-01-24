@@ -27,10 +27,15 @@ function ldrv = ldrvclose(ldrv)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-if(strfind(ldrv.type,'TYPE_LDR_VIDEO')==1)
-    if(ldrv.streamOpen)
-        close(ldrv.stream);
+if(ldrv.streamOpen==1)
+
+    if(strfind(ldrv.type,'TYPE_LDR_VIDEO')==1)
+        if(~isempty(ldrv.stream))
+            close(ldrv.stream);
+        end
     end
+    
+    ldrv.streamOpen = 0;
 end
 
 end

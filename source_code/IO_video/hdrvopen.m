@@ -27,10 +27,29 @@ function hdrv = hdrvopen(hdrv)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-if((strfind(hdrv.type,'TYPE_HDR_VIDEO')==1)|(strfind(hdrv.type,'TYPE_HDR_VIDEO_MP4')==1))
-    if(~hdrv.streamOpen)
-        open(hdrv.stream);
+if(hdrv.streamOpen==0)
+
+    switch hdrv.type
+        case 'TYPE_HDRV_MB06'
+            if(~isempty(hdrv.streamTMO))
+                close(hdrv.streamTMO)
+            end
+            
+            if(~isempty(hdrv.streamR))
+                close(hdrv.streamR)
+            end
+            
+        case 'TYPE_HDRV_LK08'
+            if(~isempty(hdrv.streamTMO))
+                close(hdrv.streamTMO)
+            end
+            
+            if(~isempty(hdrv.streamR))
+                close(hdrv.streamR)
+            end            
     end
+    
+    hdrv.streamOpen = 1;
 end
 
 end

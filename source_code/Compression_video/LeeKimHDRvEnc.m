@@ -53,8 +53,8 @@ end
 
 nameOut = RemoveExt(name);
 fileExt = fileExtension(name);
-nameTMO = [nameOut,'_lee_kim_tmo.',fileExt];
-nameResiduals = [nameOut,'_lee_kim_residuals.',fileExt];
+nameTMO = [nameOut,'_LK08_tmo.',fileExt];
+nameResiduals = [nameOut,'_LK08_residuals.',fileExt];
 
 %Opening hdr stream
 hdrv = hdrvopen(hdrv);
@@ -108,7 +108,7 @@ end
 
 close(writerObj_residuals);
 
-save([nameOut,'_lee_kim_residuals.dat'], 'r_min','r_max');
+save([nameOut,'_LK08_Rinfo.dat'], 'r_min','r_max');
 
 hdrvclose(hdrv);
 
