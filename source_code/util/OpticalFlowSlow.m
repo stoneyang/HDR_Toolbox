@@ -27,6 +27,10 @@ function offsetMap = OpticalFlowSlow(img1, img2, patchSize, maxIterations)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
+if(~exist('patchSize','var'))
+    patchSize = 7;
+end
+
 if(~exist('maxIterations','var'))
     maxIterations = 0;
 end
