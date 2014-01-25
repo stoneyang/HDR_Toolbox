@@ -32,7 +32,7 @@ RF = zeros(256,1);
 for i=1:256
     indx = find(Ld==(i-1));
     if(~isempty(indx))
-        tmpLw = Lw(Ld==(i-1));
+        tmpLw = Lw(indx);
         RF(i) = mean(tmpLw(:));
     end
 end
