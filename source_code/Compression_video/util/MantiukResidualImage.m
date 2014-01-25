@@ -1,7 +1,7 @@
 function [imgR, RF, Q] = MantiukResidualImage(Ld, Lw)
 %
 %
-%       imgR = MantiukResidualImage(Ld, Lw)
+%       [imgR, RF, Q] = MantiukResidualImage(Ld, Lw)
 %
 %
 %       Input:
