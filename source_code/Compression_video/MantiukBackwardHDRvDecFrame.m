@@ -55,7 +55,7 @@ rl = zeros(size(frameR));
 for i=1:256
     indx = find(Ld==(i-1));
     if(~isempty(indx))
-        rl(Ld==(i-1)) = frameR(Ld==(i-1))*Q(i);
+        rl(indx) = frameR(indx)*Q(i);
     end
 end
 
