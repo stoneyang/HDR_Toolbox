@@ -5,7 +5,7 @@ function LeeKimHDRvEnc(hdrv, name, bCrossBilateralFilter, hdrv_profile, hdrv_qua
 %
 %
 %       Input:
-%           -hdrv: HDR image
+%           -hdrv: a HDR video stream, use hdrvread for opening a stream
 %           -name: is output name of the image
 %           -bCrossBilateralFilter: if it is set to 1 the cross bilateral
 %           filtering is used to remove noise from the residuals
