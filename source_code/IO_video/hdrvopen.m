@@ -1,6 +1,6 @@
 function hdrv = hdrvopen(hdrv)
 %
-%        hdrv = hdrvread(hdrv)
+%        hdrv = hdrvopen(hdrv)
 %
 %
 %        Input:
