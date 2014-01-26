@@ -46,11 +46,17 @@ end
 %reading the actual frame
 switch ldrv.type
     case 'TYPE_LDR_PNG'
-        frame = double(imread([ldrv.path,'/',ldrv.list(frameCounter).name]))/255.0;
+        frame = imread([ldrv.path,'/',ldrv.list(frameCounter).name]);
     case 'TYPE_LDR_JPEG'
-        frame = double(imread([ldrv.path,'/',ldrv.list(frameCounter).name]))/255.0;
+        frame = imread([ldrv.path,'/',ldrv.list(frameCounter).name]);
     case 'TYPE_LDR_JPEG_2000'
-        frame = double(imread([ldrv.path,'/',ldrv.list(frameCounter).name]))/255.0;
+        frame = imread([ldrv.path,'/',ldrv.list(frameCounter).name]);
+    case 'TYPE_LDR_VIDEO'
+        frame = read(hdrv.streamTMO, frameCounter); 
+end
+
+if(~isempty(frame))
+    frame = double(frame)/255.0;
 end
 
 %updating the counter
