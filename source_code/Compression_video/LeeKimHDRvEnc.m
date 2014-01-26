@@ -6,11 +6,12 @@ function LeeKimHDRvEnc(hdrv, name, bCrossBilateralFilter, hdrv_profile, hdrv_qua
 %
 %       Input:
 %           -hdrv: a HDR video stream, use hdrvread for opening a stream
-%           -name: is output name of the image
+%           -name: is output name of the stream. For example 'video_hdr.avi' or
+%           'video_hdr.mp4'
 %           -bCrossBilateralFilter: if it is set to 1 the cross bilateral
 %           filtering is used to remove noise from the residuals
 %           -hdrv_profile: 
-%           -hdrv_quality: is JPEG output quality in [0,100]
+%           -hdrv_quality: is JPEG output quality in [1,100]
 %
 %     Copyright (C) 2013-14  Francesco Banterle
 % 
