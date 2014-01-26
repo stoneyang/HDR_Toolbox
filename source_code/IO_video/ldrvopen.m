@@ -1,6 +1,6 @@
 function ldrv = ldrvopen(ldrv)
 %
-%        ldrv = ldrvread(ldrv)
+%        ldrv = ldrvopen(ldrv)
 %
 %
 %        Input:
