@@ -43,12 +43,15 @@ if(bAbs)
 else
     XI = X+offset_map(:,:,1);
     YI = Y+offset_map(:,:,2);
+    
+    XI = ClampImg(XI, 1, c);
+    YI = ClampImg(YI, 1, r);
 end
 
 imgOut = zeros(r,c,col);
 
 for i=1:col
-    imgOut(:,:,i) = interp2(X,Y,img(:,:,i),XI,YI);
+    imgOut(:,:,i) = interp2(X,Y,img(:,:,i),XI,YI,'bilinear',0);
 end
 
 end

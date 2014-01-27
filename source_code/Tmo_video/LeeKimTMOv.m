@@ -103,7 +103,7 @@ for i=1:hdrv.totalFrames
         %Computing optical flow between frame and framePrev
         offset_map = OpticalFlowSlow(framePrev, frame, 7, 5);
         %Warping
-        imgWarped = imWarp(frameOutPrev, offset_map, 1);
+        imgWarped = imWarp(frameOutPrev, offset_map, 0);
         frameOut = LeeKimTMOv_frame(frame, imgWarped, fBeta, fLambda); 
     end
     
