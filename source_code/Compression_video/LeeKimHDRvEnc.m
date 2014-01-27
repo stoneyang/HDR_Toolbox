@@ -65,8 +65,10 @@ nameResiduals = [nameOut,'_LK08_residuals.',fileExt];
 hdrv = hdrvopen(hdrv);
 
 %Lee and Kim TMO
-tmo_gamma = 2.2;   %as in the original paper
-fSaturation = 0.6; %as in the original paper
+tmo_gamma = 2.2;    %as in the original paper
+fSaturation = 0.6;  %as in the original paper
+fBeta = 0.92;       %as in the original paper
+fLambda = 0.3;      %as in the original paper
 
 LeeKimTMOv(hdrv, nameTMO, fBeta, fLambda, fSaturation, tmo_gamma, hdrv_quality, hdrv_profile);
 
