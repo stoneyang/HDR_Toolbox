@@ -2,8 +2,12 @@ function LeeKimTMOv(hdrv, filenameOutput, fBeta, fLambda, fSaturation, tmo_gamma
 %
 %       LeeKimTMOv(hdrv, filenameOutput, fBeta, fLambda, fSaturation, tmo_gamma, tmo_quality, tmo_video_profile)
 %
+%       This function is a tone mapping operator for videos using the Lee
+%       and Kim operator. This is a temporal version of the Fattal and
+%       Lischinski gradient domain operator.
+%
 %       Input:
-%           -hdrv: a HDR video structure; use hdrvread to create a hdrv
+%           -hdrv: an HDR video structure; use hdrvread to create an hdrv
 %           structure
 %           -filenameOutput: output filename (if it has an image extension,
 %           single files will be generated)

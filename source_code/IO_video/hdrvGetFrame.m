@@ -65,7 +65,7 @@ switch hdrv.type
     case 'TYPE_HDRV_LK08'
         frameTMO = read(hdrv.streamTMO, frameCounter); 
         frameR   = read(hdrv.streamR, frameCounter);       
-        frame = MantiukBackwardHDRvDecFrame(frameTMO, frameR, hdrv.Rinfo.r_min(frameCounter), hdrv.Rinfo.r_max(:,frameCounter));
+        frame = LeeKimHDRvDecFrame(frameTMO, frameR, hdrv.Rinfo.r_min(frameCounter), hdrv.Rinfo.r_max(frameCounter));
 end
 
 %updating the counter
