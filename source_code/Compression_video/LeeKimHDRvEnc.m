@@ -6,12 +6,16 @@ function LeeKimHDRvEnc(hdrv, name, bCrossBilateralFilter, hdrv_profile, hdrv_qua
 %
 %       Input:
 %           -hdrv: a HDR video stream, use hdrvread for opening a stream
-%           -name: is output name of the stream. For example 'video_hdr.avi' or
-%           'video_hdr.mp4'
+%           -name: this is the output name of the stream. For example,
+%           'video_hdr.avi' or 'video_hdr.mp4'
 %           -bCrossBilateralFilter: if it is set to 1 the cross bilateral
 %           filtering is used to remove noise from the residuals
-%           -hdrv_profile: 
-%           -hdrv_quality: is JPEG output quality in [1,100]
+%           -hdrv_profile: the compression profile (encoder) for compressing the stream.
+%           Please have a look to the profile of VideoWriter from the MATLAB
+%           help. Depending on the version of MATLAB some profiles may be not
+%           be present.
+%           -hdrv_quality: the output quality in [1,100]. 100 is the best quality
+%           1 is the lowest quality.
 %
 %     Copyright (C) 2013-14  Francesco Banterle
 % 

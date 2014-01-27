@@ -32,15 +32,7 @@ function [imgR, RF, Q] = MantiukResidualImage(Ld, Lw)
 
 RF = MantiukReconstructionFunction(Ld, Lw);
 
-Lw_rec = zeros(size(Lw));
-for i=1:256
-    indx = find(Ld==(i-1));
-
-    if(~isempty(indx))
-        Lw_rec(indx) = RF(i);
-    end
-end
-
+Lw_rec = MantiukExpansion(Ld, RF);
 rl = Lw - Lw_rec; %residuals
 
 %quantization

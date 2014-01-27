@@ -31,17 +31,17 @@ function Lout = MantiukLumaCoding(Lin, inverse)
 %
 
 if(inverse==0)
-    Lout = Lin;
+    Lout = zeros(size(Lin));
 
-    Lout( Lin<5.604) = 17.554*Lout(Lin<5.604);
-    Lout((Lin>=5.604)&(Lin<10469)) = 826.8*(Lout((Lin>=5.604)&(Lin<10469)).^0.10013)-884.17;
-    Lout( Lin>=10469) = 209.16*log(Lout(Lin>=10469))-731.28;
+    Lout( Lin<5.604) = 17.554*Lin(Lin<5.604);
+    Lout((Lin>=5.604)&(Lin<10469)) = 826.8*(Lin((Lin>=5.604)&(Lin<10469)).^0.10013)-884.17;
+    Lout( Lin>=10469) = 209.16*log(Lin(Lin>=10469))-731.28;
 else
-    Lout = Lin;
+    Lout = zeros(size(Lin));
 
-    Lout( Lin<98.381) = 0.056968*Lout(Lin<98.381);
-    Lout((Lin>=98.381)&(Lin<1204.7)) = 7.3014e-30*(Lout((Lin>=98.381)&(Lin<1204.7)).^9.9872);
-    Lout( Lin>=1204.7) = 32.994*exp(Lout(Lin>=1204.7)*0.0047811);    
+    Lout( Lin<98.381) = 0.056968*Lin(Lin<98.381);
+    Lout((Lin>=98.381)&(Lin<1204.7)) = 7.3014e-30*((Lin((Lin>=98.381)&(Lin<1204.7))+884.17).^9.9872);
+    Lout( Lin>=1204.7) = 32.994*exp(Lin(Lin>=1204.7)*0.0047811);    
 end
 
 end

@@ -39,14 +39,8 @@ function frameHDR = MantiukBackwardHDRvDecFrame(frameTMO, frameR, RF, Q)
 %Reconstruction of HDR luminance
 frameTMO = double(frameTMO);
 Ld = round(lum(frameTMO));
-Lw_rec = zeros(size(Ld));
-for i=1:256
-    indx = find(Ld==(i-1));
 
-    if(~isempty(indx))
-        Lw_rec(indx) = RF(i);
-    end
-end
+Lw_rec = MantiukExpansion(Ld, RF);
 
 %decompression of the residuals
 frameR = double(frameR)-127; %values in [-127, 127]
