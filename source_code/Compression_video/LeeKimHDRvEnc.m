@@ -70,7 +70,7 @@ fSaturation = 0.6;  %as in the original paper
 fBeta = 0.92;       %as in the original paper
 fLambda = 0.3;      %as in the original paper
 
-%LeeKimTMOv(hdrv, nameTMO, fBeta, fLambda, fSaturation, tmo_gamma, hdrv_quality, hdrv_profile);
+LeeKimTMOv(hdrv, nameTMO, fBeta, fLambda, fSaturation, tmo_gamma, hdrv_quality, hdrv_profile);
 
 %video Residuals pass
 readerObj = VideoReader(nameTMO);
