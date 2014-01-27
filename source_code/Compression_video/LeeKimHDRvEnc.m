@@ -70,13 +70,13 @@ fSaturation = 0.6;  %as in the original paper
 fBeta = 0.92;       %as in the original paper
 fLambda = 0.3;      %as in the original paper
 
-LeeKimTMOv(hdrv, nameTMO, fBeta, fLambda, fSaturation, tmo_gamma, hdrv_quality, hdrv_profile);
+%LeeKimTMOv(hdrv, nameTMO, fBeta, fLambda, fSaturation, tmo_gamma, hdrv_quality, hdrv_profile);
 
 %video Residuals pass
 readerObj = VideoReader(nameTMO);
 
 writerObj_residuals = VideoWriter(nameResiduals, hdrv_profile);
-writerObj_residuals.Quality = LeeKimQuality(hdrv_quality);
+writerObj_residuals.Quality = ClampImg(round(LeeKimQuality(hdrv_quality)),1,100);
 open(writerObj_residuals);
 
 epsilon = 0.05;%as in the original paper

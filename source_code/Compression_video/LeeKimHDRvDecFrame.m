@@ -37,6 +37,7 @@ function frameHDR = LeeKimHDRvDecFrame(frameTMO, frameR, r_min, r_max)
 %
 
 %decompression of the residuals frame
+frameR = frameR(:,:,1);
 frameR = double(frameR)/255.0;
 frameR = frameR*(r_max-r_min) + r_min;
 
