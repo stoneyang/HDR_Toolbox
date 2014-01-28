@@ -49,7 +49,7 @@ function imgOut = SiftImageAlignment(img1, img2, maxIterations)
 %
 
 if(~exist('vl_imwbackward')||~exist('vl_colsubset')||~exist('vl_sift')||~exist('vl_ubcmatch'))
-    error('This function needs VL Fleat. Please download it from http://www.vlfeat.org/');
+    error('This function needs VL Feat. Please download it from http://www.vlfeat.org/');
 end
 
 if(~exist('maxIterations','var'))

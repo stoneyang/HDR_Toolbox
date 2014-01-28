@@ -49,7 +49,7 @@ if(hdrv_quality<1)
 end
 
 if(~exist('bCrossBilateralFilter','var'))
-    bCrossBilateralFilter = 1;
+    bCrossBilateralFilter = 0;
 end
 
 if(~exist('hdrv_profile','var'))

@@ -62,7 +62,6 @@ else
     bsRGB = 0;
 end
 
-
 if(~exist('tmo_quality','var'))
     tmo_quality = 95;
 end
