@@ -47,6 +47,7 @@ d23 = 'Metrics/util';
 cp = pwd();
 
 tmpStr = '/source_code/';
+addpath([cp,tmpStr,d0], '-begin');
 addpath([cp,tmpStr,d1], '-begin');
 addpath([cp,tmpStr,d2], '-begin');
 addpath([cp,tmpStr,d3], '-begin');
@@ -75,6 +76,7 @@ addpath([cp,'/demos/'], '-begin');
 savepath
 disp('done!');
 
+clear('d0');
 clear('d1');
 clear('d2');
 clear('d3');
