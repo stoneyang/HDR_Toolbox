@@ -1,6 +1,6 @@
-function imgOut = RempelEO(img, gammaRemoval, noiseReduction)
+function imgOut = RempelEO(img, gammaRemoval, noiseReduction, bVideoFlag)
 %
-%		 imgOut = RempelEO(img, gammaRemoval, noiseReduction)
+%		 imgOut = RempelEO(img, gammaRemoval, noiseReduction, bVideoFlag)
 %
 %
 %        Input:
@@ -8,6 +8,7 @@ function imgOut = RempelEO(img, gammaRemoval, noiseReduction)
 %           -gammaRemoval: the gamma value to be removed if known
 %           -noiseReduction: a boolean flag for activating the noise
 %           reduction
+%           -bVideoFlag: setting it to 1 if img is a frame of a video
 %
 %        Output:
 %           -imgOut: an expanded image
@@ -68,7 +69,7 @@ rescale_alpha = 4.0;     %rescale alpha as in the original paper
 Lexp=(L+1/256)*(maxL-0.3);
 
 %Generate expand map
-expand_map = RempelExpandMap(L);
+expand_map = RempelExpandMap(L, bVideoFlag);
 
 %Remap expand map range in [1,..., rescale_alpha]
 expand_map = expand_map*(rescale_alpha-1)+1;
