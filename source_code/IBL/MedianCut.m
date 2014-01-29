@@ -59,11 +59,7 @@ limitSize = 2;
 
 lights = [];
 
-if(c>r)
-    MedianCutAux(1,c,1,r,0,1);
-else
-    MedianCutAux(1,c,1,r,0,0);
-end
+MedianCutAux(1,c,1,r,0);
 
 imgOut = GenerateLightMap(lights,c,r);
 
