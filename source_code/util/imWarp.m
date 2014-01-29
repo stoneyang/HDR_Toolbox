@@ -41,8 +41,8 @@ if(bAbs)
     XI = offset_map(:,:,1);
     YI = offset_map(:,:,2);
 else
-    XI = X+offset_map(:,:,1);
-    YI = Y+offset_map(:,:,2);
+    XI = X-offset_map(:,:,1);
+    YI = Y-offset_map(:,:,2);
     
     XI = ClampImg(XI, 1, c);
     YI = ClampImg(YI, 1, r);
