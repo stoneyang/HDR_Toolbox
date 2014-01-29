@@ -5,7 +5,7 @@ function expand_map=RempelExpandMap(L, bVideoFlag)
 %
 %	 Input:
 %		-L: a luminance channel
-%		-bVideoFlag: a flag, true if a video is used
+%       -bVideoFlag: a flag, true if img is a frame of a video
 %
 %	 Output:
 %		-expand_map: the final expand map
