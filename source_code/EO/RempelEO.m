@@ -8,7 +8,7 @@ function imgOut = RempelEO(img, gammaRemoval, noiseReduction, bVideoFlag)
 %           -gammaRemoval: the gamma value to be removed if known
 %           -noiseReduction: a boolean flag for activating the noise
 %           reduction
-%           -bVideoFlag: setting it to 1 if img is a frame of a video
+%           -bVideoFlag: a flag, true if img is a frame of a video
 %
 %        Output:
 %           -imgOut: an expanded image
