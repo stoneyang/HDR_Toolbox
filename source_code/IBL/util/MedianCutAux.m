@@ -1,10 +1,10 @@
-function MedianCutAux(xMin,xMax,yMin,yMax,iter,cut)
+function MedianCutAux(xMin,xMax,yMin,yMax,iter)
 %
 %
-%        MedianCutAux(xMin,xMax,yMin,yMax,iter,cut)
+%        MedianCutAux(xMin,xMax,yMin,yMax,iter)
 %       
 %
-%     Copyright (C) 2011  Francesco Banterle
+%     Copyright (C) 2011-14  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -30,46 +30,35 @@ lx = xMax-xMin;
 ly = yMax-yMin;
 
 if((lx>limitSize)&&(ly>limitSize)&&(iter<nLights))
-    tot=sum(sum(L(yMin:yMax,xMin:xMax)));
-
-    pivot=-1;
-    if(cut==1)
-        %Cut on the X-axis
-        for i=xMin:xMax
-            c=sum(sum(L(yMin:yMax,xMin:i)));
-                if(c>=(tot-c)&&pivot==-1)
-                pivot=i;
-                end
-        end
-
-        if(lx>ly)
-            MedianCutAux(xMin,pivot,yMin,yMax,iter+1,1);
-            MedianCutAux(pivot+1,xMax,yMin,yMax,iter+1,1);
-        else
-            MedianCutAux(xMin,pivot,yMin,yMax,iter+1,0);
-            MedianCutAux(pivot+1,xMax,yMin,yMax,iter+1,0);
-        end
-        
-    else
-        %Cut on the Y-axis
-        for i=yMin:yMax
-            c=sum(sum(L(yMin:i,xMin:xMax)));
+    tot = sum(sum(L(yMin:yMax,xMin:xMax)));
+    pivot = -1;
+  
+    if(lx>ly)
+        %cut on the X-axis
+        for i=xMin:(xMax-1)
+            c = sum(sum(L(yMin:yMax,xMin:i)));
             if(c>=(tot-c)&&pivot==-1)
-                pivot=i;
+                pivot = i;
+            end
+        end
+
+        MedianCutAux(xMin,    pivot, yMin, yMax, iter+1);
+        MedianCutAux(pivot+1, xMax,  yMin, yMax, iter+1);
+    else
+        %cut on the Y-axis
+        for i=yMin:(yMax-1)
+            c = sum(sum(L(yMin:i,xMin:xMax)));
+            if(c>=(tot-c)&&pivot==-1)
+                pivot = i;
             end
         end
         
-        if(ly>lx)
-            MedianCutAux(xMin,xMax,yMin,pivot,iter+1,0);
-            MedianCutAux(xMin,xMax,pivot+1,yMax,iter+1,0);
-        else
-            MedianCutAux(xMin,xMax,yMin,pivot,iter+1,1);
-            MedianCutAux(xMin,xMax,pivot+1,yMax,iter+1,1);    
-        end
+        MedianCutAux(xMin, xMax, yMin,    pivot, iter+1);
+        MedianCutAux(xMin, xMax, pivot+1, yMax,  iter+1);
     end
 else
     %Generation of the light source
-    lights=[lights,CreateLight(xMin,xMax,yMin,yMax,L,imgWork)];
+    lights = [lights, CreateLight(xMin,xMax,yMin,yMax,L,imgWork)];
 end
 
 end
