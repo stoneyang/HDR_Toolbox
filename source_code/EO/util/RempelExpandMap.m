@@ -1,16 +1,16 @@
 function expand_map=RempelExpandMap(L, video_flag)
 %
-%		 expand_map=RempelExpandMap(L, video_flag)
+%	expand_map=RempelExpandMap(L, video_flag)
 %
 %
-%		 Input:
-%			-L: a luminance channel
-%			-video_flag: a flag, true if a video is used
+%	 Input:
+%		-L: a luminance channel
+%		-video_flag: a flag, true if a video is used
 %
-%		 Output:
-%			-expand_map: the final expand map
+%	 Output:
+%		-expand_map: the final expand map
 %
-%     Copyright (C) 2011  Francesco Banterle
+%     Copyright (C) 2011-14 Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -27,31 +27,31 @@ function expand_map=RempelExpandMap(L, video_flag)
 %
 
 %saturated pixels threshold
-thresholdImg=250/255;		%Images
-thresholdVideo=230/255;		%Videos
+thresholdImg   = 250/255;		%Images
+thresholdVideo = 230/255;		%Videos
 
-if(~exist('video_flag'))
+if(~exist('video_flag','var'))
     video_flag = 0;
 end
 
 if(video_flag)
-	threshold=thresholdVideo;
+     threshold=thresholdVideo;
 else
-	threshold=thresholdImg;
+     threshold=thresholdImg;
 end
 
 %binary map for saturated pixels
-mask=zeros(size(L));
-mask(L>threshold)=1;
-mask=double(bwmorph(mask,'clean'));
+mask = zeros(size(L));
+mask(L>threshold) = 1;
+mask = double(bwmorph(mask,'clean'));
 
 %Filtering with a 150x150 Gaussian kernel size
-sbeFil=GaussianFilter(mask,30);
+sbeFil = GaussianFilter(mask,30);
 
 %Normalization
 sbeFilMax=max(sbeFil(:));									
 if(sbeFilMax>0.0)
-	sbeFil=sbeFil/sbeFilMax;
+    sbeFil=sbeFil/sbeFilMax;
 end
 
 %Calculation of the gradients of L using a 5x5 mask to have thick edges
