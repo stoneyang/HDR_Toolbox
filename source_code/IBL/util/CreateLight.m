@@ -29,23 +29,29 @@ function newLight=CreateLight(xMin,xMax,yMin,yMax,L,img)
 %
 
 %Color
-tot=(yMax-yMin+1)*(xMax-xMin+1);
-totL=sum(sum(L(yMin:yMax,xMin:xMax)));
+tot  = (yMax-yMin+1)*(xMax-xMin+1);
+tmpL = L(yMin:yMax,xMin:xMax);
+totL = sum(tmpL(:));
+
 if((tot>0)&(totL>0))
-    col=reshape(img(yMin:yMax,xMin:xMax,:),tot,1,3);
-    value=sum(col,1);
+    %Color value
+    col = reshape(img(yMin:yMax,xMin:xMax,:),tot,1,size(img,3));
+    value = sum(col,1);
+    
     %Position
     [X,Y] = meshgrid(xMin:xMax,yMin:yMax);
-    %X
-    Xval=L(yMin:yMax,xMin:xMax).*X;
-    Xval=sum(sum(Xval))/totL;
-    %Y
-    Yval=L(yMin:yMax,xMin:xMax).*Y;
-    Yval=sum(sum(Yval))/totL;
+    
+    x_light = tmpL.*X;
+    x_light = sum(x_light(:))/totL;
+    
+    y_light = tmpL.*Y;
+    y_light = sum(y_light(:))/totL;
   
-    [r,c]=size(L);
-    newLight=struct('color',value,'x',Xval/c,'y',Yval/r);
+    [r,c] = size(L);
+    
+    newLight = struct('color',value,'x',x_light/c,'y',y_light/r);
 else
-    newLight=[];   
+    newLight = [];   
 end
+
 end

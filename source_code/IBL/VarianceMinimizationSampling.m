@@ -1,7 +1,7 @@
-function [imgOut,lights]=MedianCut(img,nlights,falloff)
+function [imgOut,lights]=VarianceMinimizationSampling(img,nlights,falloff)
 %
 %
-%        [imgOut,lights]=MedianCut(img,nlights,falloff)
+%        [imgOut,lights]=VarianceMinimizationSampling(img,nlights,falloff)
 %
 %
 %        Input:
@@ -14,7 +14,7 @@ function [imgOut,lights]=MedianCut(img,nlights,falloff)
 %           -imgOut: an image with sampled points
 %           -lights: a list of directional lights
 %
-%     Copyright (C) 2011-13  Francesco Banterle
+%     Copyright (C) 2014  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@ function [imgOut,lights]=MedianCut(img,nlights,falloff)
 %     GNU General Public License for more details.
 % 
 %     You should have received a copy of the GNU General Public License
-%     along with this program. If not, see <http://www.gnu.org/licenses/>.
+%     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
 if(~exist('nlights','var'))
@@ -46,7 +46,7 @@ global lights;
 
 %falloff compensation
 if(falloff)
-    img=FallOffEnvMap(img);
+    img = FallOffEnvMap(img);
 end
 
 %Global variables initialization
@@ -59,11 +59,7 @@ limitSize = 2;%limitSize=max([c,r])/2^nluce;
 
 lights = [];
 
-if(c>r)
-    MedianCutAux(1,c,1,r,0,1);
-else
-    MedianCutAux(1,c,1,r,0,0);
-end
+VarianceMinimizationSamplingAux(1,c,1,r,0);
 
 imgOut = GenerateLightMap(lights,c,r);
 
