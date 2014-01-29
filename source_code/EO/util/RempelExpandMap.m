@@ -1,11 +1,11 @@
-function expand_map=RempelExpandMap(L, video_flag)
+function expand_map=RempelExpandMap(L, bVideoFlag)
 %
-%	expand_map=RempelExpandMap(L, video_flag)
+%	expand_map=RempelExpandMap(L, bVideoFlag)
 %
 %
 %	 Input:
 %		-L: a luminance channel
-%		-video_flag: a flag, true if a video is used
+%		-bVideoFlag: a flag, true if a video is used
 %
 %	 Output:
 %		-expand_map: the final expand map
@@ -30,14 +30,14 @@ function expand_map=RempelExpandMap(L, video_flag)
 thresholdImg   = 250/255;		%Images
 thresholdVideo = 230/255;		%Videos
 
-if(~exist('video_flag','var'))
-    video_flag = 0;
+if(~exist('bVideoFlag','var'))
+    bVideoFlag = 0;
 end
 
-if(video_flag)
-     threshold=thresholdVideo;
+if(bVideoFlag)
+     threshold = thresholdVideo;
 else
-     threshold=thresholdImg;
+     threshold = thresholdImg;
 end
 
 %binary map for saturated pixels
