@@ -55,7 +55,7 @@ imgWork = img;
 nLights = round(log2(nlights));
 
 [r,c] = size(L);
-limitSize = 2;%limitSize=max([c,r])/2^nluce;
+limitSize = 2;
 
 lights = [];
 
