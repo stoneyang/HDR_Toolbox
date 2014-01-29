@@ -40,6 +40,10 @@ if(~exist('noiseReduction','var'))
     noiseReduction = 0;
 end
 
+if(~exist('bVideoFlag','var'))
+    bVideoFlag = 0;
+end
+
 %Gamma removal
 if(gammaRemoval>0.0)
     img = img.^gammaRemoval;
