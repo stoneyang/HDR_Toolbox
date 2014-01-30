@@ -28,6 +28,6 @@ function vec=PolarVec3(theta, phi)
 %
 
 sinTheta=sin(theta);
-vec=[cos(phi)*sinTheta,cos(theta),sin(phi)*sinTheta];
+vec = [cos(phi)*sinTheta, cos(theta), sin(phi)*sinTheta];
 
 end

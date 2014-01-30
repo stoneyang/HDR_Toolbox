@@ -29,11 +29,13 @@ function imgOut = EvaluationSH(SH, Dx,Dy,Dz)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-c=[0.429043,0.511664,0.743125,0.886227,0.247708];
+c = [0.429043,0.511664,0.743125,0.886227,0.247708];
 
+col = size(SH,1);
 [r1,c1] = size(Dx);
-imgOut = zeros(r1,c1,3);
-for i=1:3
+imgOut = zeros(r1,c1,col);
+
+for i=1:col
     imgOut(:,:,i) = ...
         c(1)*SH(i,9)*(Dx.^2-Dy.^2)+...
         c(3)*SH(i,7)*(Dz.^2)+...

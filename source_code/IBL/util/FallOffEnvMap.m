@@ -1,7 +1,7 @@
-function img=FallOffEnvMap(img)
+function img = FallOffEnvMap(img)
 %
 %
-%        img=FallOffEnvMap(img)
+%        img = FallOffEnvMap(img)
 %
 %
 %        Input:
@@ -28,9 +28,9 @@ function img=FallOffEnvMap(img)
 
 [r,c,col]=size(img);
 
-Y=FallOff(r,c);
+Y = FallOff(r,c);
 
-for i=1:3
+for i=1:col
     img(:,:,i)=img(:,:,i).*Y;
 end
 

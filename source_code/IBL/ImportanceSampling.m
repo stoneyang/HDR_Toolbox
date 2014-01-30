@@ -41,7 +41,7 @@ end
 
 %falloff compensation
 if(falloff)
-    img=FallOffEnvMap(img);
+    img = FallOffEnvMap(img);
 end
 
 %Luminance channel
@@ -55,7 +55,7 @@ for i=1:c
     %1D Distribution
     tmpDistr = Create1DDistribution(L(:,i));
     cDistr = [cDistr, tmpDistr];
-    values(i)=tmpDistr.maxCDF;
+    values(i) = tmpDistr.maxCDF;
 end
 rDistr = Create1DDistribution(values);
 
@@ -63,6 +63,7 @@ rDistr = Create1DDistribution(values);
 samples = [];
 imgOut = zeros(size(L));
 pi22 = 2*pi^2;
+
 for i=1:nSamples
     %random values in [0,1]
     u=rand(2,1);

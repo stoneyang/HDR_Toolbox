@@ -1,7 +1,7 @@
-function img=GenerateLightMap(lights,width,height)
+function img=GenerateLightMap(lights, width, height)
 %
 %
-%        img=GenerateLightMap(lights,width,height)
+%        img=GenerateLightMap(lights, width, height)
 %
 %
 %        Input:
@@ -29,15 +29,26 @@ function img=GenerateLightMap(lights,width,height)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-%height = round(width/2);
-img=zeros(height,width,3);
+if(isempty(lights))
+    error('lights can not be empty');
+end
+
+if(~exist('width','var')||~exist('height','var'))
+    width  = 512;
+    height = 256;
+end
+
+col = length(lights(1).color);
+
+img = zeros(height, width, col);
 
 for i=1:length(lights)
-    YY=ClampImg(round(lights(i).y*height),1,height);
-    XX=ClampImg(round(lights(i).x*width),1,width);
+    YY = ClampImg(round(lights(i).y*height),1,height);
+    XX = ClampImg(round(lights(i).x*width),1,width);
+    
     if(isnan(XX)==0)
-        for j=1:3
-            img(YY,XX,j)=lights(i).color(j);
+        for j=1:col
+            img(YY, XX, j) = lights(i).color(j);
         end
     end
 end

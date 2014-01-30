@@ -30,36 +30,43 @@ function [imgOut,SH] = DiffuseConvolutionSH(img, falloff)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-%falloff compensation
-if(falloff)
-    img=FallOffEnvMap(img);
+if(~exist('falloff','var'))
+    falloff = 0;
 end
 
-SH = zeros(3,9);
+%falloff compensation
+if(falloff)
+    img = FallOffEnvMap(img);
+end
+
+[r,c,col]=size(img);
+
+SH = zeros(col, 9);
 
 %projection constants
-y00=0.282095;
-y1x=0.488603;
-y2x=1.092548;
-y20=0.315392;
-y22=0.546274;
+y00 = 0.282095;
+y1x = 0.488603;
+y2x = 1.092548;
+y20 = 0.315392;
+y22 = 0.546274;
 
 %generation of directions
-[r,c,col]=size(img);
-[X,Y]=meshgrid(1:c,1:r);
-phi = pi*2*(X/c);
+
+[X,Y] = meshgrid(1:c,1:r);
+phi   = pi*2*(X/c);
 theta = pi*(Y/r);
 sinTheta = sin(theta);
+
 Dx = cos(phi).*sinTheta;
 Dy = cos(theta);
 Dz = sin(phi).*sinTheta;
 
-for i=1:3
+for i=1:col
     img(:,:,i) = img(:,:,i).*sinTheta;
 end
 
 %Environment projection on SH
-for i=1:3    
+for i=1:col
     %SH 0 
     SH(i,1) = mean(mean(img(:,:,i).*y00));
     %SH 1 -1 y
