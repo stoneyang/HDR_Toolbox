@@ -1,10 +1,11 @@
-function expand_map=RempelExpandMap(L, bVideoFlag)
+function expand_map = RempelExpandMap(L, gammaRemoval, bVideoFlag)
 %
-%	expand_map=RempelExpandMap(L, bVideoFlag)
+%	expand_map = RempelExpandMap(L, gammaRemoval, bVideoFlag)
 %
 %
 %	 Input:
 %		-L: a luminance channel
+%       -gammaRemoval: the gamma value to be removed if known
 %       -bVideoFlag: a flag, true if img is a frame of a video
 %
 %	 Output:
@@ -26,6 +27,10 @@ function expand_map=RempelExpandMap(L, bVideoFlag)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
+if(~exist('gammaRemoval','var'))
+    gammaRemoval = -1;
+end
+
 %saturated pixels threshold
 thresholdImg   = 250/255;		%Images
 thresholdVideo = 230/255;		%Videos
@@ -40,52 +45,57 @@ else
      threshold = thresholdImg;
 end
 
+if(gammaRemoval>0)
+    threshold = threshold.^gammaRemoval;
+end
+
 %binary map for saturated pixels
 mask = zeros(size(L));
 mask(L>threshold) = 1;
-mask = double(bwmorph(mask,'clean'));
 
 %Filtering with a 150x150 Gaussian kernel size
 sbeFil = GaussianFilter(mask,30);
 
-%Normalization
-sbeFilMax=max(sbeFil(:));									
-if(sbeFilMax>0.0)
-    sbeFil=sbeFil/sbeFilMax;
-end
-
 %Calculation of the gradients of L using a 5x5 mask to have thick edges
-Sy=[-1,-4,-6,-4,-1,...
+Sy = [ -1,-4,-6,-4,-1,...
        -2,-8,-12,-8,-2,...
-       0,0,0,0,0,...
-       2,8,12,8,2,...
-       1,4,6,4,1];
-Sx=Sy';
+        0,0,0,0,0,...
+        2,8,12,8,2,...
+        1,4,6,4,1];
+Sx = Sy';
 
-dy=imfilter(L,Sy);
-dx=imfilter(L,Sx);
+norm = sum(abs(Sx(:)));
 
-grad=sqrt(dx.^2+dy.^2);         %magnitude of the directional gradient
-grad=grad/max(grad(:));
+dy = imfilter(L, Sy/norm);
+dx = imfilter(L, Sx/norm);
+
+grad = sqrt(dx.^2+dy.^2);         %magnitude of the directional gradient
 
 %threshold for the gradient
-tr=0.05;                       
+tr = 0.015;%this threshold is for gamma = 2.2
+
+if(gammaRemoval<=0)
+    tr = tr.^2.2;
+end
 
 %maximum number of iteration for the flood fill
-maxIter=2048;
+maxIter = max(size(L));
 for k=1:maxIter
     %Flood fill
-    tmp=double(bwmorph(mask,'dilate'));
-    tmp=abs(tmp-mask);
+    tmp  = double(bwmorph(mask,'dilate'));   
+    tmp  = abs(tmp-mask);
     val1 = sum(mask(:));
-    mask((tmp>0.5)&grad<tr)=1;
+    mask((tmp>0.75)&(grad<tr)&(sbeFil>0.05)) = 1;
    
     %ended?
     if((sum(mask(:))-val1)<1)
+        disp(k);
         break;
     end  
 end
 
+mask = imopen(mask, ones(3));
+
 %Multiply the flood fill mask with the BEF
-expand_map=sbeFil.*GaussianFilter(mask,1);
+expand_map = sbeFil.*GaussianFilter(mask, 1);
 end

@@ -46,7 +46,7 @@ end
 
 %Gamma removal
 if(gammaRemoval>0.0)
-    img = img.^gammaRemoval;
+    img  = img.^gammaRemoval;
 end
 
 %noise reduction using a gentle bilateral filter of size 4 pixels
@@ -57,29 +57,23 @@ if(noiseReduction)
     end
 end
 
-
 %Luminance channel
 L = lum(img);
 
-%linear scale
-%   Black Levels 0.3 Cd/m^2
-%   White Levels 1200 Cd/m^2
-%
-
-maxL = 1200.0;           %maxmimum luminance as in the original paper
-rescale_alpha = 4.0;     %rescale alpha as in the original paper
-
 %Luminance expansion
-Lexp=(L+1/256)*(maxL-0.3);
+white_level = 1200.0; %White Levels 1200 Cd/m^2
+black_level = 0.3;    %Black Levels 0.3 Cd/m^2
+Lexp = L*(white_level-black_level)+black_level;
 
 %Generate expand map
-expand_map = RempelExpandMap(L, bVideoFlag);
+expand_map = RempelExpandMap(L, gammaRemoval, bVideoFlag);
 
 %Remap expand map range in [1,..., rescale_alpha]
+rescale_alpha = 4.0;
 expand_map = expand_map*(rescale_alpha-1)+1;
 
 %Final HDR Luminance
-Lfinal=expand_map.*Lexp;
+Lfinal = expand_map.*Lexp;
 
 %Removing the old luminance
 imgOut = zeros(size(img));

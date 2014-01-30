@@ -31,7 +31,7 @@ function expand_map=RempelExpandMapPyr(L, video_flag)
 thresholdImg=250/255;		%Images
 thresholdVideo=230/255;		%Videos
 
-if(~exist('video_flag'))
+if(~exist('video_flag','var'))
     video_flag = 0;
 end
 
