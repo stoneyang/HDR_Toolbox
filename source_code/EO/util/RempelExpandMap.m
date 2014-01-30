@@ -75,7 +75,7 @@ grad = sqrt(dx.^2+dy.^2);         %magnitude of the directional gradient
 tr = 0.015;%this threshold is for gamma = 2.2
 
 if(gammaRemoval<=0)
-    tr = tr.^2.2;
+    tr = tr^(1.0/2.2);
 end
 
 %maximum number of iteration for the flood fill
