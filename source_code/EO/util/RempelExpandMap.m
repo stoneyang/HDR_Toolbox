@@ -85,7 +85,7 @@ for k=1:maxIter
     tmp  = double(bwmorph(mask,'dilate'));   
     tmp  = abs(tmp-mask);
     val1 = sum(mask(:));
-    mask((tmp>0.75)&(grad<tr)&(sbeFil>0.05)) = 1;
+    mask((tmp>0.75)&(grad<tr)&(sbeFil>0.01)) = 1;
    
     %ended?
     if((sum(mask(:))-val1)<1)
