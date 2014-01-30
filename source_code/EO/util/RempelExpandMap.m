@@ -1,15 +1,15 @@
 function expand_map = RempelExpandMap(L, gammaRemoval, bVideoFlag)
 %
-%	expand_map = RempelExpandMap(L, gammaRemoval, bVideoFlag)
+%	 expand_map = RempelExpandMap(L, gammaRemoval, bVideoFlag)
 %
 %
-%	 Input:
-%		-L: a luminance channel
+%    Input:
+%       -L: a luminance channel
 %       -gammaRemoval: the gamma value to be removed if known
 %       -bVideoFlag: a flag, true if img is a frame of a video
 %
-%	 Output:
-%		-expand_map: the final expand map
+%     Output:
+%       -expand_map: the final expand map
 %
 %     Copyright (C) 2011-14 Francesco Banterle
 % 
