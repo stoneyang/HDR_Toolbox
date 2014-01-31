@@ -43,8 +43,6 @@ if(inverse==0)
     
     imgOut = ConvertLinearSpace(imgLMS, mtxLMStoIPT);
 else
-
-if(inverse==1)
     invGamma = 1.0/0.43;
     
     imgLMS = ConvertLinearSpace(img, inv(mtxLMStoIPT));
