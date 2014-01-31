@@ -49,8 +49,9 @@ if(inverse==0)%forward transform
     imgOut(:,:,2) = 500*(CIELabFunction(img(:,:,1), 0) - fY);
     %b
     imgOut(:,:,3) = 200*(fY - CIELabFunction(img(:,:,3), 0));   
-    
-else%inverse transform
+end
+
+if(inverse==1)%inverse transform
     tmp = (img(:,:,1)+16)/116;
     %Y
     imgOut(:,:,2) = conv_whitePoint(2)*CIELabFunction(tmp, 1);
