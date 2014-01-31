@@ -5,8 +5,8 @@ function imgOut = LeeKimTMOv_frame(img, imgTmoPrev, fBeta, fLambda)
 %
 %       Input:
 %           -img: HDR frame at time i
-%           -imgTmoPrev: image tone mapped and warped at the previous frame
-%           -fBeta: 
+%           -imgTmoPrev: previous frame tone mapped and warped
+%           -fBeta: beta parameter of the Fattal and Lischinski TMO
 %           -fLambda: smoothing constraint between frames
 %
 %       Output:
@@ -36,7 +36,7 @@ if(~exist('fBeta','var'))
 end
 
 if(~exist('fLambda','var'))
-    fLambda = 0.3;
+    fLambda = 0.15;
 end
 
 %Luminance channel
