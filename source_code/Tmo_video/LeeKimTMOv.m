@@ -97,7 +97,7 @@ for i=1:hdrv.totalFrames
     frame(frame<0) = 0;   
     
     if(i==1)
-        frameOut = FattalTMO(frame, fBeta);
+        frameOut = FattalTMO(frame, fBeta, 0);
     else
         %Computing optical flow between frame and framePrev
         offset_map = OpticalFlowSlow(log(framePrev+1), log(frame+1), 7, 5);
