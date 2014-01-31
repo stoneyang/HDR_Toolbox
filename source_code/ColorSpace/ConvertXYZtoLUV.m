@@ -65,8 +65,9 @@ if(inverse==0)%forward transform
     %V channel
     V_prime = 9*img(:,:,2)./norm;
     imgOut(:,:,3) = 13*L_star.*(V_prime-V_n_prime);   
-    
-else%inverse transform
+end
+
+if(inverse==1)%inverse transform
     c1 = (3/29)^3;
     
     U_prime = img(:,:,2)./(13*img(:,:,1))+U_n_prime;
