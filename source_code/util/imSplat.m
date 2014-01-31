@@ -32,7 +32,7 @@ function [imgOut,counter_map] = imSplat(r,c,imSprite,splat_pos,splat_power)
 col = size(splat_power,2);
 [rS,cS] = size(imSprite);
 
-if(~exist('splat_power'))
+if(~exist('splat_power','var'))
     splat_power = ones(size(splat_pos,2),col);
 end
 
