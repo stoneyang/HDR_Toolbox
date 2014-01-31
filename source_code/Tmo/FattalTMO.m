@@ -1,4 +1,4 @@
-function imgOut = FattalTMO(img, fBeta)
+function imgOut = FattalTMO(img, fBeta, bNormalization)
 %
 %       imgOut = FattalTMO(img, fBeta)
 %
@@ -6,6 +6,8 @@ function imgOut = FattalTMO(img, fBeta)
 %       Input:
 %           -img: HDR image
 %           -fBeta: 
+%           -bNormalization: a flag for applying normalization
+%            at the end with robust statistics
 %
 %       Output:
 %           -imgOut: tone mapped image
@@ -31,6 +33,10 @@ check13Color(img);
 
 if(~exist('fBeta','var'))
     fBeta = 0.95;
+end
+
+if(~exist('bNormalization','var'))
+    bNormalization = 1;
 end
 
 %Luminance channel
@@ -81,7 +87,10 @@ divG = RemoveSpecials(dx+dy);
 
 %Solving Poisson equation
 Ld = exp(PoissonSolver(divG));
-Ld = ClampImg(Ld/MaxQuart(Ld, 0.99995),0,1);
+
+if(bNormalization)
+    Ld = ClampImg(Ld/MaxQuart(Ld, 0.99995),0,1);
+end
 
 %Changing luminance
 imgOut = ChangeLuminance(img, Lori, Ld);
