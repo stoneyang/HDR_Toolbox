@@ -89,7 +89,6 @@ divG = RemoveSpecials(dx+dy-fLambda*P_lum);
 
 %Solving Poisson equation
 Ld = exp(PoissonSolver(divG,fLambda));
-Ld = ClampImg(Ld/MaxQuart(Ld, 0.99995),0,1);
 
 %Changing luminance
 imgOut = ChangeLuminance(img, Lori, Ld);
