@@ -28,7 +28,7 @@ function Ft = CIELabFunction(t, inverse)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-if(inverse==0)
+if(inverse==0) %forward function
     Ft = zeros(size(t));
     
     c1 = (6/29)^3;
@@ -37,7 +37,9 @@ if(inverse==0)
     
     Ft(t> c1) = t(t> c1).^(1/3);
     Ft(t<=c1) = t(t<=c1)*c2 + c3;
-else
+end
+
+if(inverse==1) %inverse function
     Ft = zeros(size(t));
 
     c1 = 6/29;
