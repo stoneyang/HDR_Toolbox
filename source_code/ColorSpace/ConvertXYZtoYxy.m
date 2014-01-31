@@ -32,11 +32,7 @@ check3Color(img);
 [r,c,col] = size(img);
 imgOut = zeros(r,c,col);
 
-if(inverse)%inverse transform
-    imgOut(:,:,1) = (img(:,:,2)./img(:,:,3)).*img(:,:,1);
-    imgOut(:,:,2) = img(:,:,1);
-    imgOut(:,:,3) = img(:,:,1)./img(:,:,3)-imgOut(:,:,1)-imgOut(:,:,2);
-else %forward transform   
+if(inverse==0)%forward transform   
     norm = zeros(r,c);
     for i=1:3
         norm = norm + img(:,:,i);
@@ -44,6 +40,12 @@ else %forward transform
     imgOut(:,:,1) = img(:,:,2);
     imgOut(:,:,2) = img(:,:,1)./(norm);
     imgOut(:,:,3) = img(:,:,2)./(norm);
+end
+
+if(inverse==1)%inverse transform
+    imgOut(:,:,1) = (img(:,:,2)./img(:,:,3)).*img(:,:,1);
+    imgOut(:,:,2) = img(:,:,1);
+    imgOut(:,:,3) = img(:,:,1)./img(:,:,3)-imgOut(:,:,1)-imgOut(:,:,2);
 end
 
 imgOut = RemoveSpecials(imgOut);
