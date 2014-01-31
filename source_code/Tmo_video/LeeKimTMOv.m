@@ -96,7 +96,7 @@ for i=1:hdrv.totalFrames
     frame = RemoveSpecials(frame);
     frame(frame<0) = 0;   
     
-    if(i==1)
+    if(i==1)%Note: normalization has to be taken off
         frameOut = FattalTMO(frame, fBeta, 0);
     else
         %Computing optical flow between frame and framePrev
