@@ -36,7 +36,7 @@ if(inverse==0)%from linear RGB to sRGB
     gamma_inv = 1.0/2.4;
     imgOut(img<=0.0031308) = 12.92*img(img<=0.0031308);
     imgOut(img> 0.0031308) = (1+a)*(img(img>0.0031308).^gamma_inv)-a;
-else
+end
 
 if(inverse==1)%from sRGB to linear RGB
     gamma = 2.4;
