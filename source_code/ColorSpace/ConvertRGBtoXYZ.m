@@ -35,7 +35,7 @@ mtxRGBtoXYZ = [  0.4124, 0.3576, 0.1805;...
 
 if(inverse==0)
     imgOut = ConvertLinearSpace(img, mtxRGBtoXYZ);
-else
+end
 
 if(inverse==1)
     imgOut = ConvertLinearSpace(img, inv(mtxRGBtoXYZ));
