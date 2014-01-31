@@ -38,50 +38,52 @@ if(~exist('vMax'))
     vMax = -1;
 end
 
-%Normalization
+%Computing maximum value
 if((vMax>0.0)&(vMax<1.0))
     maxImg = MaxQuart(img,vMax);
 else
-    maxImg = max(max(max(img)));
+    maxImg = max(img(:));
 end
 
-if((maxImg>0.0)&(maxImg>1.0))
-    img = img / max(max(max(img)));
+%Normalization
+if(maxImg>1.0)
+    img = img / maxImg;
 end
 
 img = ClampImg(img,0.0,1.0);
 
 %Luminance channel
-L=sqrt(lum(img));
+L = sqrt(lum(img));
 
 %32x32 Gaussian Filter. In the general case the PSF of the projector has to
 %be measured and employed to have a precise result.
 [r,c] = size(L);
-Ltmp = imresize(L,1.0/6.0,'bilinear');
-Ltmp = GaussianFilterWindow(Ltmp,2);
-L = imresize(Ltmp,[r,c],'bilinear');
+Ltmp = imresize(L, 1.0/6.0, 'bilinear');
+Ltmp = GaussianFilterWindow(Ltmp, 2);
+L = imresize(Ltmp, [r,c], 'bilinear');
 
 %Range reduction and quantization at 8-bit for the luminance layer. In this
 %case to model the projector response function is used a gamma 2.2. In the
 %general case that is not true and the response function of the projector has to
 %be measured and employed to have a precise result.
 invGamma = 1.0/2.2;
-imgLum = round(255*(L.^invGamma))/255;
+imgLum   = round(255*(L.^invGamma))/255;
 
 %Range reduction and quantization at 8-bit for the detail layer. In this
 %case to model the LCD display response function is used a gamma 2.2. In 
 %the general case that is not true and the response function of the monitor
 %has to be measured and employed to have a precise result.
-imgDet = zeros(size(img));
+imgDet    = zeros(size(img));
 tmpImgLum = imgLum.^2.2;
-for i=1:3
+
+for i=1:size(img,3)
     imgDet(:,:,i) = round(255*(img(:,:,i)./tmpImgLum).^invGamma)/255;
 end
 
-imgDet = RemoveSpecials(imgDet);
-
-for i=1:3
-    imgRec(:,:,i) = (imgDet(:,:,i).^2.2).*(imgLum.^2.2);
+for i=1:size(img,3)
+    imgRec(:,:,i) = maxImg*(imgDet(:,:,i).^2.2).*(imgLum.^2.2);
 end
+
+imgRec = RemoveSpecials(imgRec);
 
 end
