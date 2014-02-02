@@ -70,9 +70,8 @@ dy = imfilter(L, Sy/norm);
 dx = imfilter(L, Sx/norm);
 
 grad = sqrt(dx.^2+dy.^2);         %magnitude of the directional gradient
-
 %threshold for the gradient
-tr = 0.015;%this threshold is for gamma = 2.2
+tr = 0.05;%this threshold is for gamma = 2.2
 
 if(gammaRemoval<=0)
     tr = tr^(1.0/2.2);
@@ -85,7 +84,7 @@ for k=1:maxIter
     tmp  = double(bwmorph(mask,'dilate'));   
     tmp  = abs(tmp-mask);
     val1 = sum(mask(:));
-    mask((tmp>0.75)&(grad<tr)&(sbeFil>0.01)) = 1;
+    mask((tmp>0.75)&(grad<tr)&(sbeFil>0.001)) = 1;
    
     %ended?
     if((sum(mask(:))-val1)<1)
@@ -95,7 +94,6 @@ for k=1:maxIter
 end
 
 mask = imopen(mask, ones(3));
-
 %Multiply the flood fill mask with the BEF
 expand_map = sbeFil.*GaussianFilter(mask, 1);
 end
