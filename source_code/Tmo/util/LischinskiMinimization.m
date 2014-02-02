@@ -32,15 +32,15 @@ function [result,A] = LischinskiMinimization(L, g, W, LM_alpha, LM_lambda)
 %
 
 %Parameters Initialization
-if(~exist('W'))
+if(~exist('W','var'))
     W = ones(size(L));
 end
 
-if(~exist('LM_alpha'))
+if(~exist('LM_alpha','var'))
     LM_alpha = 1;
 end
 
-if(~exist('LM_lambda'))
+if(~exist('LM_lambda','var'))
     LM_lambda = 0.4;
 end
 
