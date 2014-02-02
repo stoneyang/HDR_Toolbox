@@ -30,19 +30,22 @@ function [imgOut,lights]=MedianCut(img,nlights,falloff)
 %     along with this program. If not, see <http://www.gnu.org/licenses/>.
 %
 
-if(~exist('nlights','var'))
-    nlights = 1024;
-end
-
-if(~exist('falloff','var'))
-    falloff = 0;
-end
-
 global L;
 global imgWork;
 global limitSize;
 global nLights;
 global lights;
+
+L = lum(img);
+[r,c] = size(L);
+
+if(~exist('nlights','var'))
+    nlights = 2.^(round(log2(min([r,c]))+2));
+end
+
+if(~exist('falloff','var'))
+    falloff = 0;
+end
 
 %falloff compensation
 if(falloff)
@@ -50,11 +53,9 @@ if(falloff)
 end
 
 %Global variables initialization
-L = lum(img);
 imgWork = img;
 nLights = round(log2(nlights));
 
-[r,c] = size(L);
 limitSize = 2;
 
 lights = [];

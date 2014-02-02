@@ -31,7 +31,7 @@ function [imgOut,lights]=VarianceMinimizationSampling(img,nlights,falloff)
 %
 
 if(~exist('nlights','var'))
-    nlights = 1024;
+    nlights = 2.^(round(log2(min([r,c]))+2));
 end
 
 if(~exist('falloff','var'))
