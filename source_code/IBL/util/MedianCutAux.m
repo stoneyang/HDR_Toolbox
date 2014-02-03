@@ -44,7 +44,7 @@ if((lx>limitSize)&&(ly>limitSize)&&(iter<nLights))
         end
 
         if(pivot==-1)
-            pivot = xMax=1;
+            pivot = xMax-1;
         end
         
         MedianCutAux(xMin,    pivot, yMin, yMax, iter+1);
@@ -60,7 +60,7 @@ if((lx>limitSize)&&(ly>limitSize)&&(iter<nLights))
         end
         
         if(pivot==-1)
-            pivot = yMax=1;
+            pivot = yMax-1;
         end
         
         MedianCutAux(xMin, xMax, yMin,    pivot, iter+1);
