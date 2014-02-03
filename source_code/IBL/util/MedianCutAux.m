@@ -42,8 +42,13 @@ if((lx>limitSize)&&(ly>limitSize)&&(iter<nLights))
             end
         end
 
-        MedianCutAux(xMin,    pivot, yMin, yMax, iter+1);
-        MedianCutAux(pivot+1, xMax,  yMin, yMax, iter+1);
+        if(pivot>0)
+            MedianCutAux(xMin,    pivot, yMin, yMax, iter+1);
+            MedianCutAux(pivot+1, xMax,  yMin, yMax, iter+1);
+        else
+            %Generation of the light source
+            lights = [lights, CreateLight(xMin,xMax,yMin,yMax,L,imgWork)];
+        end
     else
         %cut on the Y-axis
         for i=yMin:yMax
@@ -53,8 +58,13 @@ if((lx>limitSize)&&(ly>limitSize)&&(iter<nLights))
             end
         end
         
-        MedianCutAux(xMin, xMax, yMin,    pivot, iter+1);
-        MedianCutAux(xMin, xMax, pivot+1, yMax,  iter+1);
+        if(pivot>0)
+            MedianCutAux(xMin, xMax, yMin,    pivot, iter+1);
+            MedianCutAux(xMin, xMax, pivot+1, yMax,  iter+1);
+        else
+            %Generation of the light source
+            lights = [lights, CreateLight(xMin,xMax,yMin,yMax,L,imgWork)];
+        end
     end
 else
     %Generation of the light source
