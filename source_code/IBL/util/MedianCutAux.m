@@ -35,7 +35,7 @@ if((lx>limitSize)&&(ly>limitSize)&&(iter<nLights))
   
     if(lx>ly)
         %cut on the X-axis
-        for i=xMin:xMax
+        for i=xMin:(xMax-1)
             c = sum(sum(L(yMin:yMax,xMin:i)));
             if(c>=(tot-c)&&pivot==-1)
                 pivot = i;
@@ -51,7 +51,7 @@ if((lx>limitSize)&&(ly>limitSize)&&(iter<nLights))
         end
     else
         %cut on the Y-axis
-        for i=yMin:yMax
+        for i=yMin:(yMax-1)
             c = sum(sum(L(yMin:i,xMin:xMax)));
             if(c>=(tot-c)&&pivot==-1)
                 pivot = i;
