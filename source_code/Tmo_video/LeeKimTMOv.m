@@ -100,7 +100,7 @@ for i=1:hdrv.totalFrames
         frameOut = FattalTMO(frame, fBeta, 0);
     else
         %Computing optical flow between frame and framePrev
-        offset_map = OpticalFlowSlow(log(framePrev+1), log(frame+1), 7, 5);
+        offset_map = MotionEstimationHDR(framePrev, frame);
         %Warping
         imgWarped = imWarp(frameOutPrev, offset_map, 0);
         frameOut = LeeKimTMOv_frame(frame, imgWarped, fBeta, fLambda); 
@@ -111,6 +111,7 @@ for i=1:hdrv.totalFrames
     
     %Color correction
     frameOut = ColorCorrection(frameOut, fSaturation);
+    frameOut = frameOut/MaxQuart(frameOut, 0.99995);
     
     %Gamma/sRGB encoding
     if(bsRGB)
