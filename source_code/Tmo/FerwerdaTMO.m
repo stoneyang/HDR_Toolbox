@@ -1,6 +1,6 @@
-function imgOut=FerwerdaTMO(img, LdMax, Lda)
+function imgOut = FerwerdaTMO(img, LdMax, Lda)
 %
-%       imgOut=FerwerdaTMO(img, Lda, LdMax)
+%       imgOut = FerwerdaTMO(img, LdMax, Lda)
 %
 %
 %        Input:
@@ -26,7 +26,6 @@ function imgOut=FerwerdaTMO(img, LdMax, Lda)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %          -imgOut: tone mapped image
 
-%is it a three color channels image?
 check13Color(img);
 
 if(~exist('LdMax','var'))
@@ -42,7 +41,7 @@ if(Lda<0)
 end
 
 %Luminance channel
-L=lum(img);
+L = lum(img);
 
 %Luminance world adaptation
 Lwa = mean(L(:));
@@ -55,15 +54,20 @@ k  = ClampImg((1-(Lwa/2-0.01)/(10-0.01))^2,0,1);
 %Removing the old luminance
 col = size(img,3);
 imgOut = zeros(size(img));
-vec = [1.05,0.97,1.27];
-if(col==1)
-    vec(1) = 1;
+
+switch col
+    case 1
+        vec = 1;
+    case 3
+        vec = [1.05,0.97,1.27];
+    otherwise
+        vec = ones(col,1);        
 end
 
 for i=1:col
     imgOut(:,:,i)=(mC*img(:,:,i)+vec(i)*mR*k*L);
 end
 
-imgOut=imgOut/LdMax;
+imgOut = imgOut/LdMax;
 
 end
