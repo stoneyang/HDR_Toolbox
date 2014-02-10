@@ -26,6 +26,11 @@ function imgRGBE=float2RGBE(img)
 %
 
 [m,n,c]=size(img);
+
+if(c~=3)
+    error('RGBE encoding requires an RGB image!');
+end
+
 imgRGBE=zeros(m,n,4);
 
 v=max(img,[],3);
