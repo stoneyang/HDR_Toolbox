@@ -79,7 +79,7 @@ width  = len(2);
 if(~RLE||(count==(width*height*4)))
     tmpImg2 = zeros(width,height,4);
     for i=1:4
-        tmpImg2(:,:,i)=reshape(tmpImg(i:4:(width*height*4)),width,height);
+        tmpImg2(:,:,i) = reshape(tmpImg(i:4:(width*height*4)),width,height);
     end
     
     %from RGBE to Float

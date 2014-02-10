@@ -38,7 +38,7 @@ try
     end
     
 catch err
-    disp('This format is not supported.');
+    disp(['Error in reading ',filename]);
 end
 
 end
