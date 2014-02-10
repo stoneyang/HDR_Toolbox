@@ -1,14 +1,16 @@
-function imgOut = FerwerdaTMO(img, LdMax, Lda)
+function imgOut = FerwerdaTMO(img, LdMax, Lda, Lwa)
 %
-%       imgOut = FerwerdaTMO(img, LdMax, Lda)
+%       imgOut = FerwerdaTMO(img, LdMax, Lda, Lwa)
 %
 %
 %        Input:
 %           -img: input HDR image
 %           -LdMax: maximum luminance of the display in cd/m^2
 %           -Lda: adaptation luminance in cd/m^2
+%           -Lwa: world adaptation luminance in cd/m^2
 %
 %        Output:
+%           -imgOut: tone mapped image with values in [0,1]
 % 
 %     Copyright (C) 2010 Francesco Banterle
 %  
@@ -29,11 +31,11 @@ function imgOut = FerwerdaTMO(img, LdMax, Lda)
 check13Color(img);
 
 if(~exist('LdMax','var'))
-    LdMax = 100;
+    LdMax = 100; %assuming 100cd/m^2
 end
 
 if(~exist('Lda','var'))
-    Lda   = 30;
+    Lda   = 30; %assuming 30cd/m^2
 end
 
 if(Lda<0)
@@ -43,8 +45,9 @@ end
 %Luminance channel
 L = lum(img);
 
-%Luminance world adaptation
-Lwa = mean(L(:));
+if(~exist('Lwa','var'))
+    Lwa = mean(L(:));
+end
 
 %Contrast reduction
 mR = TpFerwerda(Lda)/TpFerwerda(Lwa);
