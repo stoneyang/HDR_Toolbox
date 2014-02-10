@@ -46,7 +46,7 @@ end
 L = lum(img);
 
 if(~exist('Lwa','var'))
-    Lwa = mean(L(:));
+    Lwa = MaxQuart(L,0.999)/2;
 end
 
 %Contrast reduction
