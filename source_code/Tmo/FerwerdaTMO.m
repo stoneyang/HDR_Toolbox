@@ -35,18 +35,15 @@ if(~exist('LdMax','var'))
 end
 
 if(~exist('Lda','var'))
-    Lda   = 30; %assuming 30cd/m^2
-end
-
-if(Lda<0)
-    Lda = LdMax/2;
+    Lda = LdMax/2; %as in the original paper
 end
 
 %Luminance channel
 L = lum(img);
 
 if(~exist('Lwa','var'))
-    Lwa = MaxQuart(L,0.999)/2;
+    Lwa = MaxQuart(L,0.999)/2; %as in the original paper
+    disp('Note: setting Lwa to default it may create dark images.');
 end
 
 %Contrast reduction
