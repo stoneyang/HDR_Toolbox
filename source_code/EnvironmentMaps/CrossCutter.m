@@ -28,11 +28,11 @@ function ret = CrossCutter(img, cb_name, cb_format)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-if(~exist('cb_name'))
+if(~exist('cb_name', 'var'))
     cb_name = 'output_cube_map';
 end
 
-if(~exist('cb_format'))
+if(~exist('cb_format', 'var'))
     cb_name = 'hdr';
 end
 
