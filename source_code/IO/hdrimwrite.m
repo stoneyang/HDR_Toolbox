@@ -63,7 +63,7 @@ switch extension
     %PIC-HDR format by Greg Ward (.hdr)
     case 'hdr'
         try
-            write_rgbe(img,filename,0);
+            write_rgbe(img,filename,1);
         catch
             try
                 write_rgbe(img,filename,0);

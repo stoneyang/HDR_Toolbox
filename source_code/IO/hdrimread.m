@@ -38,7 +38,8 @@ if((strcmpi(extension,'pic')==1)||(strcmpi(extension,'rgbe')==1))
     extension = 'hdr';
 end
 
-img=[];
+img = [];
+
 bLDR = 0;
 
 switch extension
@@ -47,11 +48,11 @@ switch extension
     case 'hdr'
         try
 		 %Uncompressed RGBE Image
-            img=read_rgbe(filename);  
+            img = read_rgbe(filename);  
         catch err  
             try 
                 %RLE compressed image
-                img=double(hdrread(filename));
+                img = double(hdrread(filename));
             catch err
                 disp('This HDR file can not be read.');
             end
@@ -60,7 +61,7 @@ switch extension
     %Portable float map
     case 'pfm'
         try
-            img=read_pfm(filename);
+            img = read_pfm(filename);
         catch
             disp('This PFM file can not be read.');
         end
@@ -94,4 +95,5 @@ end
 
 %Remove specials
 img = RemoveSpecials(img);
+
 end

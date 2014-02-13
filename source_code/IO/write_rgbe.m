@@ -44,68 +44,28 @@ fprintf(fid,'-Y %d +X %d\n',n,m);
 %convert from float to RGBE
 RGBEbuffer = uint8(float2RGBE(img));
 
+if((n<8) || (n>32767)) %RLE encoding is not allowed in these cases
+    bRLE = 0;
+end
+
+MIN_RLE_RUN = 4;
+
 if(bRLE)    
     for k=1:n
-        fwrite(fid, 127,'uint8');
-        fwrite(fid, 127,'uint8');
-        fwrite(fid, 127,'uint8');
-        fwrite(fid, 127,'uint8');
+        block = [2,2,bitshift(m,-8),bitand(m,255)];
+        fwrite(fid, block,'uint8');
 
         for j=1:4
             data = reshape(RGBEbuffer(k,:,j),m,1);
-            c = 1;        
-            while(c<m) 
-                %non run
-                notSame = -1;
-                maxLen  = min([c+127, m]);
+            cur = 1;        
+            while(cur<=m) 
 
-                for i=c:(maxLen-1)
-                    if(data(i)~=data(i+1))
-                        notSame = i + 1;
-                    else
-                        break;
-                    end
-                end
-
-                if(notSame>0)    
-                    fwrite(fid, length(c:notSame), 'uint8');
-                    fwrite(fid, data(c:notSame), 'uint8');
-                    c = notSame + 1;
-                end
-                
-                if(c==m)
-                    fwrite(fid, 1, 'uint8');
-                    fwrite(fid, data(c), 'uint8');                    
-                else
-                    %check for run
-                    same   = -1;
-                    maxLen = min([c+126, m]);
-
-                    for i=c:(maxLen-1)
-                        if(data(i)==data(i+1))
-                            same = i + 1;
-                        else
-                            break;
-                        end
-                    end
-
-                    if(same>0) 
-                        fwrite(fid, 128+length(c:same), 'uint8');
-                        fwrite(fid, data(same), 'uint8');
-                        c = same + 1;
-                    end
-                 if(c==m)
-                    fwrite(fid, 1, 'uint8');
-                    fwrite(fid, data(c), 'uint8');
-                end
-                   
-                end
-            end
+            end   
         end
-    end       
+    end
 else    
     %reshape of data
-    data=zeros(n*m*4,1);
+    data = zeros(n*m*4,1);
     for i=1:4
         C = i:4:(m*n*4);
         data(C) = reshape(RGBEbuffer(:,:,i)',m*n,1);
