@@ -44,13 +44,13 @@ fprintf(fid,'-Y %d +X %d\n',n,m);
 %convert from float to RGBE
 RGBEbuffer = uint8(float2RGBE(img));
 
-if(bRLE)
-    fwrite(fid, 127,'uint8');
-    fwrite(fid, 127,'uint8');
-    fwrite(fid, 127,'uint8');
-    fwrite(fid, 127,'uint8');
-    
+if(bRLE)    
     for k=1:n
+        fwrite(fid, 127,'uint8');
+        fwrite(fid, 127,'uint8');
+        fwrite(fid, 127,'uint8');
+        fwrite(fid, 127,'uint8');
+
         for j=1:4
             data = reshape(RGBEbuffer(k,:,j),m,1);
             c = 1;        
@@ -102,12 +102,6 @@ if(bRLE)
                 end
             end
         end
-        
-        fwrite(fid, 127,'uint8');
-        fwrite(fid, 127,'uint8');
-        fwrite(fid, 127,'uint8');
-        fwrite(fid, 127,'uint8');
-
     end       
 else    
     %reshape of data

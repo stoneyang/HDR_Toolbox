@@ -34,9 +34,11 @@ col = size(img,3);
 if(col==1)
     [r,c] = size(img);
     imgOut = zeros(r,c,3);
+    
     for i=1:3
         imgOut(:,:,i) = img;
     end
+    
     img = imgOut;
 end
 
@@ -58,10 +60,10 @@ end
 
 switch extension
     
-    %PIC-HDR format by Greg Ward
+    %PIC-HDR format by Greg Ward (.hdr)
     case 'hdr'
         try
-            write_rgbe(img,filename,1);
+            write_rgbe(img,filename,0);
         catch
             try
                 write_rgbe(img,filename,0);
@@ -70,42 +72,26 @@ switch extension
             end
         end
         
-    %Portable float map
+    %Portable float map (.pfm)
     case 'pfm'
         try
             write_pfm(img,filename);
         catch
             error('This PFM file can not be written.');
         end
-        
-    %Portable float map
-    case 'pfm'
-        try
-            write_pfm(img,filename);
-        catch
-            error('This PFM file can not be written.');
-        end        
-        
+    
+    %JPEG-HDR (.jpg)
     case 'jpg'
         try
-%            [dyn,dynClassicLog,dynClassic] = DynamicRange(img+(1/255));
-%            if(dynClassic>300)
-                JPEGHDREnc(img, filename, jpeg_hdr_quality);
-%            else
-%                imwrite(img, filename, 'Quality', jpeg_hdr_quality);
-%            end
+            JPEGHDREnc(img, filename, jpeg_hdr_quality);
         catch
             error('This JPEG file can not be written.');
         end
         
+    %HDR JPEG2000 (.jp2)
     case 'jp2'
          try
-%            [dyn,dynClassicLog,dynClassic] = DynamicRange(img+(1/255));
-%            if(dynClassic>300)            
-                HDRJPEG2000Enc(img, filename, hdr_jpeg_2000_ratio)
-%            else
-%                imwrite(img, filename, 'CompressionRatio', hdr_jpeg_2000_ratio);
-%            end
+            HDRJPEG2000Enc(img, filename, hdr_jpeg_2000_ratio)
          catch
              error('This JPEG 2000 file can not be written.');
          end        
