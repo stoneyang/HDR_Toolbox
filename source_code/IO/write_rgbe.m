@@ -48,21 +48,23 @@ if((n<8) || (n>32767)) %RLE encoding is not allowed in these cases
     bRLE = 0;
 end
 
-MIN_RLE_RUN = 4;
+%MIN_RLE_RUN = 4;
 
-if(bRLE)    
-    for k=1:n
-        block = [2,2,bitshift(m,-8),bitand(m,255)];
-        fwrite(fid, block,'uint8');
-
-        for j=1:4
-            data = reshape(RGBEbuffer(k,:,j),m,1);
-            cur = 1;        
-            while(cur<=m) 
-
-            end   
-        end
-    end
+if(bRLE)   
+    error('RLE has not implemented yet');
+%     TODO
+%     for k=1:n
+%         block = [2,2,bitshift(m,-8),bitand(m,255)];
+%         fwrite(fid, block,'uint8');
+% 
+%         for j=1:4
+%             data = reshape(RGBEbuffer(k,:,j),m,1);
+%             cur = 1;        
+%             while(cur<=m) 
+% 
+%             end   
+%         end
+%     end
 else    
     %reshape of data
     data = zeros(n*m*4,1);

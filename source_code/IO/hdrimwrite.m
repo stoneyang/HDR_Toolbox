@@ -63,13 +63,9 @@ switch extension
     %PIC-HDR format by Greg Ward (.hdr)
     case 'hdr'
         try
-            write_rgbe(img,filename,1);
+            write_rgbe(img,filename,0);
         catch
-            try
-                write_rgbe(img,filename,0);
-            catch
-                error('This PIC/HDR file can not be written.');
-            end
+            error('This PIC/HDR file can not be written.');
         end
         
     %Portable float map (.pfm)
