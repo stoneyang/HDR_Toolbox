@@ -56,6 +56,10 @@ if(~exist('hdrv_profile','var'))
     hdrv_profile = 'Motion JPEG AVI';
 end
 
+if(strcmp(hdrv_profile,'MPEG-4')==0)
+    disp('Note that the H.264 profile needs to be used for fair comparisons!');
+end
+
 nameOut = RemoveExt(name);
 fileExt = fileExtension(name);
 nameTMO = [nameOut,'_LK08_tmo.',fileExt];
