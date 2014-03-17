@@ -60,7 +60,7 @@ switch weight_type
         weight = zeros(size(img));
         weight(indx1) = img(indx1) - Zmin;
         weight(indx2) = Zmax - img(indx2);
-        weight(find(weight<0)) = 0;
+        weight(weight<0) = 0;
         weight = weight/max(weight(:));
         
     otherwise 

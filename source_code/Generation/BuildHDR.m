@@ -5,8 +5,9 @@ function imgHDR = BuildHDR(dir_name, format, lin_type, weightFun, stack, stack_e
 %
 %        Input:
 %           -dir_name: the folder name where the stack is stored as a
-%           series of LDR images.
-%           -format: an LDR format for reading LDR images in dir_name
+%           single of LDR images.
+%           -format: the LDR format of the images that we want to load in
+%           the folder dir_name.
 %           -lin_type: the linearization function:
 %                      - 'linearized': images are already linearized
 %                      - 'gamma2.2': gamma function 2.2 is used for
@@ -26,11 +27,24 @@ function imgHDR = BuildHDR(dir_name, format, lin_type, weightFun, stack, stack_e
 %                          This function produces good results when some 
 %                          under-exposed or over-exposed images are present
 %                          in the stack.
-%           -stack: a stack of LDR images; 4-D array where values are
-%           -stack_exposure: exposure values of the stack in seconds
+%           -stack: an input stack of LDR images. This has to be set if we
+%           the stack is already in memory and we do not want to load it
+%           from the disk using the tuple (dir_name, format).
+%           -stack_exposure: an array containg the exposure time of each
+%           image. Time is expressed in second (s).
 %
 %        Output:
 %           -imgHDR: the final HDR image
+%
+%        Example:
+%           This example line shows how to load a stack from disk:
+%               BuildHDR('c:\stack_example','jpg','tabledDeb97','Deb97');
+%
+%           In the case we previously loaded LDR images, in stack, and
+%           their EXIF information, in stack_exposure, we have to use
+%           the following line:
+%               BuildHDR('','','tabledDeb97','Deb97',stack,stack_exposure);
+%
 %
 %     Copyright (C) 2011  Francesco Banterle
 % 
@@ -63,6 +77,10 @@ if(~exist('stack','var')&&~exist('stack_exposure','var'))
     stack = ReadLDRStack(dir_name, format);
     stack_exposure = ReadLDRExif(dir_name, format);
 else
+    if(isempty(stack)||isempty(stack_exposure))
+        error('The stack is set empty!');
+    end
+    
     maxStack = max(stack(:));
     if(maxStack<=(1.0+1e-9))
         stack = ClampImg(round(stack * 255),0,255);
@@ -71,23 +89,8 @@ end
 
 lin_fun = [];
 switch lin_type
-    case 'tabledDeb97' %Estimating the CRF using Debevec and Malik
-        %Weight function
-        W = WeightFunction(0:(1/255):1,'Deb97');
-        %Convert the stack into a smaller stack
-        stack_hist = ComputeLDRStackHistogram(stack);
-        stack_samples = GrossbergSampling('', '', stack_hist, 100);%StackLowRes(stack);
-        %Linearization process using Debevec and Malik 1998's method
-        [nPixel, nStack, nCol] = size(stack_samples);
-        
-        lin_fun = zeros(256,nCol);
-        log_stack_exposure = log(stack_exposure);
-
-        for i=1:nCol
-            g = gsolve(stack_samples(:,:,i),log_stack_exposure,10,W);
-            lin_fun(:,i) = (g/max(g));
-        end
-        
+    case 'tabledDeb97' %Estimating the CRF using Debevec and Malik 1997's method
+         lin_fun = ComputeCRF(stack, stack_exposure);        
     otherwise    
 end
 

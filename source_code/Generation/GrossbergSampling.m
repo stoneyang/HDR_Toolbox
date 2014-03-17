@@ -1,12 +1,9 @@
-function stackOut = GrossbergSampling(dir_name, format, stack, nSamples)
+function stackOut = GrossbergSampling(stack, nSamples)
 %
-%       stackOut = GrossbergSampling(dir_name, format, stack, nSamples)
+%       stackOut = GrossbergSampling(stack, nSamples)
 %
 %
 %        Input:
-%           -dir_name: the folder name where the stack is stored as a
-%           series of LDR images.
-%           -format: an LDR format for reading LDR images in the current directory 
 %           -stack: a stack of LDR images; 4-D array where values are
 %           -nSamples: the number of samples for sampling the stack
 %
@@ -29,11 +26,6 @@ function stackOut = GrossbergSampling(dir_name, format, stack, nSamples)
 %     You should have received a copy of the GNU General Public License
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
-
-if(~exist('stack','var')&&~exist('stack_exposure','var'))
-    %Read images from the current directory
-    stack = ReadLDRStackHistogram(dir_name, format);
-end
 
 if(~exist('nSamples','var'))
     nSamples = 100;

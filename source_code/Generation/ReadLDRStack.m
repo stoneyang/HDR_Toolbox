@@ -5,7 +5,8 @@ function stack = ReadLDRStack(dir_name, format)
 %
 %        Input:
 %           -dir_name: the path where the stack is
-%           -format: an LDR format for reading LDR images in the current directory 
+%           -format: the LDR format of the images that we want to load in
+%           the folder dir_name.
 %
 %        Output:
 %           -stack: a stack of LDR images, in floating point (single)
