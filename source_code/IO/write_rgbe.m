@@ -51,7 +51,7 @@ end
 %MIN_RLE_RUN = 4;
 
 if(bRLE)   
-    error('RLE has not implemented yet');
+    error('RLE has not be implemented yet');
 %     TODO
 %     for k=1:n
 %         block = [2,2,bitshift(m,-8),bitand(m,255)];
