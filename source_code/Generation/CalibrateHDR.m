@@ -1,11 +1,10 @@
-function [imgOut, Lt] = CalibrateHDR(img, percentage, bRobust)
+function [imgOut, Lt] = CalibrateHDR(img, bRobust)
 %
-%       [imgOut, Lt] = CalibrateHDR(img, percentage, bRobust)
+%       [imgOut, Lt] = CalibrateHDR(img, bRobust)
 %
 %
 %        Input:
 %           -img: input HDR image
-%           -percentage: is the percentage of pixels for light threshold
 %           -bRobust: if it sets to 1 robust statistics are used for
 %           computing max and min
 %
@@ -29,24 +28,25 @@ function [imgOut, Lt] = CalibrateHDR(img, percentage, bRobust)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-if(~exist('bRobust'))
+if(~exist('bRobust','var'))
     bRobust = 0;
 end
 
 L = lum(img);
-Lavg = mean(mean(log10(L+1e-5)));
+L_log10 = log10(L+1e-5);
+Lavg = mean(L_log10(:));
     
 if(bRobust)
 	Lmin = MaxQuart(L,0.05);
 	Lmax = MaxQuart(L,0.95);
 else
 	Lmin = min(L(L>0.0));
-	Lmax = max(L(:));
+	Lmax = max(L(L>0.0));
 end
     
-k = (Lavg-log10(Lmin))/(log10(Lmax)-log10(Lmin));
-f = 1e4*k/Lmax;
-Lt = Lmin+(06.+0.4*(1.0-k))*(Lmax-Lmin);
+k = (Lavg-log10(Lmin)) / (log10(Lmax)-log10(Lmin));
+f = 1e4*k / Lmax;
+Lt = Lmin + (06.+0.4*(1.0-k))*(Lmax-Lmin);
     
 imgOut = img*f;
 end

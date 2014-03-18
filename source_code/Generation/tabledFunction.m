@@ -45,6 +45,7 @@ for i=1:col
             work(indx) = table(k,i);
         end
     end
+    
     img(:,:,i) = work;
 end
 

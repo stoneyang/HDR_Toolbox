@@ -25,7 +25,6 @@ function ldrv = ldrvread(filename)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-ldrv = [];
 if(isdir(filename))
     %PNG?
     tmp_list = dir([filename,'/','*.png']);
@@ -52,7 +51,8 @@ if(isdir(filename))
     
     ldrv = struct('type',type,'path',filename,'list',tmp_list,'totalFrames',totalFrames,'FrameRate',30,'frameCounter',1,'streamOpen',0);
 else
-    
+    stream = VideoReader(filename);
+    ldrv = struct('type','TYPE_LDR_VIDEO','path',filename,'totalFrames',stream.NumberOfFrames,'FrameRate',stream.FrameRate,'frameCounter',1,'streamOpen',0,'stream',stream);
 end
 
 end

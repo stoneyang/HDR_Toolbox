@@ -1,6 +1,6 @@
 function g = gsolve(Z,B,l,w)
 %
-%       imgHDR = BuildHDR(format)
+%       g = gsolve(Z,B,l,w)
 %
 %       Author: a modifed version of Paul Debevec and Jitendra Malik's code
 %

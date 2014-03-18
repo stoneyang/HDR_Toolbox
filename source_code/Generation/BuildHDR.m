@@ -1,6 +1,6 @@
-function imgHDR = BuildHDR(dir_name, format, lin_type, weightFun, stack, stack_exposure)
+function [imgHDR, lin_fun] = BuildHDR(stack, stack_exposure, lin_type, lin_fun, weightFun)
 %
-%       imgHDR = BuildHDR(dir_name, format, lin_type, weightFun, stack, stack_exposure)
+%       [imgHDR, lin_fun] = BuildHDR(stack, stack_exposure, lin_type, lin_fun, weightFun)
 %
 %
 %        Input:
@@ -12,13 +12,11 @@ function imgHDR = BuildHDR(dir_name, format, lin_type, weightFun, stack, stack_e
 %                      - 'linearized': images are already linearized
 %                      - 'gamma2.2': gamma function 2.2 is used for
 %                                    linearisation;
-%                      - 'function': a spline for RGB is used for 
-%                                    linearisation passed as input in
-%                                    lin_fun
 %                      - 'tabledDeb97': a tabled RGB function is used for
 %                                       linearisation passed as input in
 %                                       lin_fun using Debevec and Malik 97
 %                                       method
+%           -lin_fun: extra parameters for linearization, see lin_type
 %           -weight_type:
 %               - 'all':   weight is set to 1
 %               - 'hat':   hat function 1-(2x-1)^12
@@ -38,7 +36,10 @@ function imgHDR = BuildHDR(dir_name, format, lin_type, weightFun, stack, stack_e
 %
 %        Example:
 %           This example line shows how to load a stack from disk:
-%               BuildHDR('c:\stack_example','jpg','tabledDeb97','Deb97');
+%
+%               stack = ReadLDRStack('stack_alignment', 'jpg');               
+%               stack_exposure = ReadLDRExif('stack_alignment', 'jpg');
+%               BuildHDR(stack, stack_exposure,'tabledDeb97',[],'Deb97');
 %
 %           In the case we previously loaded LDR images, in stack, and
 %           their EXIF information, in stack_exposure, we have to use
@@ -72,29 +73,27 @@ if(~exist('lin_type','var'))
     lin_type = 'gamma2.2';
 end
 
-if(~exist('stack','var')&&~exist('stack_exposure','var'))
-    %Read images from the current directory
-    stack = ReadLDRStack(dir_name, format);
-    stack_exposure = ReadLDRExif(dir_name, format);
-else
-    if(isempty(stack)||isempty(stack_exposure))
-        error('The stack is set empty!');
-    end
+%do we have the inverse camera response function?
+if(~exist('lin_fun','var'))
+    lin_fun = [];
+end
+
+if(isempty(stack)||isempty(stack_exposure))
+    error('The stack is set empty!');
+end
     
-    maxStack = max(stack(:));
-    if(maxStack<=(1.0+1e-9))
-        stack = ClampImg(round(stack * 255),0,255);
-    end   
+%the stack's values have to be in [0,255] 
+maxStack = max(stack(:));
+if(maxStack<=(1.0+1e-9))
+    stack = ClampImg(round(stack * 255),0,255);
+end   
+
+%is the inverse camera function ok? Do we need to recompute it?
+if((strcmp(lin_type,'tabledDeb97')==1) && isempty(lin_fun))
+    lin_fun = ComputeCRF(stack, stack_exposure);        
 end
 
-lin_fun = [];
-switch lin_type
-    case 'tabledDeb97' %Estimating the CRF using Debevec and Malik 1997's method
-         lin_fun = ComputeCRF(stack, stack_exposure);        
-    otherwise    
-end
-
-%Combine different exposure using linearization function
+%combining the LDR images
 imgHDR = CombineLDR(stack, stack_exposure, lin_type, lin_fun, weightFun);
 
 end

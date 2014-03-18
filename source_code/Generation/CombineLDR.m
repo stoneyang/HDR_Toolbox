@@ -11,9 +11,6 @@ function imgOut = CombineLDR(stack, stack_exposure, lin_type, lin_fun, weight_ty
 %                      - 'linearized': images are already linearized
 %                      - 'gamma2.2': gamma function 2.2 is used for
 %                                    linearisation;
-%                      - 'function': a spline for RGB is used for 
-%                                    linearisation passed as input in
-%                                    lin_fun
 %                      - 'tabledDeb97': a tabled RGB function is used for
 %                                       linearisation passed as input in
 %                                       lin_fun using Debevec and Malik
@@ -23,7 +20,7 @@ function imgOut = CombineLDR(stack, stack_exposure, lin_type, lin_fun, weight_ty
 %               - 'all':   weight is set to 1
 %               - 'hat':   hat function 1-(2x-1)^12
 %               - 'Deb97': Debevec and Malik 97 weight function
-%               - 'Gauss': Gaussian function as weight function.
+%               - 'Gauss': a Gaussian function as weight function.
 %                          This function produces good results when some 
 %                          under-exposed or over-exposed images are present
 %                          in the stack.

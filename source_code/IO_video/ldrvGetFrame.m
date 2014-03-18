@@ -52,7 +52,7 @@ switch ldrv.type
     case 'TYPE_LDR_JPEG_2000'
         frame = imread([ldrv.path,'/',ldrv.list(frameCounter).name]);
     case 'TYPE_LDR_VIDEO'
-        frame = read(hdrv.streamTMO, frameCounter); 
+        frame = read(hdrv.stream, frameCounter); 
 end
 
 if(~isempty(frame))

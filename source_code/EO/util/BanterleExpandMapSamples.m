@@ -55,7 +55,7 @@ else
     %Create the histogram
     H = zeros(length(lights),1);
     for i=1:length(lights)
-        [X0,X1,Y0,Y1]=GenerateBBox(lights(i).x,lights(i).y,r,c,window);
+        [X0,X1,Y0,Y1] = GenerateBBox(lights(i).x,lights(i).y,r,c,window);
         indx = find(Lout(Y0:Y1,X0:X1)>0);
         H(i) = length(indx);
     end
@@ -74,7 +74,8 @@ if(thresholdSamples>0)
     Lout_tmp = Lout;
     for i=1:length(lights)
         [X0,X1,Y0,Y1] = GenerateBBox(lights(i).x,lights(i).y,r,c,window*3);
-        indx = find(Lout(Y0:Y1,X0:X1)>0);    
+        indx = find(Lout(Y0:Y1,X0:X1)>0); 
+        
         if(length(indx)<thresholdSamples)
             X=ClampImg(round(lights(i).x*c),1,c);
             Y=ClampImg(round(lights(i).y*r),1,r);
