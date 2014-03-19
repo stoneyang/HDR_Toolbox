@@ -28,7 +28,7 @@ function imgOut = CombineLDR(stack, stack_exposure, lin_type, lin_fun, weight_ty
 %        Output:
 %           -imgOut: the combined HDR image from the stack
 %
-%     Copyright (C) 2011  Francesco Banterle
+%     Copyright (C) 2011-14  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -63,11 +63,6 @@ for i=1:n
             tmpStack = tmpStack/255;
             weight  = WeightFunction(tmpStack,     weight_type);
             img_lin = tmpStack.^2.2;
-
-        case 'function'
-            tmpStack = tmpStack/255;
-            weight  = WeightFunction(tmpStack,     weight_type);
-            img_lin = lin_fun(stack(:,:,:,i));
         
         case 'tabledDeb97'
             weight  = WeightFunction(tmpStack/255, weight_type);

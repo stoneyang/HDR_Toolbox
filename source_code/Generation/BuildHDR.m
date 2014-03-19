@@ -47,7 +47,7 @@ function [imgHDR, lin_fun] = BuildHDR(stack, stack_exposure, lin_type, lin_fun, 
 %               BuildHDR('','','tabledDeb97','Deb97',stack,stack_exposure);
 %
 %
-%     Copyright (C) 2011  Francesco Banterle
+%     Copyright (C) 2011-14  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -82,7 +82,7 @@ if(isempty(stack)||isempty(stack_exposure))
     error('The stack is set empty!');
 end
     
-%the stack's values have to be in [0,255] 
+%the stack's values have to be in [0,255] at 8-bit
 maxStack = max(stack(:));
 if(maxStack<=(1.0+1e-9))
     stack = ClampImg(round(stack * 255),0,255);
