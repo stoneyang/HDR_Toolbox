@@ -36,5 +36,5 @@ for i=1:col
     stack(:,:,:,i) = img(:,:,i);
 end
 
-imgOut = MertensTMO( [], '', '', stack, 1.0, 0.0, 1.0 );
+imgOut = MertensTMO( [], '', '', stack, 1.0, 0.0, 1.0, 0 );
 end

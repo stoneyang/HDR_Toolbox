@@ -11,6 +11,7 @@ function imgOut = CombineLDR(stack, stack_exposure, lin_type, lin_fun, weight_ty
 %                      - 'linearized': images are already linearized
 %                      - 'gamma2.2': gamma function 2.2 is used for
 %                                    linearisation;
+%                      - 'sRGB': images are encoded using sRGB
 %                      - 'tabledDeb97': a tabled RGB function is used for
 %                                       linearisation passed as input in
 %                                       lin_fun using Debevec and Malik
@@ -63,6 +64,11 @@ for i=1:n
             tmpStack = tmpStack/255;
             weight  = WeightFunction(tmpStack,     weight_type);
             img_lin = tmpStack.^2.2;
+
+        case 'sRGB'
+            tmpStack = tmpStack/255;
+            weight  = WeightFunction(tmpStack,     weight_type);
+            img_lin = ConvertRGBtosRGB(tmpStack, 1);
         
         case 'tabledDeb97'
             weight  = WeightFunction(tmpStack/255, weight_type);
@@ -78,7 +84,7 @@ for i=1:n
 end
 
 if(~isempty(find(totWeight<=0.0)))
-    disp('WARNING: the stack has saturated pixels in all the stack, please use ''Gauss'' weighting function to avoid artifacts.');
+    disp('WARNING: the stack has saturated pixels in all the stack, please use ''Gauss'' weighting function to mitigate artifacts.');
 end
 
 totWeight(totWeight<=0.0) = 1.0;

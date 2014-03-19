@@ -58,6 +58,7 @@ end
 if(~exist('target_exposure','var'))
     disp('Finding the best target exposure...');
     values = zeros(n,1);
+    
     for i=1:n
         if(bStack)
             tmpImg = stack(:,:,:,i);
@@ -68,6 +69,7 @@ if(~exist('target_exposure','var'))
         values(i) = mean(tmpImg(:));
         clear('tmpImg');
     end
+    
     [values,indx] = sort(values);
     
     target_exposure = indx(round(n/2));
@@ -115,8 +117,8 @@ for i=1:n
         imWork_shifted = imshift(imgWork,shift_ret(1),shift_ret(2));
         
         [rot_ret, bCheck] = WardSimpleRot(imWork_shifted,img);
+        
         if(bCheck)
-            disp(rot_ret);
             imWork_shifted = imrotate(imWork_shifted,rot_ret,'bilinear','crop');
 
             %final shift
@@ -131,6 +133,7 @@ for i=1:n
         if(~bStack)
             oldName = lst(i).name;
             name = strrep(lst(i).name, ['.',format], ['_shifted.',format]);
+            
             if(strcmp(oldName,name)==1)
                 name = [name,'_shifted.',format];
             end

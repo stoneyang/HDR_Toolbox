@@ -12,6 +12,7 @@ function [imgHDR, lin_fun] = BuildHDR(stack, stack_exposure, lin_type, lin_fun, 
 %                      - 'linearized': images are already linearized
 %                      - 'gamma2.2': gamma function 2.2 is used for
 %                                    linearisation;
+%                      - 'sRGB': images are encoded using sRGB
 %                      - 'tabledDeb97': a tabled RGB function is used for
 %                                       linearisation passed as input in
 %                                       lin_fun using Debevec and Malik 97

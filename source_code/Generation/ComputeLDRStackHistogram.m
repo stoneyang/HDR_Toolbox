@@ -32,7 +32,6 @@ function stackOut = ComputeLDRStackHistogram(stack)
 stackOut = zeros(256,col,n);
 
 for i=1:n
-    disp(i);   
     %store in the stack
     for j=1:col
         stackOut(:,j,i) = imhist(uint8(stack(:,:,j,i)));

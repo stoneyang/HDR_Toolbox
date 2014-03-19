@@ -12,7 +12,7 @@ function lin_fun = ComputeCRF(stack, stack_exposure, nSamples)
 %           -nSamples: number of samples for computing the CRF
 %
 %        Output:
-%           -lin_fun: the CRF
+%           -lin_fun: the inverse CRF
 %
 %     Copyright (C) 2014  Francesco Banterle
 % 

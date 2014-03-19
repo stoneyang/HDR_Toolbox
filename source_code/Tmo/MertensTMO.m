@@ -1,4 +1,4 @@
-function imgOut = MertensTMO( img, directory, format, imageStack, wE, wS, wC )
+function imgOut = MertensTMO( img, directory, format, imageStack, wE, wS, wC, bMertensDebug )
 %
 %
 %        imgOut = MertensTMO( img, directory, format, imageStack, wE, wS, wC )
@@ -22,6 +22,8 @@ function imgOut = MertensTMO( img, directory, format, imageStack, wE, wS, wC )
 %           -wC: the weight for the contrast in [0,1]. Strong edgese are 
 %                taken more into account if the wE is near 1
 %                otherwise they are not taken into account.
+%           -bMertensDebug: a debugging flag to turn on/off the gamma
+%           encoding notice.
 %
 %        Output:
 %           -imgOut: tone mapped image
@@ -56,6 +58,10 @@ end
 
 if(~exist('wC','var'))
     wC = 1.0;
+end
+
+if(~exist('bMertensDebug','var'))
+    bMertensDebug = 1;
 end
 
 %imageStack generation
@@ -135,6 +141,8 @@ end
 %Clamping
 imgOut = ClampImg(imgOut/max(imgOut(:)),0.0,1.0);
 
-disp('This algorithm outputs images with gamma encoding. Inverse gamma is not required to be applied!');
+if(bMertensDebug)
+    disp('This algorithm outputs images with gamma encoding. Inverse gamma is not required to be applied!');
+end
 
 end
