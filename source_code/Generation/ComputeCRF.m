@@ -31,7 +31,7 @@ function lin_fun = ComputeCRF(stack, stack_exposure, nSamples)
 %
 
 if(~exist('nSamples', 'var'))
-    nSamples = 100;
+    nSamples = 1000;
 end
 
 if(isempty(stack))
@@ -55,7 +55,7 @@ W = WeightFunction(0:(1/255):1,'Deb97');
 
 %stack sub-sampling
 stack_hist = ComputeLDRStackHistogram(stack);
-stack_samples = GrossbergSampling(stack_hist, nSamples);%StackLowRes(stack);
+stack_samples = GrossbergSampling(stack_hist, nSamples);
 
 %recovering the CRF
 lin_fun = zeros(256, col);

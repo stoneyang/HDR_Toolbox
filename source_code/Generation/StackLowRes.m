@@ -27,7 +27,7 @@ function stackOut = StackLowRes (stack)
 %
 
 %stack of images
-[r,c,col,n] = size(stack);
+n = size(stack, 4);
 stackOut = [];
 
 for i=1:n
