@@ -43,6 +43,10 @@ expand_map = zeros(r,c,col);
 
 switch col
     case 1%Grayscale case
+        if(size(img,3) ~= 1)
+            img = lum(img);
+        end
+        
         if(BEM_bHighQuality)
             expand_map = LischinskiMinimization(img, expand_map_de, 0.07*ones(r,c));
         else

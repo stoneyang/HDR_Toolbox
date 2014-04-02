@@ -42,8 +42,8 @@ switch weight_type
         t3 = 50 /255;
         weight(img>=t2) = 0;        
         tmp  = 1 - (t2-img)/t3;
-        tmp2 = 1-3*tmp.^2+2*tmp.^3;      
-        weight(img>=t1&img<=t2) = tmp2(img>=t1&img<=t2);
+        tmp2 = 1 - 3*tmp.^2 + 2*tmp.^3;      
+        weight(img >= t1 & img <= t2) = tmp2(img >= t1 & img <= t2);
         
     case 'Gauss'
         weight = exp(-(img-0.5).^2/(2*(0.15)^2));
