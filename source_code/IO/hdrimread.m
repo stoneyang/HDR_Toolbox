@@ -98,7 +98,7 @@ end
 if(isempty(img))
     if(bLDR == 1)
         img = ldrimread(filename);
-        disp(['Warning: this image, ', filename,', has been loaded as ab LDR image.']);
+        disp(['Warning: this image, ', filename,', has been loaded as an LDR image.']);
     else
         error(['This image,',filename,', cannot be loaded with LDR or HDR readers.']);
     end
