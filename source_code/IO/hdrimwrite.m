@@ -1,4 +1,4 @@
-function ret=hdrimwrite(img, filename, jpeg_hdr_quality, hdr_jpeg_2000_ratio)
+function ret = hdrimwrite(img, filename, jpeg_hdr_quality, hdr_jpeg_2000_ratio)
 %
 %       ret=hdrimwrite(img, filename)
 %
@@ -30,6 +30,10 @@ function ret=hdrimwrite(img, filename, jpeg_hdr_quality, hdr_jpeg_2000_ratio)
 
 %if it is a gray image we create three channels
 col = size(img,3);
+
+if(isempty(img))
+    error('Empty images cannot be written!');
+end
 
 if(col==1)
     [r,c] = size(img);
@@ -81,7 +85,7 @@ switch extension
         try
             JPEGHDREnc(img, filename, jpeg_hdr_quality);
         catch
-            error('This JPEG file can not be written.');
+            error('This JPEG-HDR file can not be written.');
         end
         
     %HDR JPEG2000 (.jp2)
@@ -89,7 +93,7 @@ switch extension
          try
             HDRJPEG2000Enc(img, filename, hdr_jpeg_2000_ratio)
          catch
-             error('This JPEG 2000 file can not be written.');
+             error('This HDR JPEG 2000 file can not be written.');
          end        
         
     otherwise%try to save as LDR image
