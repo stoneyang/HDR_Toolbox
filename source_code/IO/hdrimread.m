@@ -31,6 +31,10 @@ function img = hdrimread(filename)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
+if(~exist('filename', 'var'))
+    error('A filename with extension needs to be passed as input!');
+end
+
 extension = lower(fileExtension(filename));
 
 %Radiance format can have different extensions: .hdr, .rgbe and .pic
@@ -54,7 +58,7 @@ switch extension
                 %RLE compressed image
                 img = double(hdrread(filename));
             catch err
-                disp('This HDR file can not be read.');
+                disp('Warning: this .hdr/.pic file can not be read.');
             end
         end
         
@@ -63,21 +67,23 @@ switch extension
         try
             img = read_pfm(filename);
         catch
-            disp('This PFM file can not be read.');
+            disp('Warning: this .pfm file can not be read.');
         end
         
     case 'jp2'
         try
             img = HDRJPEG2000Dec(filename);
         catch err
-            disp('Tried to read it as HDRJPEG 2000.');
+            bLDR = 1;            
+            disp('Warning: this .jpg2 file cannot be read as an HDR JPEG 2000 file.');
         end        
         
     case 'jpg'
         try
             img = JPEGHDRDec(filename);
         catch err
-            disp('Tried to read it as JPEG HDR.');
+            bLDR = 1;
+            disp('Warning: this .jpg file cannot be read as a JPEG-HDR file.');
         end
        
     otherwise %try to open as LDR image
@@ -85,12 +91,17 @@ switch extension
             bLDR = 1;
             img = ldrimread(filename);
         catch err
-            disp('This format is not supported.');
+            disp(['Warning: this LDR format, ',extension,', is not supported.']);
         end
 end
 
-if(isempty(img)&&(bLDR==0))
-    img = ldrimread(filename);
+if(isempty(img))
+    if(bLDR == 1)
+        img = ldrimread(filename);
+        disp(['Warning: this image, ', filename,', has been loaded as ab LDR image.']);
+    else
+        error(['This image,',filename,', cannot be loaded with LDR or HDR readers.']);
+    end
 end
 
 %Remove specials

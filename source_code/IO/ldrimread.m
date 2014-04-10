@@ -25,10 +25,15 @@ function img = ldrimread(filename)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
+if(~exist('filename', 'var'))
+    error('A filename with extension needs to be passed as input!');
+end
+
 img = [];
 
 try    
     image_info = imfinfo(filename);
+    
     if((image_info.BitDepth==24)||(image_info.BitDepth==8))
         img = double(imread(filename))/255;
     end

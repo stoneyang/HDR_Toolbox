@@ -35,6 +35,10 @@ if(isempty(img))
     error('Empty images cannot be written!');
 end
 
+if(~exist('filename', 'var'))
+    error('A filename with extension needs to be passed as input!');
+end
+
 if(col==1)
     [r,c] = size(img);
     imgOut = zeros(r,c,3);
