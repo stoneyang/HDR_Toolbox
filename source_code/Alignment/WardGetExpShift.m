@@ -66,7 +66,7 @@ while(shift_bits > 0)
             diff_b = diff_b & eb1;
             diff_b = diff_b & shifted_eb2;
 
-            err = sum(sum(diff_b));
+            err = sum(diff_b(:));
 
             if (err < min_err)
                 shift_ret = [xs;ys];

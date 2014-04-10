@@ -27,11 +27,11 @@ function imgOut = imshift(img, is_dx, is_dy)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-if(~exist('is_dx'))
+if(~exist('is_dx', 'var'))
     is_dx = 0;
 end
 
-if(~exist('is_dy'))
+if(~exist('is_dy', 'var'))
     is_dy = 0;
 end
 

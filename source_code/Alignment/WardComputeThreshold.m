@@ -33,15 +33,13 @@ function [imgThr, imgEb] = WardComputeThreshold(img, wardPercentile, wardToleran
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-if(~exist('wardPercentile'))
+if(~exist('wardPercentile','var'))
     wardPercentile = 0.5;
 end
 
-if(~exist('wardTolerance'))
+if(~exist('wardTolerance','var'))
     wardTolerance = 4/256;
 end
-
-grey = [];
 
 if(size(img,3)==1)
     grey = img;
