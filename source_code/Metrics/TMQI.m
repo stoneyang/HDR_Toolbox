@@ -6,7 +6,7 @@ function [Q, S, N, s_maps, s_local] = TMQI(hdrImage, ldrImage, window)
 %       -Input :
 %           -hdrImage: the HDR image being used as reference. The HDR 
 %                      image must be an m-by-n-by-3 single or double array
-%           -ldrImage: the LDR image being compared
+%           -ldrImage: the LDR image being compared with values in [0,255]
 %           -window: local window for statistics (see the above
 %                    reference). default widnow is Gaussian given by
 %                    window = fspecial('gaussian', 11, 1.5);
@@ -117,16 +117,14 @@ Beta = 0.7088;
 level = 5;
 weight = [0.0448 0.2856 0.3001 0.2363 0.1333];
 %--------------------
-HDR = ConvertXYZtoYxy(ConvertRGBtoXYZ(hdrImage,0),0);
-
-L_hdr = HDR(:,:,1);
+L_hdr = lum(hdrImage);
 lmin = min(L_hdr(:));
 lmax = max(L_hdr(:));
 L_hdr = double(round((2^32 - 1)/(lmax - lmin)).*(L_hdr - lmin));
 %-------------------------------------------
 
-L_ldr = ConvertXYZtoYxy(ConvertRGBtoXYZ(double(ldrImage),0),0);
-L_ldr = double(L_ldr(:,:,1));
+L_ldr = lum(double(ldrImage));
+
 %----------- structural fidelity -----------------
 [S s_local s_maps] = TMQI_StructuralFidelity(L_hdr, L_ldr,level,weight, window);
 %--------- statistical naturalness ---------------
