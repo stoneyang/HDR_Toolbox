@@ -29,7 +29,7 @@ HDR Toolbox for processing High Dynamic Range (HDR) images into MATLAB and Octav
 in the Command Window, and wait for the installation process.
 
 
-Please reference the book in your work or papers if you this toolbox:
+Please reference the book in your work or papers if you use this toolbox:
 
 @book{Banterle:2011,
 author = {Banterle, Francesco and Artusi, Alessandro and Debattista, Kurt and Chalmers, Alan},
