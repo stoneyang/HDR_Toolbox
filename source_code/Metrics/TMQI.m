@@ -124,6 +124,12 @@ L_hdr = double(round((2^32 - 1)/(lmax - lmin)).*(L_hdr - lmin));
 %-------------------------------------------
 
 L_ldr = lum(double(ldrImage));
+lmax = max(L_ldr(:));
+if(lmax <= 1.0)
+    disp('WARNING: It seems this is a normalized LDR image with values in [0,1]!');
+    disp('This means that the algorithm will produce wrong results.');
+    disp('If this is the case please multiply ldrImage by 255');
+end
 
 %----------- structural fidelity -----------------
 [S s_local s_maps] = TMQI_StructuralFidelity(L_hdr, L_ldr,level,weight, window);
