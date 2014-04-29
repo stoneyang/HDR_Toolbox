@@ -1,6 +1,6 @@
 function [imgALogLuv, param_a, param_b] = float2ALogLuv(img, n_bits)
 %
-%       imgLogLuv=float2ALogLuv(img)
+%       [imgALogLuv, param_a, param_b] = float2ALogLuv(img, n_bits)
 %
 %
 %        Input:

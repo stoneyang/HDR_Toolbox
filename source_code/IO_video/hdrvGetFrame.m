@@ -66,6 +66,11 @@ switch hdrv.type
         frameTMO = read(hdrv.streamTMO, frameCounter); 
         frameR   = read(hdrv.streamR, frameCounter);       
         frame = LeeKimHDRvDecFrame(frameTMO, frameR, hdrv.Rinfo.r_min(frameCounter), hdrv.Rinfo.r_max(frameCounter));
+
+    case 'TYPE_HDRV_MT10'
+        frameLUV = read(hdrv.stream, frameCounter); 
+        frame = MotraThomaHDRvDecFrame(frameLUV, hdrv.info.a(frameCounter), hdrv.info.b(frameCounter));
+
 end
 
 %updating the counter

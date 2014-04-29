@@ -65,7 +65,7 @@ else
         Rinfo     = load([name,'_MB06_Rinfo.mat']);
         hdrv = struct('type',type,'path',nameOut,'totalFrames',streamTMO.NumberOfFrames,'FrameRate',streamTMO.FrameRate,'frameCounter',1,'streamOpen',0,'streamTMO',streamTMO,'streamR',streamR,'Rinfo',Rinfo);
     end
-    
+       
     if(strfind(nameOut,'_LK08_'))%is it a Lee and Kim 2008 HDRv stream?
         type = 'TYPE_HDRV_LK08';
 
@@ -76,6 +76,17 @@ else
         Rinfo     = load([name,'_LK08_Rinfo.mat']);
         hdrv = struct('type',type,'path',nameOut,'totalFrames',streamTMO.NumberOfFrames,'FrameRate',streamTMO.FrameRate,'frameCounter',1,'streamOpen',0,'streamTMO',streamTMO,'streamR',streamR,'Rinfo',Rinfo);
     end        
+    
+    if(strfind(nameOut,'_MT10_'))%is it a Motra and Thoma 2010 HDRv stream?
+        type = 'TYPE_HDRV_MT10';
+        
+        pos = strfind(nameOut,'_MT10_');
+        name = nameOut(1:(pos-1));        
+        stream = VideoReader([name,'_MT10_LUV.',fileExt]);
+        info     = load([name,'_MT10_info.mat']);
+        hdrv = struct('type',type,'path',nameOut,'totalFrames',stream.NumberOfFrames,'FrameRate',stream.FrameRate,'frameCounter',1,'streamOpen',0,'stream',stream,'info',info);
+    end  
+    
 end
 
 end

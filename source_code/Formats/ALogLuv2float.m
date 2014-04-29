@@ -1,6 +1,6 @@
 function imgRGB = ALogLuv2float(img, param_a, param_b)
 %
-%       imgRGB=ALogLuv2float(img)
+%       imgRGB = ALogLuv2float(img, param_a, param_b)
 %
 %
 %        Input:
@@ -32,13 +32,13 @@ check3Color(img);
 
 %Decoding luminance Y
 imgXYZ = zeros(size(img));
-imgXYZ(:,:,2) = 2.^(((img(:,:,1)+0.5)/param_a)-param_b);
+imgXYZ(:,:,2) = 2.^(((img(:,:,1)+0.5)/param_a) - param_b);
 
 %Decoding chromaticity
 u_prime = (img(:,:,2)+0.5)/410;
 v_prime = (img(:,:,3)+0.5)/410;
 
-norm = 6*u_prime -16*v_prime + 12;
+norm = 6 * u_prime -16 * v_prime + 12;
 
 x = 9*u_prime./norm;
 y = 4*v_prime./norm;
@@ -55,6 +55,7 @@ imgXYZ(:,:,3) = z.*norm;
 mtxRGB2XYZ = [  0.497, 0.339, 0.164;...
                 0.256, 0.678, 0.066;...
                 0.023, 0.113, 0.864];
+            
 imgRGB = ConvertLinearSpace(imgXYZ, inv(mtxRGB2XYZ));
 
 end
