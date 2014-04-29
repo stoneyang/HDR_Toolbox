@@ -60,6 +60,10 @@ nameALogLUV = [nameOut,'_MT10_LUV.',fileExt];
 %number of bits is fixed due to limitation of MATLAB
 n_bits = 8;
 
+disp('Note that 8-bit encoding is used, this method should be used with');
+disp('14-bit encoding from the H.264 high profile, not available');
+disp('in MATLAB at the moment.');
+
 %Opening hdr stream
 hdrv = hdrvopen(hdrv);
 
