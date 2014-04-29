@@ -13,7 +13,7 @@
 == Title: HDR Toolbox for Matlab
 
 
-== Version: 1.0.5
+== Version: 1.0.6
 
 
 == How To Install:
@@ -42,6 +42,7 @@ Run the demos to understand how to use I/O function, visualize images, tone Map 
 
 
 ==Update Report:
+29/04/2014: -Added a novel framework for HDR video compression and three compression schemes 
 19/12/2013: -Many fixes including: ReinhardTMO, DragoTMO, RGBE2Float and many more... 
 31/10/2013: -Added different fusion operator/tone mapping operator, improved demos, enhanced the toolbox.
 
