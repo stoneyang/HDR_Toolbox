@@ -58,7 +58,7 @@ L  = L(:);
 L2 = L;
 
 delta=1e-6;
-switch typeLog       
+switch typeLog
     case 'log2'
     	L=log2(L+delta);
     case 'loge'

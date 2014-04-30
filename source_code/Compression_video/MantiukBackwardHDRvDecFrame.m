@@ -30,7 +30,7 @@ function frameHDR = MantiukBackwardHDRvDecFrame(frameTMO, frameR, RF, Q)
 %
 %     The paper describing this technique is:
 %     "Backward Compatible High Dynamic Range MPEG Video Compression"
-%           by Rafal Mantiuk, Alexander Efremov, Karol Myszkowski, and Hans-Peter Seidel 
+%     by Rafal Mantiuk, Alexander Efremov, Karol Myszkowski, and Hans-Peter Seidel 
 %     in ACM SIGGRAPH 2006
 %
 %

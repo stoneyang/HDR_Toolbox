@@ -71,6 +71,9 @@ switch hdrv.type
         frameLUV = read(hdrv.stream, frameCounter); 
         frame = MotraThomaHDRvDecFrame(frameLUV, hdrv.info.a(frameCounter), hdrv.info.b(frameCounter));
 
+    case 'TYPE_HDRV_ZRB11'
+        frameLUV = read(hdrv.stream, frameCounter); 
+        frame = ZhangHDRvDecFrame(frameLUV, hdrv.info.table_y(frameCounter,:), hdrv.info.a(frameCounter), hdrv.info.b(frameCounter));        
 end
 
 %updating the counter

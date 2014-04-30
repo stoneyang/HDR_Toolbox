@@ -1,7 +1,7 @@
-function MotraThomaHDRvEnc(hdrv, name, hdrv_profile, hdrv_quality)
+function ZhangHDRvEnc(hdrv, name, hdrv_profile, hdrv_quality)
 %
 %
-%       MotraThomaHDRvEnc(hdrv, name, hdrv_profile, hdrv_quality)
+%       ZhangHDRvEnc(hdrv, name, hdrv_profile, hdrv_quality)
 %
 %
 %       Input:
@@ -31,9 +31,9 @@ function MotraThomaHDRvEnc(hdrv, name, hdrv_profile, hdrv_quality)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 %     The paper describing this technique is:
-%     "An Adaptive LogLuv Transform for High Dynamic Range Video Compression"
-% 	  by Ajit Motra, Herbert Thoma
-%     in Proceedings of 2010 IEEE 17th International Conference on Image Processing
+%     "HVS BASED HIGH DYNAMIC RANGE VIDEO COMPRESSION WITH OPTIMAL BIT-DEPTH TRANSFORMATION"
+% 	  by Yang Zhang, Erik Reinhard, David Bull
+%     in Proceedings of 2011 IEEE 18th International Conference on Image Processing
 %
 %
 
@@ -55,7 +55,7 @@ end
 
 nameOut = RemoveExt(name);
 fileExt = fileExtension(name);
-nameALogLUV = [nameOut,'_MT10_LUV.',fileExt];
+nameLogLuv = [nameOut,'_ZRB11_LUV.',fileExt];
 
 %number of bits is fixed due to limitation of MATLAB
 n_bits = 8;
@@ -63,12 +63,13 @@ n_bits = 8;
 %Opening hdr stream
 hdrv = hdrvopen(hdrv);
 
-writerObj = VideoWriter(nameALogLUV, hdrv_profile);
+writerObj = VideoWriter(nameLogLuv, hdrv_profile);
 writerObj.Quality = hdrv_quality;
 open(writerObj);
 
-a = zeros(hdrv.totalFrames,1);
-b = zeros(hdrv.totalFrames,1);
+table_y = zeros(hdrv.totalFrames, 2^n_bits);
+a = zeros(1, hdrv.totalFrames);
+b = zeros(1, hdrv.totalFrames);
 
 for i=1:hdrv.totalFrames
     disp(['Processing frame ',num2str(i)]);
@@ -77,18 +78,19 @@ for i=1:hdrv.totalFrames
     [frame, hdrv] = hdrvGetFrame(hdrv, i);
 
     %encoding it
-    [imgALogLuv, param_a, param_b] = float2ALogLuv(frame, n_bits);
-        
+    [frameOut, y, a, b] = ZhangFrameEnc(frame, n_bits);   
+    table_y(i,:) = y;
+    
     a(i) = param_a;
     b(i) = param_b;
     
     %writing the frame out
-    writeVideo(writerObj, imgALogLuv/255.0);
+    writeVideo(writerObj, frameOut/255.0);
 end
 
 close(writerObj);
 
-save([nameOut,'_MT10_info.mat'], 'n_bits', 'a','b');
+save([nameOut,'_ZRB11_info.mat'], 'table_y', 'a', 'b');
 
 hdrvclose(hdrv);
 

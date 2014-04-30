@@ -1,22 +1,17 @@
-function imgOut = dwt2Reconstruction(pyr, filterType)
+function pyr = ZhangDWTScaling(pyr)
 %
 %
-%      img = dwt2Decomposition(pyr, mode)
+%       pyr = ZhangDWTScaling(pyr)
 %
 %
 %       Input:
-%           -pyr: the DWT decomposition 
-%           -filterType: the type of filter to use in the DWT:
-%            'db1' or 'haar', 'db2', ... ,'db10', ... , 'db45'
-%            Please have a look to the MATLAB reference for dwt2.
+%           -pyr: a DWT decomposition
 %
 %       Output:
-%           -imgOut: the reconstructed image from pyr
-% 
-%       This function decomposes an image using the DWT. Please have a look
-%       to the reference of dwt2.
+%           -pyr: scaled DWT decomposition using CSF for a viewing distance
+%           of one meter.
 %
-%     Copyright (C) 2013-14  Francesco Banterle
+%     Copyright (C) 2013-2014  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -32,10 +27,19 @@ function imgOut = dwt2Reconstruction(pyr, filterType)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-imgOut = pyr(length(pyr)).cA;
+if(length(pyr)<5)
+    error('This DWT decomposition needs to have at least 5 levels!');
+end
 
-for i=length(pyr):-1:1
-    imgOut = idwt2(imgOut, pyr(i).cH, pyr(i).cV, pyr(i).cD, filterType, pyr(i).S);       
+%coefficients scaling
+LH = [0.561073, 0.807358, 0.869726, 0.781645, 0.655063];
+HL = [0.561073, 0.807358, 0.869726, 0.781645, 0.655063];
+HH = [0.316456, 0.810127, 1.000000, 0.908227, 0.743671];
+
+for i=1:5
+    pyr(i).cH = pyr(i).cH * LH(i);
+    pyr(i).cV = pyr(i).cV * HL(i);
+    pyr(i).cD = pyr(i).cD * HH(i);
 end
 
 end

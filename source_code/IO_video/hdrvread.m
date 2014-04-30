@@ -87,6 +87,16 @@ else
         hdrv = struct('type',type,'path',nameOut,'totalFrames',stream.NumberOfFrames,'FrameRate',stream.FrameRate,'frameCounter',1,'streamOpen',0,'stream',stream,'info',info);
     end  
     
+    if(strfind(nameOut,'_ZRB11_'))%is it a Motra and Thoma 2010 HDRv stream?
+        type = 'TYPE_HDRV_ZRB11';
+        
+        pos = strfind(nameOut,'_ZRB11_');
+        name = nameOut(1:(pos-1));        
+        stream = VideoReader([name,'_ZRB11_LUV.',fileExt]);
+        info     = load([name,'_ZRB11_info.mat']);
+        hdrv = struct('type',type,'path',nameOut,'totalFrames',stream.NumberOfFrames,'FrameRate',stream.FrameRate,'frameCounter',1,'streamOpen',0,'stream',stream,'info',info);
+    end      
+    
 end
 
 end

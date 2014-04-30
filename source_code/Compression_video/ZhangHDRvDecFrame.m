@@ -1,18 +1,19 @@
-function frameHDR = MotraThomaHDRvDecFrame(frameLUV, a, b)
+function frameHDR = ZhangHDRvDecFrame(frameLUV, table_y, param_a, param_b)
 %
 %
-%       frameHDR = MotraThomaHDRvDecFrame(frameLUV, a, b)
+%       frameHDR = ZhangHDRvDecFrame(frameLUV, table_y)
 %
 %
 %       Input:
 %           -frameLUV: logLUV representation at 8-bit
-%           -a: a's adapative logLUV parameter
-%           -b: b's adapative logLUV parameter
+%           -y: encoding look-up table
+%           -param_a: adaptive multiplicative parameter
+%           -param_b: adaptive additive parameter
 %
 %       Output:
 %           -frameHDR: the reconstructed HDR frame
 %
-%     Copyright (C) 2014  Francesco Banterle
+%     Copyright (C) 2013-2014  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -28,9 +29,9 @@ function frameHDR = MotraThomaHDRvDecFrame(frameLUV, a, b)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 %     The paper describing this technique is:
-%     "An Adaptive LogLuv Transform for High Dynamic Range Video Compression"
-% 	  by Ajit Motra, Herbert Thoma
-%     in Proceedings of 2010 IEEE 17th International Conference on Image Processing
+%     "HVS BASED HIGH DYNAMIC RANGE VIDEO COMPRESSION WITH OPTIMAL BIT-DEPTH TRANSFORMATION"
+% 	  by Yang Zhang, Erik Reinhard, David Bull
+%     in Proceedings of 2011 IEEE 18th International Conference on Image Processing
 %
 %
 
@@ -38,8 +39,18 @@ function frameHDR = MotraThomaHDRvDecFrame(frameLUV, a, b)
 %Reconstruction of HDR luminance
 frameLUV = double(frameLUV);
 
-imgRGB = ALogLuv2float(frameLUV, a, b);
+L = round(frameLUV(:,:,1));
 
-frameHDR = RemoveSpecials(imgRGB);
+[r,c] = size(L);
+n = r * c;
+
+%applying look-up table
+for i=1:n   
+    L(i) = table_y(round(L(i))+1);    
+end
+
+frameLUV(:,:,1) = L;
+
+frameHDR = ALogLuv2float(frameLUV, param_a, param_b);
 
 end
