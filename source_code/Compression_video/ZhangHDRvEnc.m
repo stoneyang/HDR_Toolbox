@@ -81,8 +81,8 @@ for i=1:hdrv.totalFrames
     [frameOut, y, a, b] = ZhangFrameEnc(frame, n_bits);   
     table_y(i,:) = y;
     
-    a(i) = param_a;
-    b(i) = param_b;
+    a(i) = a;
+    b(i) = b;
     
     %writing the frame out
     writeVideo(writerObj, frameOut/255.0);
