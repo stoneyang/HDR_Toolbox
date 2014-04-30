@@ -1,11 +1,13 @@
-function frameHDR = LeeKimHDRvDecFrame(frameTMO, frameR, r_min, r_max)
+function frameHDR = MaiHDRvDecFrame(frameTMO, l, v, frameR, r_min, r_max)
 %
 %
-%       frameHDR = LeeKimHDRvDecFrame(frameTMO, frameR, r_min, r_max, fSaturation, tmo_gamma)
+%       frameHDR = MaiHDRvDecFrame(frameTMO, l, v, frameR, r_min, r_max, fSaturation, tmo_gamma)
 %
 %
 %       Input:
 %           -frameTMO: a tone mapped frame from the video stream with values in [0,255] at 8-bit
+%           -l: tone mapping function
+%           -v: tone mapping function
 %           -frameR: a residual frame from the residuals stream with values in [0,255] at 8-bit
 %           -r_min: the minimum value of frameR
 %           -r_max: the maximum value of frameR
@@ -29,10 +31,10 @@ function frameHDR = LeeKimHDRvDecFrame(frameTMO, frameR, r_min, r_max)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 %     The paper describing this technique is:
-%     "RATE-DISTORTION OPTIMIZED COMPRESSION OF HIGH DYNAMIC RANGE VIDEOS"
-%     by Chul Lee and Chang-Su Kim
-%     in 16th European Signal Processing Conference (EUSIPCO 2008),
-%     Lausanne, Switzerland, August 25-29, 2008, copyright by EURASIP
+%     "Optimizing a Tone Curve for Backward-Compatible High Dynamic Range Image and Video Compression"
+% 	  by Chul Zicong Mai, Hassan Mansour, Rafal Mantiuk, Panos Nasiopoulos,
+%     Rabab Ward, and Wolfgang Heidrich
+%     in IEEE TRANSACTIONS ON IMAGE PROCESSING, VOL. 20, NO. 6, JUNE 2011
 %
 %
 
@@ -42,20 +44,17 @@ frameR = double(frameR)/255.0;
 frameR = frameR*(r_max-r_min) + r_min;
 
 %decompression of the tone mapped frame
-tmo_gamma = 2.2;   %as in the original paper
-fSaturation = 0.6; %as in the original paper
-
 frameTMO = double(frameTMO)/255.0;
-frameTMO = GammaTMO(frameTMO, 1.0/tmo_gamma, 0.0, 0);
-frameTMO = ColorCorrection(frameTMO, 1.0/fSaturation);
+L = lum(frameTMO);
+%inverse tone mapping with (l,v);
+Lw = 10.^interp1(v, l, L, 'linear'); 
 
 %expanding luminance
-epsilon = 0.05;%as in the original paper
-l = lum(frameTMO);
-h = exp(frameR).*(l+epsilon);
+epsilon = 0.05;
+h = exp(frameR).*(Lw+epsilon);
 
 %adding colors
-frameHDR = RemoveSpecials(ChangeLuminance(frameTMO, l, h));
+frameHDR = RemoveSpecials(ChangeLuminance(frameTMO, L, h));
 
 end
 

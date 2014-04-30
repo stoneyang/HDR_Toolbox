@@ -1,7 +1,7 @@
-function ZhangHDRvEnc(hdrv, name, hdrv_profile, hdrv_quality)
+function MaiHDRvEnc(hdrv, name, hdrv_profile, hdrv_quality)
 %
 %
-%       ZhangHDRvEnc(hdrv, name, hdrv_profile, hdrv_quality)
+%       MaiHDRvEnc(hdrv, name, hdrv_profile, hdrv_quality)
 %
 %
 %       Input:
@@ -15,7 +15,7 @@ function ZhangHDRvEnc(hdrv, name, hdrv_profile, hdrv_quality)
 %           -hdrv_quality: the output quality in [1,100]. 100 is the best quality
 %           1 is the lowest quality.
 %
-%     Copyright (C) 2014  Francesco Banterle
+%     Copyright (C) 2013-14  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -31,9 +31,10 @@ function ZhangHDRvEnc(hdrv, name, hdrv_profile, hdrv_quality)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 %     The paper describing this technique is:
-%     "HVS BASED HIGH DYNAMIC RANGE VIDEO COMPRESSION WITH OPTIMAL BIT-DEPTH TRANSFORMATION"
-% 	  by Yang Zhang, Erik Reinhard, David Bull
-%     in Proceedings of 2011 IEEE 18th International Conference on Image Processing
+%     "Optimizing a Tone Curve for Backward-Compatible High Dynamic Range Image and Video Compression"
+% 	  by Chul Zicong Mai, Hassan Mansour, Rafal Mantiuk, Panos Nasiopoulos,
+%     Rabab Ward, and Wolfgang Heidrich
+%     in IEEE TRANSACTIONS ON IMAGE PROCESSING, VOL. 20, NO. 6, JUNE 2011
 %
 %
 
@@ -55,42 +56,69 @@ end
 
 nameOut = RemoveExt(name);
 fileExt = fileExtension(name);
-nameLogLuv = [nameOut,'_ZRB11_LUV.',fileExt];
-
-%number of bits is fixed due to limitation of MATLAB
-n_bits = 8;
+nameTMO = [nameOut,'_MAI11_tmo.',fileExt];
+nameResiduals = [nameOut,'_MAI11_residuals.',fileExt];
 
 %Opening hdr stream
 hdrv = hdrvopen(hdrv);
 
-writerObj = VideoWriter(nameLogLuv, hdrv_profile);
+%Tone mapping pass
+writerObj = VideoWriter(nameTMO, hdrv_profile);
 writerObj.Quality = hdrv_quality;
 open(writerObj);
 
-table_y = zeros(hdrv.totalFrames, 2^n_bits);
-a = zeros(1, hdrv.totalFrames);
-b = zeros(1, hdrv.totalFrames);
+tone_function = [];
 
 for i=1:hdrv.totalFrames
     disp(['Processing frame ',num2str(i)]);
     
-    %getting the HDR frame
-    [frame, hdrv] = hdrvGetFrame(hdrv, i);
-
-    %encoding it
-    [frameOut, y, param_a, param_b] = ZhangFrameEnc(frame, n_bits);   
-    table_y(i,:) = y;
+    %HDR frame
+    [frame, hdrv] = hdrvGetFrame(hdrv, i);   
     
-    a(i) = param_a;
-    b(i) = param_b;
+    [frameTMO, l, v] = MaiFrameEnc(frame);
     
-    %writing the frame out
-    writeVideo(writerObj, frameOut/255.0);
+    writeVideo(writerObj, ClampImg(frameTMO,0,1));
+    tone_function = [tone_function, struct('l',l,'v',v)];  
+    
 end
-
 close(writerObj);
 
-save([nameOut,'_ZRB11_info.mat'], 'table_y', 'a', 'b');
+%video Residuals pass
+readerObj = VideoReader(nameTMO);
+
+writerObj_residuals = VideoWriter(nameResiduals, hdrv_profile);
+writerObj_residuals.Quality = hdrv_quality;
+open(writerObj_residuals);
+
+r_min = zeros(1,hdrv.totalFrames);
+r_max = zeros(1,hdrv.totalFrames);
+
+for i=1:hdrv.totalFrames
+    disp(['Processing frame ',num2str(i)]);
+    
+    %HDR frame
+    [frame, hdrv] = hdrvGetFrame(hdrv, i);
+    h = lum(frame);
+    
+    %Tone mapped frame
+    frameTMO = double(read(readerObj, i))/255;
+    L = lum(frameTMO);    
+    lr = 10.^interp1(tone_function(i).v, tone_function(i).l, L, 'linear'); 
+    %Residuals
+    r = RemoveSpecials(log(h./(lr+0.05)));
+    
+    %Normalize in [0,1]
+    r_min(i) = min(r(:));
+    r_max(i) = max(r(:));    
+    r = (r-r_min(i))/(r_max(i)-r_min(i));
+    
+    %writing residuals
+    writeVideo(writerObj_residuals, r);
+end
+
+close(writerObj_residuals);
+
+save([nameOut,'_MAI11_info.mat'], 'tone_function', 'r_min', 'r_max');
 
 hdrvclose(hdrv);
 

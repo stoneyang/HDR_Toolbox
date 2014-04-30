@@ -92,7 +92,6 @@ L(L>LMax) = LMax;
 x=(LlMin:((LlMax-LlMin)/(nBin-1)):LlMax)';
 pps = spline(x,Pcum);
 Ld  = exp(LldMin+(LldMax-LldMin)*ppval(pps,real(log(L))));
-hdrimwrite(Ld,'ld.pfm');
 Ld  = (Ld-LdMin)/(LdMax-LdMin);
 
 %Changing luminance

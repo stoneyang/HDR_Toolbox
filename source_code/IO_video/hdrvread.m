@@ -87,7 +87,7 @@ else
         hdrv = struct('type',type,'path',nameOut,'totalFrames',stream.NumberOfFrames,'FrameRate',stream.FrameRate,'frameCounter',1,'streamOpen',0,'stream',stream,'info',info);
     end  
     
-    if(strfind(nameOut,'_ZRB11_'))%is it a Motra and Thoma 2010 HDRv stream?
+    if(strfind(nameOut,'_ZRB11_'))%is it a Motra and Zhang Reinhard Bull 2011 HDRv stream?
         type = 'TYPE_HDRV_ZRB11';
         
         pos = strfind(nameOut,'_ZRB11_');
@@ -95,7 +95,20 @@ else
         stream = VideoReader([name,'_ZRB11_LUV.',fileExt]);
         info     = load([name,'_ZRB11_info.mat']);
         hdrv = struct('type',type,'path',nameOut,'totalFrames',stream.NumberOfFrames,'FrameRate',stream.FrameRate,'frameCounter',1,'streamOpen',0,'stream',stream,'info',info);
-    end      
+    end
+
+    if(strfind(nameOut,'_MAI11_'))%is it a Mai et al. 2011 HDRv stream?
+        type = 'TYPE_HDRV_MAI11';
+        
+        pos = strfind(nameOut,'_MAI11_');
+        name = nameOut(1:(pos-1));        
+
+        streamTMO = VideoReader([name,'_MAI11_tmo.',fileExt]);
+        streamR   = VideoReader([name,'_MAI11_residuals.',fileExt]);
+        
+        info     = load([name,'_MAI11_info.mat']);
+        hdrv = struct('type',type,'path',nameOut,'totalFrames',streamTMO.NumberOfFrames,'FrameRate',streamTMO.FrameRate,'frameCounter',1,'streamOpen',0,'streamTMO',streamTMO, 'streamR', streamR,'info',info);
+    end    
     
 end
 
