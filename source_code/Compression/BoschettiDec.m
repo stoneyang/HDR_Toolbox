@@ -43,7 +43,7 @@ RGBDec = double(imread([name,'_bos_RGB.jp2']))/maxVal;
 
 %Reconstruction
 imgRec = zeros(size(RGBDec));
-for i=1:3
+for i=1:size(imgRec, 3)
     imgRec(:,:,i) = (RGBDec(:,:,i)).*mult;
 end
 

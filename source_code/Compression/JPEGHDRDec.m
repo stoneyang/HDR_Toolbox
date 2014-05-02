@@ -53,7 +53,7 @@ imgRI = imresize(imgRI,[r,c],'bilinear');
 
 %Decoded image
 imgRec = zeros(size(imgTMO));
-for i=1:3
+for i=1:col
     imgRec(:,:,i)=imgTMO(:,:,i).*imgRI;
 end
 

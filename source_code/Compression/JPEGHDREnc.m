@@ -28,7 +28,7 @@ function JPEGHDREnc(img, name, quality)
 %remove the extension of the file
 nameOut = RemoveExt(name);
 
-if(~exist('quality'))
+if(~exist('quality', 'var'))
     quality = 95;
 end
 
@@ -75,7 +75,7 @@ imgRI = 2.^imgRI;
 imgRI = imresize(imgRI,[r,c],'bilinear');
 
 %Tone mapped image
-for i=1:3
+for i=1:col
     imgTMO(:,:,i) = img(:,:,i)./imgRI;
 end
 imgTMO=RemoveSpecials(imgTMO);

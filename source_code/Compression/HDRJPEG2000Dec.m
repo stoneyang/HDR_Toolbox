@@ -35,8 +35,8 @@ xMax = zeros(3,1);
 
 c = 1;
 for i=1:2:6
-    xMax(c)   = decoded(i);
-    xMin(c) = decoded(i+1);
+    xMax(c) = decoded(i);
+    xMin(c) = decoded(i + 1);
     c = c+1;
 end
 
@@ -44,8 +44,8 @@ end
 nBit = 16;
 delta = 1e-6;
 imgRec = double(imread(name))/(2^nBit-1);
-for i = 1:3
-    imgRec(:,:,i) = exp(imgRec(:,:,i)*(xMax(i)-xMin(i))+xMin(i))-delta;
+for i = 1:size(imgRec, 3)
+    imgRec(:,:,i) = exp(imgRec(:,:,i) * (xMax(i) - xMin(i)) + xMin(i)) - delta;
 end
 
 imgRec(imgRec<0.0)=0;

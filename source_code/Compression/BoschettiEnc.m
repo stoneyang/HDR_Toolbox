@@ -30,23 +30,23 @@ function BoschettiEnc(img, name, bos_rateE, bos_rateRGB, nBit, tmo_operator)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-if(~exist('bos_rateRGB'))
+if(~exist('bos_rateRGB','var'))
     rateRGB = 15;
 else
     rateRGB = bos_rateRGB;
 end
 
-if(~exist('bos_rateE'))
+if(~exist('bos_rateE','var'))
     rateE = 15;
 else
     rateE = bos_rateE;
 end
 
-if(~exist('nBit'))
+if(~exist('nBit','var'))
     nBit = 16;
 end
 
-if(~exist('tmo_operator'))
+if(~exist('tmo_operator','var'))
     tmo_operator = @ReinhardTMO;
 end
 
@@ -86,7 +86,7 @@ EDec = EqDec*(maxE-minE)+minE;
 %Computing RGB
 RGB = zeros(size(img));
 div = 2.^EDec;
-for i=1:3
+for i=1:size(img, 3)
     RGB(:,:,i) = (img(:,:,i)./div);
 end
 

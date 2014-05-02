@@ -25,7 +25,7 @@ function HDRJPEG2000Enc(img, name, compRatio)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-if(~exist('compRatio'))
+if(~exist('compRatio','var'))
     compRatio = 2;
 end
 
@@ -40,7 +40,8 @@ nBit = 16;
 imgLog = log(img+delta);
 xMin = zeros(3,1);
 xMax = zeros(3,1);
-for i = 1:3
+col = size(img,3);
+for i = 1:col
     xMin(i) = min(min(imgLog(:,:,i)));
     xMax(i) = max(max(imgLog(:,:,i)));
     imgLog(:,:,i) = (imgLog(:,:,i)-xMin(i))/(xMax(i)-xMin(i));
@@ -49,7 +50,7 @@ imgLog = uint16(imgLog*(2^nBit-1));
 
 %metadata string
 metadata = [];
-for i = 1:3
+for i = 1:col
     metadata = [metadata, num2str(xMax(i)),' ',num2str(xMin(i)),' '];
 end
 
