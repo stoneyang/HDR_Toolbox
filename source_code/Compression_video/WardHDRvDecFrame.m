@@ -29,11 +29,8 @@ function frameHDR = WardHDRvDecFrame(frameTMO, frameR, r_min, r_max, r_max_tmo)
 %     You should have received a copy of the GNU General Public License
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
-%     The paper describing this technique is:
-%     "RATE-DISTORTION OPTIMIZED COMPRESSION OF HIGH DYNAMIC RANGE VIDEOS"
-%     by Chul Lee and Chang-Su Kim
-%     in 16th European Signal Processing Conference (EUSIPCO 2008),
-%     Lausanne, Switzerland, August 25-29, 2008, copyright by EURASIP
+%     This method is an extension of the Ward and Simmons JPEG-HDR method
+%     applied to videos.
 %
 %
 
