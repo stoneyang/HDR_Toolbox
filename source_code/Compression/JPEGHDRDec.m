@@ -1,7 +1,7 @@
-function imgRec=JPEGHDRDec(name)
+function imgRec = JPEGHDRDec(name)
 %
 %
-%       imgRec=JPEGHDRDec(name)
+%       imgRec = JPEGHDRDec(name)
 %
 %
 %       Input:
