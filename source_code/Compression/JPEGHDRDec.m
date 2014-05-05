@@ -45,7 +45,7 @@ imgTMO = maxTMO*((double(imread(name))/255).^gamma);
 [r,c,col] = size(imgTMO);
 
 %Read the RI layer
-imgRI = (double(imread(nameRatio))/255).^gamma;
+imgRI = (double(imread(nameRatio))/255);
 imgRI = imgRI*(maxRIenc-minRIenc)+minRIenc;
 imgRI = ClampImg(imgRI*32-16,-16,16);
 imgRI = 2.^imgRI;

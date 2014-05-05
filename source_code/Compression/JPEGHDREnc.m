@@ -50,7 +50,7 @@ RI = lum(img)./lum(imgTMO);
 %JPEG Quantization
 flag = 1;
 scale = 1;
-nameRatio=[nameOut,'_ratio.jpg'];
+nameRatio = [nameOut,'_ratio.jpg'];
 while(flag)
     RItmp = imresize(RI,scale,'bilinear');    
     RIenc = log2(RItmp+2^-16);
@@ -60,7 +60,7 @@ while(flag)
     RIenc = (RIenc-minRIenc)/(maxRIenc-minRIenc);
     %Ratio images are stored with maximum quality
     metatadata = [num2str(maxRIenc),' ',num2str(minRIenc)];
-    imwrite(RIenc.^invGamma,nameRatio,'Quality',100,'Comment',metatadata);
+    imwrite(RIenc,nameRatio,'Quality',100,'Comment',metatadata);
     scale = scale - 0.005;
     %stop?
     valueDir = dir(nameRatio);
@@ -68,7 +68,6 @@ while(flag)
 end
 
 imgRI = double(imread(nameRatio))/255;
-imgRI = imgRI.^gamma;
 imgRI = imgRI*(maxRIenc-minRIenc)+minRIenc;
 imgRI = ClampImg(imgRI*32-16,-16,16);
 imgRI = 2.^imgRI;
@@ -76,13 +75,13 @@ imgRI = imresize(imgRI,[r,c],'bilinear');
 
 %Tone mapped image
 for i=1:col
-    imgTMO(:,:,i) = img(:,:,i)./imgRI;
+    imgTMO(:,:,i) = img(:,:,i) ./ imgRI;
 end
-imgTMO=RemoveSpecials(imgTMO);
+imgTMO = RemoveSpecials(imgTMO);
 
 %Clamping using the 0.999th percentile
-maxTMO=MaxQuart(imgTMO,0.999);
-imgTMO=ClampImg(imgTMO/maxTMO,0,1);
+maxTMO = MaxQuart(imgTMO,0.999);
+imgTMO = ClampImg(imgTMO/maxTMO,0,1);
 
 metatadata = num2str(maxTMO);
 imwrite(imgTMO.^invGamma,name,'Quality',quality,'Comment',metatadata);
