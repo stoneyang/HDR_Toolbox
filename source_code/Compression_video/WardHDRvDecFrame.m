@@ -34,11 +34,19 @@ function frameHDR = WardHDRvDecFrame(frameTMO, frameR, r_min, r_max, r_max_tmo)
 %
 %
 
+[r,c,col] = size(frameTMO);
+
 %decompression of the residuals frame
 frameR = frameR(:,:,1);
 frameR = double(frameR)/255.0;
 frameR = frameR*(r_max-r_min) + r_min;
 RI = 2.^(frameR * 32 - 16);
+
+r2 = size(RI, 1);
+
+if(r2 < r)
+    RI = imresize(RI, [r,c], 'bilinear');
+end
     
 %decompression of the tone mapped frame
 tmo_gamma = 2.2; 
@@ -47,7 +55,7 @@ frameTMO = frameTMO * r_max_tmo;
 
 %adding colors
 frameHDR = zeros(size(frameTMO));
-for i=1:size(frameTMO, 3)
+for i=1:col
     frameHDR(:,:,i) = frameTMO(:,:,i) .* RI;
 end
 

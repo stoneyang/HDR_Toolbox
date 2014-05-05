@@ -1,7 +1,7 @@
-function WardHDRvEnc(hdrv, name, hdrv_profile, hdrv_quality)
+function WardHDRvEnc(hdrv, name, hdrv_profile, hdrv_quality, hdrv_residual_scaling)
 %
 %
-%       WardHDRvEnc(hdrv, name, hdrv_profile, hdrv_quality)
+%       WardHDRvEnc(hdrv, name, hdrv_profile, hdrv_quality, hdrv_residual_scaling)
 %
 %
 %       Input:
@@ -14,6 +14,8 @@ function WardHDRvEnc(hdrv, name, hdrv_profile, hdrv_quality)
 %           be present.
 %           -hdrv_quality: the output quality in [1,100]. 100 is the best quality
 %           1 is the lowest quality.
+%           -hdrv_residual_scaling: a value in (0,1] for scaling the
+%           residual stream and increasing compression.
 %
 %     Copyright (C) 2013-14  Francesco Banterle
 % 
@@ -42,6 +44,12 @@ end
 if(hdrv_quality<1)
     hdrv_quality = 95;
 end
+
+if(~exist('hdrv_residual_scaling','var'))
+    hdrv_residual_scaling = 0.75;
+end
+
+hdrv_residual_scaling = ClampImg(hdrv_residual_scaling, 0.01, 1.0);
 
 if(~exist('hdrv_profile','var'))
     hdrv_profile = 'Motion JPEG AVI';
@@ -95,6 +103,8 @@ for i=1:hdrv.totalFrames
     r_min(i) = minRIenc;
     r_max(i) = maxRIenc;    
            
+    RIenc = imresize(RIenc, hdrv_residual_scaling, 'bilinear');
+    
     %writing residuals
     writeVideo(writerObj_residuals, RIenc);
 end
@@ -116,16 +126,21 @@ for i=1:hdrv.totalFrames
     
     %HDR frame
     [frame, hdrv] = hdrvGetFrame(hdrv, i);
+    [r,c,col] = size(frame);
     
     %Tone mapped frame
     RIenc = double(read(readerObj_residuals, i))/255;
     RIenc = RIenc(:,:,1);
     RIenc = RIenc * (r_max(i) - r_min(i)) + r_min(i);
     RI = 2.^(RIenc * 32 - 16);
+
+    if(hdrv_residual_scaling < 1.0)
+        RI = imresize(RI, [r,c], 'bilinear');
+    end
     
     %Tone mapped image
     frameTMO = zeros(size(frame));
-    for j=1:size(frame, 3)
+    for j=1:col
         frameTMO(:,:,j) = frame(:,:,j) ./ RI;
     end
     frameTMO = RemoveSpecials(frameTMO);
