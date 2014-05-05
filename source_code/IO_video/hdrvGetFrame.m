@@ -80,6 +80,11 @@ switch hdrv.type
         frameR = read(hdrv.streamR, frameCounter); 
         frame = MaiHDRvDecFrame(frameTMO, hdrv.info.tone_function(frameCounter).l, hdrv.info.tone_function(frameCounter).v, frameR, hdrv.info.r_min(frameCounter), hdrv.info.r_max(frameCounter));
 
+    case 'TYPE_HDRV_WS05'
+        frameTMO = read(hdrv.streamTMO, frameCounter); 
+        frameR = read(hdrv.streamR, frameCounter); 
+        frame = WardHDRvDecFrame(frameTMO, frameR, hdrv.info.r_min(frameCounter), hdrv.info.r_max(frameCounter), hdrv.info.r_maxTMO(frameCounter));
+        
 end
 
 %updating the counter
