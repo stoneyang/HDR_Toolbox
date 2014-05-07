@@ -83,14 +83,6 @@ switch extension
         catch
             error('This PFM file can not be written.');
         end
-    
-    %JPEG-HDR (.jpg)
-    case 'jpg'
-        try
-            JPEGHDREnc(img, filename, jpeg_hdr_quality);
-        catch
-            error('This JPEG-HDR file can not be written.');
-        end
         
     %HDR JPEG2000 (.jp2)
     case 'jp2'

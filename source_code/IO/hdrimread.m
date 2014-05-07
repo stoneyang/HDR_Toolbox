@@ -77,22 +77,6 @@ switch extension
             bLDR = 1;            
             disp('Warning: this .jpg2 file cannot be read as an HDR JPEG 2000 file.');
         end        
-        
-    case 'jpg'
-        try
-            img = JPEGHDRDec(filename);
-        catch err
-            bLDR = 1;
-            disp('Warning: this .jpg file cannot be read as a JPEG-HDR file.');
-        end
-       
-    otherwise %try to open as LDR image
-        try
-            bLDR = 1;
-            img = ldrimread(filename);
-        catch err
-            disp(['Warning: this LDR format, ',extension,', is not supported.']);
-        end
 end
 
 if(isempty(img))

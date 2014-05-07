@@ -110,19 +110,6 @@ else
         hdrv = struct('type',type,'path',nameOut,'totalFrames',streamTMO.NumberOfFrames,'FrameRate',streamTMO.FrameRate,'frameCounter',1,'streamOpen',0,'streamTMO',streamTMO, 'streamR', streamR,'info',info);
     end    
     
-    if(strfind(nameOut,'_WS05_'))%is it a Mai et al. 2011 HDRv stream?
-        type = 'TYPE_HDRV_WS05';
-        
-        pos = strfind(nameOut,'_WS05_');
-        name = nameOut(1:(pos-1));        
-
-        streamTMO = VideoReader([name,'_WS05_tmo.',fileExt]);
-        streamR   = VideoReader([name,'_WS05_residuals.',fileExt]);
-        
-        info     = load([name,'_WS05_info.mat']);
-        hdrv = struct('type',type,'path',nameOut,'totalFrames',streamTMO.NumberOfFrames,'FrameRate',streamTMO.FrameRate,'frameCounter',1,'streamOpen',0,'streamTMO',streamTMO, 'streamR', streamR,'info',info);
-    end        
-    
 end
 
 end
