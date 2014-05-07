@@ -34,7 +34,6 @@ function frameHDR = MotraThomaHDRvDecFrame(frameLUV, a, b)
 %
 %
 
-
 %Reconstruction of HDR luminance
 frameLUV = double(frameLUV);
 
