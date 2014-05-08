@@ -47,7 +47,7 @@ Run the demos to understand how to use I/O function, visualize images, tone Map 
 31/10/2013: -Added different fusion operator/tone mapping operator, improved demos, enhanced the toolbox.
 
 03/10/2013: -Added input/output for HDR videos: these videos need to be encoded as folders with a sequence of HDR files.
-	    -Integrated JPEGHDR and HDRJPEG 2000 into hdrimwrite and hdrimread.
+	    -Integrated HDRJPEG 2000 into hdrimwrite and hdrimread.
 
 16/09/2013: -Added Grossberg and Nayar sampling through histograms.
 
