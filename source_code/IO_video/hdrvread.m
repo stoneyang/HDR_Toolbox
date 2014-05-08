@@ -35,11 +35,6 @@ if(isdir(filename))
         tmp_list = dir([filename,'/','*.pfm']);
         type = 'TYPE_HDR_PFM';
     end
-    
-    if(isempty(tmp_list))%assuming frames compressed with JPEG HDR
-        tmp_list = dir([filename,'/','*.jpg']);
-        type = 'TYPE_HDR_JPEG';
-    end
 
     if(isempty(tmp_list))%assuming frames compressed with HDR JPEG 2000
         tmp_list = dir([filename,'/','*.jp2']);
@@ -54,18 +49,7 @@ if(isdir(filename))
 else
     nameOut = RemoveExt(filename);
     fileExt = fileExtension(filename);
-    
-    if(strfind(nameOut,'_MB06_'))%is it a Mantiuk Backward 2006 HDRv stream?
-        type = 'TYPE_HDRV_MB06';
-        
-        pos = strfind(nameOut,'_MB06_');
-        name = nameOut(1:(pos-1));        
-        streamTMO = VideoReader([name,'_MB06_tmo.',fileExt]);
-        streamR   = VideoReader([name,'_MB06_residuals.',fileExt]);
-        Rinfo     = load([name,'_MB06_Rinfo.mat']);
-        hdrv = struct('type',type,'path',nameOut,'totalFrames',streamTMO.NumberOfFrames,'FrameRate',streamTMO.FrameRate,'frameCounter',1,'streamOpen',0,'streamTMO',streamTMO,'streamR',streamR,'Rinfo',Rinfo);
-    end
-       
+          
     if(strfind(nameOut,'_LK08_'))%is it a Lee and Kim 2008 HDRv stream?
         type = 'TYPE_HDRV_LK08';
 
