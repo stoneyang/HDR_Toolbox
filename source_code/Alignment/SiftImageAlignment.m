@@ -1,8 +1,8 @@
 function imgOut = SiftImageAlignment(img1, img2, maxIterations)
 %
-%       l=lum(img)
+%       imgOut = SiftImageAlignment(img1, img2, maxIterations)
 %
-%       This function calculates the luminance
+%       This function computes alignment using SIFT from VL Feat.
 %
 %
 %       input:
@@ -136,6 +136,9 @@ vr = 1:size(img1,1);
 z_ =  H(3,1) * u + H(3,2) * v + H(3,3) ;
 u_ = (H(1,1) * u + H(1,2) * v + H(1,3)) ./ z_ ;
 v_ = (H(2,1) * u + H(2,2) * v + H(2,3)) ./ z_ ;
-imgOut = RemoveSpecials(vl_imwbackward(img2,u_,v_));
+
+for i=1:size(img2, 3)
+    imgOut(:,:,i) = RemoveSpecials(interp2(ur, vr, img2(:,:,i), u_, v_, 'linear', NaN));
+end
 
 end

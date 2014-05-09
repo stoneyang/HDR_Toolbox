@@ -1,4 +1,4 @@
-function stackOut = SiftAlignment(stack, bStackOut, dir_name, format, target_exposure)
+function stackOut = SiftAlignment(stack, dir_name, format, target_exposure)
 %
 %
 %       stackOut = SiftAlignment(stack, bStackOut, dir_name, format,
@@ -10,8 +10,6 @@ function stackOut = SiftAlignment(stack, bStackOut, dir_name, format, target_exp
 %
 %       Input:
 %           -stack: a stack (4D) containing all images.
-%           -bStackOut: if it is sets to 1 it outputs an aligned stack in
-%           stackOut. Otherwise, stackOut = [].
 %           -dir_name: the folder name where the stack is stored. This flag
 %           is valid if stack=[]
 %           -format: the file format of the stack. This flag is valid if
@@ -90,11 +88,8 @@ else
     img = single(imread([dir_name,'/',lst(target_exposure).name]))/255;
 end
 
-stackOut = [];
-if(bStackOut)
-    stackOut = zeros(r,c,col,n);
-    stackOut(:,:,:,target_exposure) = img;
-end
+stackOut = zeros(r,c,col,n);
+stackOut(:,:,:,target_exposure) = img;
 
 for i=1:n
     
@@ -109,9 +104,7 @@ for i=1:n
 
         imWork_align = SiftImageAlignment(img, imgWork);
         
-        if(bStackOut)
-            stackOut(:,:,:,i) = imWork_align;
-        end
+        stackOut(:,:,:,i) = imWork_align;
         
         if(~bStack)
             oldName = lst(i).name;
@@ -120,7 +113,7 @@ for i=1:n
                 name = [name,'_align.',format];
             end
             
-            imwrite(imWork_align,[dir_name,'/',name]);
+            imwrite(imWork_align, [dir_name,'/',name]);
         end
         
         clear('imWork_align');

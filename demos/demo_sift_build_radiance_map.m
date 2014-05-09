@@ -11,19 +11,19 @@
 %
 %
 
-disp('1) Read a stack of LDR images');
-
 name_folder = 'stack_alignment';
 format = 'jpg';
 
+disp('1) Read exposure values from the exif');
+stack_exposure = ReadLDRExif(name_folder, format);
+
+disp('2) Read a stack of LDR images');
+
 stack = ReadLDRStack(name_folder, format);
 
-disp('2) Align the stack');
-stackOut = SiftAlignment(stack/255.0, 1, '', '');
+disp('3) Align the stack');
+stackOut = SiftAlignment(stack/255.0, '', '');
 clear('stack');
-
-disp('3) Read exposure values from the exif');
-stack_exposure = ReadLDRExif(name_folder, format);
 
 disp('4) Build the radiance map using the stack and stack_exposure');
 imgHDR = BuildHDR(stackOut, stack_exposure, 'tabledDeb97', [], 'hat');
