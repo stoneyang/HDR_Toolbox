@@ -1,4 +1,4 @@
-function ret = hdrimwrite(img, filename, jpeg_hdr_quality, hdr_jpeg_2000_ratio)
+function ret = hdrimwrite(img, filename, hdr_jpeg_2000_ratio)
 %
 %       ret=hdrimwrite(img, filename)
 %
@@ -6,7 +6,6 @@ function ret = hdrimwrite(img, filename, jpeg_hdr_quality, hdr_jpeg_2000_ratio)
 %        Input:
 %           -img: the image to write on the hard disk
 %           -filename: the name of the image to write
-%           -jpeg_hdr_quality: quality for JPEG-HDR encoder
 %           -hdr_jpeg_2000_ratio: ratio for HDR JPEG 2000
 %
 %        Output:
@@ -52,10 +51,6 @@ end
 
 ret = 0;
 
-if(~exist('jpeg_hdr_quality','var'))
-    jpeg_hdr_quality = 95;
-end
-
 if(~exist('hdr_jpeg_2000_ratio','var'))
     hdr_jpeg_2000_ratio = 2;
 end
@@ -63,7 +58,7 @@ end
 extension = lower(fileExtension(filename));
 
 if(strcmpi(extension,'pic')==1)
-    extension='hdr';
+    extension = 'hdr';
 end
 
 switch extension
@@ -71,7 +66,7 @@ switch extension
     %PIC-HDR format by Greg Ward (.hdr)
     case 'hdr'
         try
-            write_rgbe(img,filename, 1);
+            write_rgbe(img, filename, 1);
         catch
             error('This PIC/HDR file can not be written.');
         end
@@ -92,7 +87,7 @@ switch extension
              error('This HDR JPEG 2000 file can not be written.');
          end        
         
-    otherwise%try to save as LDR image
+    otherwise %try to save as LDR image
         try
             imwrite(ClampImg(img,0,1),filename);
         catch
