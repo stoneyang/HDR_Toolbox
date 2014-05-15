@@ -37,12 +37,12 @@ v = max(img,[],3);
 
 Low = find(v < 1e-32);
 
-v2 = v;
 [v, e] = log2(v);
 e = ceil(e + 128);
 e(Low) = 0;
 
 E = 2 .^ (e - 128.0);
+
 for i=1:3
     tmp = floor((img(:,:,i) .* 256) ./ E);
     tmp(Low) = 0;
