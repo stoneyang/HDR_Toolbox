@@ -33,7 +33,7 @@ end
 
 img = zeros(m,n,3);
 
-E = double(imgRGBE(:,:,4) - 128);
+E = double(imgRGBE(:,:,4) - 128 - 8);
 f = 2.^E;
 f(imgRGBE(:,:,4)==0)=0;
 
