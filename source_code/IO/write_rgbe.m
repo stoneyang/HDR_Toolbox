@@ -1,13 +1,13 @@
-function ret = write_rgbe(img, filename, bRLE, hdr_info)
+function ret = write_rgbe(img, filename, hdr_info)
 %
-%       ret = write_rgbe(img, filename, bRLE, hdr_info)
+%       ret = write_rgbe(img, filename, hdr_info)
 %
 %       This function write an image using RGBE encoding
 %
 %        Input:
 %           -img: the image to write on the hard disk
 %           -filename: the name of the image to write
-%           -hdr_info: RGBE format extra datum such as: exposure, gamma, etc.
+%           -hdr_info: RGBE format extra datum such as: RLE comression, exposure, gamma, etc.
 %
 %        Output:
 %           -ret: a boolean value, it is set to 1 if the write succeed, 0 otherwise
@@ -28,12 +28,14 @@ function ret = write_rgbe(img, filename, bRLE, hdr_info)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-if(~exist('bRLE','var'))
-    bRLE = 1;
+if(~exist('hdr_info', 'var'))
+    hdr_info = struct('exposure', 1.0, 'gamma', 1.0, 'bRLE', 1);
 end
 
-if(~exist('hdr_info', 'var'))
-    hdr_info = struct('exposure', 1.0, 'gamma', 1.0);
+if(~exist('hdr_info.bRLE','var'))
+    bRLE = 1;
+else
+    bRLE = hdr_info.bRLE;
 end
 
 if(~exist('hdr_info.exposure', 'var'))

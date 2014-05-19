@@ -7,7 +7,7 @@ function ret = hdrimwrite(img, filename, hdr_info)
 %           -img: the image to write on the hard disk
 %           -filename: the name of the image to write
 %	    -hdr_info: a MATLAB struct with datum for writing:
-%		-RGBE: exposure (exposure) and gamma (gamma)
+%		-RGBE: exposure (exposure), RLE compression enable (bRLE), and gamma (gamma)
 %		-HDR JPEG2000: the compression ratio (compression_ratio)
 %
 %        Output:
@@ -68,7 +68,7 @@ switch extension
     %PIC-HDR format by Greg Ward (.hdr)
     case 'hdr'
         try
-            write_rgbe(img, filename, 1, hdr_info);
+            write_rgbe(img, filename, hdr_info);
         catch
             error('This PIC/HDR file can not be written.');
         end
