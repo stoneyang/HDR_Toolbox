@@ -52,6 +52,8 @@ else
     end
 end
 
+exposure = hdr_info.exposure;
+gamma = hdr_info.gamma;
 
 ret = 0;
 
