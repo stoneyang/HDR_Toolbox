@@ -4,14 +4,16 @@ function ret = hdrimwrite(img, filename, hdr_info)
 %
 %
 %        Input:
-%           -img: the image to write on the hard disk
-%           -filename: the name of the image to write
+%           -img: the image to write on the hard disk.
+%           -filename: the name of the image to write.
 %	    -hdr_info: a MATLAB struct with datum for writing:
-%		-RGBE: exposure (exposure), RLE compression enable (bRLE), and gamma (gamma)
-%		-HDR JPEG2000: the compression ratio (compression_ratio)
+%		-RGBE: exposure (exposure), RLE compression enable (bRLE),
+%		and gamma (gamma). Note that gamma and exposure have to be
+%		applied by the user before writing the file.
+%		-HDR JPEG2000: the compression ratio (compression_ratio).
 %
 %        Output:
-%           -ret: a boolean value, it is set to 1 if the write succeed, 0 otherwise
+%           -ret: a boolean value, it is set to 1 if the write succeed, 0 otherwise.
 %
 %     Copyright (C) 2011-2013  Francesco Banterle
 % 

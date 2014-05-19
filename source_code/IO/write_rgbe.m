@@ -2,7 +2,10 @@ function ret = write_rgbe(img, filename, hdr_info)
 %
 %       ret = write_rgbe(img, filename, hdr_info)
 %
-%       This function write an image using RGBE encoding
+%       This function writes an image using RGBE encoding.
+%	Exposure and gamma, in the hdr_info, have to be applied before
+%	by the user.
+%
 %
 %        Input:
 %           -img: the image to write on the hard disk
@@ -41,21 +44,14 @@ end
 if(~exist('hdr_info.exposure', 'var'))
     exposure = 1.0;    
 else
-    if(hdr_info.exposure > 0.0)
-       img = img * hdr_info.exposure;
-    end
+    exposure = hdr_info.exposure;
 end
 
 if(~exist('hdr_info.gamma', 'var'))
     gamma = 1.0;    
-else
-    if(hdr_info.gamma > 0.0)
-       img = img.^hdr_info.gamma;
-    end
+else 
+    gamma = hdr_info.gamma;
 end
-
-exposure = hdr_info.exposure;
-gamma = hdr_info.gamma;
 
 ret = 0;
 
