@@ -34,8 +34,8 @@ end
 imgNoise2 = (imgReference-imgDistorted).^2;
 imgReference2 = imgReference.^2;
 
-tmp1 = sum(imgReference2(:));
-tmp2 = sum(imgNoise2(:));
+tmp1 = mean(imgReference2(:));
+tmp2 = mean(imgNoise2(:));
 
 if(tmp2>0.0)
     val = 10*log10(tmp1/tmp2);
