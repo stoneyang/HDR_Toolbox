@@ -1,12 +1,13 @@
-function imgOut = read_rgbe(filename)
+function [imgOut, hdr_info] = read_rgbe(filename)
 %
-%       img = read_rgbe(filename)
+%       [imgOut, hdr_info] = read_rgbe(filename)
 %
 %        Input:
 %           -filename: the name of the file to open
 %
 %        Output:
 %           -imgOut: a float image
+%           -hdr_info: RGBE format extra datum such as: exposure, gamma, etc.
 %
 %     Copyright (C) 2011  Francesco Banterle
 % 
@@ -125,14 +126,6 @@ else
 end
 fclose(fid);
 
-%apply gamma
-if((gamma~=1.0)&&(gamma>0.0))
-    imgOut = imgOut.^gamma;
-end
-
-%apply exposure
-if((exposure~=1.0)&&(exposure>0.0))
-    imgOut = imgOut/exposure;
-end
+hdr_info = struct('exposure', exposure, 'gamma', gamma);
 
 end

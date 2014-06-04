@@ -33,13 +33,13 @@ end
 
 img = zeros(m,n,3);
 
-E = double(imgRGBE(:,:,4)-128-8);
-f = pow2(1.0,E);
+E = double(imgRGBE(:,:,4) - 128 - 8);
+f = 2.^E;
 f(imgRGBE(:,:,4)==0)=0;
 
 for i=1:3
     %note that this + 0.5 is for being compliant with Greg Ward code
-    img(:,:,i) = double(imgRGBE(:,:,i)+0.5).*f;
+    img(:,:,i) = double(imgRGBE(:,:,i) + 0.5) .* f;
 end
 
 end

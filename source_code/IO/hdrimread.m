@@ -1,19 +1,20 @@
-function img = hdrimread(filename)
+function [img, hdr_info] = hdrimread(filename)
 %
-%       img = hdrimread(filename)
+%       [img, hdr_info] = hdrimread(filename)
 %
 %       This function reads from a file with name filename an HDR image, if
 %       the format can not be opened, it tries to open it as it was an LDR
 %       image using imread from MATLAB Image Processing Toolbox.
 %
-%       JPEG and JPEG2000 files passed as input are meant to be compressed
-%       using respectively JPEG-HDR or HDR JPEG-2000. 
+%       NOTE: JPEG2000 file passed as input are meant to be compressed
+%       using HDR JPEG-2000. 
 %
 %        Input:
 %           -filename: the name of the file to open
 %
 %        Output:
 %           -img: the opened image
+%           -hdr_info: RGBE format extra datum such as: exposure, gamma, etc.
 %
 %     Copyright (C) 2011-13  Francesco Banterle
 % 
@@ -43,7 +44,7 @@ if((strcmpi(extension,'pic')==1)||(strcmpi(extension,'rgbe')==1))
 end
 
 img = [];
-
+hdr_info = [];
 bLDR = 0;
 
 switch extension
@@ -51,11 +52,11 @@ switch extension
     %PIC-HDR format by Greg Ward
     case 'hdr'
         try
-		 %Uncompressed RGBE Image
-            img = read_rgbe(filename);  
+	    %HDR Toolbox's HDR Reader
+            [img, hdr_info] = read_rgbe(filename);  
         catch err  
             try 
-                %RLE compressed image
+		%MATLAB HDR Reader
                 img = double(hdrread(filename));
             catch err
                 disp('Warning: this .hdr/.pic file can not be read.');
