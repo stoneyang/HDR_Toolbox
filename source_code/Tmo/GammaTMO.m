@@ -1,6 +1,6 @@
-function imgOut=GammaTMO(img, TMO_gamma, TMO_fstop, TMO_view)
+function imgOut = GammaTMO(img, TMO_gamma, TMO_fstop, TMO_view)
 %
-%        imgOut=GammaTMO(img, TMO_gamma, TMO_fstop, TMO_view);
+%        imgOut = GammaTMO(img, TMO_gamma, TMO_fstop, TMO_view);
 %
 %        This function applies exposure (in f-stops) and inverse gamma
 %        correction to an image. The function can visualize images if
