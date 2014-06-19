@@ -7,7 +7,7 @@ function imgOut = PattanaikVisualAdaptationStaticTMO(img, A_rod, A_cone)
 %        TMO_view is set to true (1).
 %
 %        Input:
-%           -img: an image to be tonemapped
+%           -img: an HDR image with calibrated values in cd/m^2
 %           -A_rod: adaptation value for rods in cd/m^2
 %           -A_cone: adaptation value for cones in cd/m^2
 %
