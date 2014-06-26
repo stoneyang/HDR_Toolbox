@@ -31,7 +31,7 @@ function imgOut = imShiftWrap(img, isw_dx)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-if(~exist('isw_dx'))
+if(~exist('isw_dx','var'))
     isw_dx = 0;
 end
 

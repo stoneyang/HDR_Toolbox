@@ -1,18 +1,16 @@
-function imgOut = KuoEO(img, LMax, LMin, gammaRemoval)
+function imgOut = KuoEO(img, LMax, gammaRemoval)
 %
-%       imgOut = KuoEO(img, LMax, LMin, gammaRemoval)
-%
+%       imgOut = KuoEO(img, LMax, gammaRemoval)
 %
 %        Input:
 %           -img:  input LDR image with values in [0,1]
 %           -LMax: maximum luminance output in cd/m^2
-%           -LMin: minimum luminance output in cd/m^2
 %           -gammaRemoval: the gamma value to be removed if known
 %
 %        Output:
 %           -imgOut: an expanded image
 %
-%     Copyright (C) 2013  Francesco Banterle
+%     Copyright (C) 2013-14  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -27,36 +25,40 @@ function imgOut = KuoEO(img, LMax, LMin, gammaRemoval)
 %     You should have received a copy of the GNU General Public License
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
+%     The paper describing this technique is:
+%     "CONTENT-ADAPTIVE INVERSE TONE MAPPING"
+%     by Pin-Hung Kuo, Chi-Sun Tang, and Shao-Yi Chien
+%     in VCIP 2012, San Diego, CA, USA
+%
 
 %is it a three color channels image?
 check13Color(img);
 
-if(~exist('LMax','var'))
-    LMax = 3000.0;%The maximum output of a Brightside DR37p
-end
-
-if(~exist('LMin','var'))
-    LMin = 0.015;  %The minimum output of a Brightside DR37p
-end
+disp('Note the SVM classifier is missing, please select LMax carefully.');
+disp('This has to be chosen based on the content; indoor, outdoor, daylight, etc.');
 
 if(~exist('gammaRemoval','var'))
     gammaRemoval = -1.0;
 end
 
-if(gammaRemoval>0.0)
-    img=img.^gammaRemoval;
+if(gammaRemoval > 0.0)
+    img = img.^gammaRemoval;
 end
 
 %Calculate luminance
-L=lum(img);
+Ld = lum(img);
 
-Lexp = InverseSchlick(img, [LMax,LMin,1]);
+%Inverse Schlick Operator
+p = 30; %as in the original paper
+Lexp = (Ld * LMax) ./ (p * (1 - Ld) + Ld);
 
-expand_map = KuoExpandMap(L);
+%Computing the expand map
+expand_map = KuoExpandMap(Ld);
 
-Lexp = Lexp.*expand_map + (1.0-expand_map).*L;
+Lexp = Lexp .* expand_map + (1.0 - expand_map) .* Ld;
+hdrimwrite(expand_map,'emap.pfm');
 
 %Changing luminance
-imgOut = ChangeLuminance(img, L, Lexp);
+imgOut = ChangeLuminance(img, Ld, Lexp);
 
 end

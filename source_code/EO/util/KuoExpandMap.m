@@ -2,7 +2,6 @@ function expand_map = KuoExpandMap(L)
 %
 %		 expand_map = KuoExpandMap(L)
 %
-%
 %		 Input:
 %			-L: a luminance channel
 %
@@ -24,19 +23,26 @@ function expand_map = KuoExpandMap(L)
 %     You should have received a copy of the GNU General Public License
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
+%     The paper describing this technique is:
+%     "CONTENT-ADAPTIVE INVERSE TONE MAPPING"
+%     by Pin-Hung Kuo, Chi-Sun Tang, and Shao-Yi Chien
+%     in VCIP 2012, San Diego, CA, USA
+%
 
-kernelSize = ceil(0.1*max(size(L)));
-kernel = ones(kernelSize)/(kernelSize^2);
+kernelSize = ceil(0.1 * max(size(L)));
+kernel = ones(kernelSize) / (kernelSize^2);
 
 Lflt = imfilter(L, kernel);
 epsilon = max(Lflt(:));
 
 mask = ones(size(L));
-mask(L<epsilon) = 0;
+mask(L < epsilon) = 0;
 mask = double(bwmorph(mask,'erode'));
 
-tmp_expand_map = L.*mask;
+tmp_expand_map = L .* mask;
 
-expand_map = bilateralFilter(tmp_expand_map, L);
+sigma_s = kernelSize / 5.0; %as in the original paper
+sigma_r = 100.0/255.0; %as in the original paper
+expand_map = bilateralFilterFull(tmp_expand_map, L, sigma_s, sigma_r );
 
 end
