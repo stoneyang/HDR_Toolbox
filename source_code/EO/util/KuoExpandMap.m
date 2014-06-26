@@ -1,9 +1,10 @@
-function expand_map = KuoExpandMap(L)
+function expand_map = KuoExpandMap(L, gammaRemoval)
 %
-%		 expand_map = KuoExpandMap(L)
+%		 expand_map = KuoExpandMap(L, gammaRemoval)
 %
 %		 Input:
 %			-L: a luminance channel
+%           -gammaRemoval: the gamma value to be removed if known
 %
 %		 Output:
 %			-expand_map: the final expand map
@@ -29,6 +30,10 @@ function expand_map = KuoExpandMap(L)
 %     in VCIP 2012, San Diego, CA, USA
 %
 
+if(~exist('gammaRemoval','var'))
+    gammaRemoval = -1.0;
+end
+
 kernelSize = ceil(0.1 * max(size(L)));
 kernel = ones(kernelSize) / (kernelSize^2);
 
@@ -43,6 +48,10 @@ tmp_expand_map = L .* mask;
 
 sigma_s = kernelSize / 5.0; %as in the original paper
 sigma_r = 100.0/255.0; %as in the original paper
-expand_map = bilateralFilterFull(tmp_expand_map, L, sigma_s, sigma_r );
+if(gammaRemoval > 0.0)
+    sigma_r = sigma_r^gammaRemoval;
+end
+
+expand_map = bilateralFilter(tmp_expand_map, L, 0, 1.0, sigma_s, sigma_r );
 
 end

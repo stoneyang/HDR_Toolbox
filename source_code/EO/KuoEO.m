@@ -53,10 +53,12 @@ p = 30; %as in the original paper
 Lexp = (Ld * LMax) ./ (p * (1 - Ld) + Ld);
 
 %Computing the expand map
-expand_map = KuoExpandMap(Ld);
+expand_map = KuoExpandMap(Ld, gammaRemoval);
 
-Lexp = Lexp .* expand_map + (1.0 - expand_map) .* Ld;
-hdrimwrite(expand_map,'emap.pfm');
+%Filtered luminance
+Lexp_flt = imfilter(Lexp, fspecial('average',5));
+
+Lexp = Lexp_flt .* expand_map + (1.0 - expand_map) .* Lexp;
 
 %Changing luminance
 imgOut = ChangeLuminance(img, Ld, Lexp);
