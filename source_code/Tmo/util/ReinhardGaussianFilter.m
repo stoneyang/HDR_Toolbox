@@ -29,11 +29,12 @@ function imgOut = ReinhardGaussianFilter(img, s, alpha_i)
 %
 
 %Kernel of the filter
-s2 = s*5;
+s2 = s * 5;
 [X,Y] = meshgrid(-s2:s2, -s2:s2);
-alphaS2 = (alpha_i*s)^2;
-H = exp(-(X.^2+Y.^2)/alphaS2)/(pi*alphaS2);
+alphaS2 = (alpha_i * s)^2;
+H = exp(-(X.^2 + Y.^2) / alphaS2) / (pi * alphaS2);
+
 %Filtering
-imgOut = imfilter(img,H,'replicate');
+imgOut = imfilter(img, H, 'replicate');
 
 end

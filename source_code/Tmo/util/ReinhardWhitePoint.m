@@ -1,8 +1,9 @@
-function wp = ReinhardEstimateWhitePoint(L)
+function wp = ReinhardWhitePoint(L)
 %
 %
-%      alpha = ReinhardEstimateWhitePoint(L)
+%      alpha = ReinhardWhitePoint(L)
 %
+%       This function estimates the white point wp for ReinhardTMO
 %
 %       Input:
 %           -L: luminance channel 
@@ -29,9 +30,9 @@ function wp = ReinhardEstimateWhitePoint(L)
 LMax = MaxQuart(L, 0.99);
 LMin = MaxQuart(L, 0.01);
 
-log2Max     = log2(LMax+1e-9);
-log2Min     = log2(LMin+1e-9);
+log2Max     = log2(LMax + 1e-9);
+log2Min     = log2(LMin + 1e-9);
 
-wp = 1.5 * 2^(log2Max-log2Min-5);
+wp = 1.5 * 2^(log2Max - log2Min - 5);
 
 end

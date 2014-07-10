@@ -85,7 +85,6 @@ numMatches = size(matches,2) ;
 X1 = f1(1:2,matches(1,:)) ; X1(3,:) = 1 ;
 X2 = f2(1:2,matches(2,:)) ; X2(3,:) = 1 ;
 
-
 % RANSAC with homography model
 %clear H score ok ;
 for t = 1:maxIterations
@@ -95,9 +94,13 @@ for t = 1:maxIterations
   for i = subset
     A = cat(1, A, kron(X1(:,i)', vl_hat(X2(:,i)))) ;
   end
+  size(A)
+  disp(subset);
+  
   [U,S,V] = svd(A) ;
   H{t} = reshape(V(:,9),3,3) ;
 
+  H{t}
   % score homography
   X2_ = H{t} * X1 ;
   du = X2_(1,:)./X2_(3,:) - X2(1,:)./X2(3,:) ;
@@ -127,6 +130,10 @@ if(exist('fminsearch') == 2)
 else
     disp('Refinement disabled as fminsearch was not found.') ;
 end
+
+H = H / H(3,3) ;
+disp('H:');
+disp(H);
 
 %Applying homography H
 ur = 1:size(img1,2);

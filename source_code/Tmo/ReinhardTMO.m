@@ -1,7 +1,7 @@
-function [imgOut,pAlpha,pWhite]=ReinhardTMO(img, pAlpha, pWhite, pLocal, pPhi)
+function [imgOut, pAlpha, pWhite] = ReinhardTMO(img, pAlpha, pWhite, pLocal, pPhi)
 %
 %
-%      imgOut=ReinhardTMO(img, pAlpha, pWhite, pLocal, phi)
+%      [imgOut, pAlpha, pWhite] = ReinhardTMO(img, pAlpha, pWhite, pLocal, pPhi)
 %
 %
 %       Input:
@@ -17,7 +17,7 @@ function [imgOut,pAlpha,pWhite]=ReinhardTMO(img, pAlpha, pWhite, pLocal, pPhi)
 %           -pAlpha: as in input
 %           -pLocal: as in input 
 %
-%     Copyright (C) 2011  Francesco Banterle
+%     Copyright (C) 2011-14  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -70,10 +70,9 @@ end
 Lwa = logMean(L);
 
 %Scale luminance using alpha and logarithmic mean
-Lscaled = (pAlpha*L)/Lwa;
+Lscaled = (pAlpha * L) / Lwa;
 
 %Local calculation?
-
 if(pLocal)
     L_adapt = ReinhardFiltering(Lscaled, pAlpha, pPhi);
 else
@@ -82,7 +81,7 @@ end
 
 %Range compression
 pWhite2 = pWhite*pWhite;
-Ld = (Lscaled.*(1+Lscaled/pWhite2))./(1+L_adapt);
+Ld = (Lscaled .* (1 + Lscaled / pWhite2)) ./ (1 + L_adapt);
 
 %Changing luminance
 imgOut = ChangeLuminance(img, L, Ld);

@@ -3,6 +3,7 @@ function alpha = ReinhardAlpha(L)
 %
 %      alpha = ReinhardAlpha(L)
 %
+%       This function estimates the exposure, \alpha, for ReinhardTMO
 %
 %       Input:
 %           -L: luminance channel 
