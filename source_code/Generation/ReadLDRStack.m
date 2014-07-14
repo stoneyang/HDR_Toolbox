@@ -2,11 +2,14 @@ function stack = ReadLDRStack(dir_name, format)
 %
 %       stack = ReadLDRStack(dir_name, format)
 %
+%       This function reads an LDR stack from a directory, dir_name, given
+%       an image format.
 %
 %        Input:
 %           -dir_name: the path where the stack is
 %           -format: the LDR format of the images that we want to load in
-%           the folder dir_name.
+%           the folder dir_name. For example, it can be 'jpg', 'jpeg',
+%           'png', 'tiff', 'bmp', etc.
 %
 %        Output:
 %           -stack: a stack of LDR images, in floating point (single)
@@ -33,9 +36,22 @@ function stack = ReadLDRStack(dir_name, format)
 list = dir([dir_name,'/*.',format]);
 n = length(list);
 
-if(n>1)
+if(n > 0)
     info = imfinfo([dir_name,'/',list(1).name]);
-    stack = zeros(info.Height, info.Width, info.NumberOfSamples, n);
+    
+    colorChannels = 0;
+    if(exist('info.NumberOfSamples', 'var'))
+        colorChannels = info.NumberOfSamples;
+    else
+        switch info.ColorType
+            case 'grayscale'
+                colorChannels = 1;
+            case 'truecolor'
+                colorChannels = 3;
+        end
+    end
+    
+    stack = zeros(info.Height, info.Width, colorChannels, n);
 
     for i=1:n
         disp(list(i).name);
