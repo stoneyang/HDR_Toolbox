@@ -80,7 +80,7 @@ else
 end
 
 %Range compression
-pWhite2 = pWhite*pWhite;
+pWhite2 = pWhite * pWhite;
 Ld = (Lscaled .* (1 + Lscaled / pWhite2)) ./ (1 + L_adapt);
 
 %Changing luminance

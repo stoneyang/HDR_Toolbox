@@ -1,8 +1,9 @@
-function Lav=logMean(img)
+function Lav = logMean(img)
 %
 %
-%        Lav=logMean(img)
+%        Lav = logMean(img)
 %
+%       This function computes the geometric mean.
 %
 %        Input:
 %           -img: an single channel image
@@ -27,7 +28,7 @@ function Lav=logMean(img)
 %
 
 delta = 1e-6;
-img_delta = log(img+delta);
+img_delta = log(img + delta);
 
 Lav = exp(mean(img_delta(:)));
 

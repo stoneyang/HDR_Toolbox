@@ -37,28 +37,23 @@ function imgOut = RamanTMO( img, directory, format, imageStack)
 %
 
 %imageStack generation
-if(~exist('imageStack','var'))
+if(~exist('imageStack', 'var'))
     imageStack = [];
 end
 
 if(~isempty(img))
     %Convert the HDR image into a imageStack
-    [imageStack,imageStack_exposure] = GenerateExposureBracketing(img,1);
+    [imageStack, imageStack_exposure] = GenerateExposureBracketing(img,1);
 else
     if(isempty(imageStack))
-        %load images from the current directory
-        images=dir([directory,'/','*.',format]);
-        n = length(images);
-        for i=1:n
-            imageStack(:,:,:,i) = single(imread([directory,'/',images(i).name]))/255.0;
-        end
+        imageStack = ReadLDRStack(directory, format)/255.0;       
     end
 end
 
 C = 70.0/255.0; %As reported in Raman and Chaudhuri Eurographics 2009 short paper
 
 %number of images in the imageStack
-[r,c,col,n]=size(imageStack);
+[r, c, col, n] = size(imageStack);
 
 K1 = 1.0;%As reported in Raman and Chaudhuri Eurographics 2009 short paper
 K2 = 1.0/10.0;%As reported in Raman and Chaudhuri Eurographics 2009 short paper
@@ -78,7 +73,7 @@ for i=1:n
 end
 
 %merging
-imgOut = zeros(r,c,col);
+imgOut = zeros(r, c, col);
 for i=1:n
     for j=1:col
         tmp = imageStack(:,:,j,i).*weight(:,:,i)./total;

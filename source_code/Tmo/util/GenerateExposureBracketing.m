@@ -37,18 +37,18 @@ function [stack, stack_exposure] = GenerateExposureBracketing( img, fstopDistanc
 
 [r,c,col] = size(img);
 
-if(~exist('fstopDistance','var'))
+if(~exist('fstopDistance', 'var'))
     fstopDistance = 1;
 end
 
 %inverse gamma
-if(~exist('geb_gamma','var'))
+if(~exist('geb_gamma', 'var'))
     inv_gamma = 1.0/2.2;
 else
     inv_gamma = 1.0/geb_gamma;
 end
 
-if(~exist('geb_mode','var'))
+if(~exist('geb_mode', 'var'))
     geb_mode = 'histogram';
 end
 
@@ -60,14 +60,14 @@ switch(geb_mode)
         stack_exposure = 2.^ExposureHistogramCovering(img);
         
     case 'uniform'
-        MinL = MaxQuart(L(L>0.0),0.01);
-        MaxL = MaxQuart(L(L>0.0),0.9999);
+        MinL = MaxQuart(L(L>0.0), 0.01);
+        MaxL = MaxQuart(L(L>0.0), 0.9999);
 
         minExposure = floor(log2(MaxL));
         maxExposure = ceil(log2(MinL));
 
-        tMax = -(maxExposure-1);
-        tMin = -(minExposure+1);
+        tMax = -(maxExposure - 1);
+        tMin = -(minExposure + 1);
         stack_exposure = 2.^(tMin:fstopDistance:tMax);
         
     otherwise
@@ -76,11 +76,11 @@ end
 
 %allocate memory for the stack
 n = length(stack_exposure);
-stack = zeros(r,c,col,n);
+stack = zeros(r, c, col, n);
 
 %calculate exposures
 for i=1:n
-    expo = ClampImg((stack_exposure(i)*img).^inv_gamma,0,1);
+    expo = ClampImg((stack_exposure(i) * img).^inv_gamma, 0, 1);
     stack(:,:,:,i) = expo;
 end
 
