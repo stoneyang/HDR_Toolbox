@@ -43,10 +43,20 @@ if(isempty(stack_exposure))
 end
 
 %we need values to be in [0,255]!
+%the stack's values have to be in [0,255] at 8-bit
 maxStack = max(stack(:));
-if(maxStack<=(1.0+1e-9))
-    stack = ClampImg(round(stack * 255),0,255);
-end   
+if(maxStack <= (1.0+1e-9))
+    stack = ClampImg(round(stack * 255), 0, 255);
+else
+    if((maxStack > 255) && (maxStack <= 65535)) %16-bit stack case
+        stack = stack / 255;
+        stack = ClampImg(round(stack), 0, 255);
+    else
+        if(maxStack > 65535)
+            disp('This stack is invalid!');
+        end
+    end
+end  
 
 col = size(stack, 3);
 

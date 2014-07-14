@@ -85,12 +85,21 @@ end
     
 %the stack's values have to be in [0,255] at 8-bit
 maxStack = max(stack(:));
-if(maxStack<=(1.0+1e-9))
-    stack = ClampImg(round(stack * 255),0,255);
+if(maxStack <= (1.0+1e-9))
+    stack = ClampImg(round(stack * 255), 0, 255);
+else
+    if((maxStack > 255) && (maxStack <= 65535)) %16-bit stack case
+        stack = stack / 255;
+        stack = ClampImg(round(stack), 0, 255);
+    else
+        if(maxStack > 65535)
+            disp('This stack is invalid!');
+        end
+    end
 end   
 
 %is the inverse camera function ok? Do we need to recompute it?
-if((strcmp(lin_type,'tabledDeb97')==1) && isempty(lin_fun))
+if((strcmp(lin_type, 'tabledDeb97')==1) && isempty(lin_fun))
     lin_fun = ComputeCRF(stack, stack_exposure);        
 end
 
