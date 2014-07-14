@@ -61,10 +61,10 @@ end
 
 if(~isempty(img))
     %Convert the HDR image into a imageStack
-    [imageStack,imageStack_exposure] = GenerateExposureBracketing(img,1);
+    [imageStack, imageStack_exposure] = GenerateExposureBracketing(img,1);
 else
     if(isempty(imageStack))
-        imageStack = ReadLDRStack(directory, format)/255.0;
+        imageStack = ReadLDRStack(directory, format, 1);
     end
 end
 

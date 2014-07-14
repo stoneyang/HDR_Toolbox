@@ -52,18 +52,18 @@ end
 
 if(~isempty(img))
     %Convert the HDR image into a imageStack
-    [imageStack,imageStack_exposure] = GenerateExposureBracketing(img,1);
+    [imageStack, imageStack_exposure] = GenerateExposureBracketing(img,1);
 else
     if(isempty(imageStack))
-        imageStack = ReadLDRStack(directory, format)/255.0;
+        imageStack = ReadLDRStack(directory, format, 1);
     end
 end
 
-if(~exist('iterations'))
+if(~exist('iterations', 'var'))
     iterations = 15;
 end
 
-if(~exist('kernelSize'))
+if(~exist('kernelSize', 'var'))
     kernelSize = 5;
 end
 
@@ -71,8 +71,8 @@ end
 [r,c,col,n] = size(imageStack);
 
 %Computation of weights for each image
-total  = zeros(r,c);
-weight = ones(r,c,n);
+total  = zeros(r, c);
+weight = ones(r, c, n);
 for i=1:n
     %calculation of the weights
     weight(:,:,i) = MertensWellExposedness(imageStack(:,:,:,i));
@@ -89,7 +89,7 @@ for i=0:num
         W = weight(:,:,j);
         Wvec(j) = mean(W(indx));
     end
-    [val,j] = max(Wvec);
+    [val, j] = max(Wvec);
 
     W = zeros(r,c);
     W(indx) = 1;

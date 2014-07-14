@@ -1,6 +1,6 @@
-function stack = ReadLDRStack(dir_name, format)
+function stack = ReadLDRStack(dir_name, format, bNormalization)
 %
-%       stack = ReadLDRStack(dir_name, format)
+%       stack = ReadLDRStack(dir_name, format, bNormalization)
 %
 %       This function reads an LDR stack from a directory, dir_name, given
 %       an image format.
@@ -10,6 +10,8 @@ function stack = ReadLDRStack(dir_name, format)
 %           -format: the LDR format of the images that we want to load in
 %           the folder dir_name. For example, it can be 'jpg', 'jpeg',
 %           'png', 'tiff', 'bmp', etc.
+%           -bNormalization: is a flag for normalizing or not the stack in
+%           [0, 1].
 %
 %        Output:
 %           -stack: a stack of LDR images, in floating point (single)
@@ -33,6 +35,10 @@ function stack = ReadLDRStack(dir_name, format)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
+if(~exist('bNormalization', 'var'))
+    bNormalization = 0;
+end
+
 list = dir([dir_name,'/*.',format]);
 n = length(list);
 
@@ -40,16 +46,34 @@ if(n > 0)
     info = imfinfo([dir_name,'/',list(1).name]);
     
     colorChannels = 0;
+    
+    norm_value = 255.0;
+    
     if(exist('info.NumberOfSamples', 'var'))
         colorChannels = info.NumberOfSamples;
     else
         switch info.ColorType
             case 'grayscale'
                 colorChannels = 1;
+                
+                switch info.BitDepth
+                    case 8
+                        norm_value = 255.0;
+                    case 16
+                        norm_value = 65535.0;
+                end
+                
             case 'truecolor'
                 colorChannels = 3;
+
+                switch info.BitDepth
+                    case 24
+                        norm_value = 255.0;
+                    case 48
+                        norm_value = 65535.0;
+                end
         end
-    end
+    end  
     
     stack = zeros(info.Height, info.Width, colorChannels, n);
 
@@ -60,6 +84,10 @@ if(n > 0)
 
         %store in the stack
         stack(:,:,:,i) = img;    
+    end
+    
+    if(bNormalization)
+        stack = stack / norm_value;
     end
 else
     disp('The stack is empty!');
