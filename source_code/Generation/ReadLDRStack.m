@@ -46,7 +46,7 @@ if(n>1)
         stack(:,:,:,i) = img;    
     end
 else
-    disp('The stack is empy!');
+    disp('The stack is empty!');
     stack = [];
 end
 
