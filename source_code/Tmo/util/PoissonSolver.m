@@ -25,26 +25,30 @@ function x = PoissonSolver(f, smoothingCost)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-if(~exist('smoothingCost','var'))
+if(~exist('smoothingCost', 'var'))
     smoothingCost = 0;
 end
 
-[r,c]=size(f);
-n = r*c;
+[r,c] = size(f);
+n = r * c;
 
 %b vector
-b = -reshape(f,r*c,1);
+b = -reshape(f, r*c, 1);
 
 %Build A matrix
-A = spdiags((4+smoothingCost)*ones(n,1),0,n,n);
+A = spdiags((4 + smoothingCost) * ones(n, 1), 0, n, n);
 T = ones(n,1);
 O = T;
 T(1:r:n) = 0;
-B = spdiags(-T,1,n,n)+spdiags(-O,r,n,n);
+B = spdiags(-T,1,n,n) + spdiags(-O, r, n, n);
 A = A + B + B';
 
 %Solve Poisson equation: Ax = b
-x = A\b;
+if(~isa(b, 'double')) %force in case no double values are not used
+    b = double(b);
+end
+
+x = A \ b;
 x = x(1:n);
 x = reshape(x, r, c);
 

@@ -82,7 +82,11 @@ end
 if(isempty(stack)||isempty(stack_exposure))
     error('The stack is set empty!');
 end
-    
+
+if(~isfloat(stack))
+    stack = single(stack);
+end
+
 %the stack's values have to be in [0,255] at 8-bit
 maxStack = max(stack(:));
 if(maxStack <= (1.0+1e-9))

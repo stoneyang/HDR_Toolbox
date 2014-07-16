@@ -32,15 +32,15 @@ function [result,A] = LischinskiMinimization(L, g, W, LM_alpha, LM_lambda)
 %
 
 %Parameters Initialization
-if(~exist('W','var'))
+if(~exist('W', 'var'))
     W = ones(size(L));
 end
 
-if(~exist('LM_alpha','var'))
+if(~exist('LM_alpha', 'var'))
     LM_alpha = 1;
 end
 
-if(~exist('LM_lambda','var'))
+if(~exist('LM_lambda', 'var'))
     LM_lambda = 0.4;
 end
 
@@ -67,16 +67,21 @@ dx = padarray(dx, [0 1], 'post');
 dx = dx(:);
 
 %Building A
-A = spdiags([dx,dy],[-r,-1],n,n);
+A = spdiags([dx,dy], [-r,-1], n, n);
 A = A + A'; %symmetric conditions
 
 g00 = padarray(dx, r, 'pre'); g00 = g00(1:end-r);
 g01 = padarray(dy, 1, 'pre'); g01 = g01(1:end-1);
-D = reshape(W,r*c,1)-(g00+dx+g01+dy);
+D = reshape(W,r*c,1) - (g00+dx+g01+dy);
 A = A + spdiags(D, 0, n, n);
 
 %Solving the system
-result = A\b;
+if(~isa(b, 'double')) %force in case no double values are not used
+    b = double(b);
+end
+
+result = A \ b;
+
 %Reshaping the result
 result = reshape(result,r,c);
 end
