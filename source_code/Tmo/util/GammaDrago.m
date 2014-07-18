@@ -37,6 +37,7 @@ end
 
 if(~exist('drago_slope','var'))
     drago_slope = 4.5;
+end
 
 if(~exist('drago_start','var'))
     drago_start = 0.018;

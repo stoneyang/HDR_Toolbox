@@ -34,32 +34,32 @@ function [imgOut, Drago_LMax_out] = DragoTMO(img, Drago_Ld_Max, Drago_b, Drago_L
 %Is it a luminance or a three color channels image?
 check13Color(img);
 
-if(~exist('Drago_Ld_Max','var'))
+if(~exist('Drago_Ld_Max', 'var'))
     Drago_Ld_Max = 100; %cd/m^2
 end
 
-if(~exist('Drago_b','var'))   
+if(~exist('Drago_b', 'var'))   
     Drago_b = 0.85;
 end
 
 %Luminance channel
 L = lum(img);
 Lwa = logMean(L);
-Lwa = Lwa/((1.0+Drago_b-0.85)^5);
+Lwa = Lwa/((1.0 + Drago_b - 0.85)^5);
 LMax = max(L(:));
 
-if(exist('Drago_LMax','var'))
-    LMax = LMax*0.5 + Drago_LMax*0.5;%smoothing in case of videos
+if(exist('Drago_LMax', 'var'))
+    LMax = LMax * 0.5 + Drago_LMax * 0.5;%smoothing in case of videos
     Drago_LMax_out = LMax;
 end
 
-L_wa = L/Lwa;
-LMax_wa = LMax/Lwa;
+L_wa = L / Lwa;
+LMax_wa = LMax / Lwa;
 
-c1 = log(Drago_b)/log(0.5);
-c2 = (Drago_Ld_Max/100.0)/(log10(1+LMax_wa));
+c1 = log(Drago_b) / log(0.5);
+c2 = (Drago_Ld_Max / 100.0) / (log10(1 + LMax_wa));
 
-Ld = c2*log(1.0+L_wa)./log(2.0+8.0*((L_wa/LMax_wa).^c1));
+Ld = c2*log(1.0 + L_wa) ./ log(2.0 + 8.0 * ((L_wa / LMax_wa).^c1));
 
 %Changing luminance
 imgOut = ChangeLuminance(img, L, Ld);
