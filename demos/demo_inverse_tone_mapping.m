@@ -1,13 +1,13 @@
 %
-%       HDR Toolbox demo 4:
-%	   1) Load "Venice01.png" LDR image
-%      2) Apply Banterle et al. 2008 Expansion Operator
+%      HDR Toolbox demo 4:
+%      1) Load "Venice01.png" LDR image
+%      2) Apply Huo et al.s Expansion Operator
 %      3) Show the expanded image in false color
 %      4) Save the image as .pfm
 %      5) Save the expand map as .pfm
 %
 %       Author: Francesco Banterle
-%       Copyright June 2012 (c)
+%       Copyright 2012-14 (c)
 %
 %
 disp('1) Load "Venice01.png" LDR image');
@@ -16,13 +16,9 @@ h = figure(1);
 set(h,'Name','Input LDR image');
 imshow(img);
 
-disp('2) Apply Banterle et al. 2008 Expansion Operator:');
-disp('   - the image is assumed to be encoded with gamma = 2.2');
-disp('   - colored expand map is turned on');
-disp('   - manual samples clamping set to 5');
-disp('   - Inverse Reinhard et al. 2002 operator is used');
-disp('   - High Quality edge-aware filtering is used (LischinskiMinimization.m)');
-[imgOut,expand_map] = HuoPhysEO(img, 3000.0, 0.86, 2.2);
+disp('2) Apply Huo et al. Expansion Operator:');
+disp('   - the LDR image is assumed to be encoded with gamma = 2.2');
+[imgOut, expand_map] = HuoPhysEO(img, 3000.0, 0.86, 2.2);
 
 disp('3) Show the expanded image in false color');
 FalseColor(imgOut,'log',1,-1,2,'Inverse tone mapped LDR image in false color');
