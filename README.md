@@ -1,4 +1,4 @@
-hdr_toolbox
+HDR Toolbox
 ===========
 
 HDR Toolbox is a MATLAB/Octave toolbox for processing High Dynamic Range (HDR) content.
