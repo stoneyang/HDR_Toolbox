@@ -62,14 +62,14 @@ if(Landis_dynRangeStartLum<=0)
 end
 
 %Finding pixels needed to be expanded
-toExpand = find(L>=Landis_dynRangeStartLum);
+toExpand = find(L >= Landis_dynRangeStartLum);
 
 %Exapnsion using a power function
 maxValL = max(L(:)); %generalization in the case of unnormalized data
-weights = ((L(toExpand)-dynRangeStartLum)/(maxValL-dynRangeStartLum)).^Landis_alpha;
+weights = ((L(toExpand) - Landis_dynRangeStartLum)/(maxValL - Landis_dynRangeStartLum)).^Landis_alpha;
 
 Lexp = L;
-Lexp(toExpand) = L(toExpand).*(1-weights)+Landis_Max_Luminance*L(toExpand).*weights;
+Lexp(toExpand) = L(toExpand) .* (1-weights) + Landis_Max_Luminance * L(toExpand) .* weights;
 
 %Removing the old luminance
 imgOut = ChangeLuminance(img, L, Lexp);
