@@ -28,7 +28,7 @@ function imgBlur=GaussianFilter(img,sigma)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-H=fspecial('gaussian',GKWindow(sigma),sigma);
+H = fspecial('gaussian', GKWindow(sigma), sigma);
 imgBlur = imfilter(img,H,'replicate');
 
 end
