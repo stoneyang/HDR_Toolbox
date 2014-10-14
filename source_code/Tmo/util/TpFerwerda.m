@@ -28,18 +28,18 @@ function val=TpFerwerda(x)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-x2=log10(x);
+x2 = log10(x);
 
-if(x2<=-2.6)
-    val=-0.72;
+if(x2 <= -2.6)
+    val = -0.72;
 else
-    if(x2>=1.9)
-        val=x2-1.255;
+    if(x2 >= 1.9)
+        val = x2 - 1.255;
     else
-        val=(0.249*x2+0.65)^2.7-0.72;
+        val = (0.249 * x2 + 0.65)^2.7 - 0.72;
     end
 end
 
-val=10^val;
+val = 10^val;
 
 end

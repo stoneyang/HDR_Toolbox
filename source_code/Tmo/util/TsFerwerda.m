@@ -28,18 +28,18 @@ function val=TsFerwerda(x)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-x2=log10(x);
+x2 = log10(x);
 
-if(x2<=-3.94)
-    val=-2.86;
+if(x2 <= -3.94)
+    val = -2.86;
 else
-    if(x2>=-1.44)
-        val=x2-0.395;
+    if(x2 >= -1.44)
+        val = x2 - 0.395;
     else
-        val=(0.405*x2+1.6)^2.18-2.86;
+        val = (0.405 * x2 + 1.6)^2.18 - 2.86;
     end
 end
 
-val=10^val;
+val = 10^val;
 
 end
