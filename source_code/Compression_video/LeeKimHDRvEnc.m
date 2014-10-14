@@ -40,7 +40,7 @@ function LeeKimHDRvEnc(hdrv, name, bCrossBilateralFilter, hdrv_profile, hdrv_qua
 %
 %
 
-if(~exist('hdrv_quality','var'))
+if(~exist('hdrv_quality', 'var'))
     hdrv_quality = 95;
 end
 
@@ -48,11 +48,11 @@ if(hdrv_quality<1)
     hdrv_quality = 95;
 end
 
-if(~exist('bCrossBilateralFilter','var'))
+if(~exist('bCrossBilateralFilter', 'var'))
     bCrossBilateralFilter = 0;
 end
 
-if(~exist('hdrv_profile','var'))
+if(~exist('hdrv_profile', 'var'))
     hdrv_profile = 'Motion JPEG AVI';
 end
 
