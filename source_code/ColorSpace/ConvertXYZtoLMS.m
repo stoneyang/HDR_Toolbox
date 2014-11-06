@@ -10,7 +10,7 @@ function imgOut = ConvertXYZtoLMS(img, inverse)
 %                     the transformation from LMS to XYZ.
 %
 %        Output:
-%           -imgOut: converted image in XYZ or IPT.
+%           -imgOut: converted image in XYZ or LMS.
 %
 %     Copyright (C) 2011  Francesco Banterle
 % 
@@ -31,11 +31,11 @@ function imgOut = ConvertXYZtoLMS(img, inverse)
 %XYZ to LMS matrix conversion: HPE transformation matrix
 mtxXZYtoLMS = [0.4002 0.7075 -0.0807; -0.2280 1.1500 0.0612; 0 0 0.9184];
 
-if(inverse==0)
+if(inverse == 0)
     imgOut = ConvertLinearSpace(img, mtxXZYtoLMS);
 else
 
-if(inverse==1)
+if(inverse == 1)
     imgOut = ConvertLinearSpace(img, inv(mtxXZYtoLMS));
 end
             

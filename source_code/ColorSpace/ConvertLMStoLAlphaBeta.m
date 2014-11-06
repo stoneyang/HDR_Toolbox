@@ -28,22 +28,20 @@ function imgOut = ConvertLMStoLAlphaBeta(img, inverse)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-%ITU-R BT.709 matrix conversion from RGB to XYZ
-
-if(inverse==1)
-    mtx1 = diag([sqrt(3)/3,sqrt(6)/6,sqrt(2)/2]);
+if(inverse == 1)
+    mtx1 = diag([sqrt(3)/3, sqrt(6)/6, sqrt(2)/2]);
     mtx2 = [1 1 1; 1 1 -2; 1 -1 0];
-    mtx  = mtx1*mtx2;
+    mtx  = mtx1 * mtx2;
     
-    imgOut = exp(ConvertLinearSpace(img, mtx));
+    imgOut = 10.^(ConvertLinearSpace(img, mtx) - 0.001);
     
 else
 
-if(inverse==0)
+if(inverse == 0)
     mtx1 = [1 1 1; 1 1 -1; 1 -2 0];
-    mtx2 = diag([1/sqrt(3),1/sqrt(6),1/sqrt(2)]);
-    mtx  = mtx1*mtx2;
-    imgOut = ConvertLinearSpace(log(img), mtx);
+    mtx2 = diag([1/sqrt(3), 1/sqrt(6), 1/sqrt(2)]);
+    mtx  = mtx1 * mtx2;
+    imgOut = ConvertLinearSpace(log10(img + 0.001), mtx);
 end
             
 end

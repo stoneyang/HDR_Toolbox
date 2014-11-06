@@ -48,7 +48,7 @@ function imgOut = SiftImageAlignment(img1, img2, maxIterations)
 %   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 %
 
-if(~exist('vl_colsubset')||~exist('vl_sift')||~exist('vl_ubcmatch'))
+if(~exist('vl_colsubset') || ~exist('vl_sift') || ~exist('vl_ubcmatch'))
     error('This function needs VL Feat. Please download it from http://www.vlfeat.org/');
 end
 

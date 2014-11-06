@@ -39,7 +39,7 @@ end
 extension = lower(fileExtension(filename));
 
 %Radiance format can have different extensions: .hdr, .rgbe and .pic
-if((strcmpi(extension,'pic')==1)||(strcmpi(extension,'rgbe')==1))
+if((strcmpi(extension,'pic')==1) || (strcmpi(extension,'rgbe')==1))
     extension = 'hdr';
 end
 
@@ -56,11 +56,21 @@ switch extension
             [img, hdr_info] = read_rgbe(filename);  
         catch err  
             try 
-		%MATLAB HDR Reader
+                %MATLAB HDR Reader
                 img = double(hdrread(filename));
             catch err
                 disp('Warning: this .hdr/.pic file can not be read.');
             end
+        end
+        
+    %OpenEXR
+    case 'exr'
+        try
+            if(~exist('exrread'))
+                img = exrread(filename);
+            end
+        catch err
+            disp('Warning: this .exr file can not be read.');
         end
         
     %Portable float map
@@ -71,6 +81,7 @@ switch extension
             disp('Warning: this .pfm file can not be read.');
         end
         
+    %HDR JPEG-2000
     case 'jp2'
         try
             img = HDRJPEG2000Dec(filename);
