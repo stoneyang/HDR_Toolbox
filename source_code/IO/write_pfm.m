@@ -1,16 +1,19 @@
-function ret = write_pfm(img,filename)
+function ret = write_pfm(img, filename, endian_mode)
 %
-%       ret = write_pfm(img,filename)
+%       ret = write_pfm(img, filename, endian_mode)
 %
 %
 %        Input:
 %           -img: the image to write on the hard disk
 %           -filename: the name of the image to write
+%           -endian_mode: sets the endian mode for writing float values:
+%                         - 'l': little-endian (default)
+%                         - 'b': big-endian
 %
 %        Output:
 %           -ret: a boolean value, it is set to 1 if the write succeed, 0 otherwise
 %
-%     Copyright (C) 2011  Francesco Banterle
+%     Copyright (C) 2011-2014  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -26,31 +29,41 @@ function ret = write_pfm(img,filename)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-ret = 0;
+if(~exist('endian_mode', 'var'))
+    endian_mode = 'l';
+end
 
 %open the file
-fid = fopen(filename,'w');
+fid = fopen(filename,'w', endian_mode);
 
 [n,m,c] = size(img);
 
-fprintf(fid,'PF%c%d %d%c-1.000000%c',10,m,n,10,10);
+switch endian_mode
+    case 'l'
+        fprintf(fid,'PF%c%d %d%c-1.000000%c', 10, m, n, 10, 10);
 
-tot = n*m;
-data = zeros(tot*3,1);
+    case 'b'
+        fprintf(fid,'PF%c%d %d%c1.000000%c', 10, m, n, 10, 10);
+end
 
-img = imrotate(img,-90,'nearest');
+tot = n * m;
+tot3 = tot * 3;
+data = zeros(tot3, 1);
+
+img = imrotate(img, -90, 'nearest');
+
 
 for i=1:c
-    indx = i:3:(tot*3);
-    data(indx) = reshape(img(:,:,i),tot,1);
+    indx = i:3:tot3;
+    data(indx) = reshape(img(:,:,i), tot, 1);
 end
 
 for i=c:3
-    indx = i:3:(tot*3);
-    data(indx) = reshape(img(:,:,i),tot,1);
+    indx = i:3:tot3;
+    data(indx) = reshape(img(:,:,i), tot, 1);
 end
 
-fwrite(fid,data,'float');
+fwrite(fid, data, 'float');
 
 fclose(fid);
 

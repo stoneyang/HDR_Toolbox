@@ -24,27 +24,45 @@ function img = read_pfm(filename)
 %     You should have received a copy of the GNU General Public License
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
-fid = fopen(filename,'r');
+
+%by default PFM files are open in little-endian format
+fid = fopen(filename, 'r', 'l');
 
 %reading the header
 fscanf(fid,'%c',3);
-m=fscanf(fid,'%d',1);
+m = fscanf(fid,'%d',1);
 fscanf(fid,'%c',1);
-n=fscanf(fid,'%d',1);
+n = fscanf(fid,'%d',1);
 fscanf(fid,'%c',1);
-fscanf(fid,'%f',1);
+endian_selector = fscanf(fid,'%f',1);
 fscanf(fid,'%c',1);
 
-img=zeros([m,n,3]);
-
-tmpImg=fread(fid,n*m*3,'float');
-
-for i=1:3
-    tmpC = i:3:(m*n*3);
-    img(:,:,i) = reshape(tmpImg(tmpC),m,n);    
+%we have a big-endian encoded file
+if(endian_selector > 0.0)
+    fclose(fid);
+    
+    %reopening the file in big-endian mode
+    fid = fopen(filename, 'r', 'b');
+    fscanf(fid,'%c',3);
+    m = fscanf(fid,'%d',1);
+    fscanf(fid,'%c',1);
+    n = fscanf(fid,'%d',1);
+    fscanf(fid,'%c',1);
+    endian_selector = fscanf(fid,'%f',1);
+    fscanf(fid,'%c',1);  
 end
 
-img=imrotate(img,90,'nearest');
+img = zeros([m, n, 3]);
+
+total = n * m * 3;
+tmpImg = fread(fid, total, 'float');
+
+for i=1:3
+    tmpC = i:3:total;
+    img(:,:,i) = reshape(tmpImg(tmpC), m, n);    
+end
+
+img = imrotate(img,90,'nearest');
 
 fclose(fid);
 
