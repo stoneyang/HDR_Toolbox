@@ -32,16 +32,16 @@ function imgOut = ConvertRGBtosRGB(img, inverse)
 a = 0.055;
 imgOut = zeros(size(img));
 
-if(inverse==0)%from linear RGB to sRGB
-    gamma_inv = 1.0/2.4;
-    imgOut(img<=0.0031308) = 12.92*img(img<=0.0031308);
-    imgOut(img> 0.0031308) = (1+a)*(img(img>0.0031308).^gamma_inv)-a;
+if(inverse == 0) %from linear RGB to sRGB
+    gamma_inv = 1.0 / 2.4;
+    imgOut(img <= 0.0031308) = 12.92 * img(img <= 0.0031308);
+    imgOut(img >  0.0031308) = (1 + a) * (img(img > 0.0031308).^gamma_inv) - a;
 end
 
-if(inverse==1)%from sRGB to linear RGB
+if(inverse == 1) %from sRGB to linear RGB
     gamma = 2.4;
-    imgOut(img<=0.04045) = img(img<=0.04045)/12.92;
-    imgOut(img> 0.04045) = ((img(img> 0.04045)+a)/(1+a)).^gamma;
+    imgOut(img <= 0.04045) = img(img <= 0.04045) / 12.92;
+    imgOut(img >  0.04045) = ((img(img > 0.04045) + a) / (1 + a)).^gamma;
 end
             
 end

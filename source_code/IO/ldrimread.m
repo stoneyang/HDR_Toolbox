@@ -34,16 +34,16 @@ img = [];
 try    
     image_info = imfinfo(filename);
     
-    if((image_info.BitDepth==24)||(image_info.BitDepth==8))
-        img = double(imread(filename))/255;
+    if((image_info.BitDepth == 24)||(image_info.BitDepth == 8))
+        img = double(imread(filename)) / 255.0;
     end
         
-    if(image_info.BitDepth==48)
-        img = double(imread(filename))/65535;
+    if(image_info.BitDepth == 48)
+        img = double(imread(filename)) / 65535.0;
     end
     
 catch err
-    disp(['Error in reading ',filename]);
+    disp(['Error in reading ', filename]);
 end
 
 end
