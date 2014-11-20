@@ -1,7 +1,7 @@
-function sigma=GKSigma(window)
+function sigma = GKSigma(window)
 %
 %
-%       window=GKSigma(window)
+%       window = GKSigma(window)
 %
 %
 %       Input:
@@ -11,7 +11,7 @@ function sigma=GKSigma(window)
 %           -sigma: the sigma of the Gaussian filter
 %           
 %
-%     Copyright (C) 2011  Francesco Banterle
+%     Copyright (C) 2011-14  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -27,6 +27,6 @@ function sigma=GKSigma(window)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-sigma = window/5;
+sigma = window / 5;
 
 end

@@ -30,14 +30,14 @@ function [imgOut, counter_map] = imSplat(r, c, imSprite, splat_pos, splat_power)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-col = size(splat_power, 2);
+col = size(imSprite, 3);
 
 if(~exist('splat_power', 'var'))
     splat_power = ones(size(splat_pos, 2), col);
 end
 
-imgOut = zeros(r,c,col);
-counter_map = zeros(r,c);
+imgOut = zeros(r, c, col);
+counter_map = zeros(r, c);
 
 [rS, cS, colS] = size(imSprite);
 imSprite_counting = ones(rS, cS);

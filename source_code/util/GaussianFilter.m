@@ -1,7 +1,7 @@
-function imgBlur=GaussianFilter(img,sigma)
+function imgBlur = GaussianFilter(img, sigma)
 %
 %
-%       imgBlur=GaussianFilter(img,sigma)
+%       imgBlur = GaussianFilter(img, sigma)
 %
 %
 %       Input:
@@ -12,7 +12,7 @@ function imgBlur=GaussianFilter(img,sigma)
 %           -imgBlur: a filtered image
 %
 %
-%     Copyright (C) 2011  Francesco Banterle
+%     Copyright (C) 2011-14  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@ function imgBlur=GaussianFilter(img,sigma)
 %
 
 H = fspecial('gaussian', GKWindow(sigma), sigma);
-imgBlur = imfilter(img,H,'replicate');
+imgBlur = imfilter(img, H, 'replicate');
 
 end
 
