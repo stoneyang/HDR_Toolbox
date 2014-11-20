@@ -1,7 +1,7 @@
-function [imgDet,imgLum,imgRec] = HDRMonitorDriver(img, vMax)
+function [imgDet, imgLum, imgRec] = HDRMonitorDriver(img, vMax)
 %
 %
-%       [imgDet,imgLum,imgRec] = HDRMonitorDriver(img, vMax)
+%       [imgDet, imgLum, imgRec] = HDRMonitorDriver(img, vMax)
 %
 %
 %        Input:
@@ -15,7 +15,7 @@ function [imgDet,imgLum,imgRec] = HDRMonitorDriver(img, vMax)
 %                    displayed by the projector
 %           -imgRec: the reconstructed HDR image
 %
-%     Copyright (C) 2011  Francesco Banterle
+%     Copyright (C) 2011-14  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -34,23 +34,23 @@ function [imgDet,imgLum,imgRec] = HDRMonitorDriver(img, vMax)
 %Is it a three color channels image?
 check3Color(img);
 
-if(~exist('vMax'))
+if(~exist('vMax', 'var'))
     vMax = -1;
 end
 
 %Computing maximum value
-if((vMax>0.0)&(vMax<1.0))
-    maxImg = MaxQuart(img,vMax);
+if((vMax > 0.0) & (vMax < 1.0))
+    maxImg = MaxQuart(img, vMax);
 else
     maxImg = max(img(:));
 end
 
 %Normalization
-if(maxImg>1.0)
+if(maxImg > 1.0)
     img = img / maxImg;
 end
 
-img = ClampImg(img,0.0,1.0);
+img = ClampImg(img, 0.0, 1.0);
 
 %Luminance channel
 L = sqrt(lum(img));
@@ -58,7 +58,7 @@ L = sqrt(lum(img));
 %32x32 Gaussian Filter. In the general case the PSF of the projector has to
 %be measured and employed to have a precise result.
 [r,c] = size(L);
-Ltmp = imresize(L, 1.0/6.0, 'bilinear');
+Ltmp = imresize(L, 1.0 / 6.0, 'bilinear');
 Ltmp = GaussianFilterWindow(Ltmp, 2);
 L = imresize(Ltmp, [r,c], 'bilinear');
 
@@ -66,8 +66,8 @@ L = imresize(Ltmp, [r,c], 'bilinear');
 %case to model the projector response function is used a gamma 2.2. In the
 %general case that is not true and the response function of the projector has to
 %be measured and employed to have a precise result.
-invGamma = 1.0/2.2;
-imgLum   = round(255*(L.^invGamma))/255;
+invGamma = 1.0 / 2.2;
+imgLum   = round(255 * (L.^invGamma)) / 255.0;
 
 %Range reduction and quantization at 8-bit for the detail layer. In this
 %case to model the LCD display response function is used a gamma 2.2. In 
@@ -76,12 +76,16 @@ imgLum   = round(255*(L.^invGamma))/255;
 imgDet    = zeros(size(img));
 tmpImgLum = imgLum.^2.2;
 
-for i=1:size(img,3)
-    imgDet(:,:,i) = round(255*(img(:,:,i)./tmpImgLum).^invGamma)/255;
+col = size(img, 3);
+
+for i=1:col
+    imgDet(:,:,i) = round(255.0 * (img(:,:,i) ./ tmpImgLum).^invGamma) / 255.0;
 end
 
-for i=1:size(img,3)
-    imgRec(:,:,i) = maxImg*(imgDet(:,:,i).^2.2).*(imgLum.^2.2);
+imgRec = zeros(size(img));
+
+for i=1:col
+    imgRec(:,:,i) = maxImg * (imgDet(:,:,i).^2.2) .* (imgLum.^2.2);
 end
 
 imgRec = RemoveSpecials(imgRec);
