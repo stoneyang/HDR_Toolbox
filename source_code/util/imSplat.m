@@ -84,6 +84,6 @@ for i=1:n
                                           imSprite_counting(y_coord, x_coord,:);
 end
 
-counter_map(counter_map<1.0) = 1.0;
+counter_map(counter_map < 1.0) = 1.0;
 
 end
