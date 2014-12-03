@@ -33,7 +33,7 @@ end
 n = r * c;
 
 %b vector
-b = -reshape(f, r*c, 1);
+b = -reshape(f, r * c, 1);
 
 %Build A matrix
 A = spdiags((4 + smoothingCost) * ones(n, 1), 0, n, n);
