@@ -32,47 +32,47 @@ function imgOut = LischinskiTMO(img, pAlpha, pWhite)
 check13Color(img);
 
 %Luminance channel
-L=lum(img);
+L = lum(img);
 
-if(~exist('pAlpha','var'))
+if(~exist('pAlpha', 'var'))
     pAlpha = ReinhardAlpha(L);
 end
 
-if(~exist('pWhite','var'))
+if(~exist('pWhite', 'var'))
     pWhite = ReinhardWhitePoint(L);
 end
 
-pWhite2 = pWhite*pWhite;
+pWhite2 = pWhite * pWhite;
 
 %Number of zones in the image
 maxL = max(L(:));
 minL = min(L(:));
 epsilon = 1e-6;
-minLLog = log2(minL+epsilon);
+minLLog = log2(minL + epsilon);
 Z = ceil ( log2(maxL) - minLLog);
 
 %Chose the representative Rz for each zone
 fstopMap = zeros(size(L));
 Lav = logMean(L);
 for i=0:Z
-    indx = find(L>=2^(i-1+minLLog)&L<2^(minLLog+i));
+    indx = find(L >= 2^(i - 1 + minLLog) & L<2^(minLLog + i));
     if(~isempty(indx))
-        Rz = MaxQuart(L(indx),0.5);
+        Rz = MaxQuart(L(indx), 0.5);
         %photographic operator
         Rz2 = (pAlpha * Rz) / Lav;        
-        f = (Rz2*(1+Rz2/pWhite2))/(1+Rz2);%f = Rz2/(Rz2+1);   
+        f = (Rz2 * (1 + Rz2 / pWhite2)) / ( 1 + Rz2);%f = Rz2/(Rz2+1);   
         
-        fstopMap(indx) = log2(f/Rz);
+        fstopMap(indx) = log2(f / Rz);
     end
 end
 
 %Minimization process
-fstopMap = 2.^LischinskiMinimization(log2(L+epsilon), fstopMap, 0.07*ones(size(L)));
+fstopMap = 2.^LischinskiMinimization(log2(L + epsilon), fstopMap, 0.07 * ones(size(L)));
 imgOut = zeros(size(img));
 col = size(img,3);
 
 for i=1:col
-    imgOut(:,:,i) = img(:,:,i).*fstopMap;
+    imgOut(:,:,i) = img(:,:,i) .* fstopMap;
 end
 
 end
