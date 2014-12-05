@@ -1,7 +1,7 @@
-function [imgOut,lights]=UniformSampling(img,nlights,falloff)
+function [imgOut, lights] = UniformSampling(img, nlights, falloff)
 %
 %
-%        [imgOut,lights]=UniformSampling(img,nlights,falloff)
+%        [imgOut, lights] = UniformSampling(img, nlights, falloff)
 %
 %
 %        Input:
@@ -30,11 +30,11 @@ function [imgOut,lights]=UniformSampling(img,nlights,falloff)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-if(~exist('nlights','var'))
+if(~exist('nlights', 'var'))
     nlights = 1024;
 end
 
-if(~exist('falloff','var'))
+if(~exist('falloff', 'var'))
     falloff = 0;
 end
 
@@ -44,32 +44,32 @@ if(falloff)
 end
 
 %Global variables initialization
-L=lum(img);
+L = lum(img);
 [r,c] = size(L);
 n = round(sqrt(nlights));
 
-c1 = ceil(c/n);
-r1 = ceil(r/n);
+c1 = ceil(c / n);
+r1 = ceil(r / n);
 
 limitSize = 2;
 
-if((c1<limitSize)||(r1<limitSize))
+if((c1 < limitSize) || (r1 < limitSize))
     error('Error');
 end
 
 lights = [];
 for i=1:r1
-    yMin = (i-1)*n+1;
-    yMax = min(i*n,r);
+    yMin = (i - 1) * n + 1;
+    yMax = min(i * n, r);
     
     for j=1:c1
-        xMin = (j-1)*n+1;
-        xMax = min(j*n,c);
+        xMin = (j - 1) * n + 1;
+        xMax = min(j * n, c);
         
-        lights = [lights, CreateLight(xMin,xMax,yMin,yMax,L,img)];
+        lights = [lights, CreateLight(xMin, xMax, yMin, yMax, L, img)];
     end
 end
 
-imgOut = GenerateLightMap(lights,c,r);
+imgOut = GenerateLightMap(lights, c, r);
 
 end

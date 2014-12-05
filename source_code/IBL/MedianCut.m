@@ -1,7 +1,7 @@
-function [imgOut,lights]=MedianCut(img,nlights,falloff)
+function [imgOut, lights]=MedianCut(img, nlights, falloff)
 %
 %
-%        [imgOut,lights]=MedianCut(img,nlights,falloff)
+%        [imgOut, lights]=MedianCut(img, nlights, falloff)
 %
 %
 %        Input:
@@ -39,17 +39,17 @@ global lights;
 L = lum(img);
 [r,c] = size(L);
 
-if(~exist('nlights','var'))
-    nlights = 2.^(round(log2(min([r,c]))+2));
+if(~exist('nlights', 'var'))
+    nlights = 2.^(round(log2(min([r, c])) + 2));
 end
 
-if(~exist('falloff','var'))
+if(~exist('falloff', 'var'))
     falloff = 0;
 end
 
 %falloff compensation
 if(falloff)
-    img=FallOffEnvMap(img);
+    img = FallOffEnvMap(img);
 end
 
 %Global variables initialization
@@ -62,6 +62,6 @@ lights = [];
 
 MedianCutAux(1,c,1,r,0);
 
-imgOut = GenerateLightMap(lights,c,r);
+imgOut = GenerateLightMap(lights, c, r);
 
 end
