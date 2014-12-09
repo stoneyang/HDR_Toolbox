@@ -45,8 +45,8 @@ while(~isempty(line))
     %Properties of the RGBE image:
     
     %Compression format
-	if(~isempty(strfind(line,'FORMAT=')))
-       if(~isempty(strfind(line,'32-bit_rle_rgbe')))
+	if(~isempty(strfind(line, 'FORMAT=')))
+       if(~isempty(strfind(line, '32-bit_rle_rgbe')))
            RLE = 1;
        end
     end
@@ -77,8 +77,8 @@ height = len(1);
 width  = len(2);
 
 %uncompressed?
-if(~RLE||(count==(width*height*4)))
-    tmpImg2 = zeros(width,height,4);
+if(~RLE||(count==(width * height * 4)))
+    tmpImg2 = zeros(width, height, 4);
     for i=1:4
         tmpImg2(:,:,i) = reshape(tmpImg(i:4:(width*height*4)),width,height);
     end
@@ -102,24 +102,24 @@ else
         for j=1:4 
             k = 1;            
             %decompression of a single channel line
-            while(k<=width)
+            while(k <= width)
                 num = tmpImg(c);
-                if(num>128)
-                    num = num-128;                   
-                    buffer(k:k+num-1,j) = tmpImg(c+1);
+                if(num > 128)
+                    num = num - 128;                   
+                    buffer(k:(k + num - 1),j) = tmpImg(c + 1);
 
-                    c = c+2;
-                    k = k+num;
+                    c = c + 2;
+                    k = k + num;
                 else
-                    buffer(k:k+num-1,j) = tmpImg((c+1):c+num);
+                    buffer(k:(k + num - 1),j) = tmpImg((c + 1):(c + num));
                     
-                    c = c+num+1;
-                    k = k+num;
+                    c = c + num + 1;
+                    k = k + num;
                 end
             end
         end
-        c = c+4;
-        imgRGBE(i,:,:) = reshape(buffer,1,width,4);
+        c = c + 4;
+        imgRGBE(i,:,:) = reshape(buffer, 1, width, 4);
     end
     %from RGBE to Float
     imgOut = RGBE2float(imgRGBE);
