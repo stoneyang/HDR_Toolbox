@@ -34,11 +34,11 @@ function pyr = dwt2Decomposition(img, filterType, maxBand)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-if(~exist('maxBand','var'))
+if(~exist('maxBand', 'var'))
     maxBand = -1;
 end
 
-if(maxBand== -1)
+if(maxBand == -1)
     maxBand = floor(log2(min([size(img,1),size(img,2)])));
 end
 
@@ -49,7 +49,7 @@ for i=1:maxBand
     
     [img, cH, cV, cD] = dwt2(img, filterType);       
     
-    cur = struct('cA',[],'cH',cH,'cV',cV,'cD',cD,'S',S);
+    cur = struct('cA', [], 'cH', cH, 'cV', cV, 'cD', cD, 'S', S);
     pyr = [pyr, cur];
 end
 

@@ -39,19 +39,19 @@ function imgOut = HuoEO(img, hou_s, hou_theta, gammaRemoval)
 %is it a three color channels image?
 check13Color(img);
 
-if(~exist('gammaRemoval','var'))
+if(~exist('gammaRemoval', 'var'))
     gammaRemoval = -1.0;
 end
 
-if(~exist('hou_s','var'))
+if(~exist('hou_s', 'var'))
     hou_s = 1.6; %default parameter from the original paper
 end
 
-if(~exist('hou_theta','var'))
+if(~exist('hou_theta', 'var'))
     hou_theta = 1e-5;
 end
 
-if(gammaRemoval>0.0)
+if(gammaRemoval > 0.0)
     img = img.^gammaRemoval;
 end
 
@@ -59,14 +59,14 @@ end
 L = lum(img);
 
 Lavg = mean(L(:));
-Lm = (10^(-hou_s)*L)./(Lavg*(1.0-L+hou_theta));
+Lm = (10^(-hou_s) * L)./(Lavg * (1.0 - L + hou_theta));
 
-Lla = bilateralFilter(L,[],0.0,1.0,16.0,(3.0/255.0));%as in the original paper
+Lla = bilateralFilter(L, [], 0.0, 1.0, 16.0, (3.0 / 255.0));%as in the original paper
 Lexp = Lm./Lla;
 
 imgOut = zeros(size(img));
 
-for i=1:size(img,3)
+for i=1:size(img, 3)
     imgOut(:,:,i) = img(:,:,i).*Lexp;
 end
 

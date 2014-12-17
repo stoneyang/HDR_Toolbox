@@ -31,19 +31,19 @@ function imgOut = AkyuzEO(img, Akyuz_Max, Akyuz_gamma, gammaRemoval)
 %is it a three color channels image?
 check13Color(img);
 
-if(~exist('Akyuz_Max','var'))
+if(~exist('Akyuz_Max', 'var'))
     Akyuz_Max = 3000;
 end
 
-if(~exist('Akyuz_gamma','var'))
+if(~exist('Akyuz_gamma', 'var'))
     Akyuz_gamma = 1.0;
 end
 
-if(~exist('gammaRemoval','var'))
-    gammaRemoval=-1;
+if(~exist('gammaRemoval', 'var'))
+    gammaRemoval = -1;
 end
 
-if(gammaRemoval>0.0)
+if(gammaRemoval > 0.0)
     img=img.^gammaRemoval;
 end
 
@@ -51,7 +51,7 @@ L = lum(img);
 L_max = max(L(:));
 L_min = min(L(:));
 
-Lexp = Akyuz_Max*(((L-L_min)/(L_max-L_min)).^Akyuz_gamma);
+Lexp = Akyuz_Max * (((L - L_min) / (L_max - L_min)).^Akyuz_gamma);
 
 %Removing the old luminance
 imgOut = ChangeLuminance(img, L, Lexp);
