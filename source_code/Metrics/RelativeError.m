@@ -32,11 +32,19 @@ if(CheckSameImage(imgReference, imgDistorted)==0)
     error('The two images are different they can not be used.');
 end
 
-delta = abs(imgReference-imgDistorted);
+if(isa(imgReference, 'uint8'))
+    imgReference = double(imgReference) / 255.0;
+end
 
-relErr = delta./imgReference;
+if(isa(imgDistorted, 'uint8'))
+    imgDistorted = double(imgDistorted) / 255.0;
+end
 
-indx = find(relErr>0);
+delta = abs(imgReference - imgDistorted);
+
+relErr = delta ./ imgReference;
+
+indx = find(relErr > 0);
 
 if(~isempty(indx))
     val = mean(relErr(indx));

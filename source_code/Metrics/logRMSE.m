@@ -12,7 +12,7 @@ function val = logRMSE(img1, img2)
 %           -val: RMSE in Log2 Space for three channels images. Lower
 %           values means better quality.
 % 
-%     Copyright (C) 2006  Francesco Banterle
+%     Copyright (C) 2006-2015  Francesco Banterle
 %
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -32,11 +32,12 @@ if(CheckSameImage(img1,img2)==0)
     error('The two images are different they can not be used.');
 end
 
-subImage = img1./img2;
+subImage = img1 ./ img2;
 acc = zeros(size(img1,1),size(img1,2));
-for i=1:size(img,3)
+
+for i=1:size(img, 3)
     tmp = RemoveSpecials(log2(subImage(:,:,i)));
-    acc = acc+tmp.^2;
+    acc = acc + tmp.^2;
 end
 
 val = sqrt(mean(acc(:)));

@@ -28,11 +28,19 @@ function val=MSE(img1, img2)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-if((CheckSameImage(img1,img2)==0))
+if((CheckSameImage(img1, img2) == 0))
     error('The two images are different they can not be used or there are more than one channel.');
 end
 
-deltaSquare = (img1-img2).^2;
+if(isa(img1, 'uint8'))
+    img1 = double(img1) / 255.0;
+end
+
+if(isa(img2, 'uint8'))
+    img2 = double(img2) / 255.0;
+end
+
+deltaSquare = (img1 - img2).^2;
 
 val = mean(deltaSquare(:));
 

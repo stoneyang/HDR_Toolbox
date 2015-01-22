@@ -12,7 +12,7 @@ function val = MaximumError(img1, img2)
 %       Output:
 %           -val: the absolute maximum error between img1 and img2
 % 
-%     Copyright (C) 2014  Francesco Banterle
+%     Copyright (C) 2014-2015  Francesco Banterle
 %
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -28,11 +28,11 @@ function val = MaximumError(img1, img2)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-if(CheckSameImage(img1,img2)==0)
+if(CheckSameImage(img1,img2) == 0)
     error('The two images are different they can not be used.');
 end
 
-delta = abs(img1-img2);
+delta = abs(img1 - img2);
 
 val = max(delta(:));
 

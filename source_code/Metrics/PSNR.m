@@ -33,7 +33,14 @@ if(CheckSameImage(img1, img2) == 0)
 end
 
 disp('PSNR is not very meaningful for HDR images/videos, please consider mPSNR instead!');
-disp('Values have to be normalized, [0, 1]!');
+
+if(isa(img1, 'uint8'))
+    img1 = double(img1) / 255.0;
+end
+
+if(isa(img2, 'uint8'))
+    img2 = double(img2) / 255.0;
+end
 
 img1 = ClampImg(img1, 0, 1);
 img2 = ClampImg(img2, 0, 1);
