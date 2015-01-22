@@ -28,17 +28,18 @@ function val = PSNR(img1, img2)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-if(CheckSameImage(img1,img2)==0)
+if(CheckSameImage(img1, img2) == 0)
     error('The two images are different they can not be used.');
 end
 
 disp('PSNR is not very meaningful for HDR images/videos, please consider mPSNR instead!');
+disp('Values have to be normalized, [0, 1]!');
 
-img1 = ClampImg(img1,0,1);
-img2 = ClampImg(img2,0,1);
+img1 = ClampImg(img1, 0, 1);
+img2 = ClampImg(img2, 0, 1);
 
-valueMSE = MSE(img1,img2);
+valueMSE = MSE(img1, img2);
 
-val = 10*log10(1.0/valueMSE);
+val = 10 * log10(1.0 / valueMSE);
 
 end
