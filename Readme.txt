@@ -41,7 +41,7 @@ Please reference the book in your work or papers if you this toolbox:
 Run the demos to understand how to use I/O function, visualize images, tone Map Images, etc.
 
 
-==Update Repor
+==Update Report
 16/07/2014: -Fixed some reported bugs for single input and FattalTMO, thanks to Areias Figueiras Edite and Bin Hu
 29/04/2014: -Added a novel framework for HDR video compression and three compression schemes 
 19/12/2013: -Many fixes including: ReinhardTMO, DragoTMO, RGBE2Float and many more... 
