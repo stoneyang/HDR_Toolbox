@@ -40,7 +40,7 @@ A = spdiags((4 + smoothingCost) * ones(n, 1), 0, n, n);
 T = ones(n,1);
 O = T;
 T(1:r:n) = 0;
-B = spdiags(-T,1,n,n) + spdiags(-O, r, n, n);
+B = spdiags(-T, 1, n, n) + spdiags(-O, r, n, n);
 A = A + B + B';
 
 %Solve Poisson equation: Ax = b

@@ -52,7 +52,7 @@ else
     dy = 0;
 end
 
-if(mod(cS, 2)==0)
+if(mod(cS, 2) == 0)
     ch = round(cS / 2);
     dx = -1;
 else
@@ -77,7 +77,7 @@ for i=1:n
     
     for j=1:col
         imgOut(minY:maxY,minX:maxX,j) = imgOut(minY:maxY, minX:maxX, j) + ...
-                                        splat_power(i,j) .* imSprite(y_coord, x_coord);
+                                        splat_power(i, j) .* imSprite(y_coord, x_coord);
     end
     
     counter_map(minY:maxY, minX:maxX,:) = counter_map(minY:maxY, minX:maxX,:) + ...
