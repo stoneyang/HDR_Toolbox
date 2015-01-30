@@ -94,13 +94,10 @@ for t = 1:maxIterations
   for i = subset
     A = cat(1, A, kron(X1(:,i)', vl_hat(X2(:,i)))) ;
   end
-  size(A)
-  disp(subset);
   
   [U,S,V] = svd(A) ;
   H{t} = reshape(V(:,9),3,3) ;
 
-  H{t}
   % score homography
   X2_ = H{t} * X1 ;
   du = X2_(1,:)./X2_(3,:) - X2(1,:)./X2(3,:) ;
@@ -136,16 +133,16 @@ disp('H:');
 disp(H);
 
 %Applying homography H
-ur = 1:size(img1,2);
-vr = 1:size(img1,1);
-[u,v] = meshgrid(ur,vr) ;
+ur = 1:size(img1, 2);
+vr = 1:size(img1, 1);
+[u, v] = meshgrid(ur,vr) ;
 
 z_ =  H(3,1) * u + H(3,2) * v + H(3,3) ;
 u_ = (H(1,1) * u + H(1,2) * v + H(1,3)) ./ z_ ;
 v_ = (H(2,1) * u + H(2,2) * v + H(2,3)) ./ z_ ;
 
 for i=1:size(img2, 3)
-    imgOut(:,:,i) = RemoveSpecials(interp2(ur, vr, img2(:,:,i), u_, v_, 'linear', NaN));
+    imgOut(:,:,i) = RemoveSpecials(interp2(u, v, img2(:,:,i), u_, v_, 'linear', NaN));
 end
 
 end
