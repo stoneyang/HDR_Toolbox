@@ -31,7 +31,7 @@ function imgOut = ConvertXYZtoCIELab(img, inverse, conv_whitePoint)
 
 check3Color(img);
 
-imgOut = zeros(size(img);
+imgOut = zeros(size(img));
 
 if(~exist('conv_whitePoint', 'var'))
     conv_whitePoint = [1, 1, 1];
