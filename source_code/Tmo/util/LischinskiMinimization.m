@@ -72,7 +72,7 @@ A = A + A'; %symmetric conditions
 
 g00 = padarray(dx, r, 'pre'); g00 = g00(1:end-r);
 g01 = padarray(dy, 1, 'pre'); g01 = g01(1:end-1);
-D = reshape(W,r*c,1) - (g00 + dx + g01 + dy);
+D = reshape(W, r * c,1) - (g00 + dx + g01 + dy);
 A = A + spdiags(D, 0, n, n);
 
 %Solving the system

@@ -30,35 +30,35 @@ function imgOut = ConvertXYZtoCIELab(img, inverse, conv_whitePoint)
 %
 
 check3Color(img);
-[r,c,col] = size(img);
-imgOut = zeros(r,c,col);
 
-if(~exist('conv_whitePoint','var'))
-    conv_whitePoint = [1,1,1];
+imgOut = zeros(size(img);
+
+if(~exist('conv_whitePoint', 'var'))
+    conv_whitePoint = [1, 1, 1];
 end
 
-if(inverse==0)%forward transform
+if(inverse == 0)%forward transform
     for i=1:3
-        img(:,:,i) = img(:,:,i)/conv_whitePoint(i);
+        img(:,:,i) = img(:,:,i) / conv_whitePoint(i);
     end
 
     %L
     fY = CIELabFunction(img(:,:,2), 0);
-    imgOut(:,:,1) = 116*fY - 16;
+    imgOut(:,:,1) = 116 * fY - 16;
     %a
-    imgOut(:,:,2) = 500*(CIELabFunction(img(:,:,1), 0) - fY);
+    imgOut(:,:,2) = 500 * (CIELabFunction(img(:,:,1), 0) - fY);
     %b
-    imgOut(:,:,3) = 200*(fY - CIELabFunction(img(:,:,3), 0));   
+    imgOut(:,:,3) = 200 * (fY - CIELabFunction(img(:,:,3), 0));   
 end
 
-if(inverse==1)%inverse transform
+if(inverse == 1)%inverse transform
     tmp = (img(:,:,1)+16)/116;
     %Y
-    imgOut(:,:,2) = conv_whitePoint(2)*CIELabFunction(tmp, 1);
+    imgOut(:,:,2) = conv_whitePoint(2) * CIELabFunction(tmp, 1);
     %X
-    imgOut(:,:,1) = conv_whitePoint(1)*CIELabFunction( tmp + img(:,:,2)/500, 1);
+    imgOut(:,:,1) = conv_whitePoint(1) * CIELabFunction( tmp + img(:,:,2) / 500, 1);
     %Z
-    imgOut(:,:,3) = conv_whitePoint(3)*CIELabFunction( tmp - img(:,:,3)/200, 1);   
+    imgOut(:,:,3) = conv_whitePoint(3) * CIELabFunction( tmp - img(:,:,3) / 200, 1);   
 end
 
 imgOut = RemoveSpecials(imgOut);
