@@ -1,6 +1,6 @@
-function imgOut=WardHistAdjTMO(img,nBin,bPlotHistogram)
+function imgOut = WardHistAdjTMO(img, nBin, bPlotHistogram)
 %
-%        imgOut=WardHistAdjTMO(img,nBin,bPlotHistogram)
+%        imgOut = WardHistAdjTMO(img, nBin, bPlotHistogram)
 %
 %
 %        Input:
@@ -10,7 +10,7 @@ function imgOut=WardHistAdjTMO(img,nBin,bPlotHistogram)
 %        Output:
 %           -imgOut: tone mapped image
 % 
-%     Copyright (C) 2010  Francesco Banterle
+%     Copyright (C) 2010-15  Francesco Banterle
 %
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -29,35 +29,35 @@ function imgOut=WardHistAdjTMO(img,nBin,bPlotHistogram)
 %Is it a three color channels image?
 check13Color(img);
 
-if(~exist('nBin','var'))
+if(~exist('nBin', 'var'))
     nBin = 256;
 end
 
-if(~exist('bPlotHistogram','var'))
+if(~exist('bPlotHistogram', 'var'))
     bPlotHistogram = 0;
 end
 
-if(nBin<1)
+if(nBin < 1)
     nBin = 256;
 end
 
 %Luminance channel
-L=lum(img);
+L = lum(img);
 
 %The image is downsampled
-[n,m]=size(L);
-maxCoord = max([n,m]);
-viewAngleWidth  = 2*atan(m/(2*maxCoord*0.75));
-viewAngleHeight = 2*atan(n/(2*maxCoord*0.75));
-fScaleX = (2*tan(viewAngleWidth/2)/0.01745);
-fScaleY = (2*tan(viewAngleHeight/2)/0.01745);
+[n, m] =size(L);
+maxCoord = max([n, m]);
+viewAngleWidth  = 2 * atan(m / (2 * maxCoord * 0.75));
+viewAngleHeight = 2 * atan(n / (2 * maxCoord * 0.75));
+fScaleX = (2 * tan(viewAngleWidth / 2) / 0.01745);
+fScaleY = (2 * tan(viewAngleHeight / 2) / 0.01745);
 
-L2 = imresize(L,[round(fScaleY), round(fScaleX)],'bilinear');
+L2 = imresize(L, [round(fScaleY), round(fScaleX)], 'bilinear');
 LMax = max(L2(:));
 LMin = min(L2(:));
 
-if(LMin<=0.0)
-     LMin=min(L2(L2>0.0));
+if(LMin <= 0.0)
+     LMin = min(L2(L2 > 0.0));
 end
 
 %Log space
@@ -66,33 +66,36 @@ LlMax = log(LMax);
 LlMin = log(LMin);
 
 %Display characteristics in cd/m^2
-LdMax=100;    LldMax=log(LdMax);
-LdMin=1;      LldMin=log(LdMin);
+LdMax = 100;
+LldMax = log(LdMax);
+LdMin = 1;
+LldMin = log(LdMin);
 
 %function P
-p=zeros(nBin,1);
-delta=(LlMax-LlMin)/nBin;
+p = zeros(nBin, 1);
+delta = (LlMax - LlMin) / nBin;
+
 for i=1:nBin
-    indx=find(Llog>(delta*(i-1)+LlMin)&Llog<=(delta*i+LlMin));
-    p(i)=numel(indx);
+    indx = find(Llog > (delta * (i - 1) + LlMin) & Llog <= (delta * i + LlMin));
+    p(i) = numel(indx);
 end
 
 %Histogram ceiling   
-p=histogram_ceiling(p,delta/(LldMax-LldMin));
+p = histogram_ceiling(p, delta / (LldMax - LldMin));
 if(bPlotHistogram)
     bar(p);
 end
 
 %Calculation of P(x) 
 Pcum = cumsum(p);
-Pcum = Pcum/max(Pcum);
+Pcum = Pcum / max(Pcum);
 
 %Calculate tone mapped luminance
-L(L>LMax) = LMax;
-x=(LlMin:((LlMax-LlMin)/(nBin-1)):LlMax)';
-pps = spline(x,Pcum);
-Ld  = exp(LldMin+(LldMax-LldMin)*ppval(pps,real(log(L))));
-Ld  = (Ld-LdMin)/(LdMax-LdMin);
+L(L > LMax) = LMax;
+x = (LlMin:((LlMax - LlMin) / (nBin - 1)):LlMax)';
+pps = spline(x, Pcum);
+Ld  = exp(LldMin + (LldMax - LldMin) * ppval(pps, real(log(L))));
+Ld  = (Ld - LdMin) / (LdMax - LdMin);
 
 %Changing luminance
 imgOut = ChangeLuminance(img, L, Ld);

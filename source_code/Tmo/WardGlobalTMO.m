@@ -29,7 +29,7 @@ function imgOut = WardGlobalTMO(img, Ld_Max)
 %Is it a three color channels image?
 check13Color(img);
 
-if(~exist('Ld_Max'))
+if(~exist('Ld_Max', 'var'))
     Ld_Max = 100;
 end
 
@@ -44,9 +44,9 @@ L = lum(img);
 Lwa = logMean(L);
 
 %contrast scale
-m = (((1.219+(Ld_Max/2)^0.4)/(1.219+Lwa^0.4))^2.5);
+m = (((1.219 + (Ld_Max / 2)^0.4) / (1.219 + Lwa^0.4))^2.5);
 
-imgOut = (img*m);
+imgOut = (img * m);
 imgOut = RemoveSpecials(imgOut / Ld_Max); %Just to have values in [0,1]
 
 end
