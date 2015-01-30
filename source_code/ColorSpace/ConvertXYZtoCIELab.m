@@ -52,7 +52,7 @@ if(inverse == 0)%forward transform
 end
 
 if(inverse == 1)%inverse transform
-    tmp = (img(:,:,1)+16)/116;
+    tmp = (img(:,:,1) + 16) / 116;
     %Y
     imgOut(:,:,2) = conv_whitePoint(2) * CIELabFunction(tmp, 1);
     %X
