@@ -35,35 +35,37 @@ if(~exist('nSamples', 'var'))
 end
 
 if(isempty(stack))
-    error('stack cannot be empty!');
+    error('ComputeCRF: a stack cannot be empty!');
 end
 
 if(isempty(stack_exposure))
-    error('stack_exposure cannot be empty!');
+    error('ComputeCRF: a stack_exposure cannot be empty!');
 end
 
-%we need values to be in [0,255]!
-%the stack's values have to be in [0,255] at 8-bit
-maxStack = max(stack(:));
-if(maxStack <= (1.0+1e-9))
-    stack = ClampImg(round(stack * 255), 0, 255);
-else
-    if((maxStack > 255) && (maxStack <= 65535)) %16-bit stack case
-        stack = stack / 255;
-        stack = ClampImg(round(stack), 0, 255);
-    else
-        if(maxStack > 65535)
-            disp('This stack is invalid!');
-        end
-    end
-end  
+if(isa(stack, 'double'))
+    stack = single(stack);
+end
+
+if(isa(stack, 'uint8'))
+    stack = single(stack) / 255.0;
+end
+
+if(isa(stack, 'uint16'))
+    stack = single(stack) / 65535.0;
+    disp('Warning: is this a 16-bit image? The maximum is set to 65535.');
+end
+
+if(max(stack(:)) > 1.0)
+    error('ComputeCRF: this stak must have 1.0 as maximum value'); 
+end
 
 col = size(stack, 3);
 
 %Weight function
-W = WeightFunction(0:(1/255):1,'Deb97');
+W = WeightFunction(0:(1 / 255):1, 'Deb97');
 
 %stack sub-sampling
+stack = stack * 255.0;
 stack_hist = ComputeLDRStackHistogram(stack);
 stack_samples = GrossbergSampling(stack_hist, nSamples);
 
@@ -72,9 +74,9 @@ lin_fun = zeros(256, col);
 log_stack_exposure = log(stack_exposure);
 
 for i=1:col
-    g = gsolve(stack_samples(:,:,i),log_stack_exposure,10,W);
+    g = gsolve(stack_samples(:,:,i), log_stack_exposure, 10, W);
     g = exp(g);
-    lin_fun(:,i) = (g/max(g));
+    lin_fun(:,i) = (g / max(g));
 end
 
 end

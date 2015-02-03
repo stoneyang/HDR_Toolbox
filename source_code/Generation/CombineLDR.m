@@ -45,10 +45,10 @@ function imgOut = CombineLDR(stack, stack_exposure, lin_type, lin_fun, weight_ty
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-[r,c,col,n] = size(stack);
+[r, c, col, n] = size(stack);
 
-imgOut    = zeros(r,c,col);
-totWeight = zeros(r,c,col);
+imgOut    = zeros(r, c, col);
+totWeight = zeros(r, c, col);
 
 for i=1:n
     weight   = [];
@@ -57,37 +57,35 @@ for i=1:n
     
     switch lin_type
         case 'linearized'
-            img_lin = tmpStack/255;
-            weight  = WeightFunction(img_lin,      weight_type);
+            img_lin = tmpStack;
+            weight  = WeightFunction(img_lin, weight_type);
 
         case 'gamma2.2'
-            tmpStack = tmpStack/255;
-            weight  = WeightFunction(tmpStack,     weight_type);
+            weight  = WeightFunction(tmpStack, weight_type);
             img_lin = tmpStack.^2.2;
 
         case 'sRGB'
-            tmpStack = tmpStack/255;
-            weight  = WeightFunction(tmpStack,     weight_type);
+            weight  = WeightFunction(tmpStack, weight_type);
             img_lin = ConvertRGBtosRGB(tmpStack, 1);
         
         case 'tabledDeb97'
-            weight  = WeightFunction(tmpStack/255, weight_type);
-            img_lin = tabledFunction(tmpStack, lin_fun);            
+            weight  = WeightFunction(tmpStack, weight_type);
+            img_lin = tabledFunction(round(tmpStack *255), lin_fun);            
         otherwise
     end
    
     %Calculation of the weight function    
-    if(stack_exposure(i)>0.0)
-        imgOut    = imgOut + (weight.*img_lin) / stack_exposure(i);
+    if(stack_exposure(i) > 0.0)
+        imgOut    = imgOut + (weight .* img_lin) / stack_exposure(i);
         totWeight = totWeight + weight;
     end
 end
 
-if(~isempty(find(totWeight<=0.0)))
+if(~isempty(find(totWeight <= 0.0)))
     disp('WARNING: the stack has saturated pixels in all the stack, please use ''Gauss'' weighting function to mitigate artifacts.');
 end
 
-totWeight(totWeight<=0.0) = 1.0;
+totWeight(totWeight <= 0.0) = 1.0;
 
 imgOut = (imgOut ./ totWeight);
 

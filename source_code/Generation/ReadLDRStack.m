@@ -75,12 +75,12 @@ if(n > 0)
         end
     end  
     
-    stack = zeros(info.Height, info.Width, colorChannels, n);
+    stack = zeros(info.Height, info.Width, colorChannels, n, 'single');
 
     for i=1:n
         disp(list(i).name);
         %read an image, and convert it into floating-point
-        img = single(imread([dir_name,'/',list(i).name]));  
+        img = single(imread([dir_name, '/', list(i).name]));  
 
         %store in the stack
         stack(:,:,:,i) = img;    

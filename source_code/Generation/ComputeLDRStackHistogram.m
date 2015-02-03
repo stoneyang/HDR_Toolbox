@@ -27,9 +27,9 @@ function stackOut = ComputeLDRStackHistogram(stack)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-[r,c,col,n] = size(stack);
+[~, ~, col, n] = size(stack);
 
-stackOut = zeros(256,col,n);
+stackOut = zeros(256, col, n);
 
 for i=1:n
     %store in the stack

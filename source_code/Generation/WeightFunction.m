@@ -37,12 +37,12 @@ switch weight_type
         
     case 'Akyuz'
         weight = ones(size(img));
-        t1 = 200/255;
-        t2 = 250/255;
-        t3 = 50 /255;
-        weight(img>=t2) = 0;        
-        tmp  = 1 - (t2-img)/t3;
-        tmp2 = 1 - 3*tmp.^2 + 2*tmp.^3;      
+        t1 = 200 /255;
+        t2 = 250 /255;
+        t3 =  50/ 255; 
+        weight(img >= t2) = 0;        
+        tmp  = 1 - (t2 - img) / t3;
+        tmp2 = 1 - 3 * tmp.^2 + 2 * tmp.^3;      
         weight(img >= t1 & img <= t2) = tmp2(img >= t1 & img <= t2);
         
     case 'Gauss'
@@ -54,14 +54,14 @@ switch weight_type
     case 'Deb97'
         Zmin = 0.0;
         Zmax = 1.0;
-        tr = (Zmin+Zmax)/2;
-        indx1 = find (img<=tr);
-        indx2 = find (img>tr);
+        tr = (Zmin + Zmax) / 2;
+        indx1 = find (img <= tr);
+        indx2 = find (img > tr);
         weight = zeros(size(img));
         weight(indx1) = img(indx1) - Zmin;
         weight(indx2) = Zmax - img(indx2);
         weight(weight<0) = 0;
-        weight = weight/max(weight(:));
+        weight = weight / max(weight(:));
         
     otherwise 
         weight = 1;
