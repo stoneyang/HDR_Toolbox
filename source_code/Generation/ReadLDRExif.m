@@ -26,17 +26,17 @@ function exposure = ReadLDRExif(dir_name, format)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-list = dir([dir_name,'/*.',format]);
+list = dir([dir_name, '/*.', format]);
 n = length(list);
-exposure = zeros(n,1);
+exposure = ones(n, 1);
 
-for i=1:n
-    %Read Exif file information
-    if(strcmpi(format, 'jpg') == 1||strcmpi(format, 'jpeg') == 1)
+if(strcmpi(format, 'jpg') == 1 || strcmpi(format, 'jpeg') == 1)
+    for i=1:n
+        %Read Exif file information
         try
             if(exist('imfinfo'))
-                img_info = imfinfo([dir_name, '/',l ist(i).name]);                    
-                	exposure(i) = img_info.DigitalCamera.ExposureTime;
+                img_info = imfinfo([dir_name, '/', list(i).name]);                    
+                exposure(i) = img_info.DigitalCamera.ExposureTime;
             else
                 if(exist('exifread'))
                     exifInfo = exifread([dir_name, '/', list(i).name]);
@@ -57,8 +57,6 @@ for i=1:n
             disp(err);
             exposure(i) = 1;
         end
-    else
-        exposure(i) = 1;
     end
 end
 

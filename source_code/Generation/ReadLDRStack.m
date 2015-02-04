@@ -39,11 +39,11 @@ if(~exist('bNormalization', 'var'))
     bNormalization = 0;
 end
 
-list = dir([dir_name,'/*.',format]);
+list = dir([dir_name, '/*.', format]);
 n = length(list);
 
 if(n > 0)
-    info = imfinfo([dir_name,'/',list(1).name]);
+    info = imfinfo([dir_name, '/', list(1).name]);
     
     colorChannels = 0;
     

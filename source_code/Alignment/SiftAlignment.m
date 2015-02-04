@@ -42,13 +42,13 @@ lst = [];
 bStack = ~isempty(stack);
 
 if(~bStack)
-    lst = dir([dir_name,'/*.',format]);
+    lst = dir([dir_name, '/*.', format]);
     n = length(lst);
 else
     [r,c,col,n] = size(stack);
 end
 
-if(n<=1)
+if(n < 2)
     return;
 end
 
@@ -59,22 +59,23 @@ if(~exist('target_exposure','var'))
         if(bStack)
             tmpImg = stack(:,:,:,i);
         else
-            tmpImg = single(imread([dir_name,'/',lst(i).name]))/255;
+            tmpImg = ldrimread([dir_name,'/',lst(i).name], 0);
         end
+        
         [r,c,col] = size(tmpImg);
         values(i) = mean(tmpImg(:));
         clear('tmpImg');
     end
-    [values,indx] = sort(values);
+    [~, indx] = sort(values);
     
-    target_exposure = indx(round(n/2));
+    target_exposure = indx(round(n / 2));
     disp('OK');
 else
     if(~bStack)
         tmpTarget_exposure = 1;
         
         for i=1:n
-            if(strcmp(target_exposure,lst(i).name)==1)
+            if(strcmp(target_exposure,lst(i).name) == 1)
                 tmpTarget_exposure = i;
             end
         end
@@ -85,7 +86,7 @@ end
 if(bStack)
     img = stack(:,:,:,target_exposure);
 else
-    img = single(imread([dir_name,'/',lst(target_exposure).name]))/255;
+    img = ldrimread([dir_name, '/', lst(target_exposure).name], 0);
 end
 
 stackOut = zeros(r,c,col,n);
@@ -97,7 +98,7 @@ for i=1:n
         disp(['Aligning image ',num2str(i),' to image ',num2str(target_exposure)]);
        
         if(~bStack)
-            imgWork = single(imread([dir_name,'/',lst(i).name]))/255;  
+            imgWork = ldrimread([dir_name,'/',lst(i).name], 0);
         else
             imgWork = stack(:,:,:,i);
         end
@@ -108,12 +109,12 @@ for i=1:n
         
         if(~bStack)
             oldName = lst(i).name;
-            name = strrep(lst(i).name, ['.',format], ['_align.',format]);
-            if(strcmp(oldName,name)==1)
-                name = [name,'_align.',format];
+            name = strrep(lst(i).name, ['.',format], ['_align.', format]);
+            if(strcmp(oldName,name) == 1)
+                name = [name, '_align.', format];
             end
             
-            imwrite(imWork_align, [dir_name,'/',name]);
+            imwrite(imWork_align, [dir_name, '/', name]);
         end
         
         clear('imWork_align');
