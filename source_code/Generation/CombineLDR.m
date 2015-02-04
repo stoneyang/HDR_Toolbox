@@ -90,7 +90,7 @@ for i=1:n
    
     %Calculation of the weight function    
     t = stack_exposure(i);
-    if(stack_exposure(i) > 0.0)
+    if(t > 0.0)
         imgOut    = imgOut + (weight .* tmpStack) * t;
         totWeight = totWeight + weight * t * t;
     end
