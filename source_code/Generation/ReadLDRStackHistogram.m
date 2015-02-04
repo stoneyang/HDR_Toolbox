@@ -4,6 +4,7 @@ function stack = ReadLDRStackHistogram(dir_name, format)
 %
 %
 %        Input:
+%           -dir_name: the path where the stack is
 %           -format: an LDR format for reading LDR images in the current directory 
 %
 %        Output:
