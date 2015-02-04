@@ -34,7 +34,19 @@ stackOut = zeros(256, col, n);
 for i=1:n
     %store in the stack
     for j=1:col
-        stackOut(:,j,i) = imhist(uint8(stack(:,:,j,i)));
+        
+        tmp = stack(:,:,j,i);        
+
+        if(isa(tmp, 'double') || isa(tmp, 'single'))
+            tmp = uint8(ClampImg(round(tmp * 255), 0.0, 255.0));
+        end
+        
+        if(isa(stack, 'uint16'))
+            stack = uint8(ClampImg(round(tmp / 255), 0, 255));
+            disp('Warning: is this a 16-bit image? The maximum is set to 65535.');
+        end
+        
+        stackOut(:,j,i) = imhist(tmp);
     end
 end
 

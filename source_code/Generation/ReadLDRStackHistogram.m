@@ -9,7 +9,7 @@ function stack = ReadLDRStackHistogram(dir_name, format)
 %        Output:
 %           -stack: a stack of LDR image histograms
 %
-%     Copyright (C) 2013  Francesco Banterle
+%     Copyright (C) 2013-15  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -35,10 +35,10 @@ for i=1:n
     %read an image
     img = imread([dir_name,'/',list(i).name]);
     
-    [r,c,col] = size(img);  
+    [~, ~, col] = size(img);  
 
-    if(i==1)
-        stack = zeros(256,col,n);
+    if(i == 1)
+        stack = zeros(256, col, n);
     end
     
     %store in the stack

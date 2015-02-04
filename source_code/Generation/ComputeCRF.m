@@ -42,30 +42,12 @@ if(isempty(stack_exposure))
     error('ComputeCRF: a stack_exposure cannot be empty!');
 end
 
-if(isa(stack, 'double'))
-    stack = single(stack);
-end
-
-if(isa(stack, 'uint8'))
-    stack = single(stack) / 255.0;
-end
-
-if(isa(stack, 'uint16'))
-    stack = single(stack) / 65535.0;
-    disp('Warning: is this a 16-bit image? The maximum is set to 65535.');
-end
-
-if(max(stack(:)) > 1.0)
-    error('ComputeCRF: this stak must have 1.0 as maximum value'); 
-end
-
 col = size(stack, 3);
 
 %Weight function
 W = WeightFunction(0:(1 / 255):1, 'Deb97');
 
 %stack sub-sampling
-stack = stack * 255.0;
 stack_hist = ComputeLDRStackHistogram(stack);
 stack_samples = GrossbergSampling(stack_hist, nSamples);
 

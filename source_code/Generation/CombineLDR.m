@@ -8,7 +8,7 @@ function imgOut = CombineLDR(stack, stack_exposure, lin_type, lin_fun, weight_ty
 %           -stack_exposure: a sequence of exposure values associated to
 %                            images in the stack
 %           -lin_type: the linearization function:
-%                      - 'linearized': images are already linearized
+%                      - 'linear': images are already linear
 %                      - 'gamma2.2': gamma function 2.2 is used for
 %                                    linearisation;
 %                      - 'sRGB': images are encoded using sRGB
@@ -47,36 +47,50 @@ function imgOut = CombineLDR(stack, stack_exposure, lin_type, lin_fun, weight_ty
 
 [r, c, col, n] = size(stack);
 
-imgOut    = zeros(r, c, col);
-totWeight = zeros(r, c, col);
+imgOut    = zeros(r, c, col, 'single');
+totWeight = zeros(r, c, col, 'single');
 
 for i=1:n
     weight   = [];
-    img_lin  = [];
     tmpStack = stack(:,:,:,i);
+
+    if(isa(tmpStack, 'single'))
+        tmpStack = ClampImg(tmpStack, 0.0, 1.0);
+    end
     
+    if(isa(tmpStack, 'double'))
+        tmpStack = ClampImg(single(tmpStack), 0.0, 1.0);
+    end
+
+    if(isa(tmpStack, 'uint8'))
+        tmpStack = single(tmpStack) / 255.0;
+    end
+
+    if(isa(stack, 'uint16'))
+        stack = single(tmpStack) / 65535.0;
+    end
+
     switch lin_type
-        case 'linearized'
-            img_lin = tmpStack;
-            weight  = WeightFunction(img_lin, weight_type);
+        case 'linear'
+            weight  = WeightFunction(tmpStack, weight_type);
 
         case 'gamma2.2'
             weight  = WeightFunction(tmpStack, weight_type);
-            img_lin = tmpStack.^2.2;
+            tmpStack = tmpStack.^2.2;
 
         case 'sRGB'
             weight  = WeightFunction(tmpStack, weight_type);
-            img_lin = ConvertRGBtosRGB(tmpStack, 1);
+            tmpStack = ConvertRGBtosRGB(tmpStack, 1);
         
         case 'tabledDeb97'
             weight  = WeightFunction(tmpStack, weight_type);
-            img_lin = tabledFunction(round(tmpStack *255), lin_fun);            
+            tmpStack = tabledFunction(round(tmpStack * 255), lin_fun);            
         otherwise
     end
    
     %Calculation of the weight function    
     if(stack_exposure(i) > 0.0)
-        imgOut    = imgOut + (weight .* img_lin) / stack_exposure(i);
+        imgOut    = imgOut + (weight .* tmpStack) / stack_exposure(i);
         totWeight = totWeight + weight;
     end
 end

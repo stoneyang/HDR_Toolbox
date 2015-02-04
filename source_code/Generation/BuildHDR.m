@@ -10,7 +10,7 @@ function [imgHDR, lin_fun] = BuildHDR(stack, stack_exposure, lin_type, lin_fun, 
 %           -stack_exposure: an array containg the exposure time of each
 %           image. Time is expressed in second (s).
 %           -lin_type: the linearization function:
-%                      - 'linearized': images are already linearized
+%                      - 'linear': images are already linear
 %                      - 'gamma2.2': gamma function 2.2 is used for
 %                                    linearisation;
 %                      - 'sRGB': images are encoded using sRGB
@@ -78,23 +78,6 @@ end
 
 if(isempty(stack) || isempty(stack_exposure))
     error('The stack is set empty!');
-end
-
-if(isa(stack, 'double'))
-    stack = single(stack);
-end
-
-if(isa(stack, 'uint8'))
-    stack = single(stack) / 255.0;
-end
-
-if(isa(stack, 'uint16'))
-    stack = single(stack) / 65535.0;
-    disp('Warning: is this a 16-bit image? The maximum is set to 65535.');
-end
-
-if(max(stack(:)) > 1.0)
-    error('BuildHDR: this stak must have 1.0 as maximum value'); 
 end
 
 %is the inverse camera function ok? Do we need to recompute it?

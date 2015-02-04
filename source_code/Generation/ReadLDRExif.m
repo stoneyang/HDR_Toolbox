@@ -32,22 +32,22 @@ exposure = zeros(n,1);
 
 for i=1:n
     %Read Exif file information
-    if(strcmpi(format,'jpg')==1||strcmpi(format,'jpeg')==1)
+    if(strcmpi(format, 'jpg') == 1||strcmpi(format, 'jpeg') == 1)
         try
             if(exist('imfinfo'))
-                img_info = imfinfo([dir_name,'/',list(i).name]);                    
+                img_info = imfinfo([dir_name, '/',l ist(i).name]);                    
                 	exposure(i) = img_info.DigitalCamera.ExposureTime;
             else
                 if(exist('exifread'))
-                    exifInfo = exifread([dir_name,'/',list(i).name]);
+                    exifInfo = exifread([dir_name, '/', list(i).name]);
                     exposure(i) = exifInfo.ExposureTime;
                 else
-                    tmp = hdrimread([dir_name,'/',list(i).name]);
+                    tmp = hdrimread([dir_name, '/', list(i).name]);
                     L = lum(tmp);
                     tmpExp = mean(L(:));
                     
-                    if(tmpExp>0.0)
-                        exposure(i) = 1.0/tmpExp;
+                    if(tmpExp > 0.0)
+                        exposure(i) = 1.0 / tmpExp;
                     else
                         exposure(i) = 1.0;
                     end
