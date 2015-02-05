@@ -1,6 +1,6 @@
-function imgOut = CombineLDR(stack, stack_exposure, lin_type, lin_fun, weight_type)
+function imgOut = CombineLDR(stack, stack_exposure, lin_type, lin_fun, weight_type, bRobertson)
 %
-%       imgOut = CombineLDR(stack, stack_exposure, lin_type, lin_fun, weight_type)
+%       imgOut = CombineLDR(stack, stack_exposure, lin_type, lin_fun, weight_type, bRobertson)
 %
 %
 %        Input:
@@ -25,6 +25,7 @@ function imgOut = CombineLDR(stack, stack_exposure, lin_type, lin_fun, weight_ty
 %                          This function produces good results when some 
 %                          under-exposed or over-exposed images are present
 %                          in the stack.
+%           -bRobertson:
 %
 %        Output:
 %           -imgOut: the combined HDR image from the stack
@@ -44,6 +45,10 @@ function imgOut = CombineLDR(stack, stack_exposure, lin_type, lin_fun, weight_ty
 %     You should have received a copy of the GNU General Public License
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
+
+if(~exist('bRobertson', 'var'))
+    bRobertson = 0;
+end
 
 [r, c, col, n] = size(stack);
 
@@ -90,9 +95,17 @@ for i=1:n
    
     %Calculation of the weight function    
     t = stack_exposure(i);
-    if(t > 0.0)
-        imgOut    = imgOut + (weight .* tmpStack) * t;
-        totWeight = totWeight + weight * t * t;
+    
+    if(bRobertson)
+        if(t > 0.0)
+            imgOut    = imgOut + (weight .* tmpStack) * t;
+            totWeight = totWeight + weight * t * t;
+        end
+    else
+        if(t > 0.0)
+            imgOut    = imgOut + (weight .* tmpStack) / t;
+            totWeight = totWeight + weight;
+        end
     end
 end
 

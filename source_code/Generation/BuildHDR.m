@@ -1,6 +1,6 @@
-function [imgHDR, lin_fun] = BuildHDR(stack, stack_exposure, lin_type, lin_fun, weightFun)
+function [imgHDR, lin_fun] = BuildHDR(stack, stack_exposure, lin_type, lin_fun, weightFun, bRobertson)
 %
-%       [imgHDR, lin_fun] = BuildHDR(stack, stack_exposure, lin_type, lin_fun, weightFun)
+%       [imgHDR, lin_fun] = BuildHDR(stack, stack_exposure, lin_type, lin_fun, weightFun, bRobertson)
 %
 %
 %        Input:
@@ -27,6 +27,7 @@ function [imgHDR, lin_fun] = BuildHDR(stack, stack_exposure, lin_type, lin_fun, 
 %                          This function produces good results when some 
 %                          under-exposed or over-exposed images are present
 %                          in the stack.
+%               -bRobertson:
 %
 %        Output:
 %           -imgHDR: the final HDR image
@@ -61,6 +62,10 @@ function [imgHDR, lin_fun] = BuildHDR(stack, stack_exposure, lin_type, lin_fun, 
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
+if(~exist('bRobertson', 'var'))
+    bRobertson = 0;
+end
+
 %is a weight function defined?
 if(~exist('weightFun', 'var'))
     weightFun = 'all';
@@ -86,6 +91,6 @@ if((strcmp(lin_type, 'tabledDeb97') == 1) && isempty(lin_fun))
 end
 
 %combining the LDR images
-imgHDR = double(CombineLDR(stack, stack_exposure, lin_type, lin_fun, weightFun));
+imgHDR = double(CombineLDR(stack, stack_exposure, lin_type, lin_fun, weightFun, bRobertson));
 
 end
