@@ -47,7 +47,7 @@ function imgOut = CombineLDR(stack, stack_exposure, lin_type, lin_fun, weight_ty
 %
 
 if(~exist('bRobertson', 'var'))
-    bRobertson = 0;
+    bRobertson = 1;
 end
 
 [r, c, col, n] = size(stack);

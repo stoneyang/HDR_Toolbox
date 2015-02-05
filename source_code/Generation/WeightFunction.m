@@ -36,9 +36,9 @@ switch weight_type
         
     case 'Gauss'
         mu = 0.5;
-        sigma = 0.15;
+        sigma = 0.5;
         sigma2 = sigma * sigma * 2;
-        weight = exp(-(img - mu).^2 / sigma2);
+        weight = exp(-4*(img - mu).^2 / sigma2);
         
     case 'hat'
         weight = 1 - (2 * img - 1).^12;
