@@ -11,7 +11,7 @@ function img = tabledFunction(img, table)
 %        Output:
 %           -img: an LDR image with remapped values
 %
-%     Copyright (C) 2011  Francesco Banterle
+%     Copyright (C) 2011-15  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@ function img = tabledFunction(img, table)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-col = size(img,3);
+col = size(img, 3);
 
 img = img + 1;
 
@@ -38,12 +38,8 @@ for i=1:col
     n = length(values);
     
     for j=1:n
-        k = values(j);
-        indx = find(img(:,:,i)==k);
-        
-        if(isempty(indx)==0)
-            work(indx) = table(k,i);
-        end
+        k = values(j);        
+        work(img(:,:,i) == k) = table(k, i);
     end
     
     img(:,:,i) = work;

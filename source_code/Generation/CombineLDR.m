@@ -25,12 +25,13 @@ function imgOut = CombineLDR(stack, stack_exposure, lin_type, lin_fun, weight_ty
 %                          This function produces good results when some 
 %                          under-exposed or over-exposed images are present
 %                          in the stack.
-%           -bRobertson:
+%           -bRobertson: if it is set to 1 it enables the Robertson's
+%           modification for assembling exposures for reducing noise.
 %
 %        Output:
 %           -imgOut: the combined HDR image from the stack
 %
-%     Copyright (C) 2011-14  Francesco Banterle
+%     Copyright (C) 2011-15 Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -47,7 +48,7 @@ function imgOut = CombineLDR(stack, stack_exposure, lin_type, lin_fun, weight_ty
 %
 
 if(~exist('bRobertson', 'var'))
-    bRobertson = 1;
+    bRobertson = 0;
 end
 
 [r, c, col, n] = size(stack);
@@ -98,12 +99,12 @@ for i=1:n
     
     if(bRobertson)
         if(t > 0.0)
-            imgOut    = imgOut + (weight .* tmpStack) * t;
+            imgOut = imgOut + (weight .* tmpStack) * t;
             totWeight = totWeight + weight * t * t;
         end
     else
         if(t > 0.0)
-            imgOut    = imgOut + (weight .* tmpStack) / t;
+            imgOut = imgOut + (weight .* tmpStack) / t;
             totWeight = totWeight + weight;
         end
     end

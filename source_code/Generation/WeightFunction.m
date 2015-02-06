@@ -14,7 +14,7 @@ function weight = WeightFunction(img, weight_type)
 %        Output:
 %           -weight: the output weight function for a given LDR image
 %
-%     Copyright (C) 2011  Francesco Banterle
+%     Copyright (C) 2011-15  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ switch weight_type
         mu = 0.5;
         sigma = 0.5;
         sigma2 = sigma * sigma * 2;
-        weight = exp(-4*(img - mu).^2 / sigma2);
+        weight = exp(-4 * (img - mu).^2 / sigma2);
         
     case 'hat'
         weight = 1 - (2 * img - 1).^12;
@@ -56,7 +56,7 @@ switch weight_type
         weight = weight / max(weight(:));
         
     otherwise 
-        weight = 1;
+        weight = -1;
 end
 
 end

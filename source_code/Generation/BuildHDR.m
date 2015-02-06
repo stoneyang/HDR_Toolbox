@@ -2,6 +2,7 @@ function [imgHDR, lin_fun] = BuildHDR(stack, stack_exposure, lin_type, lin_fun, 
 %
 %       [imgHDR, lin_fun] = BuildHDR(stack, stack_exposure, lin_type, lin_fun, weightFun, bRobertson)
 %
+%       This function builds an HDR image from a stack of LDR images.
 %
 %        Input:
 %           -stack: an input stack of LDR images. This has to be set if we
@@ -18,7 +19,9 @@ function [imgHDR, lin_fun] = BuildHDR(stack, stack_exposure, lin_type, lin_fun, 
 %                                       linearisation passed as input in
 %                                       lin_fun using Debevec and Malik 97
 %                                       method
-%           -lin_fun: extra parameters for linearization, see lin_type
+%           -lin_fun: it is the camera response function of the camera that
+%           took the pictures in the stack. If it is empty, [], this
+%           function will be estimated when lin_type == tabledDeb97.
 %           -weight_type:
 %               - 'all':   weight is set to 1
 %               - 'hat':   hat function 1-(2x-1)^12
@@ -27,7 +30,8 @@ function [imgHDR, lin_fun] = BuildHDR(stack, stack_exposure, lin_type, lin_fun, 
 %                          This function produces good results when some 
 %                          under-exposed or over-exposed images are present
 %                          in the stack.
-%               -bRobertson:
+%            -bRobertson: if it is set to 1 it enables the Robertson's
+%             modification for assembling exposures for reducing noise.
 %
 %        Output:
 %           -imgHDR: the final HDR image
@@ -85,8 +89,14 @@ if(isempty(stack) || isempty(stack_exposure))
     error('The stack is set empty!');
 end
 
+%do we have a camera response function?
+bFun = 0;
+if(~isempty(lin_fun))
+    bFun = (length(lin_fun) == 256);
+end
+
 %is the inverse camera function ok? Do we need to recompute it?
-if((strcmp(lin_type, 'tabledDeb97') == 1) && isempty(lin_fun))
+if((strcmp(lin_type, 'tabledDeb97') == 1) && bFun)
     lin_fun = ComputeCRF(stack, stack_exposure);        
 end
 
