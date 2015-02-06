@@ -30,33 +30,33 @@ list = dir([dir_name, '/*.', format]);
 n = length(list);
 exposure = ones(n, 1);
 
-if(strcmpi(format, 'jpg') == 1 || strcmpi(format, 'jpeg') == 1)
-    for i=1:n
-        %Read Exif file information
-        try
-            if(exist('imfinfo'))
-                img_info = imfinfo([dir_name, '/', list(i).name]);                    
-                exposure(i) = img_info.DigitalCamera.ExposureTime;
-            else
-                if(exist('exifread'))
+for i=1:n
+    %Read Exif file information
+    try
+        if(exist('imfinfo'))
+            img_info = imfinfo([dir_name, '/', list(i).name]);                    
+            exposure(i) = img_info.DigitalCamera.ExposureTime;
+        else
+            if(exist('exifread'))
+                if(strcmpi(format, 'jpg') == 1 || strcmpi(format, 'jpeg') == 1)
                     exifInfo = exifread([dir_name, '/', list(i).name]);
                     exposure(i) = exifInfo.ExposureTime;
-                else
-                    tmp = hdrimread([dir_name, '/', list(i).name]);
-                    L = lum(tmp);
-                    tmpExp = mean(L(:));
+                end
+            else
+            	tmp = hdrimread([dir_name, '/', list(i).name]);
+                L = lum(tmp);
+                tmpExp = mean(L(:));
                     
-                    if(tmpExp > 0.0)
-                        exposure(i) = 1.0 / tmpExp;
-                    else
-                        exposure(i) = 1.0;
-                    end
+                if(tmpExp > 0.0)
+                    exposure(i) = 1.0 / tmpExp;
+                else
+                exposure(i) = 1.0;
                 end
             end
-        catch err
-            disp(err);
-            exposure(i) = 1;
         end
+    catch err
+        disp(err);
+        exposure(i) = 1;
     end
 end
 
