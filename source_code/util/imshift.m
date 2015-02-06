@@ -11,7 +11,7 @@ function imgOut = imshift(img, is_dx, is_dy)
 %		 Output:
 %			-imgOut: the final shifted image
 %
-%     Copyright (C) 2012  Francesco Banterle
+%     Copyright (C) 2012-15  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -38,8 +38,8 @@ end
 imgOut = zeros(size(img));
 imgTmp = zeros(size(img));
 
-if(abs(is_dx)>0)
-    if(is_dx>0)
+if(abs(is_dx) > 0)
+    if(is_dx > 0)
         imgTmp(:,(is_dx+1):end,:) = img(:,1:(end-is_dx),:);
     else
         imgTmp(:,1:(end+is_dx),:) = img(:,(1-is_dx):end,:);    
@@ -48,9 +48,9 @@ else
     imgTmp = img;
 end
 
-if(abs(is_dy)>0)
+if(abs(is_dy) > 0)
     
-    if(is_dy>0)
+    if(is_dy > 0)
         imgOut((is_dy+1):end,:,:) = imgTmp(1:(end-is_dy),:,:);
     else
         imgOut(1:(end+is_dy),:,:) = imgTmp((1-is_dy):end,:,:);    

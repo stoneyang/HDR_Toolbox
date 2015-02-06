@@ -30,19 +30,19 @@ function imgOut = imWarp(img, offset_map, bAbs)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-if(~exist('bAbs','var'))
+if(~exist('bAbs', 'var'))
     bAbs = 0;
 end
 
-[r,c,col] = size(img);
-[X,Y] = meshgrid(1:c,1:r);
+[r, c, col] = size(img);
+[X, Y] = meshgrid(1:c,1:r);
     
 if(bAbs)
     XI = offset_map(:,:,1);
     YI = offset_map(:,:,2);
 else
-    XI = X-offset_map(:,:,1);
-    YI = Y-offset_map(:,:,2);
+    XI = X - offset_map(:,:,1);
+    YI = Y - offset_map(:,:,2);
     
     XI = ClampImg(XI, 1, c);
     YI = ClampImg(YI, 1, r);
@@ -51,7 +51,7 @@ end
 imgOut = zeros(r,c,col);
 
 for i=1:col
-    imgOut(:,:,i) = interp2(X,Y,img(:,:,i),XI,YI,'bilinear',0);
+    imgOut(:,:,i) = interp2(X, Y, img(:,:,i), XI, YI, 'bilinear', 0);
 end
 
 end
