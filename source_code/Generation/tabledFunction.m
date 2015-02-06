@@ -38,7 +38,7 @@ for i=1:col
     n = length(values);
     
     for j=1:n
-        k = values(j);        
+        k = values(j);    
         work(img(:,:,i) == k) = table(k, i);
     end
     

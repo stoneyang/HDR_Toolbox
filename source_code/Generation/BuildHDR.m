@@ -96,7 +96,7 @@ if(~isempty(lin_fun))
 end
 
 %is the inverse camera function ok? Do we need to recompute it?
-if((strcmp(lin_type, 'tabledDeb97') == 1) && bFun)
+if((strcmp(lin_type, 'tabledDeb97') == 1) && ~bFun)
     lin_fun = ComputeCRF(stack, stack_exposure);        
 end
 
