@@ -1,4 +1,4 @@
-function weight = WeightFunction(img, weight_type)
+function weight = WeightFunction(img, weight_type, bMeanWeight)
 %
 %       weight = WeightFunction(img, weight_type)
 %
@@ -10,6 +10,7 @@ function weight = WeightFunction(img, weight_type)
 %               - 'hat': hat function 1-(2x-1)^12
 %               - 'Deb97': Debevec and Malik 97 weight function
 %               - 'Gauss': Gaussian (mu = 0.5, sigma=0.15) 
+%           -bMeanWeight:
 %
 %        Output:
 %           -weight: the output weight function for a given LDR image
@@ -29,6 +30,17 @@ function weight = WeightFunction(img, weight_type)
 %     You should have received a copy of the GNU General Public License
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
+
+if(~exist('bMeanWeight', 'var'))
+    bMeanWeight = 0;
+end
+
+col = size(img, 3);
+bCreate = 0;
+if((size(img, 3) > 1) && bMeanWeight)
+    img = mean(img, 3);
+    bCreate = 1;
+end
 
 switch weight_type
     case 'all'
@@ -57,6 +69,13 @@ switch weight_type
         
     otherwise 
         weight = -1;
+end
+
+if(bCreate)
+    for i=1:col
+        tmpOut(:,:,i) = weight;
+    end
+    weight = tmpOut;
 end
 
 end

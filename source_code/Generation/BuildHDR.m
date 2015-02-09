@@ -1,6 +1,6 @@
-function [imgHDR, lin_fun] = BuildHDR(stack, stack_exposure, lin_type, lin_fun, weightFun, bRobertson)
+function [imgHDR, lin_fun] = BuildHDR(stack, stack_exposure, lin_type, lin_fun, weightFun, bLogDomain, bMeanWeight, bRobertson)
 %
-%       [imgHDR, lin_fun] = BuildHDR(stack, stack_exposure, lin_type, lin_fun, weightFun, bRobertson)
+%       [imgHDR, lin_fun] = BuildHDR(stack, stack_exposure, lin_type, lin_fun, weightFun, bLogDomain, bMeanWeight, bRobertson)
 %
 %       This function builds an HDR image from a stack of LDR images.
 %
@@ -30,8 +30,13 @@ function [imgHDR, lin_fun] = BuildHDR(stack, stack_exposure, lin_type, lin_fun, 
 %                          This function produces good results when some 
 %                          under-exposed or over-exposed images are present
 %                          in the stack.
-%            -bRobertson: if it is set to 1 it enables the Robertson's
-%             modification for assembling exposures for reducing noise.
+%           -bLogDomain, if it is set to 1 it enables the merge of the exposure
+%	        the logarithmic domain, otherwise in the linear domain. This value
+%           is set to 1 by default.
+%           -bMeanWeight:
+%           -bRobertson: if it is set to 1 it enables the Robertson's
+%           modification for assembling exposures for reducing noise.
+%           This value is set to 0 by default.
 %
 %        Output:
 %           -imgHDR: the final HDR image
@@ -41,13 +46,10 @@ function [imgHDR, lin_fun] = BuildHDR(stack, stack_exposure, lin_type, lin_fun, 
 %           This example line shows how to load a stack from disk:
 %
 %               stack = ReadLDRStack('stack_alignment', 'jpg');               
+%               
 %               stack_exposure = ReadLDRExif('stack_alignment', 'jpg');
+%               
 %               BuildHDR(stack, stack_exposure,'tabledDeb97',[],'Deb97');
-%
-%           In the case we previously loaded LDR images, in stack, and
-%           their EXIF information, in stack_exposure, we have to use
-%           the following line:
-%               BuildHDR('','','tabledDeb97','Deb97',stack,stack_exposure);
 %
 %
 %     Copyright (C) 2011-15  Francesco Banterle
@@ -65,6 +67,14 @@ function [imgHDR, lin_fun] = BuildHDR(stack, stack_exposure, lin_type, lin_fun, 
 %     You should have received a copy of the GNU General Public License
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
+
+if(~exist('bLogDomain', 'var'))
+    bLogDomain = 1;
+end
+
+if(~exist('bMeanWeight', 'var'))
+    bMeanWeight = 1;
+end
 
 if(~exist('bRobertson', 'var'))
     bRobertson = 0;
@@ -101,6 +111,6 @@ if((strcmp(lin_type, 'tabledDeb97') == 1) && ~bFun)
 end
 
 %combining the LDR images
-imgHDR = double(CombineLDR(stack, stack_exposure, lin_type, lin_fun, weightFun, bRobertson));
+imgHDR = double(CombineLDR(stack, stack_exposure, lin_type, lin_fun, weightFun, bLogDomain, bMeanWeight, bRobertson));
 
 end

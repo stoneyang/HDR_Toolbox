@@ -1,6 +1,6 @@
-function imgOut = CombineLDR(stack, stack_exposure, lin_type, lin_fun, weight_type, bRobertson)
+function imgOut = CombineLDR(stack, stack_exposure, lin_type, lin_fun, weight_type, bLogDomain, bMeanWeight, bRobertson)
 %
-%       imgOut = CombineLDR(stack, stack_exposure, lin_type, lin_fun, weight_type, bRobertson)
+%       imgOut = CombineLDR(stack, stack_exposure, lin_type, lin_fun, weight_type, bLogDomain, bMeanWeight, bRobertson)
 %
 %
 %        Input:
@@ -25,6 +25,10 @@ function imgOut = CombineLDR(stack, stack_exposure, lin_type, lin_fun, weight_ty
 %                          This function produces good results when some 
 %                          under-exposed or over-exposed images are present
 %                          in the stack.
+%           -bLogDomain, if it is set to 1 it enables the merge of the exposure
+%	        the logarithmic domain, otherwise in the linear domain. This value
+%           is set to 1 by default.
+%           -bMeanWeight:
 %           -bRobertson: if it is set to 1 it enables the Robertson's
 %           modification for assembling exposures for reducing noise.
 %
@@ -46,6 +50,14 @@ function imgOut = CombineLDR(stack, stack_exposure, lin_type, lin_fun, weight_ty
 %     You should have received a copy of the GNU General Public License
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
+
+if(~exist('bLogDomain', 'var'))
+    bLogDomain = 1;
+end
+
+if(~exist('bMeanWeight', 'var'))
+    bMeanWeight = 1;
+end
 
 if(~exist('bRobertson', 'var'))
     bRobertson = 0;
@@ -73,23 +85,19 @@ for i=1:n
     end
 
     if(isa(stack, 'uint16'))
-        stack = single(tmpStack) / 65535.0;
+        tmpStack = single(tmpStack) / 65535.0;
     end
 
-    switch lin_type
-        case 'linear'
-            weight  = WeightFunction(tmpStack, weight_type);
+    weight  = WeightFunction(tmpStack, weight_type, bMeanWeight);
 
+    switch lin_type
         case 'gamma2.2'
-            weight  = WeightFunction(tmpStack, weight_type);
             tmpStack = tmpStack.^2.2;
 
         case 'sRGB'
-            weight  = WeightFunction(tmpStack, weight_type);
             tmpStack = ConvertRGBtosRGB(tmpStack, 1);
         
         case 'tabledDeb97'
-            weight  = WeightFunction(tmpStack, weight_type);
             tmpStack = tabledFunction(round(tmpStack * 255), lin_fun);            
         otherwise
     end
@@ -97,15 +105,18 @@ for i=1:n
     %Calculation of the weight function    
     t = stack_exposure(i);
     
-    if(bRobertson)
-        if(t > 0.0)
+    if(t > 0.0)
+        if(bRobertson)
             imgOut = imgOut + (weight .* tmpStack) * t;
             totWeight = totWeight + weight * t * t;
-        end
-    else
-        if(t > 0.0)
-            imgOut = imgOut + (weight .* tmpStack) / t;
-            totWeight = totWeight + weight;
+        else
+            if(bLogDomain)
+                imgOut = imgOut + weight .* (log(tmpStack) - log(t));
+                totWeight = totWeight + weight;                
+            else
+                imgOut = imgOut + (weight .* tmpStack) / t;
+                totWeight = totWeight + weight;
+            end
         end
     end
 end
@@ -114,8 +125,12 @@ if(~isempty(find(totWeight <= 0.0)))
     disp('WARNING: the stack has saturated pixels in all the stack, please use ''Gauss'' weighting function to mitigate artifacts.');
 end
 
-totWeight(totWeight <= 0.0) = 1.0;
-
 imgOut = (imgOut ./ totWeight);
+
+if(~bRobertson && bLogDomain)
+    imgOut = exp(imgOut);
+end
+
+imgOut = RemoveSpecials(imgOut);
 
 end
