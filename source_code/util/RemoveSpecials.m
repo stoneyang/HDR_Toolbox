@@ -1,18 +1,18 @@
-function img=RemoveSpecials(img)
+function img = RemoveSpecials(img, clamping_value)
 %
 %
-%       img=RemoveSpecials(img)
-%
+%       img = RemoveSpecials(img, clamping_value)
 %
 %       This function removes specials: Inf and NaN
 %
 %       Input:
 %           -img: an image which can contain float special values
+%           -clamping_value:
 %
 %       Output:
 %           -img: the image without float special values
 %
-%     Copyright (C) 2011  Francesco Banterle
+%     Copyright (C) 2011-15  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -28,6 +28,10 @@ function img=RemoveSpecials(img)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-img(isnan(img)|isinf(img))=0;
+if(~exist('clamping_value', 'var'))
+    clamping_value = 0;
+end
+
+img(isnan(img) | isinf(img)) = clamping_value;
 
 end

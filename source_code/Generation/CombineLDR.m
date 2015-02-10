@@ -68,26 +68,19 @@ end
 imgOut    = zeros(r, c, col, 'single');
 totWeight = zeros(r, c, col, 'single');
 
+scale = 1.0;
+
+if(isa(stack, 'uint8'))
+    scale = 255.0;
+end
+
+if(isa(stack, 'uint16'))
+    scale = 65535.0;
+end
+
 for i=1:n
-    weight   = [];
-    tmpStack = stack(:,:,:,i);
-
-    if(isa(tmpStack, 'single'))
-        tmpStack = ClampImg(tmpStack, 0.0, 1.0);
-    end
+    tmpStack = ClampImg(single(stack(:,:,:,i)) / scale, 0.0, 1.0);
     
-    if(isa(tmpStack, 'double'))
-        tmpStack = ClampImg(single(tmpStack), 0.0, 1.0);
-    end
-
-    if(isa(tmpStack, 'uint8'))
-        tmpStack = single(tmpStack) / 255.0;
-    end
-
-    if(isa(stack, 'uint16'))
-        tmpStack = single(tmpStack) / 65535.0;
-    end
-
     weight  = WeightFunction(tmpStack, weight_type, bMeanWeight);
 
     switch lin_type
@@ -102,8 +95,9 @@ for i=1:n
         otherwise
     end
    
-    %Calculation of the weight function    
+    %computing the weight function    
     t = stack_exposure(i);
+    weight(weight<1e-3) = 0.0;
     
     if(t > 0.0)
         if(bRobertson)
@@ -131,6 +125,11 @@ if(~bRobertson && bLogDomain)
     imgOut = exp(imgOut);
 end
 
-imgOut = RemoveSpecials(imgOut);
+[~, index] = min(stack_exposure);
+
+for i=1:col
+    saturation_value = double(max(max(stack(:,:,i,index))))/ (t * scale);
+    imgOut(:,:,i) = RemoveSpecials(imgOut(:,:,i), saturation_value);
+end
 
 end
