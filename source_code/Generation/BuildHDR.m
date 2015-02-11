@@ -99,15 +99,9 @@ if(isempty(stack) || isempty(stack_exposure))
     error('The stack is set empty!');
 end
 
-%do we have a camera response function?
-bFun = 0;
-if(~isempty(lin_fun))
-    bFun = (length(lin_fun) == 256);
-end
-
 %is the inverse camera function ok? Do we need to recompute it?
-if((strcmp(lin_type, 'tabledDeb97') == 1) && ~bFun)
-    lin_fun = ComputeCRF(stack, stack_exposure);        
+if((strcmp(lin_type, 'LUT') == 1) && isempty(lin_fun))
+    [lin_fun, ~] = ComputeCRF(stack, stack_exposure);        
 end
 
 %merging
@@ -141,7 +135,7 @@ for i=1:n
         case 'sRGB'
             tmpStack = ConvertRGBtosRGB(tmpStack, 1);
         
-        case 'tabledDeb97'
+        case 'LUT'
             tmpStack = tabledFunction(round(tmpStack * 255), lin_fun);            
         otherwise
     end
