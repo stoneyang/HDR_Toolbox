@@ -1,20 +1,22 @@
-function lin_fun = ComputeCRF(stack, stack_exposure, nSamples)
+function [lin_fun, max_lin_fun] = ComputeCRF(stack, stack_exposure, nSamples, bNormalize)
 %
-%       lin_fun = ComputeCRF(stack, stack_exposure, nSamples)
+%       lin_fun = ComputeCRF(stack, stack_exposure, nSamples, bNormalize)
 %
 %       This function computes camera response function using Debevec and
 %       Malik method.
 %
 %        Input:
-%           -stack: a stack of LDR images;
+%           -stack: a stack of LDR images.
 %           -stack_exposure: an array containg the exposure time of each
 %           image. Time is expressed in second (s).
-%           -nSamples: number of samples for computing the CRF
+%           -nSamples: number of samples for computing the CRF.
+%           -bNormalize: if 1 it enables function normalization.
 %
 %        Output:
-%           -lin_fun: the inverse CRF
+%           -lin_fun: the inverse CRF.
+%           -max_lin_fun: maximum value of the inverse CRF.
 %
-%     Copyright (C) 2014  Francesco Banterle
+%     Copyright (C) 2014-15  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -32,6 +34,10 @@ function lin_fun = ComputeCRF(stack, stack_exposure, nSamples)
 
 if(~exist('nSamples', 'var'))
     nSamples = 1000;
+end
+
+if(~exist('bNormalize', 'var'))
+    bNormalize = 1;
 end
 
 if(isempty(stack))
@@ -55,10 +61,18 @@ stack_samples = GrossbergSampling(stack_hist, nSamples);
 lin_fun = zeros(256, col);
 log_stack_exposure = log(stack_exposure);
 
+max_lin_fun = zeros(col, 1);
+
 for i=1:col
-    g = gsolve(stack_samples(:,:,i), log_stack_exposure, 10, W);
+    g = gsolve(stack_samples(:,:,i), log_stack_exposure, 20, W);
     g = exp(g);
-    lin_fun(:,i) = (g / max(g));
+    
+    lin_fun(:,i) = g;
+    max_lin_fun(i) = max(g);
+    
+    if(bNormalize)
+        lin_fun(:,i) = lin_fun(:,i) / max_lin_fun(i);
+    end
 end
 
 end
