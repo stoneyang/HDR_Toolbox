@@ -26,7 +26,7 @@ stackOut = SiftAlignment(stack/255.0, '', '');
 clear('stack');
 
 disp('4) Build the radiance map using the stack and stack_exposure');
-imgHDR = BuildHDR(stackOut, stack_exposure, 'tabledDeb97', [], 'hat');
+imgHDR = BuildHDR(stackOut, stack_exposure, 'LUT', [], 'hat');
 
 disp('5) Save the radiance map in the .hdr format');
 hdrimwrite(imgHDR,'example_build_sift_alignment.hdr');

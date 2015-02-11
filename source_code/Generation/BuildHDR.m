@@ -1,6 +1,6 @@
-function [imgHDR, lin_fun] = BuildHDR(stack, stack_exposure, lin_type, lin_fun, weightFun, bLogDomain, bMeanWeight, bRobertson)
+function [imgOut, lin_fun] = BuildHDR(stack, stack_exposure, lin_type, lin_fun, weight_type, merge_type, bMeanWeight)
 %
-%       [imgHDR, lin_fun] = BuildHDR(stack, stack_exposure, lin_type, lin_fun, weightFun, bLogDomain, bMeanWeight, bRobertson)
+%       [imgOut, lin_fun] = BuildHDR(stack, stack_exposure, lin_type, lin_fun, weight_type, merge_type, bMeanWeight)
 %
 %       This function builds an HDR image from a stack of LDR images.
 %
@@ -15,13 +15,13 @@ function [imgHDR, lin_fun] = BuildHDR(stack, stack_exposure, lin_type, lin_fun, 
 %                      - 'gamma2.2': gamma function 2.2 is used for
 %                                    linearisation;
 %                      - 'sRGB': images are encoded using sRGB
-%                      - 'tabledDeb97': a tabled RGB function is used for
-%                                       linearisation passed as input in
-%                                       lin_fun using Debevec and Malik 97
-%                                       method
+%                      - 'LUT': the lineraziation function is a look-up
+%                               table defined stored as an array in the 
+%                               lin_fun 
 %           -lin_fun: it is the camera response function of the camera that
-%           took the pictures in the stack. If it is empty, [], this
-%           function will be estimated when lin_type == tabledDeb97.
+%           took the pictures in the stack. If it is empty, [], and 
+%           type is 'LUT' it will be estimated using Debevec and Malik's
+%           method.
 %           -weight_type:
 %               - 'all':   weight is set to 1
 %               - 'hat':   hat function 1-(2x-1)^12
@@ -30,17 +30,20 @@ function [imgHDR, lin_fun] = BuildHDR(stack, stack_exposure, lin_type, lin_fun, 
 %                          This function produces good results when some 
 %                          under-exposed or over-exposed images are present
 %                          in the stack.
-%           -bLogDomain, if it is set to 1 it enables the merge of the exposure
-%	        the logarithmic domain, otherwise in the linear domain. This value
-%           is set to 1 by default.
-%           -bMeanWeight:
+%           -merge_type:
+%               - 'linear': it merges different LDR images in the linear
+%               domain.
+%               - 'log': it merges different LDR images in the natural
+%               logarithmic domain.
+%               - 'robertson': it merges different LDR images in the linear
+%               domain using Robertson et al.'s weighting.
 %           -bRobertson: if it is set to 1 it enables the Robertson's
 %           modification for assembling exposures for reducing noise.
 %           This value is set to 0 by default.
 %
 %        Output:
-%           -imgHDR: the final HDR image
-%           -lin_fun:
+%           -imgOut: the final HDR image.
+%           -lin_fun: the camera response function.
 %
 %        Example:
 %           This example line shows how to load a stack from disk:
@@ -68,21 +71,18 @@ function [imgHDR, lin_fun] = BuildHDR(stack, stack_exposure, lin_type, lin_fun, 
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-if(~exist('bLogDomain', 'var'))
-    bLogDomain = 1;
+%merge type, if it is not set the default is 'log'
+if(~exist('merge_type', 'var'))
+    merge_type = 'log';
 end
 
 if(~exist('bMeanWeight', 'var'))
     bMeanWeight = 1;
 end
 
-if(~exist('bRobertson', 'var'))
-    bRobertson = 0;
-end
-
 %is a weight function defined?
-if(~exist('weightFun', 'var'))
-    weightFun = 'all';
+if(~exist('weight_type', 'var'))
+    weight_type = 'all';
 end
 
 %is the linearization type of the images defined?
@@ -110,7 +110,93 @@ if((strcmp(lin_type, 'tabledDeb97') == 1) && ~bFun)
     lin_fun = ComputeCRF(stack, stack_exposure);        
 end
 
-%combining the LDR images
-imgHDR = double(CombineLDR(stack, stack_exposure, lin_type, lin_fun, weightFun, bLogDomain, bMeanWeight, bRobertson));
+%merging
+[r, c, col, n] = size(stack);
+
+imgOut    = zeros(r, c, col, 'single');
+totWeight = zeros(r, c, col, 'single');
+
+scale = 1.0;
+
+if(isa(stack, 'uint8'))
+    scale = 255.0;
+end
+
+if(isa(stack, 'uint16'))
+    scale = 65535.0;
+end
+
+%for each LDR image...
+for i=1:n
+    tmpStack = ClampImg(single(stack(:,:,:,i)) / scale, 0.0, 1.0);
+    
+    %computing the weight function    
+    weight  = WeightFunction(tmpStack, weight_type, bMeanWeight);
+
+    %linearization of the image
+    switch lin_type
+        case 'gamma2.2'
+            tmpStack = tmpStack.^2.2;
+
+        case 'sRGB'
+            tmpStack = ConvertRGBtosRGB(tmpStack, 1);
+        
+        case 'tabledDeb97'
+            tmpStack = tabledFunction(round(tmpStack * 255), lin_fun);            
+        otherwise
+    end
+   
+    %summing things up...
+    t = stack_exposure(i);    
+    if(t > 0.0)
+        switch merge_type
+            case 'linear'
+                imgOut = imgOut + (weight .* tmpStack) / t;
+                totWeight = totWeight + weight;
+            
+            case 'log'
+                imgOut = imgOut + weight .* (log(tmpStack) - log(t));
+                totWeight = totWeight + weight;                
+            
+            case 'robertson'
+                imgOut = imgOut + (weight .* tmpStack) * t;
+                totWeight = totWeight + weight * t * t;
+        end
+    end
+end
+
+%checking for saturated pixels
+bSaturation = 0;
+if(~isempty(find(totWeight <= 0.0)))
+    bSaturation = 1;
+    disp('WARNING: the stack has saturated pixels in all the stack, please use ''Gauss'' weighting function to mitigate artifacts.');
+end
+
+imgOut = (imgOut ./ totWeight);
+
+if(strcmp(merge_type, 'log') == 1)
+    imgOut = exp(imgOut);
+end
+
+%handling saturated pixels
+if(bSaturation)
+    [~, index] = min(stack_exposure);
+
+    for i=1:col
+        max_val = double(max(max(stack(:,:,i,index)))) / (t * scale);
+
+        saturation_value = max_val;
+        for j=1:n
+            if(j ~= index)
+                saturation_value = saturation_value + (1.0 / stack_exposure(j));
+            end
+        end
+
+        imgOut(:,:,i) = RemoveSpecials(imgOut(:,:,i), saturation_value);
+    end
+end
+
+%forcing to double type for allowing to be used in some MATLAB functions
+imgOut = double(imgOut);
 
 end

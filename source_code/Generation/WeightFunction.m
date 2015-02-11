@@ -36,10 +36,12 @@ if(~exist('bMeanWeight', 'var'))
 end
 
 col = size(img, 3);
-bCreate = 0;
 if((size(img, 3) > 1) && bMeanWeight)
-    img = mean(img, 3);
-    bCreate = 1;
+    L = mean(img, 3);
+    
+    for i=1:col
+        img(:,:,i) = L;
+    end
 end
 
 switch weight_type
@@ -69,13 +71,6 @@ switch weight_type
         
     otherwise 
         weight = -1;
-end
-
-if(bCreate)
-    for i=1:col
-        tmpOut(:,:,i) = weight;
-    end
-    weight = tmpOut;
 end
 
 end
