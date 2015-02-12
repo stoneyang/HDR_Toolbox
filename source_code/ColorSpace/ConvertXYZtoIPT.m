@@ -36,7 +36,7 @@ if(inverse==0)
     
     imgLMS = ConvertXYZtoLMS(img, 0);
     
-    ind0 = find(imgLMS>=0.0);    
+    ind0 = find(imgLMS >= 0.0);    
     ind1 = find(imgLMS<0.0);
     imgLMS(ind0) = imgLMS(ind0).^gamma;
     imgLMS(ind1) = -(-imgLMS(ind1)).^gamma;

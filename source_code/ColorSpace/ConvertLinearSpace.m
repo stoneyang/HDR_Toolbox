@@ -30,8 +30,8 @@ function imgOut = ConvertLinearSpace(img, mtx)
 check3Color(img);
 
 %Is it a 3x3 matrix?
-[r,c]=size(mtx);
-if(r~=3||c~=3)
+[r, c]=size(mtx);
+if(r ~= 3 || c ~= 3)
     error('The matrix for color transformation is not 3x3.');
 end
 

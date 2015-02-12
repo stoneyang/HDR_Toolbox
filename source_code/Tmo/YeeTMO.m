@@ -1,7 +1,7 @@
-function [imgOut,La]=YeeTMO(img, nLayer, CMax, Lda)
+function [imgOut, La] = YeeTMO(img, nLayer, CMax, Lda)
 %
 %
-%       imgOut=YeeTMO(img, nLayer)
+%       [imgOut, La] = YeeTMO(img, nLayer, CMax, Lda)
 %
 %
 %       Input:
@@ -14,7 +14,7 @@ function [imgOut,La]=YeeTMO(img, nLayer, CMax, Lda)
 %           -imgOut: tone mapped image
 %           -La: Adaptation luminance
 % 
-%     Copyright (C) 2010  Francesco Banterle
+%     Copyright (C) 2010-15  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -33,47 +33,48 @@ function [imgOut,La]=YeeTMO(img, nLayer, CMax, Lda)
 %is it a three color channels image?
 check13Color(img);
 
-if(~exist('nLayer','var'))
-    nLayer=64;
+if(~exist('nLayer', 'var'))
+    nLayer = 64;
 end
 
-if(~exist('CMax','var'))
-    CMax=100;
+if(~exist('CMax', 'var'))
+    CMax = 100;
 end
 
-if(~exist('Lda','var'))
-    Lda=20;
+if(~exist('Lda', 'var'))
+    Lda = 20;
 end
 
 %Luminance channel
-L=lum(img);
-if(min(L(:))<0.0)
-    img(img<0.0) = 0.0;
+L = lum(img);
+if(min(L(:)) < 0.0)
+    img(img < 0.0) = 0.0;
     L = lum(img);
 end
 
 %calculation of the adaptation
-Llog = log10(L+1e-6);
+Llog = log10(L + 1e-6);
 minLLog = min(Llog(:));
-LLoge = log(L+2.5*1e-5);
-bin_size1=1;
-bin_size2=0.5;
+LLoge = log(L + 2.5 * 1e-5);
+bin_size1 = 1;
+bin_size2 = 0.5;
 La=zeros(size(L));
-for i=0:(nLayer-1)
-    bin_size=bin_size1+(bin_size2-bin_size1)*i/(nLayer-1);    
-    segments=round((Llog-minLLog)/bin_size)+1; 
+for i=0:(nLayer - 1)
+    bin_size = bin_size1+(bin_size2 - bin_size1) * i / (nLayer - 1);    
+    segments = round((Llog-minLLog) / bin_size) + 1; 
     
     %Calculation of layers
-    [imgLabel]=CompoCon(segments,8);    
+    [imgLabel] = CompoCon(segments,8);    
     labels = unique(imgLabel);    
     for p=1:length(labels);
         %Group adaptation
-        indx = find(imgLabel==labels(p));
+        indx = find(imgLabel == labels(p));
         La(indx) = La(indx) + mean(LLoge(indx));
     end
 end
-La=exp(La/nLayer);
-La(La<0.0)=0;
+
+La = exp(La / nLayer);
+La(La < 0.0) = 0;
 
 %Dynamic Range Reduction
 imgOut = TumblinRushmeierTMO(img, Lda, CMax, La);
