@@ -11,7 +11,7 @@ function stackOut = GrossbergSampling(stack, nSamples)
 %           -stackOut: a stack of LDR samples for Debevec and Malik method
 %           (gsolve.m)
 %
-%     Copyright (C) 2013  Francesco Banterle
+%     Copyright (C) 2013-15  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -27,15 +27,15 @@ function stackOut = GrossbergSampling(stack, nSamples)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-if(~exist('nSamples','var'))
+if(~exist('nSamples', 'var'))
     nSamples = 100;
 end
 
-if(nSamples<1)
+if(nSamples < 1)
     nSamples = 100;
 end
 
-[h_bins, col, stackSize] = size(stack);
+[~, col, stackSize] = size(stack);
 
 %Compute CDF
 %figure(4);
@@ -43,20 +43,20 @@ end
 for i=1:stackSize
     for j=1:col
         h_cdf = cumsum(stack(:,j,i));
-        stack(:,j,i) = h_cdf/max(h_cdf(:));
+        stack(:,j,i) = h_cdf / max(h_cdf(:));
     end
 %    plot(stack(:,1,i));
 end
 %figure(1);
 stackOut = zeros(nSamples, stackSize, col);
 
-u = 0:(1.0/(nSamples-1)):1;
+u = 0:(1.0 / (nSamples - 1)):1;
 
 for i=1:nSamples
     for j=1:col
         for k=1:stackSize
-           [p, val] = min(abs(stack(:,j,k)-u(i)));
-           stackOut(i,k,j) = val-1;
+           [~, val] = min(abs(stack(:,j,k) - u(i)));
+           stackOut(i,k,j) = val - 1;
         end
     end
 end
