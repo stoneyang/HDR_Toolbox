@@ -1,6 +1,6 @@
 function s = SaturationPouli(C, I)
 %
-%       s = SaturationPouli(C,I)
+%       s = SaturationPouli(C, I)
 %
 %       This computes the saturation using channel C and I from LCh color
 %       space
@@ -35,6 +35,6 @@ function s = SaturationPouli(C, I)
 %
 %
 
-s = C./(sqrt(C.^2+I.^2));
+s = C ./ (sqrt(C.^2 + I.^2));
 
 end

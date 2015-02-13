@@ -1,17 +1,16 @@
-function l = lum(img)
+function C = IPTColorfullness(imgIPT)
 %
-%       l = lum(img)
+%       C = IPTColorfullness(imgIPT)
 %
-%       This function calculates the luminance
-%
+%       This computes the colorfullness in the IPT color space
 %
 %       input:
-%           img: an RGB image
+%         - imgIPT: an image in the IPT color space
 %
 %       output:
-%           l: luminance as XYZ color 
+%         - C: colorfullness
 %
-%     Copyright (C) 2011-13  Francesco Banterle
+%     Copyright (C) 2015  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -27,18 +26,8 @@ function l = lum(img)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-col = size(img, 3);
+check3Color(imgIPT);
 
-switch col
-    case 1
-        l = img;
-        
-    case 3
-        l = 0.2126 * img(:,:,1) + 0.7152 * img(:,:,2) + 0.0722 * img(:,:,3);
-        
-    otherwise
-        l = mean(img, 3); 
-        disp('Mean of channels was computed; the input image is not an RGB or luminance image!');
-end
+C = sqrt(imgIPT(:,:,2).^2 + imgIPT(:,:,3).^2);
 
 end
