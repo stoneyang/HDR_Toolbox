@@ -1,18 +1,18 @@
-function imgOut = ConvertXYZtoIPT(img, inverse)
+function imgOut = ConvertLMStoIPT(img, inverse)
 %
-%       imgOut = ConvertXYZtoIPT(img, inverse)
+%       imgOut = ConvertLMStoIPT(img, inverse)
 %
 %
 %        Input:
-%           -img: image to convert from XYZ to IPT or from IPT to XYZ.
+%           -img: image to convert from LMS to IPT or from IPT to LMS.
 %           -inverse: takes as values 0 or 1. If it is set to 1 the
-%                     transformation from XYZ to IPT is applied, otherwise
-%                     the transformation from IPT to XYZ.
+%                     transformation from LMS to IPT is applied, otherwise
+%                     the transformation from IPT to LMS.
 %
 %        Output:
-%           -imgOut: converted image in XYZ or IPT.
+%           -imgOut: converted image in LMS or IPT.
 %
-%     Copyright (C) 2011  Francesco Banterle
+%     Copyright (C) 2015  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -31,15 +31,24 @@ function imgOut = ConvertXYZtoIPT(img, inverse)
 %matrix conversion from XYZ to IPT
 mtxLMStoIPT = [0.4000 0.4000 0.2000; 4.4550 -4.8510 0.3960; 0.8056 0.3572 -1.1628];
 
-if(inverse == 0)   
-    imgLMS = ConvertXYZtoLMS(img, 0);
+if(inverse == 0)
+    gamma = 0.43;
     
-    imgOut = ConvertLMStoIPT(imgLMS, 0);
+    ind0 = find(img >= 0.0);    
+    ind1 = find(img < 0.0);
+    img(ind0) = img(ind0).^gamma;
+    img(ind1) = -(-img(ind1)).^gamma;
     
+    imgOut = ConvertLinearSpace(img, mtxLMStoIPT);
 else
-    imgLMS = ConvertLMStoIPT(img, 1);
+    invGamma = 1.0/0.43;
     
-    imgOut = ConvertXYZtoLMS(imgLMS, 1);
+    imgOut = ConvertLinearSpace(img, inv(mtxLMStoIPT));
+
+    ind0 = find(imgOut >= 0.0);    
+    ind1 = find(imgOut < 0.0);
+    imgOut(ind0) = imgOut(ind0).^invGamma;
+    imgOut(ind1) = -(-imgOut(ind1)).^invGamma;
 end
             
 end

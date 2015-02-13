@@ -35,6 +35,6 @@ function F_L = CIECAM02_F_L(L_A)
 k = 1.0 ./ (5 * L_A + 1.0); %Equation 1
 
 F_L = 0.2 * k.^4 .* (5 * L_A) + ...
-      0.1 * (1.0 - k.^4).^2 .* (5 * L_A).^(1.0 /  3.0); %Equation 2
+      0.1 * (1.0 - k.^4).^2 .* ((5 * L_A).^(1.0 /  3.0)); %Equation 2
   
 end

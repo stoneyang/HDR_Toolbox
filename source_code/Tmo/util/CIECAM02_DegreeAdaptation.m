@@ -37,5 +37,5 @@ if(~exist('F', 'var'))
 end
 
 D = F * (1.0 - (exp(-(L_A + 42) / 92) / 3.6)); 
-  
+
 end
