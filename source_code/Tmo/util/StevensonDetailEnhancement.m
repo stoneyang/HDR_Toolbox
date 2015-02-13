@@ -1,18 +1,18 @@
-function detail_layer_out = StevensonDetailEnhancement(detail_layer, FL)
+function detail_layer_out = StevensonDetailEnhancement(detail_layer, F_L)
 %
-%       detail_layer_out = StevensonDetailEnhancement(detail_layer, FL)
+%       detail_layer_out = StevensonDetailEnhancement(detail_layer, F_L)
 %
 %       This function adjusts the detail layer for taking into account the
 %       Stevenson effect.
 %
 %       input:
 %           -detail_layer: the detail layer of an image
-%           -FL: a luminance dependent factor
+%           -F_L: a luminance dependent factor
 %
 %       output:
 %           -detail_layer_out: processed detail layer
 %
-%     Copyright (C) 2014  Francesco Banterle
+%     Copyright (C) 2014-15  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -28,7 +28,15 @@ function detail_layer_out = StevensonDetailEnhancement(detail_layer, FL)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-exponent = (FL + 0.85).^0.25;
-detail_layer_out = detail_layer.^exponent;
+exponent = (F_L + 0.85).^0.25;
 
+[~, ~, col] = size(detail_layer);
+
+detail_layer_out = zeros(size(detail_layer));
+
+for i=1:col
+    detail_layer_out(:,:,i) = detail_layer(:,:,i).^exponent;
+end
+
+hdrimwrite(detail_layer_out, 'detail_layer_out.pfm');
 end

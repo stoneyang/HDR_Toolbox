@@ -1,4 +1,4 @@
-function exposure = ReadLDRInfo(dir_name, format)
+function exposure = ReadLDRStackInfo(dir_name, format)
 %
 %       exposure = ReadLDRInfo(dir_name, format)
 %

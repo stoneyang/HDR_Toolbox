@@ -7,7 +7,7 @@
 %	   5) Save the radiance map in .hdr format
 %	   6) Show the tone mapped version of the radiance map
 %       Author: Francesco Banterle
-%       Copyright June 2013 (c)
+%       Copyright 2013-15 (c)
 %
 %
 
@@ -15,7 +15,7 @@ name_folder = 'stack_alignment';
 format = 'jpg';
 
 disp('1) Read exposure values from the exif');
-stack_exposure = ReadLDRExif(name_folder, format);
+stack_exposure = ReadLDRStackInfo(name_folder, format);
 
 disp('2) Read a stack of LDR images');
 
