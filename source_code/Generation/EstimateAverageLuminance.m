@@ -1,6 +1,6 @@
-function value = EstimateAverageLuminance(exposure_time, aperture_value, iso_value, K_value)
+function [value, value_inv] = EstimateAverageLuminance(exposure_time, aperture_value, iso_value, K_value)
 %
-%       value = EstimateAverageLuminance(exposure_time, aperture_value, iso_value, K_value)
+%       [value, value_inv] = EstimateAverageLuminance(exposure_time, aperture_value, iso_value, K_value)
 %
 %       This function estimates the average scene luminance given camera
 %       parameters.
@@ -10,6 +10,7 @@ function value = EstimateAverageLuminance(exposure_time, aperture_value, iso_val
 %           -aperture_value:
 %           -iso_value:
 %           -K_value:
+%           -value_inv:
 %
 %        Output:
 %           -value: this value is the estimated luminance in the scene.
@@ -35,15 +36,17 @@ if(~exist('K_value', 'var'))
 end
 
 if(~exist('aperture_value', 'var'))
-   K_value = 1;
+   aperture_value = 1;
 end
 
 if(~exist('iso_value', 'var'))
-   K_value = 1;
+   iso_value = 1;
 end
 
 K_value = ClampImg(K_value, 10.6, 13.4);
 
 value = (K_value * aperture_value^2) / (iso_value * exposure_time);
+
+value_inv = (iso_value * exposure_time) / (K_value * aperture_value^2);
 
 end

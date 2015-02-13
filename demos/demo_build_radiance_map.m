@@ -23,7 +23,7 @@ disp('2) Align the stack');
 clear('stack');
 
 disp('3) Read exposure values from the exif');
-stack_exposure = ReadLDRInfo(name_folder, format);
+stack_exposure = ReadLDRStackInfo(name_folder, format);
 
 disp('4) Build the radiance map using the stack and stack_exposure');
 imgHDR = BuildHDR(stackOut, stack_exposure, 'LUT', [], 'Deb97', 'linear');

@@ -38,17 +38,29 @@ for i=1:n
             img_info = imfinfo([dir_name, '/', list(i).name]);    
             
             if(isfield(img_info, 'DigitalCamera'))
-                shutter_speed = img_info.DigitalCamera.ExposureTime;
-                exposure(i)
+                exposure_time = img_info.DigitalCamera.ExposureTime;
+                aperture = img_info.DigitalCamera.FNumber;
+                iso = img_info.DigitalCamera.ISOSpeedRatings;
+                
+                [~, value] = EstimateAverageLuminance(exposure_time, aperture, iso, iso);
+                exposure(i) = value;
             else
-                disp('Th
+                disp('WARNING: The LDR image does not have camera information!');
                 exposure(i) = 1;
             end
         else
             if(exist('exifread'))
                 if(strcmpi(format, 'jpg') == 1 || strcmpi(format, 'jpeg') == 1)
                     exifInfo = exifread([dir_name, '/', list(i).name]);
-                    exposure(i) = exifInfo.ExposureTime;
+                
+                    exposure_time = img_info.DigitalCamera.ExposureTime;
+                    aperture = img_info.DigitalCamera.FNumber;
+                    iso = img_info.DigitalCamera.ISOSpeedRatings;
+                       
+                    [~, value] = EstimateAverageLuminance(exposure_time, aperture, iso, iso);
+                    exposure(i) = value;
+                    
+                    exposure(i) =  value;
                 end
             else
             	tmp = hdrimread([dir_name, '/', list(i).name]);
