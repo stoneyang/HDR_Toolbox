@@ -28,7 +28,7 @@ function detail_layer_out = StevensonDetailEnhancement(detail_layer, F_L)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-exponent = (F_L + 0.85).^0.25;
+exponent = (F_L + 0.8).^0.25;
 
 [~, ~, col] = size(detail_layer);
 
