@@ -1,7 +1,8 @@
-function exposure = ReadLDRExif(dir_name, format)
+function exposure = ReadLDRInfo(dir_name, format)
 %
-%       exposure = ReadLDRExif(dir_name, format)
+%       exposure = ReadLDRInfo(dir_name, format)
 %
+%       This function reads information from an LDR image file.
 %
 %        Input:
 %           -dir_name: the folder name where the stack is stored.
@@ -34,8 +35,15 @@ for i=1:n
     %Read Exif file information
     try
         if(exist('imfinfo'))
-            img_info = imfinfo([dir_name, '/', list(i).name]);                    
-            exposure(i) = img_info.DigitalCamera.ExposureTime;
+            img_info = imfinfo([dir_name, '/', list(i).name]);    
+            
+            if(isfield(img_info, 'DigitalCamera'))
+                shutter_speed = img_info.DigitalCamera.ExposureTime;
+                exposure(i)
+            else
+                disp('Th
+                exposure(i) = 1;
+            end
         else
             if(exist('exifread'))
                 if(strcmpi(format, 'jpg') == 1 || strcmpi(format, 'jpeg') == 1)
