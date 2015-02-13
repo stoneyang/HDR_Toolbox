@@ -38,5 +38,4 @@ for i=1:col
     detail_layer_out(:,:,i) = detail_layer(:,:,i).^exponent;
 end
 
-hdrimwrite(detail_layer_out, 'detail_layer_out.pfm');
 end

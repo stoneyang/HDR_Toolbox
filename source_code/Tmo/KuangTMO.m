@@ -53,7 +53,8 @@ if(~exist('type_param', 'var'))
 end
 
 if(strcmp(type_param, 'unknown'))
-    img = (img / max(img(:))) * 2e5;
+    L = lum(img);
+    img = (img / max(L(:))) * 2e4;
 end
 
 if(~exist('average_surrond_param', 'var'))
@@ -80,11 +81,11 @@ end
 imgDetail = imgXYZ ./ imgBase;
 
 %computing Chromatic adaptation: Section the 2.3 of the original paper
-img_RGB_w = GaussianFilterWindow(img, minSize, 4);
-
 M_CAT02 = [ 0.7328 0.4296 -0.1624;...
            -0.7036 1.6975  0.0061;...
             0.003  0.0136  0.9834];
+
+img_RGB_w = ConvertLinearSpace(GaussianFilterWindow(imgXYZ, max([r, c]), 8), M_CAT02);
 
 imgRGB = ConvertLinearSpace(imgBase, M_CAT02); %Equation 5       
         
@@ -94,7 +95,7 @@ L_A = 0.2 * Y_W;
 D = CIECAM02_DegreeAdaptation(L_A);
 
 wp_D65_XYZ = [96.047, 100, 108.883]; %D65 white point in XYZ
-wp_D65_RGB = ConvertRGBtoXYZ(reshape(wp_D65_XYZ, 1, 1, 3), 1);
+wp_D65_RGB = ConvertLinearSpace(reshape(wp_D65_XYZ, 1, 1, 3), M_CAT02);
 
 imgRGB_c = zeros(size(imgRGB));
 for i=1:col
@@ -184,7 +185,9 @@ for i=2:col
     imgIPT(:,:,i) = imgIPT(:,:,i) .* scale; 
 end
 
-imgOut = ConvertLinearSpace(ConvertXYZtoIPT(imgIPT, 1), M_CAT02); 
+imgOut = ConvertRGBtoXYZ(ConvertXYZtoIPT(imgIPT, 1), 1); 
+
+imgOut = ClampImg(imgOut / MaxQuart(imgOut, 0.99), 0.0, 1.0);
 
 disp('WARNING: the output image has D65 as whitepoint.');
 
