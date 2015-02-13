@@ -171,8 +171,7 @@ switch average_surrond_param
         gamma_value = 1.0;
 end
 
-max_I = max(max(imgIPT(:,:,1)));
-imgIPT(:,:,1) = ((imgIPT(:,:,1) / max_I).^gamma_value) * max_I;
+imgIPT(:,:,1) = NormalizedGamma(imgIPT(:,:,1), gamma_value);
 
 %computing color
 C = IPTColorfullness(imgIPT);
