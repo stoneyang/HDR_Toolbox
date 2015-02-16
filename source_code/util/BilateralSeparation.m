@@ -1,19 +1,19 @@
-function [Base,Detail]=BilateralSeparation(img, simga_s, simga_r)
+function [Base, Detail] = BilateralSeparation(img, sigma_s, sigma_r)
 %
 %
-%       [Base,Detail]=BilateralSeparation(img)
+%       [Base, Detail] = BilateralSeparation(img, sigma_s, sigma_r)
 %
 %
 %       Input:
 %           -img: input image
-%	    -sigma_r: range sigma
-%	    -sigma_s: spatial sigma
+%           -sigma_r: range sigma
+%           -sigma_s: spatial sigmatmp
 %
 %       Output:
 %           -Base: the low frequency image
 %           -Detail: the high frequency image
 %
-%     Copyright (C) 2011  Francesco Banterle
+%     Copyright (C) 2011-15  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -29,27 +29,37 @@ function [Base,Detail]=BilateralSeparation(img, simga_s, simga_r)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
+[r, c , col] = size(img);
+
 %default parameters
-if(~exist('sigma_s')|~exist('sigma_r'))
-    sigma_r=4;
-    sigma_s=0.5;
+if(~exist('sigma_s', 'var'))
+    sigma_s = max([r, c]) * 0.02;
+end
+
+if(~exist('sigma_r', 'var'))
+    sigma_r = 0.4;
 end
 
 %Base Layer
-tmp=log2(img+1);
+img_log = log10(img + 1e-6);
+
+imgFil = zeros(size(img));
 
 try
-    imgFil = bilateralFilter(tmp,[],min(min(tmp)),max(max(tmp)),sigma_s,sigma_r);
+    for i=1:col
+        tmp = img_log(:,:,i);
+        imgFil(:,:,i) = bilateralFilter(tmp, [], min(tmp(:)), max(tmp(:)), sigma_s, sigma_r);
+    end
 catch exception
-    imgFil = bilateralFilter(tmp);
+    disp(exception);
 end
 
-Base=2.^(imgFil)-1;
+Base = 10.^(imgFil) - 1e-6;
 
 %Removing 0
-Base(find(Base<0))=0;
+Base(Base <= 0) = 0;
 
 %Detail Layer
-Detail=RemoveSpecials(img./Base);
+Detail = RemoveSpecials(img ./ Base);
 
 end
