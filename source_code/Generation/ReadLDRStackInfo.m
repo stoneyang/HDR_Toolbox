@@ -42,7 +42,7 @@ for i=1:n
                 aperture = img_info.DigitalCamera.FNumber;
                 iso = img_info.DigitalCamera.ISOSpeedRatings;
                 
-                [~, value] = EstimateAverageLuminance(exposure_time, aperture, iso, iso);
+                [~, value] = EstimateAverageLuminance(exposure_time, aperture, iso);
                 exposure(i) = value;
             else
                 disp('WARNING: The LDR image does not have camera information!');
