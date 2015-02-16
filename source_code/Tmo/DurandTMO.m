@@ -1,17 +1,16 @@
-function imgOut = DurandTMO(img, Lda, CMax)
+function imgOut = DurandTMO(img, target_contrast)
 %
-%       imgOut = DurandTMO(img, Lda, CMax)  
+%       imgOut = DurandTMO(img, target_contrast)  
 %
 %
 %        Input:
 %           -img: input HDR image
-%           -Lda: adaptation luminance in [30,100] cd/m^2
-%           -CMax: maximum ldr monitor luminance in [30,100] cd/m^2
+%           -target_contrast: how to reduce the dynamic range
 %
 %        Output:
 %           -imgOut: tone mapped image
 % 
-%     Copyright (C) 2010  Francesco Banterle
+%     Copyright (C) 2010-15  Francesco Banterle
 %
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -31,37 +30,36 @@ function imgOut = DurandTMO(img, Lda, CMax)
 check13Color(img);
 
 %default parameters
-if(~exist('Lda','var'))
-    Lda=80;
-end
-
-if(~exist('CMax','var'))
-    CMax=100;
+if(~exist('target_contrast', 'var'))
+    target_contrast = 5; %as in the original paper
 end
 
 %Luminance channel
-L=lum(img);
+L = lum(img);
 
-col = size(img,3);
+col = size(img, 3);
 
 %Chroma
 for i=1:col
-    img(:,:,i) = RemoveSpecials(img(:,:,i)./L);
+    img(:,:,i) = RemoveSpecials(img(:,:,i) ./ L);
 end
 
 %Fine details and base separation
-[Lbase,Ldetail]=BilateralSeparation(L);
+[Lbase, Ldetail] = BilateralSeparation(L);
 
-%Tumblin-Rushmeier TMO
+log_base = log10(Lbase);
+max_log_base = max(log_base(:));
+log_detail = log10(Ldetail);
+compression_factor = log10(target_contrast) / (max_log_base - min(log_base(:)));
+log_absolute = compression_factor * max_log_base;
+
+log_compressed = log_base * compression_factor + log_detail - compression_factor - log_absolute;
+
+output = 10.^(log_compressed); 
+
+imgOut = zeros(size(img));
 for i=1:col
-    img(:,:,i)=img(:,:,i).*Lbase;
-end
-
-imgOut = TumblinRushmeierTMO(img, Lda, CMax);
-
-%Adding details back
-for i=1:col
-    imgOut(:,:,i) = imgOut(:,:,i).*Ldetail;
+    imgOut(:,:,i) = img(:,:,i) .* output;
 end
 
 end

@@ -31,32 +31,32 @@ function imgOut=TumblinRushmeierTMO(img, Lda, LdMax, CMax, Lwa)
 check13Color(img);
 
 %default parameters
-if(~exist('Lda','var'))
+if(~exist('Lda', 'var'))
     Lda = 20;
 end
 
-if(~exist('LdMax','var'))
+if(~exist('LdMax', 'var'))
     LdMax = 100;
 end
 
-if(~exist('CMax','var'))
+if(~exist('CMax', 'var'))
     CMax = 100;
 end
 
 %Luminance channel
 L = lum(img);
 
-if(~exist('Lwa','var'))
-    tmp = log(L+2.3*1e-5);
+if(~exist('Lwa', 'var'))
+    tmp = log(L + 2.3 * 1e-5);
     Lwa = exp(mean(tmp(:)));
 end
 
 %Range compression
 gamma_w  = gammaTumRushTMO(Lwa);
 gamma_d  = gammaTumRushTMO(Lda);
-gamma_wd = gamma_w/(1.855+0.4*log(Lda));
-mLwa     = sqrt(CMax).^(gamma_wd-1);
-Ld       = Lda*mLwa.*((L/Lwa).^(gamma_w/gamma_d));
+gamma_wd = gamma_w / (1.855 + 0.4 * log(Lda));
+mLwa     = sqrt(CMax).^(gamma_wd - 1);
+Ld       = Lda * mLwa .* ((L/Lwa).^(gamma_w / gamma_d));
 
 %Changing luminance
 imgOut = ChangeLuminance(img, L, Ld);

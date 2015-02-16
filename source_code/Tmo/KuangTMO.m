@@ -72,13 +72,7 @@ minSize = min([r, c]);
 sigma_s = minSize * 0.02; %as in the original paper
 sigma_r = 0.35; %as in the original paper
 
-imgBase = zeros(size(img));
-for i=1:col
-    tmp = log10(imgXYZ(:,:,i));
-    imgBase(:,:,i) = 10.^bilateralFilter(tmp, [], min(tmp(:)), max(tmp(:)), sigma_s, sigma_r);
-end
-
-imgDetail = imgXYZ ./ imgBase;
+[imgBase, imgDetail] = BilateralSeparation(imgXYZ, sigma_s, sigma_r);
 
 %computing Chromatic adaptation: Section the 2.3 of the original paper
 img_XYZ_w = GaussianFilter(imgXYZ, max([r, c]) / 2, 8);
