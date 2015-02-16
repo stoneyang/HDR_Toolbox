@@ -1,7 +1,7 @@
-function window=GKWindow(sigma)
+function window = GKWindow(sigma)
 %
 %
-%       window=GKWindow(sigma)
+%       window = GKWindow(sigma)
 %
 %
 %       Input:
@@ -10,7 +10,7 @@ function window=GKWindow(sigma)
 %       Onput:
 %           -window: the size of the window of the filter
 %
-%     Copyright (C) 2011  Francesco Banterle
+%     Copyright (C) 2011-15  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -26,6 +26,6 @@ function window=GKWindow(sigma)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-window=ceil(sigma*5);
+window = ceil(sigma * 5);
 
 end
