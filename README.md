@@ -3,15 +3,15 @@ HDR Toolbox
 
 HDR Toolbox is a MATLAB/Octave toolbox for processing High Dynamic Range (HDR) content.
 
--Author: Francesco Banterle
+Author: Francesco Banterle
 
--License: This software is distributed under GPL v3 license (see license.txt)
+License: This software is distributed under GPL v3 license (see license.txt)
 
--Year: Fall 2010-2014
+Year: Fall 2010-2015
 
--Title: HDR Toolbox for Matlab
+Title: HDR Toolbox for Matlab
 
--Version: 1.0.5
+Version: 1.0.7
 
 Contact:
 ========
