@@ -13,7 +13,7 @@
 == Title: HDR Toolbox for Matlab
 
 
-== Version: 1.0.6
+== Version: 1.0.7
 
 
 == How To Install:
