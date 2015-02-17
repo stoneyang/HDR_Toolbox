@@ -32,14 +32,12 @@ n = length(list);
 exposure = ones(n, 1);
 
 for i=1:n
-    %Read Exif file information
-    bRead = 0;
-    
+    %Read Exif file information   
     img_info = [];
     
     try
         if(exist('imfinfo') == 2)
-            img_info = imfinfo([dir_name, '/', list(i).name]);                
+            img_info = imfinfo([dir_name, '/', list(i).name]); 
         end
     catch err
         disp(err);
@@ -54,7 +52,7 @@ for i=1:n
         end
     end
     
-    if(bRead) 
+    if(~isempty(img_info)) 
         if(isfield(img_info, 'DigitalCamera'))
             exposure_time = img_info.DigitalCamera.ExposureTime;
             aperture = img_info.DigitalCamera.FNumber;
