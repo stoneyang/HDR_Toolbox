@@ -163,7 +163,7 @@ end
 bSaturation = 0;
 if(~isempty(find(totWeight <= 0.0)))
     bSaturation = 1;
-    disp('WARNING: the stack has saturated pixels in all the stack, please use ''Gauss'' weighting function to mitigate artifacts.');
+    disp('WARNING: the stack has saturated pixels.');
 end
 
 imgOut = (imgOut ./ totWeight);
