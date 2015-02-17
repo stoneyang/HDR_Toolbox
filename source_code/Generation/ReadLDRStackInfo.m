@@ -33,51 +33,40 @@ exposure = ones(n, 1);
 
 for i=1:n
     %Read Exif file information
+    bRead = 0;
+    
+    img_info = [];
+    
     try
-        if(exist('imfinfo'))
-            img_info = imfinfo([dir_name, '/', list(i).name]);    
-            
-            if(isfield(img_info, 'DigitalCamera'))
-                exposure_time = img_info.DigitalCamera.ExposureTime;
-                aperture = img_info.DigitalCamera.FNumber;
-                iso = img_info.DigitalCamera.ISOSpeedRatings;
-                
-                [~, value] = EstimateAverageLuminance(exposure_time, aperture, iso);
-                exposure(i) = value;
-            else
-                disp('WARNING: The LDR image does not have camera information!');
-                exposure(i) = 1;
-            end
-        else
-            if(exist('exifread'))
-                if(strcmpi(format, 'jpg') == 1 || strcmpi(format, 'jpeg') == 1)
-                    exifInfo = exifread([dir_name, '/', list(i).name]);
-                
-                    exposure_time = img_info.DigitalCamera.ExposureTime;
-                    aperture = img_info.DigitalCamera.FNumber;
-                    iso = img_info.DigitalCamera.ISOSpeedRatings;
-                       
-                    [~, value] = EstimateAverageLuminance(exposure_time, aperture, iso, iso);
-                    exposure(i) = value;
-                    
-                    exposure(i) =  value;
-                end
-            else
-            	tmp = hdrimread([dir_name, '/', list(i).name]);
-                L = lum(tmp);
-                tmpExp = mean(L(:));
-                    
-                if(tmpExp > 0.0)
-                    exposure(i) = 1.0 / tmpExp;
-                else
-                exposure(i) = 1.0;
-                end
-            end
+        if(exist('imfinfo') == 2)
+            img_info = imfinfo([dir_name, '/', list(i).name]);                
         end
     catch err
         disp(err);
-        exposure(i) = 1;
+        
+        try
+            if(exist('exifread') == 2)
+                img_info = exifread([dir_name, '/', list(i).name]);
+            end
+            
+        catch err
+            disp(err);
+        end
     end
+    
+    if(bRead) 
+        if(isfield(img_info, 'DigitalCamera'))
+            exposure_time = img_info.DigitalCamera.ExposureTime;
+            aperture = img_info.DigitalCamera.FNumber;
+            iso = img_info.DigitalCamera.ISOSpeedRatings;
+
+            [~, value] = EstimateAverageLuminance(exposure_time, aperture, iso);
+            exposure(i) = value;
+        else
+            disp('WARNING: The LDR image does not have camera information!');
+        end
+    end
+    
 end
 
 end
