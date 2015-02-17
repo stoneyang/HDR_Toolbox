@@ -58,8 +58,8 @@ switch weight_type
         weight = 1 - (2 * img - 1).^12;
         
     case 'Deb97'
-        Zmin = 0.0;
-        Zmax = 1.0;
+        Zmin = 0.01;
+        Zmax = 0.99;
         tr = (Zmin + Zmax) / 2;
         indx1 = find (img <= tr);
         indx2 = find (img > tr);

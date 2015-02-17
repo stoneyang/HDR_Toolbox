@@ -159,6 +159,9 @@ for i=1:n
     end
 end
 
+hdrimwrite(imgOut,'imgOut.pfm');
+hdrimwrite(totWeight,'totWeight.pfm');
+
 %checking for saturated pixels
 bSaturation = 0;
 if(~isempty(find(totWeight <= 0.0)))
@@ -186,7 +189,12 @@ if(bSaturation)
             end
         end
 
-        imgOut(:,:,i) = RemoveSpecials(imgOut(:,:,i), saturation_value);
+        tmp = imgOut(:,:,i);
+        
+        tmp((isnan(tmp) | isinf(tmp)) & stack(:,:,i,index) > 0.9) = saturation_value;
+        tmp((isnan(tmp) | isinf(tmp)) & stack(:,:,i,index) < 0.5) = 0.0;
+        
+        imgOut(:,:,i) = tmp;
     end
 end
 
