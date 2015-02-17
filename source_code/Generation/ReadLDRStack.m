@@ -56,6 +56,26 @@ if(n > 0)
         try 
             if(exist('exifread') == 2)
                 img_info = exifread(name);
+                
+                if(isfield(img_info, 'SamplesPerPixel'))
+                    
+                    if(img_info.SamplesPerPixel == 3)
+                        img_info.ColorType = 'truecolor';                      
+                    end
+                    
+                    if(img_info.SamplesPerPixel == 1)
+                        img_info.ColorType = 'grayscale';                      
+                    end
+                else
+                    img_info.ColorType = 'truecolor';
+                end
+                
+                if(isfield(img_info, 'BitsPerSample'))
+                    img_info.BitDepth = round(mean(img_info.BitsPerSample));
+                else
+                    img_info.BitDepth = 8;
+                end
+                
             end
         catch
             disp(err);
@@ -68,13 +88,13 @@ if(n > 0)
     
     if(~isempty(img_info))
         if(isfield(img_info, 'NumberOfSamples'))
-            colorChannels = info.NumberOfSamples;
+            colorChannels = img_info.NumberOfSamples;
         else
-            switch info.ColorType
+            switch img_info.ColorType
                 case 'grayscale'
                     colorChannels = 1;
 
-                    switch info.BitDepth
+                    switch img_info.BitDepth
                         case 8
                             norm_value = 255.0;
                         case 16
@@ -84,7 +104,7 @@ if(n > 0)
                 case 'truecolor'
                     colorChannels = 3;
 
-                    switch info.BitDepth
+                    switch img_info.BitDepth
                         case 24
                             norm_value = 255.0;
                         case 48

@@ -45,6 +45,19 @@ for i=1:n
         try
             if(exist('exifread') == 2)
                 img_info = exifread([dir_name, '/', list(i).name]);
+                
+                if(isfield(img_info, 'FNumber'))
+                    img_info.DigitalCamera.FNumber = FNumber; 
+                end
+                
+                if(isfield(img_info, 'ISOSpeedRatings'))
+                    img_info.DigitalCamera.ISOSpeedRatings = ISOSpeedRatings; 
+                end
+                
+                if(isfield(img_info, 'ExposureTime'))
+                    img_info.DigitalCamera.ExposureTime = ExposureTime; 
+                end                
+                
             end
             
         catch err
