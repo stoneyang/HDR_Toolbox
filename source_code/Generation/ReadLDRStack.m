@@ -43,54 +43,76 @@ list = dir([dir_name, '/*.', format]);
 n = length(list);
 
 if(n > 0)
-    info = imfinfo([dir_name, '/', list(1).name]);
+    img_info = [];
+    name = [dir_name, '/', list(1).name];
+    
+    try
+        if(exist('imfinfo') == 2)
+            img_info = imfinfo(name);
+        end
+    catch err
+        disp(err);
+        
+        try 
+            if(exist('exifread') == 2)
+                img_info = exifread(name);
+            end
+        catch
+            disp(err);
+        end
+    end
     
     colorChannels = 0;
     
     norm_value = 255.0;
     
-    if(exist('info.NumberOfSamples', 'var'))
-        colorChannels = info.NumberOfSamples;
-    else
-        switch info.ColorType
-            case 'grayscale'
-                colorChannels = 1;
-                
-                switch info.BitDepth
-                    case 8
-                        norm_value = 255.0;
-                    case 16
-                        norm_value = 65535.0;
-                end
-                
-            case 'truecolor'
-                colorChannels = 3;
+    if(~isempty(img_info))
+        if(isfield(img_info, 'NumberOfSamples'))
+            colorChannels = info.NumberOfSamples;
+        else
+            switch info.ColorType
+                case 'grayscale'
+                    colorChannels = 1;
 
-                switch info.BitDepth
-                    case 24
-                        norm_value = 255.0;
-                    case 48
-                        norm_value = 65535.0;
-                end
+                    switch info.BitDepth
+                        case 8
+                            norm_value = 255.0;
+                        case 16
+                            norm_value = 65535.0;
+                    end
+
+                case 'truecolor'
+                    colorChannels = 3;
+
+                    switch info.BitDepth
+                        case 24
+                            norm_value = 255.0;
+                        case 48
+                            norm_value = 65535.0;
+                    end
+            end
+        end  
+
+        stack = zeros(info.Height, info.Width, colorChannels, n, 'single');
+
+        for i=1:n
+            disp(list(i).name);
+            %read an image, and convert it into floating-point
+            img = single(imread([dir_name, '/', list(i).name]));  
+
+            %store in the stack
+            stack(:,:,:,i) = img;    
         end
-    end  
-    
-    stack = zeros(info.Height, info.Width, colorChannels, n, 'single');
 
-    for i=1:n
-        disp(list(i).name);
-        %read an image, and convert it into floating-point
-        img = single(imread([dir_name, '/', list(i).name]));  
-
-        %store in the stack
-        stack(:,:,:,i) = img;    
-    end
-    
-    if(bNormalization)
-        stack = stack / norm_value;
+        if(bNormalization)
+            stack = stack / norm_value;
+        end
+    else
+        disp('WARNING: The stack is empty!');
+        stack = [];        
     end
 else
-    disp('The stack is empty!');
+    disp('WARNING: The stack is empty!');
     stack = [];
 end
 
