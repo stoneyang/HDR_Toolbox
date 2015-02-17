@@ -57,8 +57,7 @@ if(n > 0)
             if(exist('exifread') == 2)
                 img_info = exifread(name);
                 
-                if(isfield(img_info, 'SamplesPerPixel'))
-                    
+                if(isfield(img_info, 'SamplesPerPixel'))                    
                     if(img_info.SamplesPerPixel == 3)
                         img_info.ColorType = 'truecolor';                      
                     end

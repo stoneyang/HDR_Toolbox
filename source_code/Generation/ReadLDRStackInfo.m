@@ -47,15 +47,15 @@ for i=1:n
                 img_info = exifread([dir_name, '/', list(i).name]);
                 
                 if(isfield(img_info, 'FNumber'))
-                    img_info.DigitalCamera.FNumber = FNumber; 
+                    img_info.DigitalCamera.FNumber = img_info.FNumber; 
                 end
                 
                 if(isfield(img_info, 'ISOSpeedRatings'))
-                    img_info.DigitalCamera.ISOSpeedRatings = ISOSpeedRatings; 
+                    img_info.DigitalCamera.ISOSpeedRatings = img_info.ISOSpeedRatings; 
                 end
                 
                 if(isfield(img_info, 'ExposureTime'))
-                    img_info.DigitalCamera.ExposureTime = ExposureTime; 
+                    img_info.DigitalCamera.ExposureTime = img_info.ExposureTime; 
                 end                
                 
             end
