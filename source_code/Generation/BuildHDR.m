@@ -159,9 +159,6 @@ for i=1:n
     end
 end
 
-hdrimwrite(imgOut,'imgOut.pfm');
-hdrimwrite(totWeight,'totWeight.pfm');
-
 %checking for saturated pixels
 bSaturation = 0;
 if(~isempty(find(totWeight <= 0.0)))
