@@ -75,6 +75,21 @@ if(n > 0)
                     img_info.BitDepth = 8;
                 end
                 
+                if(isfield(img_info, 'ImageWidth'))
+                    img_info.Width = img_info.ImageWidth;
+                end
+                
+                if(isfield(img_info, 'ImageLength'))
+                    img_info.Height = img_info.ImageLength;
+                end                
+                
+                if(isfield(img_info, 'PixelXDimension'))
+                    img_info.Width = PixelXDimension;
+                end
+                
+                if(isfield(img_info, 'PixelYDimension'))
+                    img_info.Height = PixelYDimension;
+                end
             end
         catch
             disp(err);
@@ -112,7 +127,13 @@ if(n > 0)
             end
         end  
 
-        stack = zeros(info.Height, info.Width, colorChannels, n, 'single');
+        if(img_info.Height == 0 || img_info.Width == 0)
+            tmp = imread(name);
+            [img_info.Height, img_info.Width, n] = size(tmp);
+            clear('tmp');
+        end
+        
+        stack = zeros(img_info.Height, img_info.Width, colorChannels, n, 'single');
 
         for i=1:n
             disp(list(i).name);
