@@ -1,4 +1,4 @@
-function stackOut = SiftAlignment(stack, folder_name, format, target_exposure)
+function stackOut = SiftAlignment(stack, bStackOut, folder_name, format, target_exposure)
 %
 %
 %       stackOut = SiftAlignment(stack, bStackOut, folder_name, format,
@@ -39,6 +39,8 @@ function stackOut = SiftAlignment(stack, folder_name, format, target_exposure)
 
 lst = [];
 
+stackOut = [];
+
 bStack = ~isempty(stack);
 
 if(~bStack)
@@ -68,8 +70,10 @@ end
 
 [r,c,col] = size(img);
 
-stackOut = zeros(r, c, col, n);
-stackOut(:,:,:,target_exposure) = img;
+if(bStackOut)
+    stackOut = zeros(r, c, col, n);
+    stackOut(:,:,:,target_exposure) = img;
+end
 
 for i=1:n
     
@@ -84,7 +88,9 @@ for i=1:n
 
         img_work_aligned = SiftImageAlignment(img, img_work);
         
-        stackOut(:,:,:,i) = img_work_aligned;
+        if(bStackOut)
+            stackOut(:,:,:,i) = img_work_aligned;
+        end
         
         if(~bStack)
             name = strrep(lst(i).name, ['.',format], ['_aligned.', format]);
