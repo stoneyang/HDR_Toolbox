@@ -158,11 +158,10 @@ for i=1:n
         end
     end
 end
-hdrimwrite(imgOut,'imgOut.pfm');
-hdrimwrite(totWeight,'totWeight.pfm');
+
 %checking for saturated pixels
 bSaturation = 0;
-if(~isempty(find(totWeight <= 0.0)))
+if(~isempty(totWeight <= 0.0))
     bSaturation = 1;
     disp('WARNING: the stack has saturated pixels.');
 end
