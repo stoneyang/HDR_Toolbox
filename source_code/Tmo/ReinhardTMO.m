@@ -38,11 +38,11 @@ check13Color(img);
 %Luminance channel
 L = lum(img);
 
-if(~exist('pLocal','var'))
+if(~exist('pLocal', 'var'))
     pLocal = 0;
 end
 
-if(~exist('pAlpha','var'))
+if(~exist('pAlpha', 'var'))
     pAlpha = ReinhardAlpha(L);
 else
     if(pAlpha<=0)
@@ -50,7 +50,7 @@ else
     end
 end
 
-if(~exist('pWhite','var'))
+if(~exist('pWhite', 'var'))
     pWhite = ReinhardWhitePoint(L);
 else
     if(pWhite<=0)
@@ -58,10 +58,10 @@ else
     end
 end
 
-if(~exist('pPhi','var'))
+if(~exist('pPhi', 'var'))
     pPhi = 8;
 else
-    if(pPhi<0)
+    if(pPhi < 0)
         pPhi = 8;
     end
 end

@@ -52,27 +52,55 @@ if(~exist('vl_colsubset') || ~exist('vl_sift') || ~exist('vl_ubcmatch'))
     error('This function needs VL Feat. Please download it from http://www.vlfeat.org/');
 end
 
-if(~exist('maxIterations','var'))
+if(~exist('maxIterations', 'var'))
     maxIterations = 64;
 end
 
-if(maxIterations<1)
+if(maxIterations < 1)
     maxIterations = 64;
 end
 
 %converting into luminance
-ratio_2_1 = RemoveSpecials(img2./img1);
-scale = mean(ratio_2_1(:));
-img1 = ClampImg(img1*scale,0.0,1.0);
+ratio_2_1 = RemoveSpecials(img2 ./ img1);
+img1 = img1 * mean(ratio_2_1(:));
 
 try
-    im1g = single(ColorToGreyFusion(img1));
-    im2g = single(ColorToGreyFusion(img2));
+    im1g = single(ColorToGrayFusion(img1));
+    im2g = single(ColorToGrayFusion(img2));
 catch e
     disp(e);
     im1g = single(lum(img1));
     im2g = single(lum(img2));
 end
+
+%do we have out of range values?
+max_1 = max(im1g(:));
+max_2 = max(im2g(:));
+
+if(max_1 > 1.0 || max_2 > 1.0)
+    min_1 = min(im1g(:));
+    min_2 = min(im2g(:));
+    
+    r_1 = max_1 / min_1;
+    r_2 = max_2 / min_2;
+    
+    if(r_1 > 1000 || r_2 > 1000)
+        Lwa = MAX([logMean(im1g), logMean(im2g)]);
+        im1g = im1g / Lwa;
+        im2g = im2g / Lwa;
+
+        im1g = im1g ./ (im1g + 1.0);
+        im2g = im2g ./ (im2g + 1.0);
+    else
+        max_val = max([max_1, max_2]);
+        im1g = im1g / max_val;
+        im2g = im2g / max_val;
+        
+    end   
+end
+
+im1g = RemoveSpecials(im1g);
+im2g = RemoveSpecials(im2g);
 
 %SIFT matches
 [f1,d1] = vl_sift(im1g) ;
@@ -95,7 +123,7 @@ for t = 1:maxIterations
     A = cat(1, A, kron(X1(:,i)', vl_hat(X2(:,i))));
   end
   
-  [U,S,V] = svd(A);
+  [~, ~, V] = svd(A);
   H{t} = reshape(V(:,9),3,3);
 
   % score homography

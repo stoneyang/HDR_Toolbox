@@ -1,7 +1,7 @@
-function [dyn,dynClassicLog,dynClassic]=DynamicRange(img)
+function [dyn, dynClassicLog, dynClassic] = DynamicRange(img)
 %
 %
-%        [dyn,dynClassicLog,dynClassic]=DynamicRange(img)
+%        [dyn, dynClassicLog, dynClassic] = DynamicRange(img)
 %
 %
 %        Input:
@@ -15,7 +15,7 @@ function [dyn,dynClassicLog,dynClassic]=DynamicRange(img)
 %           -dynClassic: dynamic range with maximum and minimum values
 %           of the image
 %
-%     Copyright (C) 2011  Francesco Banterle
+%     Copyright (C) 2011-15  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -33,9 +33,9 @@ function [dyn,dynClassicLog,dynClassic]=DynamicRange(img)
 
 L = lum(img);
 
-dyn = log10(MaxQuart(L,0.999)/MaxQuart(L,0.001));
+dyn = log10(MaxQuart(L,0.999) / MaxQuart(L, 0.001));
 
-dynClassic = max(L(:))/min(L(:));
+dynClassic = max(L(:)) / min(L(:));
 
 dynClassicLog = log10(dynClassic);
 

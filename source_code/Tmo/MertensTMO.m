@@ -1,18 +1,18 @@
-function imgOut = MertensTMO( img, directory, format, imageStack, wE, wS, wC, bMertensDebug )
+function imgOut = MertensTMO( img, folder_name, format, imageStack, wE, wS, wC, bMertensDebug )
 %
 %
-%        imgOut = MertensTMO( img, directory, format, imageStack, wE, wS, wC )
+%        imgOut = MertensTMO( img, folder_name, format, imageStack, wE, wS, wC )
 %
 %
 %        Input:
 %           -img: input HDR image
-%           -directory: the directory where to fetch the exposure stack in
+%           -folder_name: the folder_name where to fetch the exposure stack in
 %           the case img=[]
 %           -format: the format of LDR images ('bmp', 'jpg', etc) in case
 %                    img=[] and the tone mapped images is built from a sequence of
-%                    images in the current directory
+%                    images in the current folder_name
 %           -imageStack: an exposure stack of LDR images; in case img=[],
-%                        and directory='' and format=''
+%                        and folder_name='' and format=''
 %           -wE: the weight for the well exposedness in [0,1]. Well exposed
 %                pixels are taken more into account if the wE is near 1
 %                otherwise they are not taken into account.
@@ -74,7 +74,7 @@ if(~isempty(img))
     [imageStack, imageStack_exposure] = GenerateExposureBracketing(img, 1);
 else
     if(isempty(imageStack))
-        imageStack = ReadLDRStack(directory, format, 1);
+        imageStack = ReadLDRStack(folder_name, format, 1);
     end
 end
 

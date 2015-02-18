@@ -69,7 +69,7 @@ else
     img = ldrimread([folder_name, '/', lst(target_exposure).name], 0);
 end
 
-[r,c,col] = size(img);
+[r, c, col] = size(img);
 
 alignment = zeros(n, 2);
 
@@ -87,7 +87,7 @@ for i=1:n
         disp(['Aligning image ', num2str(i), ' to image ', num2str(target_exposure)]);
        
         if(~bStack)
-            img_work = ldrimread([folder_name,'/',lst(i).name], 0);  
+            img_work = ldrimread([folder_name, '/', lst(i).name], 0);  
         else
             img_work = stack(:,:,:,i);
         end
@@ -95,7 +95,7 @@ for i=1:n
         shift_ret = WardGetExpShift(img, img_work);
         img_work_shifted = imshift(img_work, shift_ret);
         
-        [rot_ret, bCheck] = WardSimpleRot(img_work_shifted,img);
+        [rot_ret, bCheck] = WardSimpleRot(img, img_work_shifted);
         
         if(bCheck)
             img_work_shifted = imrotate(img_work_shifted, rot_ret, 'bilinear', 'crop');

@@ -1,7 +1,7 @@
-function imgOut = ColorToGreyFusion(img)
+function imgOut = ColorToGrayFusion(img)
 %
 %
-%       imgOut = ColorToGreyFusion(img)
+%       imgOut = ColorToGrayFusion(img)
 %
 %       This function converts an image into a grey-scale using Exposure
 %       Fusion
@@ -28,13 +28,14 @@ function imgOut = ColorToGreyFusion(img)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-[r,c,col] = size(img);
+[r, c, col] = size(img);
 
-stack = zeros(r,c,1,col);
+stack = zeros(r, c, 1, col);
 
 for i=1:col
     stack(:,:,:,i) = img(:,:,i);
 end
 
 imgOut = MertensTMO( [], '', '', stack, 1.0, 0.0, 1.0, 0 );
+
 end
