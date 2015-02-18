@@ -22,11 +22,12 @@ disp('2) Read a stack of LDR images');
 stack = ReadLDRStack(name_folder, format);
 
 disp('3) Align the stack');
-stackOut = SiftAlignment(stack/255.0, '', '');
+stackOut = SiftAlignment(stack / 255.0, '', '');
 clear('stack');
 
 disp('4) Build the radiance map using the stack and stack_exposure');
-imgHDR = BuildHDR(stackOut, stack_exposure, 'LUT', [], 'hat');
+imgHDR = BuildHDR(stackOut, stack_exposure, 'LUT', [], 'Deb97', 'linear', 0);
+
 
 disp('5) Save the radiance map in the .hdr format');
 hdrimwrite(imgHDR,'example_build_sift_alignment.hdr');

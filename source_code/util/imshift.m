@@ -1,12 +1,11 @@
-function imgOut = imshift(img, is_dx, is_dy)
+function imgOut = imshift(img, shift_vector)
 %
-%		 imgOut = imshift(img, is_dx, is_dy)
+%		 imgOut = imshift(img, shift_vector)
 %
 %
 %		 Input:
 %           -img: an input image to be shifted
-%           -is_dx: shift amount (in pixels) on the X-axis
-%           -is_dy: shift amount (in pixels) on the Y-axis
+%           -shift_vector: a 2D shift vector;  amount (in pixels)
 %
 %		 Output:
 %			-imgOut: the final shifted image
@@ -27,36 +26,36 @@ function imgOut = imshift(img, is_dx, is_dy)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-if(~exist('is_dx', 'var'))
-    is_dx = 0;
+if(~exist('shift_vector', 'var'))
+    disp('WARNING: no valid shift vector');
+    return;
 end
 
-if(~exist('is_dy', 'var'))
-    is_dy = 0;
-end
+is_dx = shift_vector(1);
+is_dy = shift_vector(2);
 
 imgOut = zeros(size(img));
-imgTmp = zeros(size(img));
+img_tmp = zeros(size(img));
 
 if(abs(is_dx) > 0)
     if(is_dx > 0)
-        imgTmp(:,(is_dx+1):end,:) = img(:,1:(end-is_dx),:);
+        img_tmp(:,(is_dx + 1):end,:) = img(:,1:(end - is_dx),:);
     else
-        imgTmp(:,1:(end+is_dx),:) = img(:,(1-is_dx):end,:);    
+        img_tmp(:,1:(end + is_dx),:) = img(:,(1 - is_dx):end,:);    
     end
 else
-    imgTmp = img;
+    img_tmp = img;
 end
 
 if(abs(is_dy) > 0)
     
     if(is_dy > 0)
-        imgOut((is_dy+1):end,:,:) = imgTmp(1:(end-is_dy),:,:);
+        imgOut((is_dy + 1):end,:,:) = img_tmp(1:(end - is_dy),:,:);
     else
-        imgOut(1:(end+is_dy),:,:) = imgTmp((1-is_dy):end,:,:);    
+        imgOut(1:(end + is_dy),:,:) = img_tmp((1 - is_dy):end,:,:);    
     end
 else
-    imgOut = imgTmp;
+    imgOut = img_tmp;
 end
 
 end

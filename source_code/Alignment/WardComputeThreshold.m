@@ -33,18 +33,18 @@ function [imgThr, imgEb] = WardComputeThreshold(img, wardPercentile, wardToleran
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-if(~exist('wardPercentile','var'))
+if(~exist('wardPercentile', 'var'))
     wardPercentile = 0.5;
 end
 
-if(~exist('wardTolerance','var'))
-    wardTolerance = 4/256;
+if(~exist('wardTolerance', 'var'))
+    wardTolerance = 4 / 256;
 end
 
-if(size(img,3)==1)
+if(size(img,3) == 1)
     grey = img;
 else
-    grey = (54*img(:,:,1) + 183*img(:,:,2) + 19*img(:,:,3)) / 256;
+    grey = (54 * img(:,:,1) + 183 * img(:,:,2) +  19 * img(:,:,3)) / 256;
 end
 
 medVal = MaxQuart(grey, wardPercentile);
@@ -52,9 +52,9 @@ medVal = MaxQuart(grey, wardPercentile);
 imgThr = zeros(size(grey));
 imgThr(grey>medVal) = 1.0;
 
-A = medVal-wardTolerance;
-B = medVal+wardTolerance;
+A = medVal - wardTolerance;
+B = medVal + wardTolerance;
 imgEb = ones(size(grey));
-imgEb((grey>=A)&(grey<=B)) = 0.0;
+imgEb((grey >= A) & (grey <= B)) = 0.0;
 
 end
