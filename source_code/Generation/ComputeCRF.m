@@ -1,4 +1,4 @@
-function [lin_fun, max_lin_fun] = ComputeCRF(stack, stack_exposure, nSamples, bNormalize)
+function [lin_fun, max_lin_fun] = ComputeCRF(stack, stack_exposure, nSamples, bNormalize, smoothing_term)
 %
 %       lin_fun = ComputeCRF(stack, stack_exposure, nSamples, bNormalize)
 %
@@ -11,6 +11,8 @@ function [lin_fun, max_lin_fun] = ComputeCRF(stack, stack_exposure, nSamples, bN
 %           image. Time is expressed in second (s).
 %           -nSamples: number of samples for computing the CRF.
 %           -bNormalize: if 1 it enables function normalization.
+%           -smoothing_term: a smoothing term for solving the linear
+%           system.
 %
 %        Output:
 %           -lin_fun: the inverse CRF.
@@ -48,6 +50,10 @@ if(isempty(stack_exposure))
     error('ComputeCRF: a stack_exposure cannot be empty!');
 end
 
+if(~exist('smoothing_term', 'var'))
+    smoothing_term = 30;
+end
+
 col = size(stack, 3);
 
 %Weight function
@@ -64,7 +70,7 @@ log_stack_exposure = log(stack_exposure);
 max_lin_fun = zeros(col, 1);
 
 for i=1:col
-    g = gsolve(stack_samples(:,:,i), log_stack_exposure, 20, W);
+    g = gsolve(stack_samples(:,:,i), log_stack_exposure, smoothing_term, W);
     g = exp(g);
     
     lin_fun(:,i) = g;
