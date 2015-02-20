@@ -77,7 +77,7 @@ if(~exist('merge_type', 'var'))
 end
 
 if(~exist('bMeanWeight', 'var'))
-    bMeanWeight = 1;
+    bMeanWeight = 0;
 end
 
 %is a weight function defined?
