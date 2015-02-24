@@ -63,15 +63,17 @@ L  = lum(img);
 L  = L(:);
 L2 = L;
 
-delta = 1e-6;
+epsilon = 1e-6;
 
 switch typeLog
     case 'log2'
-    	L = log2(L + delta);
+    	L = log2(L + epsilon);
+        
     case 'loge'
-        L = log(L + delta);
+        L = log(L + epsilon);
+        
     case 'log10'
-    	L = log10(L + delta);
+    	L = log10(L + epsilon);
 end
 
 histo = zeros(nBins, 1);
