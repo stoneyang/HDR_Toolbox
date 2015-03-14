@@ -33,7 +33,7 @@ if(~exist('scaling_factor', 'var'))
 end
 
 if(scaling_factor > 1)   
-    window = window / scaling_factor;
+    window = min([round(window / scaling_factor), 3]);
    
     H = fspecial('gaussian', window, GKSigma(window));    
     [r, c, ~] = size(img);
@@ -41,6 +41,7 @@ if(scaling_factor > 1)
     imgBlur = imfilter(tmp_img, H, 'replicate');
     imgBlur = imresize(imgBlur, [r, c], 'bilinear');
 else
+    window = min([round(window), 3]);
     H = fspecial('gaussian', window, GKSigma(window));
     imgBlur = imfilter(img, H, 'replicate');
 end
