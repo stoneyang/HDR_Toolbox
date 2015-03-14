@@ -17,7 +17,7 @@ function [imgOut, pAlpha, pWhite] = ReinhardTMO(img, pAlpha, pWhite, pLocal, pPh
 %           -pAlpha: as in input
 %           -pLocal: as in input 
 %
-%     Copyright (C) 2011-14  Francesco Banterle
+%     Copyright (C) 2011-15  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@ end
 if(~exist('pAlpha', 'var'))
     pAlpha = ReinhardAlpha(L);
 else
-    if(pAlpha<=0)
+    if(pAlpha <= 0)
         pAlpha = ReinhardAlpha(L);
     end
 end
@@ -53,7 +53,7 @@ end
 if(~exist('pWhite', 'var'))
     pWhite = ReinhardWhitePoint(L);
 else
-    if(pWhite<=0)
+    if(pWhite <= 0)
         pWhite = ReinhardWhitePoint(L);
     end
 end
