@@ -1,7 +1,7 @@
-function [imgOut,pAlpha,pWhite]=ReinhardBilTMO(img, pAlpha, pWhite, pPhi)
+function [imgOut, pAlpha, pWhite] = ReinhardBilTMO(img, pAlpha, pWhite, pPhi)
 %
 %
-%      imgOut=ReinhardBilTMO(img, pAlpha, pWhite, pLocal)
+%      [imgOut, pAlpha, pWhite] = ReinhardBilTMO(img, pAlpha, pWhite, pPhi)
 %
 %
 %       Input:
@@ -15,7 +15,7 @@ function [imgOut,pAlpha,pWhite]=ReinhardBilTMO(img, pAlpha, pWhite, pPhi)
 %           -pAlpha: as in input
 %           -pWhite: as in input
 % 
-%     Copyright (C) 2011  Francesco Banterle
+%     Copyright (C) 2011-15  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -36,15 +36,15 @@ check13Color(img);
 %Luminance channel
 L = lum(img);
 
-if(~exist('pAlpha','var'))
+if(~exist('pAlpha', 'var'))
     pAlpha = ReinhardAlpha(L);
 end
 
-if(~exist('pWhite','var'))
+if(~exist('pWhite', 'var'))
     pWhite = ReinhardWhitePoint(L);
 end
 
-if(~exist('pPhi','var'))
+if(~exist('pPhi', 'var'))
     pPhi = 8;
 end
 
@@ -52,7 +52,7 @@ end
 Lwa = logMean(L);
 
 %Scale luminance using alpha and logarithmic mean
-Lscaled = (pAlpha*L)/Lwa;
+Lscaled = (pAlpha * L)/Lwa;
 
 %Local calculation?
 sMax    = 8;     
@@ -65,8 +65,8 @@ L_adapt = bilateralFilter(L_tmp, [], 0, 1, alpha2, alpha1);
 L_adapt = L_adapt ./ (1 - L_adapt);
 
 %Range compression
-pWhite2 = pWhite*pWhite;
-Ld = (Lscaled.*(1+Lscaled/pWhite2))./(1+L_adapt);
+pWhite2 = pWhite * pWhite;
+Ld = (Lscaled .* (1 + Lscaled/ pWhite2))./(1 + L_adapt);
 
 %Changing luminance
 imgOut = ChangeLuminance(img, L, Ld);
