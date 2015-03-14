@@ -10,7 +10,7 @@ function fstops = ExposureHistogramCovering(img, nBin)
 %        Output:
 %           -fstops: a set of fstops values covering the HDR image
 %
-%     Copyright (C) 2012  Francesco Banterle
+%     Copyright (C) 2012-15  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@ if(~exist('nBin','var'))
     nBin = 1024;
 end
 
-[histo, bound, haverage] = HistogramHDR(img, nBin, 'log2', 0, 0);
+[histo, bound, haverage] = HistogramHDR(img, nBin, 'log2', [], 0, 0);
 
 overlap = 1.0;
 dMM = (bound(2) - bound(1)) / nBin;
@@ -39,8 +39,8 @@ removingBins = round((4.0 - overlap) / dMM);
 fstops = [];
 while(sum(histo) > 0)
     [val,ind] = max(histo);
-    indMin = max([(ind - removingBins),1]);
-    indMax = min([(ind + removingBins),nBin]);
+    indMin = max([(ind - removingBins), 1]);
+    indMax = min([(ind + removingBins), nBin]);
     histo(indMin:indMax) = 0;
     fstops = [fstops, (-(ind * dMM + bound(1)) - 1.0)];
 end

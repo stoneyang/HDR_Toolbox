@@ -1,6 +1,6 @@
-function imgOut=SchlickTMO(img, schlick_mode, schlick_p, schlick_bit, schlick_dL0, schlick_k)
+function imgOut = SchlickTMO(img, schlick_mode, schlick_p, schlick_bit, schlick_dL0, schlick_k)
 %
-%       imgOut=SchlickTMO(img, schlick_mode, schlick_p, schlick_bit,schlick_dL0)
+%       imgOut = SchlickTMO(img, schlick_mode, schlick_p, schlick_bit,schlick_dL0)
 %
 %
 %       Input:
@@ -14,7 +14,7 @@ function imgOut=SchlickTMO(img, schlick_mode, schlick_p, schlick_bit, schlick_dL
 %       Output
 %           -imgOut: tone mapped image
 % 
-%     Copyright (C) 2010  Francesco Banterle
+%     Copyright (C) 2010-15  Francesco Banterle
 %
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -32,15 +32,15 @@ function imgOut=SchlickTMO(img, schlick_mode, schlick_p, schlick_bit, schlick_dL
 
 check13Color(img);
 
-if(~exist('schlick_mode','var'))
+if(~exist('schlick_mode', 'var'))
     schlick_mode = 'nonuniform';
 end
 
-if(~exist('schlick_bit','var'))
+if(~exist('schlick_bit', 'var'))
     schlick_bit = 8;
 end
 
-if(~exist('schlick_dL0','var'))
+if(~exist('schlick_dL0',  'var'))
     schlick_dL0 = 1;
 end
 
@@ -48,8 +48,8 @@ if(~exist('schlick_k','var'))
     schlick_k = 0.5;
 end
 
-if(~exist('schlick_p','var'))
-    schlick_p=1/0.005;
+if(~exist('schlick_p', 'var'))
+    schlick_p = 1 / 0.005;
 end
 
 %Luminance channel
@@ -60,28 +60,29 @@ LMax = max(L(:));
 
 %Min Luminance value 
 LMin = min(L(:));
-if(LMin<=0.0)
-     LMin=min(min(L(LMin>0.0)));
+if(LMin <= 0.0)
+     indx = find(L > 0.0);
+     LMin = min(min(L(indx)));
 end
 
 %Mode selection
 switch schlick_mode
     case 'standard'
         p = schlick_p;        
-        if(p<1)
-            p=1;
+        if(p < 1)
+            p = 1;
         end
         
     case 'calib'
-        p = schlick_dL0*LMax/(2^schlick_bit*LMin);
+        p = schlick_dL0 * LMax / (2^schlick_bit * LMin);
         
     case 'nonuniform'
-        p = schlick_dL0*LMax/(2^schlick_bit*LMin);
-        p = p*(1-schlick_k+schlick_k*L/sqrt(LMax*LMin));
+        p = schlick_dL0 * LMax/(2^schlick_bit * LMin);
+        p = p * (1 - schlick_k + schlick_k * L/sqrt(LMax * LMin));
 end
 
 %Dynamic Range Reduction
-Ld=p.*L./((p-1).*L+LMax);
+Ld = p .* L ./ ((p - 1) .* L + LMax);
 
 %Changing luminance
 imgOut = ChangeLuminance(img, L, Ld);

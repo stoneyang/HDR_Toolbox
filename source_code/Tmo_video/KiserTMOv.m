@@ -21,7 +21,7 @@ function KiserTMOv(hdrv, filenameOutput, tmo_alpha_coeff, tmo_dn_clamping, tmo_g
 %           help. Depending on the version of MATLAB some profiles may be not
 %           be present.
 %
-%     Copyright (C) 2013  Francesco Banterle
+%     Copyright (C) 2013-15 Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -89,7 +89,7 @@ disp('Tone Mapping...');
 tmo_alpha_coeff_c = 1.0 - tmo_alpha_coeff;
 
 beta_clamping   = 0.999;
-beta_clamping_c = (1.0-beta_clamping);
+beta_clamping_c = (1.0 - beta_clamping);
 
 for i=1:hdrv.totalFrames
     disp(['Processing frame ',num2str(i)]);
@@ -102,14 +102,14 @@ for i=1:hdrv.totalFrames
     if(tmo_dn_clamping)%Clamping black and white levels
         L = RemoveSpecials(lum(frame));
         %computing CDF's histogram 
-        [histo,bound,~] = HistogramHDR(L,256,'log10',1);  
+        [histo, bound, ~] = HistogramHDR(L, 256, 'log10', [], 1);  
         histo_cdf = cumsum(histo);
         histo_cdf = histo_cdf/max(histo_cdf(:));
-        [Y,ind] = min(abs(histo_cdf-beta_clamping));
-        maxL = 10^(ind*(bound(2)-bound(1))/256 + bound(1));
+        [Y,ind] = min(abs(histo_cdf - beta_clamping));
+        maxL = 10^(ind*(bound(2) - bound(1)) / 256 + bound(1));
 
         [Y,ind] = min(abs(histo_cdf-beta_clamping_c));
-        minL = 10^(ind*(bound(2)-bound(1))/256 + bound(1));
+        minL = 10^(ind*(bound(2) - bound(1)) / 256 + bound(1));
 
         frame(frame>maxL) = maxL;
         frame(frame<minL) = minL;
