@@ -77,8 +77,8 @@ switch schlick_mode
         p = schlick_dL0 * LMax / (2^schlick_bit * LMin);
         
     case 'nonuniform'
-        p = schlick_dL0 * LMax/(2^schlick_bit * LMin);
-        p = p * (1 - schlick_k + schlick_k * L/sqrt(LMax * LMin));
+        p = schlick_dL0 * LMax / (2^schlick_bit * LMin);
+        p = p * (1 - schlick_k + schlick_k * L / sqrt(LMax * LMin));
 end
 
 %Dynamic Range Reduction
