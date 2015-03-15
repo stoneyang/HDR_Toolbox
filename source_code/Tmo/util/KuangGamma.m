@@ -1,14 +1,16 @@
-function F_L = CIECAM02_F_L(L_A)
+function gamma_value = KuangGamma(average_surrond_param)
 %
 %
-%       F_L = CIECAM02_F_L(L_A)
+%       gamma_value = KuangGamma(average_surrond_param)
 %
 %       Input:
-%           -L_A: is the luminance of the adapting field in cd/m^2.
+%           -average_surrond_param: 
+%               'dark':
+%               'average':
+%               'dim':
 %
 %       Output:
-%           -F_L: is a predictor a variety of luminance-dependent
-%            appearance effect.
+%           -gamma_value: a gamma value.
 % 
 %     Copyright (C) 2015  Francesco Banterle
 % 
@@ -26,15 +28,23 @@ function F_L = CIECAM02_F_L(L_A)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 %     The paper describing this technique is:
-%     "The CIECAM02 color appearance model"
-% 	  by Nathan Moroney , Mark D. Fairchild , Robert W. G. Hunt ,
-%     Changjun Li , M. Ronnier Luo , Todd Newman
-%     in IS&T/SID 10 th Color Imaging Conference
+%     "iCAM06: A refined image appearance model for HDR image rendering"
+% 	  by Jiangtao Kuang, Garrett M. Johnson, and Mark D. Fairchild
+%     in J. Vis. Commun. Image R. 18 (2007) 406–-414
 %
 
-k = 1.0 ./ (5 * L_A + 1.0); %Equation 1
+switch average_surrond_param
+    case 'dark'
+        gamma_value = 1.5;
+        
+    case 'dim'
+        gamma_value = 1.25;
+        
+    case 'average'
+        gamma_value = 1.0;
+        
+    otherwise
+        gamma_value = 1.0;
+end
 
-F_L = 0.2 * k.^4 .* (5 * L_A) + ...
-      0.1 * (1.0 - k.^4).^2 .* ((5 * L_A).^(1.0 /  3.0)); %Equation 2
-  
 end

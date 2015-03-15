@@ -1,7 +1,7 @@
 function imgOut = KuangTMO(img, type_param, p_param, average_surrond_param)
 %
 %
-%       imgOut = KuangTMO(img, type_param, p_param)
+%       imgOut = KuangTMO(img, type_param, p_param, average_surrond_param)
 %
 %       Input:
 %           -img: an HDR image in the RGB color space
@@ -88,7 +88,6 @@ imgBase_p = ConvertLinearSpace(imgBase_ca, M_HPE); %Equation 9
 
 Y_W = img_XYZ_w(:,:,2);
 L_A = Y_W * 0.2;
-
 F_L = CIECAM02_F_L(L_A); %Equation 13
 
 p = p_param;
@@ -96,12 +95,10 @@ imgBase_p_a = zeros(size(img));
 for i=1:col
     %Equation 10, 11, 12
     tmp = (F_L .* imgBase_p(:,:,i) ./ Y_W).^p;
-    imgBase_p_a(:,:,i) = (400 * tmp) ./ (27.13 + tmp) + 0.1;
+    imgBase_p_a(:,:,i) = ((400 * tmp) ./ (27.13 + tmp)) + 0.1;
 end
 
 clear('imgBase_p');
-
-imgDetail = StevensonDetailEnhancement(imgDetail, F_L); %Equation 24
 
 %Hunt's model
 S = imgBase_ca(:,:,2);
@@ -126,13 +123,20 @@ for i=1:col
     imgRGB_tc(:,:,i) = imgBase_p_a(:,:,i) + A_S; %Equation 20
 end
 
+imgRGB_tc_xyz = ConvertLinearSpace(imgRGB_tc, inv(M_HPE));
+
+clear('imgRGB_tc');
 clear('imgBase_p_a');
 
-%image attribute adjustments: Section 2.6
-img_wd_XYZ =  ConvertLinearSpace(imgRGB_tc, inv(M_HPE)) .* imgDetail;
+%details' layer enhancement
+L_A = imgBase(:,:,2) * 0.2;
+F_L = CIECAM02_F_L(L_A);
+imgDetail = StevensonDetailEnhancement(imgDetail, F_L); %Equation 24
 
+%image attribute adjustments: Section 2.6
+img_wd_XYZ = imgRGB_tc_xyz .* imgDetail;
 clear('imgDetail');
-clear('imgRGB_tc');
+clear('imgRGB_tc_xyz');
 
 M_D65_H = [ 0.4002 0.7075 -0.0807;...
            -0.228  1.15    0.0612;...
@@ -145,8 +149,6 @@ imgIPT = ConvertLMStoIPT(img_wd_LMS, 0);
 
 %computing colorfullness
 C = IPTColorfullness(imgIPT);
-L_A = imgBase(:,:,2) * 0.2;
-F_L = CIECAM02_F_L(L_A);
 scale = (F_L + 1).^0.2 .* (1.29 * C.^2 - 0.27 * C + 0.42) ./ (C.^2 - 0.31 * C + 0.42);
 
 for i=2:col
@@ -155,27 +157,17 @@ for i=2:col
 end
 
 gamma_value = 1.0; %Equation 27
-switch average_surrond_param
-    case 'dark'
-        gamma_value = 1.5;
-        
-    case 'dim'
-        gamma_value = 1.25;
-        
-    case 'average'
-        gamma_value = 1.0;
-        
-    otherwise
-        gamma_value = 1.0;
-end
 
-imgIPT(:,:,1) = NormalizedGamma(imgIPT(:,:,1), gamma_value);
+
+imgIPT(:,:,1) = NormalizedGamma(imgIPT(:,:,1), KuangGamma(average_surrond_param));
 
 %converting the image from IPT to RGB
 imgOut = ConvertRGBtoXYZ(ConvertXYZtoIPT(imgIPT, 1), 1); 
 
 %clamping values in [0,1] with robust statistics
-imgOut = ClampImg(imgOut / MaxQuart(imgOut, 0.99), 0.0, 1.0);
+img_min = MaxQuart(imgOut, 0.01);
+img_max = MaxQuart(imgOut, 0.99);
+imgOut = ClampImg((imgOut - img_min) / (img_max - img_min), 0.0, 1.0);
 
 disp('WARNING: the output image has D65 as whitepoint.');
 

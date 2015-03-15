@@ -4,11 +4,11 @@ function imgOut = SchlickTMO(img, schlick_mode, schlick_p, schlick_bit, schlick_
 %
 %
 %       Input:
-%           -img: input HDR image
-%           -schlick_p: in [1,+inf]
-%           -schlick_bit: number of bit for the quantization
+%           -img: input HDR image.
+%           -schlick_p: model parameter which takes values in [1,+inf].
+%           -schlick_bit: number of bit for the quantization step.
 %           -schlick_dL0: 
-%           -schlick_k: in [0,1]
+%           -schlick_k: in [0,1].
 %           -Mode = { 'standard', 'calib', 'nonuniform' }
 %
 %       Output
@@ -61,8 +61,11 @@ LMax = max(L(:));
 %Min Luminance value 
 LMin = min(L(:));
 if(LMin <= 0.0)
-     indx = find(L > 0.0);
-     LMin = min(min(L(indx)));
+     tmp = min(L(L > 0.0));
+     
+     if(~isempty(LMin))
+         LMin = tmp;
+     end
 end
 
 %Mode selection
