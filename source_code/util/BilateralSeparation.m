@@ -51,7 +51,7 @@ try
         imgFil(:,:,i) = bilateralFilter(tmp, [], min(tmp(:)), max(tmp(:)), sigma_s, sigma_r);
     end
 catch exception
-    disp(exception);
+    disp(['BilateralSeparation:', exception]);
 end
 
 Base = 10.^(imgFil) - 1e-6;
