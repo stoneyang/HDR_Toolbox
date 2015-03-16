@@ -33,7 +33,7 @@ if(~exist('scaling_factor', 'var'))
     scaling_factor = 1;
 end
 
-imgBlur = GaussianFilterWindow(img, GKWindow(sigma), scaling_factor);
+imgBlur = GaussianFilterWindow(img, sigma * 5, scaling_factor);
 
 end
 
