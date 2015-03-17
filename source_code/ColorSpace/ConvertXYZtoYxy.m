@@ -29,23 +29,23 @@ function imgOut = ConvertXYZtoYxy(img, inverse)
 %
 
 check3Color(img);
-[r,c,col] = size(img);
-imgOut = zeros(r,c,col);
+[r, c, col] = size(img);
+imgOut = zeros(r, c, col);
 
-if(inverse==0)%forward transform   
-    norm = zeros(r,c);
+if(inverse == 0)%forward transform   
+    norm = zeros(r, c);
     for i=1:3
         norm = norm + img(:,:,i);
     end
     imgOut(:,:,1) = img(:,:,2);
-    imgOut(:,:,2) = img(:,:,1)./(norm);
-    imgOut(:,:,3) = img(:,:,2)./(norm);
+    imgOut(:,:,2) = img(:,:,1) ./ (norm);
+    imgOut(:,:,3) = img(:,:,2) ./ (norm);
 end
 
-if(inverse==1)%inverse transform
-    imgOut(:,:,1) = (img(:,:,2)./img(:,:,3)).*img(:,:,1);
+if(inverse == 1)%inverse transform
+    imgOut(:,:,1) = (img(:,:,2) ./ img(:,:,3)) .* img(:,:,1);
     imgOut(:,:,2) = img(:,:,1);
-    imgOut(:,:,3) = img(:,:,1)./img(:,:,3)-imgOut(:,:,1)-imgOut(:,:,2);
+    imgOut(:,:,3) = img(:,:,1) ./ img(:,:,3) - imgOut(:,:,1) - imgOut(:,:,2);
 end
 
 imgOut = RemoveSpecials(imgOut);
