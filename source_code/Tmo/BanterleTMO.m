@@ -47,19 +47,19 @@ function [imgOut, BTMO_segments, BTMO_which_operator] = BanterleTMO(img, BTMO_se
 %
 %
 
-disp('The BanterleTMO/HybridTMO is valid for values in 0.015cd/m^2 to 3,000 cd/m^2!');
-
 L = lum(img);
 if(find(L > 3000))
-    disp('Note that the input image that you supplied has values over 3,000 cd/m^2'); 
+    disp('WARNING: the input image that you supplied has values over 3,000 cd/m^2'); 
+    disp('These values were not tested in the original paper.');
 end
 
 if(find(L < 0.015))
-    disp('Note that the input image that you supplied has values under 0.015 cd/m^2'); 
+    disp('WARNING: the input image that you supplied has values under 0.015 cd/m^2'); 
+    disp('These values were not tested in the original paper.');
 end
 
 %Segmentation
-if(~exist('BTMO_segments','var'))
+if(~exist('BTMO_segments', 'var'))
     BTMO_segments = CreateSegments(img);
 else    
     BTMO_segments = round(BTMO_segments);
