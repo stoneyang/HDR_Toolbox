@@ -30,7 +30,7 @@ function imgOut = KrawczykTMO(img)
 check13Color(img);
 
 %Calculate the histrogram of the HDR image in Log10 space
-[histo,bound,haverage] = HistogramHDR(img, 256, 'log10', [], 0);
+[histo, bound, haverage] = HistogramHDR(img, 256, 'log10', [], 0);
 
 %Determine how many K clusters (number of zones)
 C = bound(1):1:bound(2);
@@ -49,7 +49,7 @@ LLog10 = log10(L + delta);
 totPixels = zeros(size(C));
 oldK = K;
 oldC = C;
-iter = 100; %mximum number of iterations
+iter = 100; %maximum number of iterations
 histoValue = (bound(2) - bound(1)) * (0:(length(histo) - 1)) / (length(histo) - 1) + bound(1);
 histoValue = histoValue';
 
@@ -108,8 +108,8 @@ for p=1:iter
             totPixels(i) = tmp;
 
             %Removing not necessary frameworks
-            C(i + 1)=[];
-            totPixels(i + 1)=[];          
+            C(i + 1) = [];
+            totPixels(i + 1) = [];          
             K = length(C);
             break
         end
@@ -137,15 +137,15 @@ for i=1:K
         framework(indx) = i;
 
         %updating distance
-        distance=tmpDistance;
+        distance = tmpDistance;
     end
 end
 
 %Normalization
-sigma2=2*sigma^2;
-tot=zeros(size(L));
-A=zeros(K,1);
-sigmaArticulation2=2*0.33^2;
+sigma2 = 2 * sigma^2;
+tot = zeros(size(L));
+A = zeros(K, 1);
+sigmaArticulation2 = 2 * 0.33^2;
 for i=1:K
     %Articulatin of the framework
     indx = find(framework == i);
@@ -178,7 +178,7 @@ for i=1:K
     end
 end
 
-%Clamp in the range [-2,0]
+%Clamp in the range [-2, 0]
 Ld = ClampImg(Y, -2, 0);
 
 %Remap values in [0,1]
