@@ -84,6 +84,7 @@ end
 
 %Check for Drago et al.'s oeprator
 indx0 = find(mask == 1);
+
 %Check for Reinhard et al.'s operator
 indx1 = find(mask == 0);
 
@@ -110,7 +111,7 @@ else
     end
     
     %Only Drago et al.'s operator?
-    if(isempty(indx1))
+    if(isempty(indx0))
         imgOut = DragoTMO(img);
         BTMO_which_operator = 'DragoTMO';
         disp('The BanterleTMO is using DragoTMO only');
