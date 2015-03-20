@@ -142,39 +142,51 @@ for i=1:K
 end
 
 %Normalization
+[height, width, col] = size(img);
+
 sigma2 = 2 * sigma^2;
 tot = zeros(size(L));
 A = zeros(K, 1);
+
 sigmaArticulation2 = 2 * 0.33^2;
+
+P = zeros(height, width, K);
+
 for i=1:K
     %Articulatin of the framework
     indx = find(framework == i);
-    maxY = max(LLog10(indx));
-    minY = min(LLog10(indx));
-    A(i) = 1 - exp(-(maxY - minY)^2 / sigmaArticulation2);
-    %The sum of Probability Maps for normalisation
-    tot = tot + exp(-(C(i) - LLog10).^2 / sigma2) * A(i);
+    if(~isempty(indx))
+        maxY = max(LLog10(indx));
+        minY = min(LLog10(indx));
+        
+        A(i) = 1 - exp(-(maxY - minY)^2 / sigmaArticulation2);
+
+        %Computing the probability P_i
+        P(:,:,i) = RemoveSpecials(exp(-(C(i) - LLog10).^2 / sigma2));
+        %Spatial processing
+        P(:,:,i) = bilateralFilter(P(:,:,i), [], 0, 1, min([height, width]) / 2, 0.4);
+        %The sum of P_i for normalization
+        tot = tot + P(:,:,i) * A(i);
+    end
 end
 
 %Calculating probability maps
-bDebug = 0;
+bDebug = 1;
 Y = LLog10;
-[height, width, col] = size(img);
 for i=1:K
     indx = find(framework == i);
     if(~isempty(indx))
-        %Probability map
-        P = exp(-(C(i) - LLog10).^2 / sigma2);
-        P = RemoveSpecials(P ./ tot);
-        P = bilateralFilter(P, [], 0, 1, min([height, width]) / 2, 0.4);
+        %P_i normalization
+        P(:,:,i) = RemoveSpecials(P(:,:,i) ./ tot);
 
         if(bDebug)
             figure(i)
-            imshow(P);
+            imshow(P(:,:,i));
         end
+        
         %Anchoring
         W = MaxQuart(LLog10(indx), 0.95);
-        Y = Y - W * A(i) * P;
+        Y = Y - W * P(:,:,i);
     end
 end
 
