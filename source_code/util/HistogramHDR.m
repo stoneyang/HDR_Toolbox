@@ -1,7 +1,7 @@
-function [histo, bounds, haverage] = HistogramHDR(img, nBins, typeLog, bounds, bNormalized, bPlot)
+function [histo, bounds, haverage] = HistogramHDR(img, nBins, typeLog, bounds, bNormalized, bPlot, epsilon)
 %
 %
-%        [histo, bounds, haverage] = HistogramHDR(img, nBins, typeLog, bounds, bNormalized, bPlot)
+%        [histo, bounds, haverage] = HistogramHDR(img, nBins, typeLog, bounds, bNormalized, bPlot, epsilon)
 %
 %
 %        Input:
@@ -59,11 +59,13 @@ if(~exist('bPlot', 'var'))
     bPlot = 0;
 end
 
+if(~exist('epsilon', 'var'))
+    epsilon = 1e-6;
+end
+
 L  = lum(img);
 L  = L(:);
 L2 = L;
-
-epsilon = 1e-6;
 
 switch typeLog
     case 'log2'
@@ -81,7 +83,6 @@ histo = zeros(nBins, 1);
 if(isempty(bounds))
     Lmax = max(L);
     Lmin = min(L);
-    
     bounds(1) = Lmin;
     bounds(2) = Lmax;
 else
@@ -97,6 +98,7 @@ total = 0;
 for i=1:nBins
     indx  = find(L >= (dMM * (i - 1) + Lmin) & L < (dMM * i + Lmin));
     count = length(indx);
+    
     if(count > 0)
         histo(i) = count;
         haverage = haverage + MaxQuart(L2(indx), 0.5) * count;
