@@ -26,7 +26,7 @@ function imgOut = KrawczykTMO(img)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-bDebug = 1;
+bDebug = 0;
 
 %is it a three color channels image?
 check13Color(img);
