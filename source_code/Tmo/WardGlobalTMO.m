@@ -41,7 +41,7 @@ end
 L = lum(img);
 
 %harmonic mean
-Lwa = logMean(L);
+Lwa = logMean(L);  % see p.247 in Reinhard et al's book for more details
 
 %contrast scale
 m = (((1.219 + (Ld_Max / 2)^0.4) / (1.219 + Lwa^0.4))^2.5);
