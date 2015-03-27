@@ -25,6 +25,10 @@ function imgOut = WardGlobalTMO(img, Ld_Max)
 %     You should have received a copy of the GNU General Public License
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
+%     This program is implemented based on Greg Ward's paper:
+%        "A Contrast-Based Scalefactor for Luminance Display"
+%        appeared in Graphics gems IV: Pages 415-421, 
+%        Academic Press Professional, Inc. San Diego, CA, USA. 1994.
 
 %Is it a three color channels image?
 check13Color(img);
