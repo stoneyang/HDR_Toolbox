@@ -34,7 +34,7 @@ switch col
         l = img;
         
     case 3
-        l = 0.2126 * img(:,:,1) + 0.7152 * img(:,:,2) + 0.0722 * img(:,:,3);
+        l = 0.2126 * img(:,:,1) + 0.7152 * img(:,:,2) + 0.0722 * img(:,:,3);  % See p.36 in Reinhard et al.'s book for more details.
         
     otherwise
         l = mean(img, 3); 
