@@ -56,7 +56,7 @@ L = lum(img);
 
 %Calculate image statistics
 Lav  = logMean(L);
-maxL = MaxQuart(L,0.99);
+maxL = MaxQuart(L, 0.99);
 minL = MaxQuart(L(L > 0),0.01);
 
 imageKey = (log(Lav) - log(minL)) / (log(maxL) - log(minL));
@@ -74,9 +74,10 @@ end
 
 %Bilateral filter to avoid to boost noise/artifacts
 if(Masia_noise_removal)
+    %note that the original paper does not provide parameters for filtering
     Lbase = bilateralFilter(L);
     Ldetail = RemoveSpecials(L ./ Lbase);
-    Lexp = Ldetail.*(Lbase.^gamma_cor);
+    Lexp = Ldetail .* (Lbase.^gamma_cor);
 else
     Lexp = L.^gamma_cor;
 end
