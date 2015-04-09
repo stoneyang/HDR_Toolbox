@@ -49,8 +49,8 @@ L = lum(img);
 maxCoord = max([n, m]);
 viewAngleWidth  = 2 * atan(m / (2 * maxCoord * 0.75));
 viewAngleHeight = 2 * atan(n / (2 * maxCoord * 0.75));
-fScaleX = (2 * tan(viewAngleWidth / 2) / 0.01745);
-fScaleY = (2 * tan(viewAngleHeight / 2) / 0.01745);
+fScaleX = (2 * tan(viewAngleWidth / 2) / 0.01745);   % see eqn.(1) in Larson et al's paper on TIP 1997
+fScaleY = (2 * tan(viewAngleHeight / 2) / 0.01745);  % see eqn.(1) in Larson et al's paper on TIP 1997
 
 L2 = imresize(L, [round(fScaleY), round(fScaleX)], 'bilinear');
 LMax = max(L2(:));
@@ -73,7 +73,7 @@ LldMin = log(LdMin);
 
 %function P
 p = zeros(nBin, 1);
-delta = (LlMax - LlMin) / nBin;
+delta = (LlMax - LlMin) / nBin;  % see equations below eqn.(3) in Larson et al's paper on TIP 1997
 
 for i=1:nBin
     indx = find(Llog > (delta * (i - 1) + LlMin) & Llog <= (delta * i + LlMin));
