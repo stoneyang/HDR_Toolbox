@@ -86,7 +86,7 @@ if(bPlotHistogram)
     bar(p);
 end
 
-%Calculation of P(x) 
+%Calculation of P(x); see eqn.(2) in the original paper
 Pcum = cumsum(p);
 Pcum = Pcum / max(Pcum);
 
@@ -94,7 +94,7 @@ Pcum = Pcum / max(Pcum);
 L(L > LMax) = LMax;
 x = (LlMin:((LlMax - LlMin) / (nBin - 1)):LlMax)';
 pps = spline(x, Pcum);
-Ld  = exp(LldMin + (LldMax - LldMin) * ppval(pps, real(log(L))));
+Ld  = exp(LldMin + (LldMax - LldMin) * ppval(pps, real(log(L)))); % eqn.(4) in the original paper
 Ld  = (Ld - LdMin) / (LdMax - LdMin);
 
 %Changing luminance
