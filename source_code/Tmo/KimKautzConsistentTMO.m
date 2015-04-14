@@ -71,16 +71,16 @@ minL = min(L_log(:));
 maxLd = log(Ld_max);
 minLd = log(Ld_min);
 
-k1 = (maxLd-minLd)/(maxL-minL);
+k1 = (maxLd-minLd)/(maxL-minL);    % as eqn.(1) in the original paper
 
-d0 = maxL/minL;
-sigma = d0/KK_c1;
+d0 = maxL/minL;% as in the original paper, d0 is the dynamic range of the log-luminances
+sigma = d0/KK_c1;                  % as eqn.(4) in the original paper
 
 sigma2 = (sigma^2)*2;
-w = exp(-(L-mu).^2/sigma2);
-k2 = (1-k1)*w+k1;
+w = exp(-(L-mu).^2/sigma2);        % as eqn.(4) in the original paper
+k2 = (1-k1)*w+k1;                  % as eqn.(3) in the original paper
 
-Ld = exp(KK_c2*k2.*(L_log-mu)+mu);
+Ld = exp(KK_c2*k2.*(L_log-mu)+mu); % as eqn.(5) in the original paper
 
 %Percentile clamping
 maxLd = MaxQuart(Ld, 0.99);
@@ -89,7 +89,7 @@ minLd = MaxQuart(Ld, 0.01);
 Ld(Ld>maxLd) = maxLd;
 Ld(Ld<minLd) = minLd;
 
-Ld = (Ld-minLd)/(maxLd-minLd);
+Ld = (Ld-minLd)/(maxLd-minLd);      % as eqn.(6) in the original paer
 
 %Changing luminance
 imgOut = ChangeLuminance(img, L, Ld);
