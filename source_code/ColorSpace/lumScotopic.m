@@ -30,6 +30,6 @@ check3Color(imgXYZ);
 
 eps = 1e-6;
 t = (imgXYZ(:,:,2) + imgXYZ(:,:,3)) ./ (imgXYZ(:,:,1) + eps);
-V = imgXYZ(:,:,2) .* (1.33 * (1.0 + t) -1.68);
+V = imgXYZ(:,:,2) .* (1.33 * (1.0 + t) - 1.68);
 
 end
