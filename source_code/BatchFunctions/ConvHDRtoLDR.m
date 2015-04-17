@@ -26,7 +26,7 @@ function ret = ConvHDRtoLDR(fmtIn, fmtOut, tonemapper, ldr_gamma)
 %        Output:
 %           -ret: a boolean value, true or 1 if the method succeeds
 %
-%     Copyright (C) 2012  Francesco Banterle
+%     Copyright (C) 2012-15  Francesco Banterle
 %
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -42,29 +42,27 @@ function ret = ConvHDRtoLDR(fmtIn, fmtOut, tonemapper, ldr_gamma)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-
-ret = 0;
-
-if(~exist('ldr_gamma','var'))
+if(~exist('ldr_gamma', 'var'))
     ldr_gamma = 2.2;
 end
 
-if(~exist('tonemapper','var'))
+if(~exist('tonemapper', 'var'))
     tonemapper = @ReinhardTMO;
 end
 
-lst = dir(['*.',fmtIn]);
+lst = dir(['*.', fmtIn]);
 
 for i=1:length(lst)
-    tmpName = lst(i).name;
-    disp(tmpName);
+    disp(lst(i).name);
     
-    img = hdrimread(tmpName);
+    tmp_name = lst(i).name;    
+    img = hdrimread(tmp_name);
     
-    img_tmo = GammaTMO(tonemapper(img),ldr_gamma);
+    img_tmo = GammaTMO(tonemapper(img), ldr_gamma);
     
-    tmpName_we = tmpName(1:(end-3));
-    imwrite(img_tmo,[tmpName_we, fmtOut]);
+    tmp_name_we = RemoveExt(tmp_name);
+    tmp_name_out = [tmp_name_we, '.', fmtOut];
+    imwrite(img_tmo, tmp_name_out);
 end
 
 ret = 1;

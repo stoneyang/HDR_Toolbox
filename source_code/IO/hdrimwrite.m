@@ -32,7 +32,7 @@ function ret = hdrimwrite(img, filename, hdr_info)
 %
 
 %if it is a gray image we create three channels
-col = size(img,3);
+col = size(img, 3);
 
 if(isempty(img))
     error('Empty images cannot be written!');
@@ -42,8 +42,8 @@ if(~exist('filename', 'var'))
     error('A filename with extension needs to be passed as input!');
 end
 
-if(col==1)
-    [r,c] = size(img);
+if(col == 1)
+    [r, c] = size(img);
     imgOut = zeros(r, c, 3);
     
     for i=1:3
@@ -55,7 +55,7 @@ end
 
 ret = 0;
 
-if(~exist('hdr_info','var'))
+if(~exist('hdr_info', 'var'))
     hdr_info = struct('exposure', 1.0, 'gamma', 1.0, 'compression_ratio', 2.0);
 end
 
@@ -78,7 +78,7 @@ switch extension
     %Portable float map (.pfm)
     case 'pfm'
         try
-            write_pfm(img,filename);
+            write_pfm(img, filename);
         catch
             error('This PFM file can not be written.');
         end
@@ -97,7 +97,7 @@ switch extension
         
     otherwise %try to save as LDR image
         try
-            imwrite(ClampImg(img,0,1),filename);
+            imwrite(ClampImg(img, 0, 1), filename);
         catch
             error('This format is not supported.');
         end

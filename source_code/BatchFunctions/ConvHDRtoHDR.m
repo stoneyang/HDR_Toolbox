@@ -37,15 +37,15 @@ function ret = ConvHDRtoHDR(fmtIn, fmtOut)
 
 ret = 0;
 
-lst = dir(['*.',fmtIn]);
+lst = dir(['*.', fmtIn]);
 
 for i=1:length(lst)
-    tmpName = lst(i).name;
+    tmp_name = lst(i).name;
     disp(tmpName);
     
-    img = hdrimread(tmpName);
-    tmpName_we = tmpName(1:(end-3));
-    hdrimwrite(img,[tmpName_we, fmtOut]);
+    img = hdrimread(tmp_name);
+    tmp_name_we = RemoveExt(tmp_name);
+    hdrimwrite(img,[tmp_name_we, fmtOut]);
 end
 
 ret = 1;
