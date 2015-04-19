@@ -1,17 +1,17 @@
-function imgOut=ExponentialTMO(img, q_exponential, k_exponential)
+function imgOut = ExponentialTMO(img, q_exponential, k_exponential)
 %
-%       imgOut=ExponentialTMO(img,Exp_scale)   
+%       imgOut = ExponentialTMO(img,Exp_scale)   
 %
 %
 %       Input:
 %           -img: input HDR image
-%           -q_exponential: appearance value (1,+inf)
-%           -k_exponential: appearance value (1,+inf)
+%           -q_exponential: appearance value [1, +inf)
+%           -k_exponential: appearance value [1, +inf)
 %
 %       Output
 %           -imgOut: tone mapped image
 % 
-%     Copyright (C) 2010 Francesco Banterle
+%     Copyright (C) 2010-15 Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -38,12 +38,10 @@ if(~exist('k_exponential', 'var'))
     k_exponential = 1;
 end
 
-%check for q_exponential>=1
 if(q_exponential < 1)
     q_exponential = 1;
 end
 
-%check for q_exponential>=1
 if(k_exponential < 1)
     k_exponential = 1;
 end
