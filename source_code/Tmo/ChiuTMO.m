@@ -19,7 +19,7 @@ function imgOut=ChiuTMO(img, chiu_k, chiu_sigma, chiu_clamping, chiu_glare, chiu
 %        Output:
 %           -imgOut: tone mapped image in linear space.
 % 
-%     Copyright (C) 2010 Francesco Banterle
+%     Copyright (C) 2010-15 Francesco Banterle
 %  
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -35,86 +35,88 @@ function imgOut=ChiuTMO(img, chiu_k, chiu_sigma, chiu_clamping, chiu_glare, chiu
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-%Is it a three color channels image?
+%is it a three color channels image?
 check13Color(img);
 
 %Luminance channel
-L=lum(img);
+L = lum(img);
+
+r = size(img, 1);
+c = size(img, 2);
 
 %default parameters
-if(~exist('chiu_k'))
+if(~exist('chiu_k', 'var'))
     chiu_k = 8;
 end
 
-if(~exist('chiu_sigma'))
-    r = size(img,1);
-    c = size(img,2);
-    chiu_sigma = round(16*max([r,c])/1024)+1;
+if(~exist('chiu_sigma', 'var'))
+    chiu_sigma = round(16 * max([r, c]) / 1024) + 1;
 end
 
-if(~exist('chiu_clamping'))
-    chiu_clamping=500;
+if(~exist('chiu_clamping', 'var'))
+    chiu_clamping = 500;
 end
 
-if(~exist('chiu_glare'))
+if(~exist('chiu_glare', 'var'))
     chiu_glare = 0.8;
 end
 
-if(~exist('chiu_glare_n'))
+if(~exist('chiu_glare_n', 'var'))
     chiu_glare_n = 8;    
 end
 
-if(~exist('chiu_glare_width'))
-    chiu_glare_width=121;
+if(~exist('chiu_glare_width', 'var'))
+    chiu_glare_width = 121;
 end
 
-%Check parameters
-if(chiu_k<=0)
+%cheking parameters
+if(chiu_k <= 0)
     chiu_k = 8;
 end
 
-if(chiu_sigma<=0)
-    chiu_sigma = round(16*max([r,c])/1024)+1;
+if(chiu_sigma <= 0)
+    chiu_sigma = round(16 * max([r, c]) / 1024) + 1;
 end
     
-%Calculating S
-blurred = RemoveSpecials(1./(chiu_k*GaussianFilter(L,chiu_sigma)));
+%calculating S
+blurred = RemoveSpecials(1 ./ (chiu_k * GaussianFilter(L, chiu_sigma)));
 
-%Clamping S
-if(chiu_clamping>0)
-    iL=RemoveSpecials(1./L);
-    indx=find(blurred>=iL);
-    blurred(indx)=iL(indx);
+%clamping S
+if(chiu_clamping > 0)
+    iL = RemoveSpecials(1./L);
+    indx = find(blurred >= iL);
+    blurred(indx) = iL(indx);
 
     %Smoothing S
-    H2=[0.080,0.113,0.080;...
-        0.113,0.227,0.113;...
-        0.080,0.113,0.080];
+    H2 = [0.080 0.113 0.080;...
+          0.113 0.227 0.113;...
+          0.080 0.113 0.080];
 
     for i=1:chiu_clamping
-        blurred = imfilter(blurred,H2,'replicate');
+        blurred = imfilter(blurred, H2, 'replicate');
     end
 end
 
-%Dynamic range reduction
-Ld=L.*blurred;
+%dynamic range reduction
+Ld = L .* blurred;
 
-if(chiu_glare>0)
+if(chiu_glare > 0)
     %Calculation of a kernel with a Square Root shape for simulating glare
-    window2=round(chiu_glare_width/2);
-    [x,y]=meshgrid(-1:1/window2:1,-1:1/window2:1);
-    H3=(1-chiu_glare)*(abs(sqrt(x.^2+y.^2)-1)).^chiu_glare_n;    
-    H3(window2+1,window2+1)=0;
+    window2 = round(chiu_glare_width / 2);
+    [x, y] = meshgrid(-1:1 / window2:1,-1: 1 / window2:1);
+    H3 = (1 - chiu_glare) * (abs(sqrt(x.^2 + y.^2) - 1)).^chiu_glare_n;    
+    H3(window2 + 1, window2 + 1)=0;
 
     %Circle of confusion of the kernel
-    H3(find(sqrt(x.^2+y.^2)>1))=0;
+    distance = sqrt(x.^2 + y.^2);
+    H3(distance > 1) = 0;
 
     %Normalization of the kernel
-    H3=H3/sum(H3(:));
-    H3(window2+1,window2+1)=chiu_glare;
+    H3 = H3 / sum(H3(:));
+    H3(window2 + 1, window2 + 1) = chiu_glare;
    
     %Filtering
-    Ld = imfilter(Ld,H3,'replicate');
+    Ld = imfilter(Ld, H3, 'replicate');
 end
 
 %Changing luminance

@@ -55,7 +55,7 @@ L = lum(img);
 Lwa = logMean(L);
 
 %Dynamic Range Reduction
-Ld = 1-exp(-(L * q_exponential) / (Lwa * k_exponential));
+Ld = 1 - exp(-(L * q_exponential) / (Lwa * k_exponential));
 
 %Changing luminance
 imgOut = ChangeLuminance(img, L, Ld);
