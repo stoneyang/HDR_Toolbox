@@ -59,9 +59,9 @@ switch col
     case 1
         vec = 1;
     case 3
-        vec = [1.05,0.97,1.27];
+        vec = [1.05, 0.97, 1.27];
     otherwise
-        vec = ones(col,1);        
+        vec = ones(col, 1);        
 end
 
 for i=1:col

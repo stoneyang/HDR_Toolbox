@@ -13,7 +13,7 @@ function imgOut = VanHaterenTMO(img)
 %     This is the stable version of the Van Hateren 2006 algorithm, this is
 %     not suitable for HDR videos.
 % 
-%     Copyright (C) 2010  Francesco Banterle
+%     Copyright (C) 2010-15  Francesco Banterle
 %
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -37,30 +37,32 @@ a_C = 9e-2;
 C_beta = 2.8e-3; % 1/ms
 
 %Calculate Ios,max
-polIosMax = [a_C,1,0,0,0,-1/C_beta];
+polIosMax = [a_C, 1, 0, 0, 0, -1 / C_beta];
 maxIos = max(real(roots(polIosMax)));
 
 %Luminance channel
 Lori = lum(img);
 
 %conversion from cd/m^2 to trolands (tr)
-L= Lori * pupil_area;
+L = Lori * pupil_area;
 
 %Range reduction
-tmpI = - 1./(C_beta + k_beta *L);
-[r,c] = size(L);
-n = r*c;
+tmpI = - 1 ./ (C_beta + k_beta * L);
+[r, c] = size(L);
+n = r * c;
 Ios = zeros(size(tmpI));
-base = [a_C,1,0,0,0];
+base = [a_C, 1, 0, 0, 0];
 
 for i = 1:n
     tmp = [base, tmpI(i)];
     Ios(i) = max(real(roots(tmp)));
 end
 
-Ld = ClampImg(1-Ios/maxIos,0,1);
+Ld = ClampImg(1 - Ios / maxIos, 0, 1);
 
 %Changing luminance
 imgOut = ChangeLuminance(img, Lori, Ld);
+
+disp('WARNING: the image does not require gamma correction.');
 
 end

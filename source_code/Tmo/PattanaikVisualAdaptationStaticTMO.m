@@ -42,20 +42,20 @@ function imgOut = PattanaikVisualAdaptationStaticTMO(img, A_rod, A_cone)
 %     as the original papers.
 %
 
-if(~exist('A_rod','var'))
+if(~exist('A_rod', 'var'))
     A_rod = 80;
     disp('Assuming adaptation for an office condition');
 end
 
-if(~exist('A_cone','var'))
+if(~exist('A_cone', 'var'))
     A_cone = 80;
     disp('Assuming adaptation for an office condition');
 end
 
 %for gray scale images
-if(size(img,3) == 1)
+if(size(img, 3) == 1)
     [r,c] = size(img);
-    img2 = zeros(r,c,3);
+    img2 = zeros(r, c, 3);
     for i=1:3
         img2(:,:,i) = img;
     end
@@ -84,8 +84,8 @@ R_rod = SigmoidResponse(L_rod, sr_n, sigma_rod, B_rod);
 S = ColorCorrectionSigmoid(L_cone, sr_n, sigma_cone, B_cone);
 img_chroma = zeros(size(img));
 
-for i=1:3
-    img_chroma(:,:,i) = (img(:,:,i)./L_cone).^S;
+for i=1:size(img, 3)
+    img_chroma(:,:,i) = (img(:,:,i) ./ L_cone).^S;
 end
 img_chroma = RemoveSpecials(img_chroma);
 
@@ -93,8 +93,9 @@ R_lum = R_cone + R_rod;
 
 %adding back chroma
 imgOut = zeros(size(img));
-for i=1:3
-    imgOut(:,:,i) = img_chroma(:,:,i).*R_lum;
+
+for i=1:size(img, 3)
+    imgOut(:,:,i) = img_chroma(:,:,i) .* R_lum;
 end
 
 end

@@ -48,7 +48,7 @@ end
 
 if(~isempty(img))
     %Convert the HDR image into a imageStack
-    [imageStack, imageStack_exposure] = GenerateExposureBracketing(img, 1);
+    [imageStack, ~] = GenerateExposureBracketing(img, 1);
 else
     if(isempty(imageStack))
         imageStack = ReadLDRStack(directory, format, 1);       
@@ -68,8 +68,8 @@ imageStackMin = min(imageStack(:));
 sigma_r = K2 * (imageStackMax - imageStackMin);
 
 %Computation of weights for each image
-total = zeros(r,c);
-weight = zeros(r,c,n);
+total = zeros(r, c);
+weight = zeros(r, c, n);
 for i=1:n
     L = lum(imageStack(:,:,:,i));
     L_filtered = bilateralFilter(L, [], imageStackMin, imageStackMax, sigma_s, sigma_r);
