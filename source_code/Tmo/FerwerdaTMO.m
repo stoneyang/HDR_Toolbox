@@ -26,7 +26,7 @@ function imgOut = FerwerdaTMO(img, LdMax, Lda, Lwa)
 % 
 %     You should have received a copy of the GNU General Public License
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-%          -imgOut: tone mapped image
+%
 
 check13Color(img);
 
@@ -42,7 +42,7 @@ end
 L = lum(img);
 
 if(~exist('Lwa', 'var'))
-    Lwa = MaxQuart(L, 0.999)/ 2; %as in the original paper
+    Lwa = MaxQuart(L, 0.999) / 2; %as in the original paper
     disp('Note: setting Lwa to default it may create dark images.');
 end
 

@@ -61,7 +61,7 @@ end
 
 if(~isempty(img))
     %Convert the HDR image into a imageStack
-    [imageStack, imageStack_exposure] = GenerateExposureBracketing(img,1);
+    [imageStack, imageStack_exposure] = GenerateExposureBracketing(img, 1);
 else
     if(isempty(imageStack))
         imageStack = ReadLDRStack(directory, format, 1);
@@ -69,35 +69,35 @@ else
 end
 
 %number of images in the imageStack
-[r,c,col,n]=size(imageStack);
+[r, c, col, n] = size(imageStack);
 
-H_local = zeros(r,c,n);
-totalE1 = zeros(r,c);
+H_local = zeros(r, c, n);
+totalE1 = zeros(r, c);
 
-kernel = zeros(beb_R*2+1);
-[X,Y] = meshgrid(1:(beb_R*2+1),1:(beb_R*2+1));
-kernel((((X-beb_R-1).^2+(Y-beb_R-1).^2)<=(beb_R.^2))) = 1;
+kernel = zeros(beb_R * 2 + 1);
+[X,Y] = meshgrid(1:(beb_R * 2 + 1), 1:(beb_R * 2 + 1));
+kernel((((X - beb_R - 1).^2 + (Y - beb_R - 1).^2) <= (beb_R.^2))) = 1;
 
 for i=1:n   
-    logI = log(imageStack(:,:,:,i)+1);
+    logI = log(imageStack(:,:,:,i) + 1);
     H_local(:,:,i) = entropyfilt(lum(logI), kernel);
     totalE1 = totalE1 + H_local(:,:,i);
 end
 
-totalE2 = zeros(r,c);
+totalE2 = zeros(r, c);
 for i=1:n
-    H_norm = H_local(:,:,i)./totalE1;
-    H_local(:,:,i) = exp(beb_beta*H_norm);
+    H_norm = H_local(:,:,i) ./ totalE1;
+    H_local(:,:,i) = exp(beb_beta * H_norm);
     totalE2 = totalE2 + H_local(:,:,i);
 end
 
-imgOut = zeros(r,c,col);
+imgOut = zeros(r, c, col);
 for i=1:n    
-    H_norm = H_local(:,:,i)./totalE2;
-    logI   = log(1+imageStack(:,:,:,i));
+    H_norm = H_local(:,:,i) ./ totalE2;
+    logI   = log(1 + imageStack(:,:,:,i));
     
     for j=1:col
-        logI(:,:,j) = logI(:,:,j).*H_norm;
+        logI(:,:,j) = logI(:,:,j) .* H_norm;
     end
     
     imgOut = imgOut + logI;
@@ -106,7 +106,7 @@ end
 imgOut = exp(imgOut); 
 maxL = max(imgOut(:));
 minL = min(imgOut(:));
-imgOut = (imgOut-minL)/(maxL-minL);
+imgOut = (imgOut - minL) / (maxL - minL);
 
 disp('This algorithm outputs images with gamma encoding. Inverse gamma is not required to be applied!');
 end
