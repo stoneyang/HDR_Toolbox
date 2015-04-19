@@ -1,18 +1,16 @@
-function imgOut = PeceKautzTMO( img, directory, format, imageStack, iterations, kernelSize)
+function imgOut = PeceKautzMerge(imageStack, directory, format, iterations, kernelSize)
 %
 %
-%        imgOut = PeceKautzTMO( img, directory, format, imageStack, iterations, kernelSize)
+%        imgOut = PeceKautzMerge(imageStack, directory, format, iterations, kernelSize)
 %
 %
 %        Input:
-%           -img: input HDR image
+%           -imageStack: an exposure stack of LDR images
 %           -directory: the directory where to fetch the exposure imageStack in
-%           the case img=[]
+%           the case imageStack=[]
 %           -format: the format of LDR images ('bmp', 'jpg', etc) in case
-%                    img=[] and the tone mapped images is built from a sequence of
+%                    imageStack=[] and the tone mapped images is built from a sequence of
 %                    images in the current directory
-%           -imageStack: an exposure stack of LDR images; in case img=[],
-%                        and directory='' and format=''
 %           -iterations: number of iterations for improving the movements'
 %           mask
 %           -kernelSize: size of the kernel for improving the movements' mask
@@ -23,7 +21,7 @@ function imgOut = PeceKautzTMO( img, directory, format, imageStack, iterations, 
 %        Note: Gamma correction is not needed because it works on gamma
 %        corrected images.
 % 
-%     Copyright (C) 2013  Francesco Banterle
+%     Copyright (C) 2013-15  Francesco Banterle
 %
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -46,17 +44,12 @@ function imgOut = PeceKautzTMO( img, directory, format, imageStack, iterations, 
 %
 
 %imageStack generation
-if(~exist('imageStack','var'))
+if(~exist('imageStack', 'var'))
     imageStack = [];
 end
 
-if(~isempty(img))
-    %Convert the HDR image into a imageStack
-    [imageStack, imageStack_exposure] = GenerateExposureBracketing(img,1);
-else
-    if(isempty(imageStack))
-        imageStack = ReadLDRStack(directory, format, 1);
-    end
+if(isempty(imageStack))
+    imageStack = ReadLDRStack(directory, format, 1);
 end
 
 if(~exist('iterations', 'var'))
@@ -80,9 +73,9 @@ end
 
 [moveMask,num] = PeceKautzMoveMask(imageStack, iterations, kernelSize);
 
-weight_move = zeros(r,c,n);
+weight_move = zeros(r, c, n);
 for i=0:num
-    indx = find(moveMask==i);
+    indx = find(moveMask == i);
     
     Wvec = zeros(n,1);
     for j=1:n
@@ -91,7 +84,7 @@ for i=0:num
     end
     [val, j] = max(Wvec);
 
-    W = zeros(r,c);
+    W = zeros(r, c);
     W(indx) = 1;
     weight_move(:,:,j) = weight_move(:,:,j) + W;
 end
@@ -102,11 +95,11 @@ for i=1:n
 end
 
 for i=1:n
-    weight_move(:,:,i) = RemoveSpecials(weight_move(:,:,i)./total);
+    weight_move(:,:,i) = RemoveSpecials(weight_move(:,:,i) ./ total);
 end
 
 %empty pyramid
-tf=[];
+tf = [];
 for i=1:n
     %Laplacian pyramid: image
     pyrImg = pyrImg3(imageStack(:,:,:,i),@pyrLapGen);
@@ -116,7 +109,7 @@ for i=1:n
     %Multiplication image times weights
     tmpVal = pyrLstS2OP(pyrImg,pyrW,@pyrMul);
    
-    if(i==1)
+    if(i == 1)
         tf = tmpVal;
     else
         %accumulation
@@ -131,7 +124,7 @@ for i=1:col
 end
 
 %Clamping
-imgOut = ClampImg(imgOut/max(imgOut(:)),0.0,1.0);
+imgOut = ClampImg(imgOut / max(imgOut(:)), 0.0, 1.0);
 
 disp('This algorithm outputs images with gamma encoding. Inverse gamma is not required to be applied!');
 end
