@@ -33,17 +33,17 @@ function imgOut = ColorCorrection(img, schlick_correction)
 %is it a three color channels image?
 check3Color(img);
 
-if(~exist('schlick_correction','var'))
+if(~exist('schlick_correction', 'var'))
     schlick_correction = 0.5;
 end
 
-schlick_correction = ClampImg(schlick_correction,0.0,1.0);
+schlick_correction = ClampImg(schlick_correction, 0.0, 1.0);
 
 L = lum(img);
 imgOut = zeros(size(img));
 
-for i=1:size(img,3);
-    imgOut(:,:,i) = ((img(:,:,i)./L).^schlick_correction).*L;
+for i=1:size(img, 3);
+    imgOut(:,:,i) = ((img(:,:,i) ./ L).^schlick_correction) .* L;
 end
 
 imgOut = RemoveSpecials(imgOut);
