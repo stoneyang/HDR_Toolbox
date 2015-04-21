@@ -29,19 +29,19 @@ function S_i = ZhangCham_Score(theta_stack, i, sigma_s)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-if(~exist('sigma_s'))
+if(~exist('sigma_s', 'var'))
     sigma_s = 0.2;
 end
 
-sigma_s_2 = (sigma_s.^2)*2;
+sigma_s_2 = (sigma_s.^2) * 2;
 
 [r,c,n] = size(theta_stack);
 
 S_i = zeros(r,c);
 for j=1:n
     if(j~=i)
-        tmp = ZhangCham_ThetaDistance(theta_stack(:,:,i),theta_stack(:,:,j));
-        S_i = S_i + exp(-tmp.^2/sigma_s_2);
+        tmp = ZhangCham_ThetaDistance(theta_stack(:,:,i), theta_stack(:,:,j));
+        S_i = S_i + exp(-tmp.^2 / sigma_s_2);
     end
 end
 

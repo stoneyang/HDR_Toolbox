@@ -28,14 +28,14 @@ function alpha = ZhangCham_Alpha(img, zc_tau)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-if(~exist('zc_tau'))
+if(~exist('zc_tau', 'var'))
     zc_tau = 0.9;
 end
 
-zc_tau = ClampImg(zc_tau,0.0,1.0);
+zc_tau = ClampImg(zc_tau, 0.0, 1.0);
 
 alpha = zeros(size(img));
 
-alpha( (img>(1-zc_tau))&(img<zc_tau) ) = 1;
+alpha( (img > (1 - zc_tau)) & (img < zc_tau) ) = 1;
 
 end

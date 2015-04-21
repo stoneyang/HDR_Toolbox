@@ -27,6 +27,7 @@ folder = [folder, cellstr('Compression')];
 folder = [folder, cellstr('Compression_video')];
 folder = [folder, cellstr('Compression_video/util')];
 folder = [folder, cellstr('Deghosting')];
+folder = [folder, cellstr('Deghosting/util')];
 folder = [folder, cellstr('EnvironmentMaps')];
 folder = [folder, cellstr('EO')];
 folder = [folder, cellstr('EO/util')];

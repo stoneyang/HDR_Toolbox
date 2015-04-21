@@ -47,17 +47,13 @@ end
 if(isempty(imageStack))
     imageStack = ReadLDRStack(directory, format, 1);
 end
-
-if(isa(imageStack, 'single'))
-    imageStack = double(imageStack);
-end
-        
+       
 if(isa(imageStack, 'uint8'))
-    imageStack = double(imageStack) / 255.0;
+    imageStack = single(imageStack) / 255.0;
 end
        
 if(isa(imageStack, 'uint16'))
-    imageStack = double(imageStack) / 655535.0;
+    imageStack = single(imageStack) / 655535.0;
 end
 
 %extracting gradients
@@ -71,7 +67,7 @@ for i=1:n
     L = lum(imageStack(:,:,:,i));
     
     window_size = 5;
-    kernel_gauss = fspecial('gaussian', window_size,GKSigma(window_size));
+    kernel_gauss = fspecial('gaussian', window_size, GKSigma(window_size));
     [kgx,kgy] = gradient(kernel_gauss);
     
     gx = imfilter(L, kgx, 'replicate');
@@ -91,6 +87,7 @@ if(~bStatic)%Dynamic scene
     for i=1:n
         V(:,:,i) = grad_mag(:,:,i) ./ (mag_total + epsilon);
     end
+    
     clear('grad_mag');
     clear('mag_total');
 
@@ -113,7 +110,6 @@ if(~bStatic)%Dynamic scene
 
     clear('C_total');
 
-
     %Final weights
     W = zeros(r, c, n);
     W_total = zeros(r, c);
@@ -130,9 +126,9 @@ if(~bStatic)%Dynamic scene
     total = zeros(r, c);
     for i=1:n      
         W_i = W(:,:,i) ./ W_total;
-        W_i = bilateralFilter(W_i, double(lum(imageStack(:,:,:,i))));%,0.0,1.0,5,5/255);
+        W_i = bilateralFilter(W_i, double(lum(imageStack(:,:,:,i))));
         for j=1:col
-            imgOut(:,:,j) = imgOut(:,:,j) + W_i .* imageStack(:,:,j,i);
+            imgOut(:,:,j) = imgOut(:,:,j) + W_i .* imageStack(:,:,j, i);
         end
         total = total + W_i;
     end
@@ -145,7 +141,8 @@ else
     total = zeros(r, c);
     for i=1:n      
         V_i = grad_mag(:,:,i) ./ (mag_total + epsilon);
-        V_i = bilateralFilter(V_i, double(lum(imageStack(:,:,:,i))));%,0.0,1.0,5,5/255);
+        V_i = bilateralFilter(V_i, double(lum(imageStack(:,:,:,i))));
+        
         for j=1:col
             imgOut(:,:,j) = imgOut(:,:,j) + V_i .* imageStack(:,:,j,i);
         end
@@ -157,5 +154,5 @@ else
     end    
 end
 
-disp('This algorithm outputs images with gamma encoding. Inverse gamma is not required to be applied!');
+disp('WARNING: this algorithm outputs images with gamma encoding!');
 end

@@ -51,17 +51,13 @@ end
 if(isempty(imageStack))
     imageStack = ReadLDRStack(directory, format, 1);
 end
-
-if(isa(imageStack, 'single'))
-    imageStack = double(imageStack);
-end
-        
+       
 if(isa(imageStack, 'uint8'))
-    imageStack = double(imageStack) / 255.0;
+    imageStack = single(imageStack) / 255.0;
 end
        
 if(isa(imageStack, 'uint16'))
-    imageStack = double(imageStack) / 655535.0;
+    imageStack = single(imageStack) / 655535.0;
 end
 
 if(~exist('iterations', 'var'))
@@ -73,7 +69,7 @@ if(~exist('kernelSize', 'var'))
 end
 
 %number of images in the stack
-[r,c,col,n] = size(imageStack);
+[r, c, col, n] = size(imageStack);
 
 %Computation of weights for each image
 total  = zeros(r, c);
@@ -83,7 +79,7 @@ for i=1:n
     weight(:,:,i) = MertensWellExposedness(imageStack(:,:,:,i));
 end
 
-[moveMask,num] = PeceKautzMoveMask(imageStack, iterations, kernelSize);
+[moveMask, num] = PeceKautzMoveMask(imageStack, iterations, kernelSize);
 
 weight_move = zeros(r, c, n);
 for i=0:num
@@ -94,7 +90,7 @@ for i=0:num
         W = weight(:,:,j);
         Wvec(j) = mean(W(indx));
     end
-    [val, j] = max(Wvec);
+    [~, j] = max(Wvec);
 
     W = zeros(r, c);
     W(indx) = 1;
@@ -114,18 +110,18 @@ end
 tf = [];
 for i=1:n
     %Laplacian pyramid: image
-    pyrImg = pyrImg3(imageStack(:,:,:,i),@pyrLapGen);
+    pyrImg = pyrImg3(imageStack(:,:,:,i), @pyrLapGen);
     %Gaussian pyramid: weight   
     pyrW   = pyrGaussGen(weight_move(:,:,i));
 
     %Multiplication image times weights
-    tmpVal = pyrLstS2OP(pyrImg,pyrW,@pyrMul);
+    tmpVal = pyrLstS2OP(pyrImg, pyrW, @pyrMul);
    
     if(i == 1)
         tf = tmpVal;
     else
         %accumulation
-        tf = pyrLst2OP(tf,tmpVal,@pyrAdd);    
+        tf = pyrLst2OP(tf, tmpVal, @pyrAdd);    
     end
 end
 

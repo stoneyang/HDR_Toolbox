@@ -29,16 +29,16 @@ function d_ij = ZhangCham_ThetaDistance(theta_i, theta_j, window_size)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-if(~exist('window_size'))
+if(~exist('window_size', 'var'))
     window_size = 9;
 end
 
-diff = abs(theta_i-theta_j);
+diff = abs(theta_i - theta_j);
 
-window_size_full = window_size*2+1;
-kernel = ones(window_size_full)/(window_size_full*window_size_full);
+window_size_full = window_size * 2 + 1;
+kernel = ones(window_size_full ) / (window_size_full * window_size_full);
 
-d_ij = imfilter(diff,kernel, 'replicate');
+d_ij = imfilter(diff, kernel, 'replicate');
 
 end
 
