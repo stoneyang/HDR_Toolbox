@@ -36,20 +36,20 @@ function [moveMask,num] = PeceKautzMoveMask(imageStack, iterations, kernelSize)
 %     London, UK, November 2010
 %
 
-if(~exist('iterations'))
+if(~exist('iterations', 'var'))
     iterations = 15;
 end
 
-if(~exist('kernelSize'))
+if(~exist('kernelSize', 'var'))
     kernelSize = 5;
 end
 
 moveMask = [];
 
 n = size(imageStack, 4);
-[moveMask, eb] = WardComputeThreshold(imageStack(:,:,:,1)); 
+[moveMask, ~] = WardComputeThreshold(imageStack(:,:,:,1)); 
 for i = 2:n   
-    [mask, eb] = WardComputeThreshold(imageStack(:,:,:,i));
+    [mask, ~] = WardComputeThreshold(imageStack(:,:,:,i));
     moveMask = moveMask + mask;
 end
 
@@ -67,13 +67,15 @@ for i=1:iterations
     moveMask = imerode(moveMask, kernel);
 end   
 
-hdrimwrite(moveMask,'moveMask_RAW.pfm');
+%hdrimwrite(moveMask,'moveMask_RAW.pfm');
+
 %calculate connected components
 [moveMask1, num1] = bwlabel(moveMask, 4);
 [moveMask2, num2] = bwlabel(1 - moveMask, 4);
 
 moveMask = moveMask1 + (moveMask2 + num1);
 num = num1 + num2;
-hdrimwrite(moveMask1,'moveMask.pfm');
+
+%hdrimwrite(moveMask1,'moveMask.pfm');
 
 end
