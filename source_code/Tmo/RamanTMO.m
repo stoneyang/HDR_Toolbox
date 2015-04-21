@@ -52,6 +52,9 @@ end
 
 C = 70.0/255.0; %As reported in Raman and Chaudhuri Eurographics 2009 short paper
 
+%make sure data must be of class "double"
+imageStack = im2double(imageStack);
+
 %number of images in the imageStack
 [r, c, col, n] = size(imageStack);
 
