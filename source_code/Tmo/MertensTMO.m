@@ -1,4 +1,4 @@
-function imgOut = MertensTMO( img, folder_name, format, imageStack, wE, wS, wC, bMertensDebug )
+function imgOut = MertensTMO( img, folder_name, format, imageStack, wE, wS, wC)
 %
 %
 %        imgOut = MertensTMO( img, folder_name, format, imageStack, wE, wS, wC )
@@ -60,89 +60,90 @@ if(~exist('wC', 'var'))
     wC = 1.0;
 end
 
-if(~exist('bMertensDebug', 'var'))
-    bMertensDebug = 1;
-end
-
 %imageStack generation
-if(~exist('imageStack','var'))
+if(~exist('imageStack', 'var'))
     imageStack = [];
 end
 
 if(~isempty(img))
     %Convert the HDR image into a imageStack
-    [imageStack, imageStack_exposure] = GenerateExposureBracketing(img, 1);
+    [imageStack, ~] = GenerateExposureBracketing(img, 1);
 else
     if(isempty(imageStack))
         imageStack = ReadLDRStack(folder_name, format, 1);
+    else
+        if(isa(imageStack, 'uint8'))
+            imageStack = single(imageStack) / 255.0;
+        end
+        
+        if(isa(imageStack, 'uint16'))
+            imageStack = single(imageStack) / 655535.0;
+        end        
     end
 end
 
-
 %number of images in the stack
-[r,c,col,n] = size(imageStack);
+[r, c, col, n] = size(imageStack);
 
 %Computation of weights for each image
-total  = zeros(r,c);
-weight = ones(r,c,n);
+total  = zeros(r, c);
+weight = ones(r, c, n);
 for i=1:n
     %calculation of the weights
-    if(wE>0.0)
+    if(wE > 0.0)
         weightE = MertensWellExposedness(imageStack(:,:,:,i));
         weight(:,:,i) = weight(:,:,i) .* weightE.^wE;
     end
     
-    if(wC>0.0)
+    if(wC > 0.0)
         L = mean(imageStack(:,:,:,i),3);  
         weightC = MertensContrast(L);
         weight(:,:,i) = weight(:,:,i) .* (weightC.^wC);
     end
 
-    if(wS>0.0)
+    if(wS > 0.0)
         weightS = MertensSaturation(imageStack(:,:,:,i));
         weight(:,:,i) = weight(:,:,i) .* (weightS.^wS);
     end
     
-    weight(:,:,i) = weight(:,:,i)+1e-12;
+    weight(:,:,i) = weight(:,:,i) + 1e-12;
     
     total = total + weight(:,:,i);
 end
 
 %Normalization of weights
 for i=1:n
-    weight(:,:,i) = weight(:,:,i)./total;
+    weight(:,:,i) = weight(:,:,i) ./ total;
 end
 
 %empty pyramid
-tf=[];
+tf = [];
 for i=1:n
     %Laplacian pyramid: image
-    pyrImg = pyrImg3(imageStack(:,:,:,i),@pyrLapGen);
+    pyrImg = pyrImg3(imageStack(:,:,:,i), @pyrLapGen);
     %Gaussian pyramid: weight   
     pyrW   = pyrGaussGen(weight(:,:,i));
 
     %Multiplication image times weights
-    tmpVal = pyrLstS2OP(pyrImg,pyrW,@pyrMul);
+    tmpVal = pyrLstS2OP(pyrImg, pyrW, @pyrMul);
    
-    if(i==1)
+    if(i == 1)
         tf = tmpVal;
     else
         %accumulation
-        tf = pyrLst2OP(tf,tmpVal,@pyrAdd);    
+        tf = pyrLst2OP(tf, tmpVal, @pyrAdd);    
     end
 end
 
 %Evaluation of Laplacian/Gaussian Pyramids
-imgOut=zeros(r,c,col);
+imgOut = zeros(r, c, col);
 for i=1:col
     imgOut(:,:,i) = pyrVal(tf(i));
 end
 
 %Clamping
-imgOut = ClampImg(imgOut/max(imgOut(:)),0.0,1.0);
+imgOut = ClampImg(imgOut / max(imgOut(:)), 0.0, 1.0);
 
-if(bMertensDebug)
-    disp('This algorithm outputs images with gamma encoding. Inverse gamma is not required to be applied!');
-end
+disp('WARNING: This algorithm outputs images with gamma encoding. Inverse gamma is not required to be applied!');
 
 end

@@ -48,6 +48,18 @@ if(isempty(imageStack))
     imageStack = ReadLDRStack(directory, format, 1);
 end
 
+if(isa(imageStack, 'single'))
+    imageStack = double(imageStack);
+end
+        
+if(isa(imageStack, 'uint8'))
+    imageStack = double(imageStack) / 255.0;
+end
+       
+if(isa(imageStack, 'uint16'))
+    imageStack = double(imageStack) / 655535.0;
+end
+
 %extracting gradients
 [r, c, col, n] = size(imageStack);
 

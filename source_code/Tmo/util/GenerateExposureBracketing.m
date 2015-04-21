@@ -19,7 +19,7 @@ function [stack, stack_exposure] = GenerateExposureBracketing( img, fstopDistanc
 %           -stack_exposure: exposure values of the stack (stored as time
 %           in seconds)
 % 
-%     Copyright (C) 2010 Francesco Banterle
+%     Copyright (C) 2010-15 Francesco Banterle
 %  
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -43,9 +43,9 @@ end
 
 %inverse gamma
 if(~exist('geb_gamma', 'var'))
-    inv_gamma = 1.0/2.2;
+    inv_gamma = 1.0 / 2.2;
 else
-    inv_gamma = 1.0/geb_gamma;
+    inv_gamma = 1.0 / geb_gamma;
 end
 
 if(~exist('geb_mode', 'var'))
@@ -60,18 +60,18 @@ switch(geb_mode)
         stack_exposure = 2.^ExposureHistogramCovering(img);
         
     case 'uniform'
-        MinL = MaxQuart(L(L>0.0), 0.01);
-        MaxL = MaxQuart(L(L>0.0), 0.9999);
+        MinL = MaxQuart(L(L > 0.0), 0.01);
+        MaxL = MaxQuart(L(L > 0.0), 0.9999);
 
         minExposure = floor(log2(MaxL));
-        maxExposure = ceil(log2(MinL));
+        maxExposure = ceil( log2(MinL));
 
         tMax = -(maxExposure - 1);
         tMin = -(minExposure + 1);
         stack_exposure = 2.^(tMin:fstopDistance:tMax);
         
     otherwise
-        error('wrong mode for sampling the HDR image');
+        error('ERROR: wrong mode for sampling the HDR image');
 end
 
 %allocate memory for the stack

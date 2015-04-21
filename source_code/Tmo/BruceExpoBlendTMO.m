@@ -23,7 +23,7 @@ function imgOut = BruceExpoBlendTMO(img, directory, format, imageStack, beb_R, b
 %        Note: Gamma correction is not needed because it works on gamma
 %        corrected images.
 % 
-%     Copyright (C) 2013  Francesco Banterle
+%     Copyright (C) 2013-15  Francesco Banterle
 %
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -61,10 +61,22 @@ end
 
 if(~isempty(img))
     %Convert the HDR image into a imageStack
-    [imageStack, imageStack_exposure] = GenerateExposureBracketing(img, 1);
+    [imageStack, ~] = GenerateExposureBracketing(img, 1);
 else
     if(isempty(imageStack))
-        imageStack = ReadLDRStack(directory, format, 1);
+        imageStack = double(ReadLDRStack(directory, format, 1));
+    else
+        if(isa(imageStack, 'single'))
+            imageStack = double(imageStack);
+        end
+        
+        if(isa(imageStack, 'uint8'))
+            imageStack = double(imageStack) / 255.0;
+        end
+        
+        if(isa(imageStack, 'uint16'))
+            imageStack = double(imageStack) / 655535.0;
+        end        
     end
 end
 

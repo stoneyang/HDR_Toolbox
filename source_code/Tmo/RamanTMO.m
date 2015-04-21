@@ -51,14 +51,23 @@ if(~isempty(img))
     [imageStack, ~] = GenerateExposureBracketing(img, 1);
 else
     if(isempty(imageStack))
-        imageStack = ReadLDRStack(directory, format, 1);       
+        imageStack = double(ReadLDRStack(directory, format, 1));    
+    else
+        if(isa(imageStack, 'single'))
+            imageStack = double(imageStack);
+        end
+        
+        if(isa(imageStack, 'uint8'))
+            imageStack = double(imageStack) / 255.0;
+        end
+        
+        if(isa(imageStack, 'uint16'))
+            imageStack = double(imageStack) / 655535.0;
+        end        
     end
 end
 
 C = 70.0 / 255.0; %As reported in Raman and Chaudhuri Eurographics 2009 short paper
-
-%make sure data must be of class "double"
-imageStack = im2double(imageStack);
 
 %number of images in the imageStack
 [r, c, col, n] = size(imageStack);
