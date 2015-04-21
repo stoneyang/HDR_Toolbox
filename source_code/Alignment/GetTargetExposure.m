@@ -11,14 +11,14 @@ function target_exposure = GetTargetExposure(stack, folder_name, format)
 %       Input:
 %           -stack: a stack (4D) containing all images.
 %           -folder_name: the folder name where the stack is stored. This flag
-%           is valid if stack is empty, []/
+%           is valid if stack is empty, [].
 %           -format: the file format of the stack. This flag is valid if
 %           stack is empty, [].
 %
 %       Output:
-%           -target_exposure: the target exposure for alignment.
+%           -target_exposure: the index of the target exposure for alignment.
 %
-%     Copyright (C) 2013  Francesco Banterle
+%     Copyright (C) 2013-15  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -44,12 +44,12 @@ else
 end
 
 disp('Finding the best target exposure...');
-values = zeros(n,1);
+values = zeros(n, 1);
 for i=1:n
     if(bStack)
         img_tmp = stack(:,:,:,i);
     else
-        img_tmp = ldrimread([folder_name,'/',lst(i).name], 0);
+        img_tmp = ldrimread([folder_name, '/', lst(i).name], 0);
     end
     
     values(i) = mean(img_tmp(:));

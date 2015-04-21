@@ -1,15 +1,18 @@
-function index = GalloReferenceImage(imageStack)
+function target_exposure = GalloReferenceImage(stack, folder_name, format)
 %
 %
-%        index = GalloReferenceImage(imageStack)
+%        index = GalloReferenceImage(stack)
 %
 %
 %        Input:
-%           -imageStack: an exposure stack of LDR images with values in
-%           [0,1].
+%           -stack: a stack (4D) containing all images.
+%           -folder_name: the folder name where the stack is stored. This flag
+%           is valid if stack is empty, [].
+%           -format: the file format of the stack. This flag is valid if
+%           stack is empty, [].
 %
 %        Output:
-%   `       -index: the index of the reference image in the stack.
+%   `       -reference_exposure: the index of the reference image in the stack.
 % 
 %     Copyright (C) 2015  Francesco Banterle
 %
@@ -33,17 +36,31 @@ function index = GalloReferenceImage(imageStack)
 %     2009
 %
 
-[r, c, ~, n] = size(imageStack);
+bStack = ~isempty(stack);
+
+if(~bStack)
+    lst = dir([folder_name, '/*.', format]);
+    n = length(lst);
+else
+    n = size(stack, 4);
+end
 
 toe = 248 / 255;
 tue =   7 / 255;
 
-index = -1;
+target_exposure = -1;
 value = r * c;
 
 for i=1:n
-    over_exp = max(imageStack(:,:,:,i), [], 3);
-    under_exp = min(imageStack(:,:,:,i), [], 3);
+    
+    if(bStack)
+        current_exposure = stack(:,:,:,i);
+    else
+        current_exposure = ldrimread([folder_name, '/', lst(i).name], 0);
+    end    
+    
+    over_exp = max(current_exposure, [], 3);
+    under_exp = min(current_exposure, [], 3);
     
     mask_oe = zeros(r, c);
     mask_oe(over_exp >= toe) = 1;
@@ -57,7 +74,7 @@ for i=1:n
     tmp_value = sum(mask(:));
     
     if(tmp_value < value) 
-        index = i;
+        target_exposure = i;
         value = tmp_value; 
     end    
 end
