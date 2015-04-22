@@ -1,20 +1,21 @@
-function [moveMask,num] = PeceKautzMoveMask(imageStack, iterations, kernelSize)
+function [moveMask, num] = PeceKautzMoveMask(imageStack, iterations, ke_size, kd_size)
 %
 %
-%        [moveMask,num] = PeceKautzMoveMask(imageStack, iterations, kernelSize)
+%        [moveMask, num] = PeceKautzMoveMask(imageStack, iterations, kernelSize)
 %
 %
 %        Input:
 %           -imageStack: an exposure stack of LDR images
 %           -iterations: number of iterations for improving the movements'
 %           mask
-%           -kernelSize: size of the kernel for improving the movements' mask
+%           -ke_size: size of the erosion kernel
+%           -kd_size: size of the dilation kernel
 %
 %        Output:
 %           -moveMask: movements' mask
 %           -num: number of different connected components in moveMask
 % 
-%     Copyright (C) 2013  Francesco Banterle
+%     Copyright (C) 2013-15  Francesco Banterle
 %
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -37,14 +38,16 @@ function [moveMask,num] = PeceKautzMoveMask(imageStack, iterations, kernelSize)
 %
 
 if(~exist('iterations', 'var'))
-    iterations = 15;
+    iterations = 1;
 end
 
-if(~exist('kernelSize', 'var'))
-    kernelSize = 5;
+if(~exist('ke_size', 'var'))
+    ke_size = 3;
 end
 
-moveMask = [];
+if(~exist('kd_size', 'var'))
+    kd_size = 17;
+end
 
 n = size(imageStack, 4);
 [moveMask, ~] = WardComputeThreshold(imageStack(:,:,:,1)); 
@@ -59,15 +62,13 @@ moveMask(moveMask == n) = 0;
 %convert moveMask into a binary mask
 moveMask(moveMask > 0) = 1;    
 
-kernel = strel('disk', kernelSize);
+kernel_d = strel('disk', kd_size);
+kernel_e = strel('disk', ke_size);
 
 for i=1:iterations
-    moveMask = bwmorph(moveMask, 'clean');
-    moveMask = imdilate(moveMask, kernel);
-    moveMask = imerode(moveMask, kernel);
-end   
-
-%hdrimwrite(moveMask,'moveMask_RAW.pfm');
+    moveMask = imdilate(moveMask, kernel_d);
+    moveMask = imerode(moveMask, kernel_e);
+end
 
 %calculate connected components
 [moveMask1, num1] = bwlabel(moveMask, 4);
@@ -75,7 +76,5 @@ end
 
 moveMask = moveMask1 + (moveMask2 + num1);
 num = num1 + num2;
-
-%hdrimwrite(moveMask1,'moveMask.pfm');
 
 end

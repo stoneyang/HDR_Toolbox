@@ -1,4 +1,4 @@
-function imgOut = PeceKautzMerge(imageStack, directory, format, iterations, kernelSize)
+function imgOut = PeceKautzMerge(imageStack, directory, format, iterations, ke_size, kd_size)
 %
 %
 %        imgOut = PeceKautzMerge(imageStack, directory, format, iterations, kernelSize)
@@ -13,7 +13,8 @@ function imgOut = PeceKautzMerge(imageStack, directory, format, iterations, kern
 %                    images in the current directory
 %           -iterations: number of iterations for improving the movements'
 %           mask
-%           -kernelSize: size of the kernel for improving the movements' mask
+%           -ke_size: size of the erosion kernel
+%           -kd_size: size of the dilation kernel
 %
 %        Output:
 %           -imgOut: tone mapped image
@@ -64,8 +65,12 @@ if(~exist('iterations', 'var'))
     iterations = 15;
 end
 
-if(~exist('kernelSize', 'var'))
-    kernelSize = 5;
+if(~exist('ke_size', 'var'))
+    ke_size = 3;
+end
+
+if(~exist('kd_size', 'var'))
+    kd_size = 17;
 end
 
 %number of images in the stack
@@ -79,7 +84,7 @@ for i=1:n
     weight(:,:,i) = MertensWellExposedness(imageStack(:,:,:,i));
 end
 
-[moveMask, num] = PeceKautzMoveMask(imageStack, iterations, kernelSize);
+[moveMask, num] = PeceKautzMoveMask(imageStack, iterations, ke_size, kd_size);
 
 weight_move = zeros(r, c, n);
 for i=0:num
@@ -102,17 +107,15 @@ for i=1:n
     total = total + weight_move(:,:,i);
 end
 
-for i=1:n
-    weight_move(:,:,i) = RemoveSpecials(weight_move(:,:,i) ./ total);
-end
-
 %empty pyramid
 tf = [];
 for i=1:n
     %Laplacian pyramid: image
     pyrImg = pyrImg3(imageStack(:,:,:,i), @pyrLapGen);
-    %Gaussian pyramid: weight   
-    pyrW   = pyrGaussGen(weight_move(:,:,i));
+
+    %Gaussian pyramid: weight_i
+    weight_i = RemoveSpecials(weight_move(:,:,i) ./ total);
+    pyrW   = pyrGaussGen(weight_i);
 
     %Multiplication image times weights
     tmpVal = pyrLstS2OP(pyrImg, pyrW, @pyrMul);
@@ -126,7 +129,7 @@ for i=1:n
 end
 
 %Evaluation of Laplacian/Gaussian Pyramids
-imgOut=zeros(r,c,col);
+imgOut = zeros(r, c, col);
 for i=1:col
     imgOut(:,:,i) = pyrVal(tf(i));
 end
