@@ -70,4 +70,5 @@ Ld = (Lscaled .* (1 + Lscaled/ pWhite2))./(1 + L_adapt);
 
 %Changing luminance
 imgOut = ChangeLuminance(img, L, Ld);
+
 end

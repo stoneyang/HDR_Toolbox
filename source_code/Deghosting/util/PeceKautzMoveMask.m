@@ -36,42 +36,46 @@ function [moveMask,num] = PeceKautzMoveMask(imageStack, iterations, kernelSize)
 %     London, UK, November 2010
 %
 
-if(~exist('iterations'))
+if(~exist('iterations', 'var'))
     iterations = 15;
 end
 
-if(~exist('kernelSize'))
+if(~exist('kernelSize', 'var'))
     kernelSize = 5;
 end
 
 moveMask = [];
 
-n = size(imageStack,4);
-[moveMask,eb] = WardComputeThreshold(imageStack(:,:,:,1)); 
+n = size(imageStack, 4);
+[moveMask, ~] = WardComputeThreshold(imageStack(:,:,:,1)); 
 for i = 2:n   
-    [mask,eb] = WardComputeThreshold(imageStack(:,:,:,i));
+    [mask, ~] = WardComputeThreshold(imageStack(:,:,:,i));
     moveMask = moveMask + mask;
 end
 
 %filtering the noise
-moveMask(moveMask==n) = 0;
+moveMask(moveMask == n) = 0;
 
 %convert moveMask into a binary mask
-moveMask(moveMask>0) = 1;    
+moveMask(moveMask > 0) = 1;    
 
-kernel = strel('disk',kernelSize);
+kernel = strel('disk', kernelSize);
 
 for i=1:iterations
-    moveMask = bwmorph(moveMask,'clean');
+    moveMask = bwmorph(moveMask, 'clean');
     moveMask = imdilate(moveMask, kernel);
     moveMask = imerode(moveMask, kernel);
 end   
-hdrimwrite(moveMask,'moveMask_RAW.pfm');
+
+%hdrimwrite(moveMask,'moveMask_RAW.pfm');
+
 %calculate connected components
 [moveMask1, num1] = bwlabel(moveMask, 4);
-[moveMask2, num2] = bwlabel(1-moveMask, 4);
+[moveMask2, num2] = bwlabel(1 - moveMask, 4);
 
-moveMask = moveMask1+(moveMask2+num1);
-num = num1+num2;
-hdrimwrite(moveMask1,'moveMask.pfm');
+moveMask = moveMask1 + (moveMask2 + num1);
+num = num1 + num2;
+
+%hdrimwrite(moveMask1,'moveMask.pfm');
+
 end

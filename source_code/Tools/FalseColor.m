@@ -33,7 +33,7 @@ function [imgOut, FC_MAX_L] = FalseColor(img, FC_compress, FC_Vis, FC_LMax, FC_f
 %           -FC_MAX_L: the maxium luminance value in the selected
 %           FC_compress domain
 %
-%     Copyright (C) 2011  Francesco Banterle
+%     Copyright (C) 2011-15  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -49,45 +49,36 @@ function [imgOut, FC_MAX_L] = FalseColor(img, FC_compress, FC_Vis, FC_LMax, FC_f
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-%Checking if it is a valid RGB image or a luminance channel
-[r,c,col] = size(img);
-switch col
-    case 1
-        L = img;
-    case 3
-        L = lum(img);
-    otherwise
-        error('No valid image');
-end
+L = lum(img);
 
-if(~exist('FC_Vis','var'))
+if(~exist('FC_Vis', 'var'))
     FC_Vis = 1;
 end
 
-if(~exist('FC_compress','var'))
+if(~exist('FC_compress', 'var'))
     FC_compress = 'log';
 end
 
-if(~exist('FC_figure','var'))
+if(~exist('FC_figure', 'var'))
     FC_figure = 1;
 end
 
-if(~exist('FC_title','var'))
+if(~exist('FC_title', 'var'))
     FC_title = 'False color visualization';
 end
 
-%Minimum luminance
+%minimum luminance
 LMin = min(L(:));
 
-%Maximum luminance
-if(~exist('FC_LMax','var'))
+%maximum luminance
+if(~exist('FC_LMax', 'var'))
     LMax = max(L(:));
 else
     if(FC_LMax<0)
         LMax = max(L(:));
     else
         tLMax = max(L(:));
-        if(FC_LMax<tLMax)
+        if(FC_LMax < tLMax)
             LMax = tLMax;
         else
             LMax = FC_LMax - MinL;
@@ -97,50 +88,54 @@ end
 
 FC_MAX_L = LMax;
 
-%Luminance compression
+%luminance compression
 epsilon = 1e-6; %for avoiding singularities
 switch FC_compress
     case 'log2'
-        L = log2(L+epsilon);
-        LMax = log2(LMax+epsilon);
-        LMin = log2(LMin+epsilon);       
+        L = log2(L + epsilon);
+        LMax = log2(LMax + epsilon);
+        LMin = log2(LMin + epsilon);   
+        
     case 'log'
-        L = log(L+epsilon);    
-        LMax = log(LMax+epsilon);
-        LMin = log(LMin+epsilon);
+        L = log(L + epsilon);    
+        LMax = log(LMax + epsilon);
+        LMin = log(LMin + epsilon);
+        
     case 'log10'
-        L = log10(L+epsilon);
-        LMax = log10(LMax+epsilon);
-        LMin = log10(LMin+epsilon);
+        L = log10(L + epsilon);
+        LMax = log10(LMax + epsilon);
+        LMin = log10(LMin + epsilon);
+        
     case 'sigmoid'
-        L = (L./(L+1.0)).^(1.0/2.2);
-        LMax = (LMax./(LMax+1.0)).^(1.0/2.2);
-        LMin = (LMin./(LMax+1.0)).^(1.0/2.2);
+        L = (L ./ (L + 1.0)).^(1.0 / 2.2);
+        LMax = (LMax ./ (LMax + 1.0)).^(1.0 / 2.2);
+        LMin = (LMin ./ (LMax + 1.0)).^(1.0 / 2.2);
+        
     otherwise
 end
 
 %creating ticks for the visualization
 if(FC_Vis)
-    delta = LMax-LMin;
-    yticks = LMin:(delta/4):LMax;
+    delta = LMax - LMin;
+    yticks = LMin:(delta / 4):LMax;
 
     switch FC_compress
         case 'log2'
-            yticks = 2.^yticks-epsilon;
+            yticks = 2.^yticks - epsilon;
         case 'log'
-            yticks = exp(yticks)-epsilon;
+            yticks = exp(yticks) - epsilon;
         case 'log10'
-            yticks = 10.^yticks-epsilon;
+            yticks = 10.^yticks - epsilon;
         case 'sigmoid'
             yticks = yticks.^2.2;
-            yticks = yticks./(1.0-yticks);
+            yticks = yticks ./ (1.0 - yticks);
         otherwise
     end
 end
 
-L = L-LMin;
-LMax = LMax-LMin;
-L = L/LMax;
+L = L - LMin;
+LMax = LMax - LMin;
+L = L / LMax;
 
 %Create a color map
 n_bit = 8;
@@ -148,13 +143,13 @@ res = 2^n_bit;
 color_map = colormap(jet(res));
 
 %Coloring using the colormap
-L = ClampImg(round(L*res),1,res);
-imgOut = ind2rgb(L,color_map);
+L = ClampImg(round(L * res), 1, res);
+imgOut = ind2rgb(L, color_map);
 
 if(FC_Vis)%Visualization  
     h = figure(FC_figure);
     set(h, 'Name', FC_title);
-    imshow(imgOut,'InitialMagnification','fit');
+    imshow(imgOut, 'InitialMagnification', 'fit');
     colormap(color_map);
     
     precision = 4;

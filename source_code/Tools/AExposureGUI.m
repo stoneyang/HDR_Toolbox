@@ -1,6 +1,6 @@
-function [img_cur_exp, exposure] = InteractiveHDRVis(img)
+function [img_cur_exp, exposure] = AExposureGUI(img)
 %
-%        [img_cur_exp, exposure] = InteractiveHDRVis(img)
+%        [img_cur_exp, exposure] = AExposureGUI(img)
 %
 %        This function allows to explore the dynamic range in an image,
 %        img. This is achieved by clicking with the left mouse button into
@@ -14,7 +14,7 @@ function [img_cur_exp, exposure] = InteractiveHDRVis(img)
 %           -img_cur_exp: the input image with the last selected exposure
 %           -exposure: the last click exposure
 %
-%     Copyright (C) 2012-13  Francesco Banterle
+%     Copyright (C) 2012-15  Francesco Banterle
 %
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -34,27 +34,27 @@ L = lum(img);
 
 bFlag = 1;
 
-invGamma = 1.0/2.2;
-exposure = 0.25/(mean(L(:))+1e-6);
+invGamma = 1.0 / 2.2;
+exposure = 0.25 / (mean(L(:)) + 1e-6);
 kernelSize = 7;
 
-img_cur_exp = (img*exposure);
+img_cur_exp = (img * exposure);
 
 while(bFlag)
     imshow(img_cur_exp.^invGamma);
-    [x,y,button] = ginput(1);
-
-    if(isempty(x)==0)
-        disp(['Coordinates (',num2str([x,y]),')']);
+    [x, y, button] = ginput(1);
+ 
+    if(isempty(x) == 0)
+        disp(['Coordinates (', num2str([x,y]), ')']);
         x = round(real(x));
         y = round(real(y));
         disp(['Pixel value: [', num2str(img(y,x,:)),']']);
-        block = L((y-kernelSize):(y+kernelSize),(x-kernelSize):(x+kernelSize));
+        block = L((y - kernelSize):(y + kernelSize),(x - kernelSize):(x + kernelSize));
         exposure = 0.25/mean(block(:));
         disp(['Exposure: ',num2str(exposure)]);
-        img_cur_exp = (img*exposure);
+        img_cur_exp = (img * exposure);
         
-        if(button==3)
+        if(button == 3)
             bFlag = 0;
         end
     else

@@ -12,7 +12,7 @@ function imgOut = FerwerdaTMO(img, LdMax, Lda, Lwa)
 %        Output:
 %           -imgOut: tone mapped image with values in [0,1]
 % 
-%     Copyright (C) 2010 Francesco Banterle
+%     Copyright (C) 2010-15 Francesco Banterle
 %  
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -26,30 +26,30 @@ function imgOut = FerwerdaTMO(img, LdMax, Lda, Lwa)
 % 
 %     You should have received a copy of the GNU General Public License
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-%          -imgOut: tone mapped image
+%
 
 check13Color(img);
 
-if(~exist('LdMax','var'))
-    LdMax = 100; %assuming 100cd/m^2
+if(~exist('LdMax', 'var'))
+    LdMax = 100; %assuming 100 cd/m^2 output display
 end
 
-if(~exist('Lda','var'))
-    Lda = LdMax/2; %as in the original paper
+if(~exist('Lda', 'var'))
+    Lda = LdMax / 2; %as in the original paper
 end
 
 %Luminance channel
 L = lum(img);
 
-if(~exist('Lwa','var'))
-    Lwa = MaxQuart(L,0.999)/2; %as in the original paper
+if(~exist('Lwa', 'var'))
+    Lwa = MaxQuart(L, 0.999) / 2; %as in the original paper
     disp('Note: setting Lwa to default it may create dark images.');
 end
 
 %Contrast reduction
-mR = TpFerwerda(Lda)/TpFerwerda(Lwa);
-mC = TsFerwerda(Lda)/TsFerwerda(Lwa);
-k  = ClampImg((1-(Lwa/2-0.01)/(10-0.01))^2,0,1);
+mR = TpFerwerda(Lda) / TpFerwerda(Lwa);
+mC = TsFerwerda(Lda) / TsFerwerda(Lwa);
+k  = ClampImg((1 - (Lwa / 2 - 0.01) / (10 - 0.01))^2, 0, 1);
 
 %Removing the old luminance
 col = size(img,3);
@@ -59,15 +59,15 @@ switch col
     case 1
         vec = 1;
     case 3
-        vec = [1.05,0.97,1.27];
+        vec = [1.05, 0.97, 1.27];
     otherwise
-        vec = ones(col,1);        
+        vec = ones(col, 1);        
 end
 
 for i=1:col
-    imgOut(:,:,i)=(mC*img(:,:,i)+vec(i)*mR*k*L);
+    imgOut(:,:,i) = (mC * img(:,:,i) + vec(i) * mR * k * L);
 end
 
-imgOut = imgOut/LdMax;
+imgOut = imgOut / LdMax;
 
 end

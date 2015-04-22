@@ -1,25 +1,21 @@
-function target_exposure = GetTargetExposure(stack, folder_name, format)
+function target_exposure = GalloReferenceImage(stack, folder_name, format)
 %
 %
-%       stackOut = SiftAlignment(stack, bStackOut, folder_name, format,
-%       target_exposure)
+%        index = GalloReferenceImage(stack)
 %
-%       This function shifts pixels on the right with wrapping of the moved
-%       pixels. This can be used as rotation on the Y-axis for environment
-%       map encoded as longituted-latitude encoding.
 %
-%       Input:
+%        Input:
 %           -stack: a stack (4D) containing all images.
 %           -folder_name: the folder name where the stack is stored. This flag
 %           is valid if stack is empty, [].
 %           -format: the file format of the stack. This flag is valid if
 %           stack is empty, [].
 %
-%       Output:
-%           -target_exposure: the index of the target exposure for alignment.
-%
-%     Copyright (C) 2013-15  Francesco Banterle
+%        Output:
+%   `       -reference_exposure: the index of the reference image in the stack.
 % 
+%     Copyright (C) 2015  Francesco Banterle
+%
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
 %     the Free Software Foundation, either version 3 of the License, or
@@ -33,6 +29,12 @@ function target_exposure = GetTargetExposure(stack, folder_name, format)
 %     You should have received a copy of the GNU General Public License
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
+%     The paper describing this technique is:
+%     "Artifact-free High Dynamic Range Imaging"
+% 	  by  O. Gallo, N. Gelfand, W. Chen, M. Tico, and K. Pulli. 
+%     in IEEE International Conference on Computational Photography (ICCP)
+%     2009
+%
 
 bStack = ~isempty(stack);
 
@@ -43,23 +45,38 @@ else
     n = size(stack, 4);
 end
 
-disp('Finding the best target exposure...');
-values = zeros(n, 1);
+toe = 248 / 255;
+tue =   7 / 255;
+
+target_exposure = -1;
+value = r * c;
+
 for i=1:n
-    if(bStack)
-        img_tmp = stack(:,:,:,i);
-    else
-        img_tmp = ldrimread([folder_name, '/', lst(i).name], 0);
-    end
     
-    values(i) = mean(img_tmp(:));
-    clear('img_tmp');
+    if(bStack)
+        current_exposure = stack(:,:,:,i);
+    else
+        current_exposure = ldrimread([folder_name, '/', lst(i).name], 0);
+    end    
+    
+    over_exp = max(current_exposure, [], 3);
+    under_exp = min(current_exposure, [], 3);
+    
+    mask_oe = zeros(r, c);
+    mask_oe(over_exp >= toe) = 1;
+
+    mask_ue = zeros(r, c);
+    mask_ue(under_exp <= tue) = 1;
+    
+    mask = mask_oe + mask_ue;
+    mask(mask > 1) = 1;
+    
+    tmp_value = sum(mask(:));
+    
+    if(tmp_value < value) 
+        target_exposure = i;
+        value = tmp_value; 
+    end    
 end
 
-[~, indx] = sort(values);
-    
-target_exposure = indx(round(n / 2));
-
-disp('OK');
-    
 end

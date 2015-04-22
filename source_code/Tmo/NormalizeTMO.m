@@ -12,7 +12,7 @@ function imgOut=NormalizeTMO(img, bRobust)
 %        Output:
 %           -imgOut: tone mapped image
 % 
-%     Copyright (C) 2010 Francesco Banterle
+%     Copyright (C) 2010-15 Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -31,12 +31,12 @@ function imgOut=NormalizeTMO(img, bRobust)
 %is it a three color channels image?
 check13Color(img);
 
-if(~exist('bRobust','var'))
+if(~exist('bRobust', 'var'))
     bRobust = 1;
 end
 
 %Luminance channel
-L=lum(img);
+L = lum(img);
 
 %Computing the maximum
 maxValue = 1;
@@ -47,6 +47,6 @@ else
     maxValue = max(L(:));
 end
 
-imgOut=img/maxValue;
+imgOut = img / maxValue;
 
 end

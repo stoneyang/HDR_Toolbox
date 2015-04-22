@@ -37,7 +37,7 @@ function imgOut = ColorCorrectionMantiuk(img, mantiuk_p)
 %is it a three color channels image?
 check3Color(img);
 
-if(~exist('mantiuk_p','var'))
+if(~exist('mantiuk_p', 'var'))
     mantiuk_p = 0.5;
 end
 
@@ -45,10 +45,11 @@ mantiuk_p = ClampImg(mantiuk_p, 0.0, 1.0);
 
 L = lum(img);
 imgOut = zeros(size(img));
-for i=1:size(img,3);
-    M = (img(:,:,i)./L);
-    Mc = (M-1.0).*mantiuk_p + 1.0;
-    imgOut(:,:,i) = Mc.*L;
+
+for i=1:size(img, 3);
+    M = (img(:,:,i) ./ L);
+    Mc = (M - 1.0) .* mantiuk_p + 1.0;
+    imgOut(:,:,i) = Mc .* L;
 end
 
 imgOut = RemoveSpecials(imgOut);

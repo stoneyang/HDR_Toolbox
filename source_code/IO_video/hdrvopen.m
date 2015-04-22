@@ -11,7 +11,7 @@ function hdrv = hdrvopen(hdrv)
 %
 %        This function opens the video stream for reading frames
 %
-%     Copyright (C) 2013  Francesco Banterle
+%     Copyright (C) 2013-15  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@ function hdrv = hdrvopen(hdrv)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-if(hdrv.streamOpen==0)
+if(hdrv.streamOpen == 0)
 
 %     switch hdrv.type
 %         case 'TYPE_HDRV_MB06'

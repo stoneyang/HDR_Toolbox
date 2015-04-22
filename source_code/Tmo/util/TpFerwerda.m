@@ -1,6 +1,6 @@
-function val=TpFerwerda(x)
+function y = TpFerwerda(x)
 %
-%        val=TpFerwerda(x)
+%        y = TpFerwerda(x)
 %
 %
 %       The gamma function used in Ferwerda TMO for Scotopic levels
@@ -9,10 +9,10 @@ function val=TpFerwerda(x)
 %           -x: a value
 %
 %       Output:
-%           -val: application of the gamma function
+%           -y: application of the gamma function
 %
 % 
-%     Copyright (C) 2010 Francesco Banterle
+%     Copyright (C) 2010-15 Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -28,18 +28,18 @@ function val=TpFerwerda(x)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-x2 = log10(x);
+t = log10(x);
 
-if(x2 <= -2.6)
-    val = -0.72;
+if(t <= -2.6)
+    y = -0.72;
 else
-    if(x2 >= 1.9)
-        val = x2 - 1.255;
+    if(t >= 1.9)
+        y = t - 1.255;
     else
-        val = (0.249 * x2 + 0.65)^2.7 - 0.72;
+        y = (0.249 * t + 0.65)^2.7 - 0.72;
     end
 end
 
-val = 10^val;
+y = 10^y;
 
 end

@@ -19,7 +19,7 @@ function ret = ConvLDRtoLDR(fmtIn, fmtOut)
 %        Output:
 %           -ret: a boolean value, true or 1 if the method succeeds
 %
-%     Copyright (C) 2012  Francesco Banterle
+%     Copyright (C) 2012-15  Francesco Banterle
 %
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -37,15 +37,15 @@ function ret = ConvLDRtoLDR(fmtIn, fmtOut)
 
 ret = 0;
 
-lst = dir(['*.',fmtIn]);
+lst = dir(['*.', fmtIn]);
 
 for i=1:length(lst)
-    tmpName = lst(i).name;
-    disp(tmpName);
+    tmp_name = lst(i).name;
+    disp(tmp_name);
     
-    img = imread(tmpName);
-    tmpName_we = tmpName(1:(end-3));
-    imwrite(img,[tmpName_we, fmtOut]);
+    img = imread(tmp_name);
+    tmp_name_we = RemoveExt(tmp_name);
+    imwrite(img,[tmp_name_we, '.', fmtOut]);
 end
 
 ret = 1;

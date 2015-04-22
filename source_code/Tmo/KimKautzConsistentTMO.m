@@ -20,7 +20,7 @@ function imgOut = KimKautzConsistentTMO(img, Ld_max, Ld_min, KK_c1, KK_c2)
 %       Output:
 %           -imgOut: output tone mapped image in linear domain
 %
-%     Copyright (C) 2013  Francesco Banterle
+%     Copyright (C) 2013-15  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -43,25 +43,25 @@ function imgOut = KimKautzConsistentTMO(img, Ld_max, Ld_min, KK_c1, KK_c2)
 %     International Conference on Computer Graphics and Imaging  2008
 %
 
-if(~exist('Ld_max','var'))
+if(~exist('Ld_max', 'var'))
     Ld_max = 300; %300 cd/m^2
 end
 
-if(~exist('Ld_min','var'))
+if(~exist('Ld_min', 'var'))
     Ld_min = 0.3; %0.3 cd/m^2
 end
 
-if(~exist('KK_c1','var'))
+if(~exist('KK_c1', 'var'))
     KK_c1 = 3.0; %as in the original paper
 end
 
-if(~exist('KK_c2','var'))
+if(~exist('KK_c2', 'var'))
     KK_c2 = 0.5; %as in the original paper
 end
 
 L = lum(img);
 
-L_log = log(L+1e-6);
+L_log = log(L + 1e-6);
 
 mu = mean(L_log(:));
 
@@ -71,25 +71,29 @@ minL = min(L_log(:));
 maxLd = log(Ld_max);
 minLd = log(Ld_min);
 
-k1 = (maxLd-minLd)/(maxL-minL);    % as eqn.(1) in the original paper
+k1 = (maxLd - minLd) / (maxL - minL);  % as eqn.(1) in the original paper
 
-d0 = maxL/minL;% as in the original paper, d0 is the dynamic range of the log-luminances
-sigma = d0/KK_c1;                  % as eqn.(4) in the original paper
+d0 = maxL / minL;  % as in the original paper, d0 is the dynamic range of the log-luminances
+sigma = d0 / KK_c1;                    % as eqn.(4) in the original paper
 
-sigma2 = (sigma^2)*2;
-w = exp(-(L-mu).^2/sigma2);        % as eqn.(4) in the original paper
-k2 = (1-k1)*w+k1;                  % as eqn.(3) in the original paper
+sigma2 = (sigma^2) * 2;
+w = exp(-(L - mu).^2 / sigma2);        % as eqn.(4) in the original paper
+k2 = (1 - k1) * w + k1;                % as eqn.(3) in the original paper
 
-Ld = exp(KK_c2*k2.*(L_log-mu)+mu); % as eqn.(5) in the original paper
+Ld = exp(KK_c2 * k2 .* (L_log - mu) + mu);  % as eqn.(5) in the original paper
 
 %Percentile clamping
 maxLd = MaxQuart(Ld, 0.99);
 minLd = MaxQuart(Ld, 0.01);
 
-Ld(Ld>maxLd) = maxLd;
-Ld(Ld<minLd) = minLd;
+Ld(Ld > maxLd) = maxLd;
+Ld(Ld < minLd) = minLd;
 
+<<<<<<< HEAD
 Ld = (Ld-minLd)/(maxLd-minLd);      % as eqn.(6) in the original paer
+=======
+Ld = (Ld - minLd) / (maxLd - minLd);
+>>>>>>> master
 
 %Changing luminance
 imgOut = ChangeLuminance(img, L, Ld);

@@ -1,7 +1,6 @@
-
-function val=TsFerwerda(x)
+function y = TsFerwerda(x)
 %
-%       val=TsFerwerda(x)
+%       y = TsFerwerda(x)
 %
 %
 %       The gamma function used in Ferwerda TMO for Photopic levels
@@ -10,9 +9,9 @@ function val=TsFerwerda(x)
 %           -x: a value
 %
 %       Output:
-%           -val: application of the gamma function
+%           -y: application of the gamma function
 % 
-%     Copyright (C) 2010 Francesco Banterle
+%     Copyright (C) 2010-15 Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -28,18 +27,18 @@ function val=TsFerwerda(x)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-x2 = log10(x);
+t = log10(x);
 
-if(x2 <= -3.94)
-    val = -2.86;
+if(t <= -3.94)
+    y = -2.86;
 else
-    if(x2 >= -1.44)
-        val = x2 - 0.395;
+    if(t >= -1.44)
+        y = t - 0.395;
     else
-        val = (0.405 * x2 + 1.6)^2.18 - 2.86;
+        y = (0.405 * t + 1.6)^2.18 - 2.86;
     end
 end
 
-val = 10^val;
+y = 10^y;
 
 end
