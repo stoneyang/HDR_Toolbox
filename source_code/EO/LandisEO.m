@@ -49,7 +49,7 @@ if(~exist('gammaRemoval','var'))
 end
 
 %Gamma removal
-if(gammaRemoval>0.0)
+if(gammaRemoval > 0.0)
     img = img.^gammaRemoval;
 end
 
@@ -57,7 +57,7 @@ end
 L = lum(img);
 
 %Expanding from the mean value
-if(Landis_dynRangeStartLum<=0)
+if(Landis_dynRangeStartLum <= 0)
     Landis_dynRangeStartLum = mean(L(:));
 end
 
@@ -66,10 +66,10 @@ toExpand = find(L >= Landis_dynRangeStartLum);
 
 %Exapnsion using a power function
 maxValL = max(L(:)); %generalization in the case of unnormalized data
-weights = ((L(toExpand) - Landis_dynRangeStartLum)/(maxValL - Landis_dynRangeStartLum)).^Landis_alpha;
+weights = ((L(toExpand) - Landis_dynRangeStartLum) / (maxValL - Landis_dynRangeStartLum)).^Landis_alpha;
 
 Lexp = L;
-Lexp(toExpand) = L(toExpand) .* (1-weights) + Landis_Max_Luminance * L(toExpand) .* weights;
+Lexp(toExpand) = L(toExpand) .* (1 - weights) + Landis_Max_Luminance * L(toExpand) .* weights;
 
 %Removing the old luminance
 imgOut = ChangeLuminance(img, L, Lexp);

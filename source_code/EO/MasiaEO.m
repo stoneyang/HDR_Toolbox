@@ -1,3 +1,4 @@
+
 function [imgOut, bWarning] = MasiaEO(img, Masia_Max, Masia_noise_removal, gammaRemoval)
 %
 %       [imgOut, bWarning] = MasiaEO(img, Mesia_Max, Masia_noise_removal, gammaRemoval)
@@ -57,14 +58,12 @@ L = lum(img);
 %Calculate image statistics
 Lav  = logMean(L);
 maxL = MaxQuart(L, 0.99);
-minL = MaxQuart(L(L > 0),0.01);
-
+minL = MaxQuart(L(L > 0), 0.01);
 imageKey = (log(Lav) - log(minL)) / (log(maxL) - log(minL));
 
 %Calculate the gamma correction value
 a_var = 10.44;
 b_var = -6.282;
-
 gamma_cor = imageKey * a_var + b_var;
 
 if(gamma_cor <= 0.0)

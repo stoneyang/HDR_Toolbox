@@ -45,7 +45,7 @@ end
 %Luminance channel
 L = lum(img);
 Lwa = logMean(L);
-Lwa = Lwa/((1.0 + Drago_b - 0.85)^5);
+Lwa = Lwa / ((1.0 + Drago_b - 0.85)^5);
 LMax = max(L(:));
 
 if(exist('Drago_LMax', 'var'))
