@@ -89,11 +89,7 @@ minLd = MaxQuart(Ld, 0.01);
 Ld(Ld > maxLd) = maxLd;
 Ld(Ld < minLd) = minLd;
 
-<<<<<<< HEAD
-Ld = (Ld-minLd)/(maxLd-minLd);      % as eqn.(6) in the original paer
-=======
-Ld = (Ld - minLd) / (maxLd - minLd);
->>>>>>> master
+Ld = (Ld - minLd) / (maxLd - minLd); % as eqn.(6) in the original paper
 
 %Changing luminance
 imgOut = ChangeLuminance(img, L, Ld);
