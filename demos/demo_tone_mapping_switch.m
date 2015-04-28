@@ -1,4 +1,33 @@
 function [img, imgTMO] = demo_tone_mapping_switch(filename, TMO, savefilename)
+%
+%
+%      [img, imgTMO] = demo_tone_mapping_switch(filename, TMO, savefilename)
+%
+%
+%       Input:
+%           -filename:     filename of input image
+%           -TMO:          tone mapping method
+%           -savefilename: filename of output image
+%       Output:
+%           -img:      input HDR image
+%           -imgTMO:   image after tone mapping
+%
+% 
+%     Copyright (C) 2015  Fan Yang
+%
+%     This program is free software: you can redistribute it and/or modify
+%     it under the terms of the GNU General Public License as published by
+%     the Free Software Foundation, either version 3 of the License, or
+%     (at your option) any later version.
+% 
+%     This program is distributed in the hope that it will be useful,
+%     but WITHOUT ANY WARRANTY; without even the implied warranty of
+%     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%     GNU General Public License for more details.
+% 
+%     You should have received a copy of the GNU General Public License
+%     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+%
     disp('1) Load the image using hdrimread');
     img = hdrimread(filename);
     
