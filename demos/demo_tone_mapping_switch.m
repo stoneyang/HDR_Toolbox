@@ -82,7 +82,7 @@ function imgTMO = tone_mapping_switch(img, TMO)
         case 'normalize'
             imgTMO = NormalizeTMO(img);
         case 'Pattanaik'
-            imgTMO = PattanaikVisualStaticTMO(img);
+            imgTMO = PattanaikVisualAdaptationStaticTMO(img);
         case 'Raman'
             imgTMO = RamanTMO(img);
         case 'Reinhard'
