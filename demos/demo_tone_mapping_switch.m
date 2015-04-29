@@ -34,12 +34,14 @@ function [img, imgTMO] = demo_tone_mapping_switch(filename, TMO, savefilename)
     disp('2) Show the image in linear mode using imshow');
     h = figure(1);
     set(h,'Name','HDR visualization in Linear mode at F-stop 0');
-    GammaTMO(img, 1.0, 0, 1);
+    %GammaTMO(img, 1.0, 0, 1);
+    imwrite(GammaTMO(img, 1.0, 0, 1), 'original_hdr.tif');
     
     disp('3) Show the image applying gamma');
     h = figure(2);
     set(h,'Name','HDR visualization with gamma correction, 2.2, at F-stop 0');
-    GammaTMO(img, 2.2, 0, 1);
+    %GammaTMO(img, 2.2, 0, 1);
+    imwrite(GammaTMO(img, 2.2, 0, 1), 'gamma.tif');
     
     disp('4) Show the results applying TMO');
     h = figure(3);
