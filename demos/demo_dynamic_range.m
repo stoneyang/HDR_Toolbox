@@ -25,11 +25,6 @@ function [dynRg, dynRgLog, img, L] = demo_dynamic_range(filename)
     L = lum(img);
     imshow(L);
     
-    %nanRows = any(isnan(L), 2);
-    %zeroRows = any(L == 0, 2);
-    %badRows = nanRows | zeroRows;
-    %L(badRows, :) = [];
-    
     epsilon = 0.00001;
     Lmax = double(max(L(:)));
     Lmin = double(min(L(:))) + epsilon; % to make sure the mininum not be null
