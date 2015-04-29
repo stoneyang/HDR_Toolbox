@@ -36,4 +36,10 @@ function [dynRg, dynRgLog, img, L] = demo_dynamic_range(filename)
     
     dynRg = Lmax / Lmin;
     dynRgLog = 20 * log10(dynRg);
+    
+    disp('4) Show the color temperature in logarithmic unit');
+    h = figure(3);
+    set(h,'Name','Color temperature in logarithmic unit (10-based)');
+    imagesc(L);
+    colorbar;
 end
