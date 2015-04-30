@@ -1,17 +1,18 @@
-function [img, imgTMO] = demo_tone_mapping_switch(filename, TMO, savefilename)
+function [imgTMO, execTime] = tone_mapping(filename, TMO, outputHDR, outputGamma, outputTM)
 %
 %
-%      [img, imgTMO] = demo_tone_mapping_switch(filename, TMO, savefilename)
+%      [imgTMO, execTime] = tone_mapping(filename, TMO, outputHDR, outputGamma, outputTM)
 %
 %
 %       Input:
 %           -filename:     filename of input image
 %           -TMO:          tone mapping method
-%           -savefilename: filename of output image
+%           -outputHDR:    filename of original hdr in tif format
+%           -outputGamma:  filename of gamma-corrected image
+%           -outputTM:     filename of output image
 %       Output:
-%           -img:      input HDR image
-%           -imgTMO:   image after tone mapping
-%
+%           -imgTMO:       image after tone mapping
+%           -execTime:     execution time of TMO
 % 
 %     Copyright (C) 2015  Fan Yang
 %
@@ -28,82 +29,135 @@ function [img, imgTMO] = demo_tone_mapping_switch(filename, TMO, savefilename)
 %     You should have received a copy of the GNU General Public License
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
+    disp(strcat({'Start tone mapping of '}, filename, {' using '}, TMO, {' ...'}));
     disp('1) Load the image using hdrimread');
     img = hdrimread(filename);
     
     disp('2) Show the image in linear mode using imshow');
     h = figure(1);
     set(h,'Name','HDR visualization in Linear mode at F-stop 0');
-    %GammaTMO(img, 1.0, 0, 1);
-    imwrite(GammaTMO(img, 1.0, 0, 1), 'original_hdr.tif');
+    imwrite(GammaTMO(img, 1.0, 0, 1), outputHDR);
     
     disp('3) Show the image applying gamma');
     h = figure(2);
     set(h,'Name','HDR visualization with gamma correction, 2.2, at F-stop 0');
-    %GammaTMO(img, 2.2, 0, 1);
-    imwrite(GammaTMO(img, 2.2, 0, 1), 'gamma.tif');
+    imwrite(GammaTMO(img, 2.2, 0, 1), outputGamma);
     
     disp('4) Show the results applying TMO');
     h = figure(3);
     set(h,'Name','Tone mapped image using TMO');
-    imgTMO = tone_mapping_switch(img, TMO);
+    disp(TMO);
+    [imgTMO, execTime] = tone_mapping_switch(img, TMO);
+    %% TODO: numbers of TMOs DO NOT need gamma correction or 2.2 value!
     GammaTMO(imgTMO, 2.2, 0, 1);
+    %%
+    disp(strcat({'Execution time of '}, TMO, {': '}, num2str(execTime), {' seconds'}));
     
     disp('5) Save the tone mapped image as a PNG.');
-    imwrite(GammaTMO(imgTMO, 2.2, 0, 0), savefilename);
+    imwrite(GammaTMO(imgTMO, 2.2, 0, 0), outputTM);
 end
 
-function imgTMO = tone_mapping_switch(img, TMO)
+function [imgTMO, execTime] = tone_mapping_switch(img, TMO)
     switch(TMO)
         case 'Ashikhmin'
+            tic
             imgTMO = AshikhminTMO(img);
+            execTime = toc;
         case 'Banterle'
+            tic
             imgTMO = BanterleTMO(img);
+            execTime = toc;
         case 'Chiu'
+            tic
             imgTMO = ChiuTMO(img);
+            execTime = toc;
         case 'Drago'
+            tic
             imgTMO = DragoTMO(img);
+            execTime = toc;
         case 'Durand'
+            tic
             imgTMO = DurandTMO(img);
+            execTime = toc;
         case 'exponential'
+            tic
             imgTMO = ExponentialTMO(img);
+            execTime = toc;
         case 'Fairchild'
+            tic
             imgTMO = KuangTMO(img);
+            execTime = toc;
         case 'Fattal'
+            tic
             imgTMO = FattalTMO(img);
+            execTime = toc;
         case 'Ferwerda'
+            tic
             imgTMO = FerwerdaTMO(img);
+            execTime = toc;
         case 'KimKautzConsistent'
+            tic
             imgTMO = KimKautzConsistentTMO(img);
+            execTime = toc;
         case 'Krawczyk'
+            tic
             imgTMO = KrawczykTMO(img);
+            execTime = toc;
         case 'Lischinski'
+            tic
             imgTMO = LischinskiTMO(img);
+            execTime = toc;
         case 'logarithmic'
+            tic
             imgTMO = LogarithmicTMO(img);
+            execTime = toc;
         case 'normalize'
+            tic
             imgTMO = NormalizeTMO(img);
+            execTime = toc;
         case 'Pattanaik'
+            tic
             imgTMO = PattanaikVisualAdaptationStaticTMO(img);
+            execTime = toc;
         case 'Raman'
+            tic
             imgTMO = RamanTMO(img);
+            execTime = toc;
         case 'Reinhard'
+            tic
             imgTMO = ReinhardTMO(img);
+            execTime = toc;
         case 'ReinhardBil'
+            tic
             imgTMO = ReinhardBilTMO(img);
+            execTime = toc;
         case 'ReinhardDevlin'
+            tic
             imgTMO = ReinhardDevlinTMO(img);  
+            execTime = toc;
         case 'Schlick'
+            tic
             imgTMO = SchlickTMO(img);
+            execTime = toc;
         case 'TumblinRushmeier'
+            tic
             imgTMO = TumblinRushmeierTMO(img);
+            execTime = toc;
         case 'VanHateren'
+            tic
             imgTMO = VanHaterenTMO(img);
+            execTime = toc;
         case 'WardGlobal'
+            tic
             imgTMO = WardGlobalTMO(img);
+            execTime = toc;
         case 'WardHistAdj'
+            tic
             imgTMO = WardHistAdjTMO(img);
+            execTime = toc;
         case 'Yee'
+            tic
             imgTMO = YeeTMO(img);
+            execTime = toc;
     end
 end
