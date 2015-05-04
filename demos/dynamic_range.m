@@ -1,6 +1,6 @@
-function [dynRg, dynRgLog] = dynamic_range(filename, saveLuminanceFile, saveMap)
+function [Lmax, Lmin, dynRg, dynRgLog] = dynamic_range(filename, saveLuminanceFile, saveMap)
 %
-%      [dynRg, dynRgLog] = dynamic_range(filename, saveLuminanceFile, saveMap)
+%      [Lmax, Lmin, dynRg, dynRgLog] = dynamic_range(filename, saveLuminanceFile, saveMap)
 %
 %
 %       Input:
@@ -8,6 +8,8 @@ function [dynRg, dynRgLog] = dynamic_range(filename, saveLuminanceFile, saveMap)
 %           -saveLuminanceFile: tone mapping method
 %           -saveMap:           filename of original hdr in tif format
 %       Output:
+%           -Lmax:              maximum luminance of the input
+%           -Lmin:              minimum luminance of the input
 %           -dynRg:             dynamic range of input HDR
 %           -dynRgLog:          log dynamic range of input HDR
 % 
@@ -45,11 +47,13 @@ function [dynRg, dynRgLog] = dynamic_range(filename, saveLuminanceFile, saveMap)
     epsilon = 0.00001;
     Lmax = double(max(L(:)));
     Lmin = double(min(L(:))) + epsilon; % to make sure the mininum not be null
-    
+    disp(strcat({'Maximum luminance (cd/m^2): '}, Lmax));
+    disp(strcat({'Minimum luminance (cd/m^2): '}, Lmin));
+        
     dynRg = Lmax / Lmin;
     dynRgLog = 20 * log10(dynRg);
-    disp(strcat({'Dynamic Range of '}, filename, num2str(dynRg)));
-    disp(strcat({'Dynamic Range in dB: '}, filename, num2str(dynRgLog)));
+    disp(strcat({'Dynamic Range:'}, num2str(dynRg)));
+    disp(strcat({'Dynamic Range in dB: '}, num2str(dynRgLog)));
     
     disp('4) Show the color temperature in logarithmic unit');
     h = figure(3);
