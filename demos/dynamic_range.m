@@ -47,8 +47,8 @@ function [Lmax, Lmin, dynRg, dynRgLog] = dynamic_range(filename, saveLuminanceFi
     epsilon = 0.00001;
     Lmax = double(max(L(:)));
     Lmin = double(min(L(:))) + epsilon; % to make sure the mininum not be null
-    disp(strcat({'Maximum luminance (cd/m^2): '}, Lmax));
-    disp(strcat({'Minimum luminance (cd/m^2): '}, Lmin));
+    disp(strcat({'Maximum luminance (cd/m^2): '}, num2str(Lmax)));
+    disp(strcat({'Minimum luminance (cd/m^2): '}, num2str(Lmin)));
         
     dynRg = Lmax / Lmin;
     dynRgLog = 20 * log10(dynRg);

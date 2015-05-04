@@ -1,14 +1,12 @@
-function [imgTMO, execTime] = tone_mapping(filename, TMO, outputHDR, outputGamma, outputTM)
+function [imgTMO, execTime] = tone_mapping(inputImg, TMO, outputTM)
 %
 %
-%      [imgTMO, execTime] = tone_mapping(filename, TMO, outputHDR, outputGamma, outputTM)
+%      [imgTMO, execTime] = tone_mapping(inputImg, TMO, outputTM)
 %
 %
 %       Input:
-%           -filename:     filename of input image
+%           -inputImg:     input HDR image
 %           -TMO:          tone mapping method
-%           -outputHDR:    filename of original hdr in tif format
-%           -outputGamma:  filename of gamma-corrected image
 %           -outputTM:     filename of output image
 %       Output:
 %           -imgTMO:       image after tone mapping
@@ -29,25 +27,11 @@ function [imgTMO, execTime] = tone_mapping(filename, TMO, outputHDR, outputGamma
 %     You should have received a copy of the GNU General Public License
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
-    disp(strcat({'Start tone mapping of '}, filename, {' using '}, TMO, {' ...'}));
-    disp('1) Load the image using hdrimread');
-    img = hdrimread(filename);
-    
-    disp('2) Show the image in linear mode using imshow');
-    h = figure(1);
-    set(h,'Name','HDR visualization in Linear mode at F-stop 0');
-    imwrite(GammaTMO(img, 1.0, 0, 1), outputHDR);
-    
-    disp('3) Show the image applying gamma');
-    h = figure(2);
-    set(h,'Name','HDR visualization with gamma correction, 2.2, at F-stop 0');
-    imwrite(GammaTMO(img, 2.2, 0, 1), outputGamma);
-    
-    disp('4) Show the results applying TMO');
+    disp('Show the results applying TMO');
     h = figure(3);
     set(h,'Name','Tone mapped image using TMO');
     disp(TMO);
-    [imgTMO, execTime] = tone_mapping_switch(img, TMO);
+    [imgTMO, execTime] = tone_mapping_switch(inputImg, TMO);
     %% TODO: numbers of TMOs DO NOT need gamma correction or 2.2 value!
     GammaTMO(imgTMO, 2.2, 0, 1);
     %%

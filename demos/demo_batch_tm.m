@@ -26,6 +26,7 @@ TMOs = {'Ashikhmin', 'Banterle', 'Chiu', 'Drago', 'Durand', 'exponential',...
 
 records = cell(numel(TMOs), numel(names));
 
+% names assembly line
 inputPrefix = 'e:\yangfan\data\hdr\input\';
 inputSuffix = '.hdr';
 
@@ -39,6 +40,7 @@ outputTMSuffix = '.png';
 
 recordsFile = strcat(outputPrefix, 'records.csv');
 
+% calculation line
 tic
 for i = 1 : numel(names)
     name = names{i};
@@ -54,18 +56,23 @@ for i = 1 : numel(names)
     records(2,i) = {Lmax};
     records(3,i) = {Lmin};
     records(4,i) = {dynRg};
-    records(5,i) = {dynRg};
+    records(5,i) = {dynRgLog};
+    
+    img = hdr_condition(inputFile, outputHDR, outputGamma);
 
     for j = 1 : numel(TMOs)
         TMO = TMOs{j};
         outputTMFile = strcat(outputPrefix, name, '_', TMO, outputTMSuffix);
-        [imgTMO, execTime] = tone_mapping(inputFile, TMO, outputHDR, outputGamma, outputTMFile);
+        
+        disp(strcat({'Start tone mapping of '}, name, {' using '}, TMO, {' ...'}));
+        [~, execTime] = tone_mapping(img, TMO, outputTMFile);
         
         records(j+5,i) = {execTime};
     end
 end
 avgTime = toc / numel(names);
 
+% export data
 ds = cell2dataset(records);
 export(ds, 'file' ,recordsFile, 'delimiter', ',');
 
