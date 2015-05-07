@@ -31,7 +31,7 @@ function imgOut = PattanaikVisualAdaptationStaticTMO(img, A_rod, A_cone)
 %
 %
 %     The paper describing this technique is:
-%     "ime-Dependent Visual Adaptation For Fast Realistic Image Display"
+%     "Time-Dependent Visual Adaptation For Fast Realistic Image Display"
 % 	  by Sumanta N. Pattanaik, Jack Tumblin, Hector Yee, Donald P. Greenberg
 %     in SIGGRAPH 2000
 %
