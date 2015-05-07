@@ -1,10 +1,10 @@
-function [Lmax, Lmin, dynRg, dynRgLog] = dynamic_range(filename, saveLuminanceFile, saveMap)
+function [Lmax, Lmin, dynRg, dynRgLog] = dynamic_range(img, saveLuminanceFile, saveMap)
 %
-%      [Lmax, Lmin, dynRg, dynRgLog] = dynamic_range(filename, saveLuminanceFile, saveMap)
+%      [Lmax, Lmin, dynRg, dynRgLog] = dynamic_range(img, saveLuminanceFile, saveMap)
 %
 %
 %       Input:
-%           -filename:          filename of input image
+%           -img:               input image
 %           -saveLuminanceFile: tone mapping method
 %           -saveMap:           filename of original hdr in tif format
 %       Output:
@@ -28,23 +28,23 @@ function [Lmax, Lmin, dynRg, dynRgLog] = dynamic_range(filename, saveLuminanceFi
 %     You should have received a copy of the GNU General Public License
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
-    disp(strcat({'Start calculating dynamic range of '}, filename, {' ...'}));
-    disp('1) Load HDR image using hdrimread');
-    img = hdrimread(filename);
+%     disp(strcat({'Start calculating dynamic range of '}, filename, {' ...'}));
+%     disp('1) Load HDR image using hdrimread');
+%     img = hdrimread(filename);
 
-    disp('2) Show the image in linear mode using imshow');
+    disp('Show the image in linear mode using imshow');
     h = figure(1);
     set(h,'Name','HDR visualization in Linear mode at F-stop 0');
     GammaTMO(img, 1.0, 0, 1);
     
-    disp('3) Calculate the dynamic range of HDR image');
+    disp('Calculate the dynamic range of HDR image');
     h = figure(2);
     set(h,'Name','Luminance visualization in Linear mode at F-stop 0');
     L = lum(img);
     imshow(L);
     imwrite(L, saveLuminanceFile);
     
-    epsilon = 0.00001;
+    epsilon = 0.0000000000001;
     Lmax = double(max(L(:)));
     Lmin = double(min(L(:))) + epsilon; % to make sure the mininum not be null
     disp(strcat({'Maximum luminance (cd/m^2): '}, num2str(Lmax)));
@@ -55,11 +55,13 @@ function [Lmax, Lmin, dynRg, dynRgLog] = dynamic_range(filename, saveLuminanceFi
     disp(strcat({'Dynamic Range:'}, num2str(dynRg)));
     disp(strcat({'Dynamic Range in dB: '}, num2str(dynRgLog)));
     
-    disp('4) Show the color temperature in logarithmic unit');
+    disp('Show the color temperature in logarithmic unit');
     h = figure(3);
     set(h,'Name','Color temperature in logarithmic unit (10-based)');
     map = imagesc(L);
     colorbar;
     saveas(map, saveMap);
-    %% TODO: export the color temperature map with the same size of the precedent figures
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %%% TODO: export the color temperature map with the same size of the precedent figures
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 end
