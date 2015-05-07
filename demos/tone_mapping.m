@@ -32,116 +32,144 @@ function [imgTMO, execTime] = tone_mapping(inputImg, TMO, outputTM)
     set(h,'Name','Tone mapped image using TMO');
     disp(TMO);
     [imgTMO, execTime] = tone_mapping_switch(inputImg, TMO);
-    %% TODO: numbers of TMOs DO NOT need gamma correction or 2.2 value!
-    GammaTMO(imgTMO, 2.2, 0, 1);
-    %%
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %%% TODO: numbers of TMOs DO NOT need gamma correction or 2.2 value!
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % GammaTMO(imgTMO, 2.2, 0, 1);
+
     disp(strcat({'Execution time of '}, TMO, {': '}, num2str(execTime), {' seconds'}));
     
-    disp('5) Save the tone mapped image as a PNG.');
-    imwrite(GammaTMO(imgTMO, 2.2, 0, 0), outputTM);
+    disp('Save the tone mapped image as a PNG.');
+    imwrite(imgTMO, outputTM);
 end
 
 function [imgTMO, execTime] = tone_mapping_switch(img, TMO)
     switch(TMO)
-        case 'Ashikhmin'
+        case 'Ashikhmin' % Ashikhmin2002
             tic
             imgTMO = AshikhminTMO(img);
             execTime = toc;
-        case 'Banterle'
+            imgTMO = GammaTMO(imgTMO, 2.2, 0, 1);
+        case 'Banterle'  % Banterle2012
             tic
             imgTMO = BanterleTMO(img);
             execTime = toc;
-        case 'Chiu'
+            imgTMO = GammaTMO(imgTMO, 2.2, 0, 1);
+        case 'Chiu'      % Chiu1993
             tic
             imgTMO = ChiuTMO(img);
             execTime = toc;
-        case 'Drago'
+            imgTMO = GammaTMO(imgTMO, 2.2, 0, 1);
+        case 'Drago'     % Drago2003
             tic
             imgTMO = DragoTMO(img);
             execTime = toc;
-        case 'Durand'
+            imgTMO = GammaDrago(imgTMO); 
+            imshow(imgTMO);
+        case 'Durand'    % Durand2002
             tic
             imgTMO = DurandTMO(img);
             execTime = toc;
+            imgTMO = GammaTMO(imgTMO, 2.2, 0, 1);
         case 'exponential'
             tic
             imgTMO = ExponentialTMO(img);
             execTime = toc;
-        case 'Fairchild'
+            imgTMO = GammaTMO(imgTMO, 2.2, 0, 1);
+        case 'Fairchild'  % Kuang2007
             tic
             imgTMO = KuangTMO(img);
             execTime = toc;
-        case 'Fattal'
+            imgTMO = GammaTMO(imgTMO, 2.2, 0, 1);
+        case 'Fattal'     % Fattal2002
             tic
             imgTMO = FattalTMO(img);
             execTime = toc;
-        case 'Ferwerda'
+            imgTMO = GammaTMO(imgTMO, 2.2, 0, 1);
+        case 'Ferwerda'   % Ferwerda1996
             tic
             imgTMO = FerwerdaTMO(img);
             execTime = toc;
-        case 'KimKautzConsistent'
+            imgTMO = GammaTMO(imgTMO, 2.2, 0, 1);
+        case 'KimKautzConsistent'  % Kim2008
             tic
             imgTMO = KimKautzConsistentTMO(img);
             execTime = toc;
-        case 'Krawczyk'
+            imgTMO = GammaTMO(imgTMO, 2.2, 0, 1);
+        case 'Krawczyk'    % Krawczyk2005b & Krawczyk2005c
             tic
             imgTMO = KrawczykTMO(img);
             execTime = toc;
-        case 'Lischinski'
+            imgTMO = GammaTMO(imgTMO, 2.2, 0, 1);
+        case 'Lischinski'  % Lischinski2006
             tic
             imgTMO = LischinskiTMO(img);
             execTime = toc;
+            imgTMO = GammaTMO(imgTMO, 2.2, 0, 1);
         case 'logarithmic'
             tic
             imgTMO = LogarithmicTMO(img);
             execTime = toc;
+            imgTMO = GammaTMO(imgTMO, 2.2, 0, 1);
         case 'normalize'
             tic
             imgTMO = NormalizeTMO(img);
             execTime = toc;
-        case 'Pattanaik'
+            imgTMO = GammaTMO(imgTMO, 2.2, 0, 1);
+        case 'Pattanaik'  % Pattanaik2000
             tic
             imgTMO = PattanaikVisualAdaptationStaticTMO(img);
             execTime = toc;
-        case 'Raman'
+            imgTMO = GammaTMO(imgTMO, 2.2, 0, 1);
+        case 'Raman'  % Raman2009
             tic
             imgTMO = RamanTMO(img);
             execTime = toc;
-        case 'Reinhard'
+            imgTMO = GammaTMO(imgTMO, 2.2, 0, 1);
+        case 'Reinhard' % Reinhard2002 & Reinhard2003
             tic
             imgTMO = ReinhardTMO(img);
             execTime = toc;
+            imgTMO = GammaTMO(imgTMO, 2.2, 0, 1);
         case 'ReinhardBil'
             tic
             imgTMO = ReinhardBilTMO(img);
             execTime = toc;
-        case 'ReinhardDevlin'
+            imgTMO = GammaTMO(imgTMO, 2.2, 0, 1);
+        case 'ReinhardDevlin' % Reinhard2005
             tic
             imgTMO = ReinhardDevlinTMO(img);  
             execTime = toc;
-        case 'Schlick'
+            imgTMO = GammaTMO(imgTMO, 1.6, 0, 1);  % as suggested in the original paper
+        case 'Schlick'  % Schlick1994
             tic
-            imgTMO = SchlickTMO(img);
+            imgTMO = SchlickTMO(img, 'nonuniform', 1/0.005, 8, 1, 0); % k = 0 usually the best
             execTime = toc;
-        case 'TumblinRushmeier'
+            imgTMO = GammaTMO(imgTMO, 2.2, 0, 1);
+        case 'TumblinRushmeier' % TumblinRushmeier1993
             tic
             imgTMO = TumblinRushmeierTMO(img);
             execTime = toc;
-        case 'VanHateren'
+            imgTMO = GammaTMO(imgTMO, 2.2, 0, 1);
+        case 'VanHateren'  % VanHateren2006
             tic
             imgTMO = VanHaterenTMO(img);
             execTime = toc;
-        case 'WardGlobal'
+            imgTMO = GammaTMO(imgTMO, 2.2, 0, 1);
+        case 'WardGlobal'  % Ward1994
             tic
             imgTMO = WardGlobalTMO(img);
             execTime = toc;
-        case 'WardHistAdj'
+            imgTMO = GammaTMO(imgTMO, 2.2, 0, 1);
+        case 'WardHistAdj' % Ward1997 & Larson1997
             tic
             imgTMO = WardHistAdjTMO(img);
             execTime = toc;
-        case 'Yee'
+            imgTMO = GammaTMO(imgTMO, 2.2, 0, 1);
+        case 'Yee' % Yee2003
             tic
             imgTMO = YeeTMO(img);
             execTime = toc;
+            imgTMO = GammaTMO(imgTMO, 2.2, 0, 1);
     end
 end
