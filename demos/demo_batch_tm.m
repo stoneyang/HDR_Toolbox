@@ -49,8 +49,9 @@ for i = 1 : numel(names)
     outputLumMap = strcat(outputPrefix, name, outputLumMapSuffix);
     outputHDR = strcat(outputPrefix, name, outputHDRSuffix);
     outputGamma = strcat(outputPrefix, name, outputGammaSuffix);
-        
-    [Lmax, Lmin, dynRg, dynRgLog] = dynamic_range(inputFile, outputLum, outputLumMap);
+    
+    inputImg = hdrimread(inputFile);
+    [Lmax, Lmin, dynRg, dynRgLog] = dynamic_range(inputImg, outputLum, outputLumMap);
     
     records(1,i) = {name};
     records(2,i) = {Lmax};
@@ -58,7 +59,7 @@ for i = 1 : numel(names)
     records(4,i) = {dynRg};
     records(5,i) = {dynRgLog};
     
-    img = hdr_condition(inputFile, outputHDR, outputGamma);
+    img = hdr_condition(inputImg, outputHDR, outputGamma);
 
     for j = 1 : numel(TMOs)
         TMO = TMOs{j};
