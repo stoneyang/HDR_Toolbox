@@ -58,9 +58,11 @@ function [Lmax, Lmin, dynRg, dynRgLog] = dynamic_range(img, saveLuminanceFile, s
     disp('Show the color temperature in logarithmic unit');
     h = figure(3);
     set(h,'Name','Color temperature in logarithmic unit (10-based)');
-    map = imagesc(L);
-    colorbar;
-    saveas(map, saveMap);
+    map = FalseColor(img);
+    imwrite(map, saveMap);
+%     map = imagesc(L);
+%     colorbar;
+%     saveas(map, saveMap);
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%% TODO: export the color temperature map with the same size of the precedent figures
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
