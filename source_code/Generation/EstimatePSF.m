@@ -1,6 +1,6 @@
 function [PSF, C, hot_pixels_pos] = EstimatePSF( img )
 %
-%       [PSF, C] = EstimatePSF( img )
+%       [PSF, C, hot_pixels_pos] = EstimatePSF( img )
 %
 %       This function estimates the point spread function (PSF) of a camera
 %       from a single HDR image.
