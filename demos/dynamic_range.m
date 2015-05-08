@@ -56,8 +56,8 @@ function [Lmax, Lmin, dynRg, dynRgLog] = dynamic_range(img, saveLuminanceFile, s
     disp(strcat({'Dynamic Range in dB: '}, num2str(dynRgLog)));
     
     disp('Show the color temperature in logarithmic unit');
-    h = figure(3);
-    set(h,'Name','Color temperature in logarithmic unit (10-based)');
+%     h = figure(3);
+%     set(h,'Name','Color temperature in logarithmic unit (10-based)');
     map = FalseColor(img);
     imwrite(map, saveMap);
 %     map = imagesc(L);
