@@ -125,7 +125,7 @@ function [imgTMO, execTime] = tone_mapping_switch(img, TMO)
             tic
             imgTMO = RamanTMO(img);
             execTime = toc;
-            imgTMO = GammaTMO(imgTMO, 2.2, 0, 1);
+            %imgTMO = GammaTMO(imgTMO, 2.2, 0, 1);
         case 'Reinhard' % Reinhard2002 & Reinhard2003
             tic
             imgTMO = ReinhardTMO(img);
