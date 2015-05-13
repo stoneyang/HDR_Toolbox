@@ -155,7 +155,7 @@ function [imgTMO, execTime] = tone_mapping_switch(img, TMO)
             tic
             imgTMO = VanHaterenTMO(img);
             execTime = toc;
-            imgTMO = GammaTMO(imgTMO, 2.2, 0, 1);
+            %imgTMO = GammaTMO(imgTMO, 2.2, 0, 1);
         case 'WardGlobal'  % Ward1994
             tic
             imgTMO = WardGlobalTMO(img);
