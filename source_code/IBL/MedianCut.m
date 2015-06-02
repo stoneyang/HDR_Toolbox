@@ -1,7 +1,7 @@
-function [imgOut, lights]=MedianCut(img, nlights, falloff)
+function [imgOut, lights] = MedianCut(img, nlights, falloff)
 %
 %
-%        [imgOut, lights]=MedianCut(img, nlights, falloff)
+%        [imgOut, lights] = MedianCut(img, nlights, falloff)
 %
 %
 %        Input:

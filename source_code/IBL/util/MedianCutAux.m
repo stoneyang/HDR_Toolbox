@@ -1,7 +1,7 @@
-function MedianCutAux(xMin,xMax,yMin,yMax,iter)
+function MedianCutAux(xMin, xMax, yMin, yMax, iter)
 %
 %
-%        MedianCutAux(xMin,xMax,yMin,yMax,iter)
+%        MedianCutAux(xMin, xMax, yMin, yMax, iter)
 %       
 %
 %     Copyright (C) 2011-14  Francesco Banterle
@@ -26,8 +26,8 @@ global limitSize;
 global nLights;
 global lights;
 
-lx = xMax-xMin;
-ly = yMax-yMin;
+lx = xMax - xMin;
+ly = yMax - yMin;
 
 if((lx>limitSize)&&(ly>limitSize)&&(iter<nLights))
     tot = sum(sum(L(yMin:yMax,xMin:xMax)));
@@ -68,7 +68,7 @@ if((lx>limitSize)&&(ly>limitSize)&&(iter<nLights))
     end
 else
     %Generation of the light source
-    lights = [lights, CreateLight(xMin,xMax,yMin,yMax,L,imgWork)];
+    lights = [lights, CreateLight(xMin, xMax, yMin, yMax, L, imgWork)];
 end
 
 end
