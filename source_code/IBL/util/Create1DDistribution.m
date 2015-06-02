@@ -1,7 +1,7 @@
-function distr=Create1DDistribution(values)
+function distr = Create1DDistribution(values)
 %
 %
-%        distr=Create1DDistribution(values)
+%        distr = Create1DDistribution(values)
 %
 %
 %        Input:
@@ -28,7 +28,7 @@ function distr=Create1DDistribution(values)
 
 sumPDF = sum(values);
 
-if(sumPDF<=0)
+if(sumPDF <= 0)
     PDF = zeros(size(values));
     sumPDF = 1.0;
 else
@@ -38,10 +38,10 @@ end
 CDF = cumsum(PDF);
 maxCDF = max(CDF);
 
-if(maxCDF>0)
-    CDF = CDF/maxCDF;
+if(maxCDF > 0)
+    CDF = CDF / maxCDF;
 end
 
-distr=struct('PDF',PDF/sumPDF,'CDF',CDF,'maxCDF',maxCDF);
+distr = struct('PDF', PDF / sumPDF, 'CDF', CDF, 'maxCDF', maxCDF);
 
 end

@@ -1,7 +1,7 @@
-function newLight=CreateLight(xMin,xMax,yMin,yMax,L,img)
+function light = CreateLight(xMin, xMax, yMin, yMax, L, img)
 %
 %
-%        newLight=CreateLight(xMin,xMax,yMin,yMax,L,img)
+%        light = CreateLight(xMin, xMax, yMin, yMax, L, img)
 %
 %
 %        Input:
@@ -10,7 +10,7 @@ function newLight=CreateLight(xMin,xMax,yMin,yMax,L,img)
 %           -img: the full size image
 %
 %        Output:
-%           -newLight: a directional light
+%           -light: a directional light
 %
 %     Copyright (C) 2011  Francesco Banterle
 % 
@@ -28,30 +28,24 @@ function newLight=CreateLight(xMin,xMax,yMin,yMax,L,img)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-%Color
-tot  = (yMax-yMin+1)*(xMax-xMin+1);
-tmpL = L(yMin:yMax,xMin:xMax);
+tot  = (yMax - yMin + 1) * (xMax - xMin + 1);
+tmpL = L(yMin:yMax, xMin:xMax);
 totL = sum(tmpL(:));
 
-if((tot>0)&(totL>0))
-    %Color value
-    col = reshape(img(yMin:yMax,xMin:xMax,:),tot,1,size(img,3));
+if((tot > 0) & (totL > 0))
+    %color value
+    col = reshape(img(yMin:yMax, xMin:xMax,:), tot, 1, size(img, 3));
     value = sum(col,1);
     
-    %Position
-    [X,Y] = meshgrid(xMin:xMax,yMin:yMax);
+    %position
+    [r, c] = size(L);
+    [X, Y] = meshgrid(xMin:xMax, yMin:yMax);   
+    x_light = sum(sum(tmpL .* X)) / (totL * c);    
+    y_light = sum(sum(tmpL .* Y))/(totL * r);  
     
-    x_light = tmpL.*X;
-    x_light = sum(x_light(:))/totL;
-    
-    y_light = tmpL.*Y;
-    y_light = sum(y_light(:))/totL;
-  
-    [r,c] = size(L);
-    
-    newLight = struct('color',value,'x',x_light/c,'y',y_light/r);
+    light = struct('col', value, 'x', x_light, 'y', y_light);
 else
-    newLight = [];   
+    light = [];   
 end
 
 end

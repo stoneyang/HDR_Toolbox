@@ -1,4 +1,4 @@
-function [imgOut,samples]=ImportanceSampling(img, falloff, nSamples)
+function [imgOut, samples] = ImportanceSampling(img, falloff, nSamples)
 %
 %
 %        [imgOut,samples]=ImportanceSampling(img, falloff, nSamples)
@@ -46,14 +46,14 @@ end
 
 %Luminance channel
 L = lum(img);
-[r,c]=size(L);
+c = size(L, 2);
 
 %Creation of 1D distributions for sampling
 cDistr = [];
 values = zeros(c,1);
 for i=1:c
     %1D Distribution
-    tmpDistr = Create1DDistribution(L(:,i));
+    tmpDistr = Create1DDistribution(L(:, i));
     cDistr = [cDistr, tmpDistr];
     values(i) = tmpDistr.maxCDF;
 end

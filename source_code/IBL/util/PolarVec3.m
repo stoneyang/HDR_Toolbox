@@ -1,7 +1,7 @@
-function vec=PolarVec3(theta, phi)
+function vec = PolarVec3(theta, phi)
 %
 %
-%        vec=PolarVec3(theta, phi)
+%        vec = PolarVec3(theta, phi)
 %
 %
 %        Input:
@@ -27,7 +27,7 @@ function vec=PolarVec3(theta, phi)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-sinTheta=sin(theta);
-vec = [cos(phi)*sinTheta, cos(theta), sin(phi)*sinTheta];
+sinTheta = sin(theta);
+vec = [cos(phi) * sinTheta, cos(theta), sin(phi) * sinTheta];
 
 end

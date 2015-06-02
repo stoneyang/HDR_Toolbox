@@ -26,12 +26,12 @@ function img = FallOffEnvMap(img)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-[r,c,col]=size(img);
+[r, c, col] = size(img);
 
-Y = FallOff(r,c);
+Y = FallOff(r, c);
 
 for i=1:col
-    img(:,:,i)=img(:,:,i).*Y;
+    img(:,:,i) = img(:,:,i) .* Y;
 end
 
 end
