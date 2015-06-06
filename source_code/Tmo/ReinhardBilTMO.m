@@ -52,7 +52,7 @@ end
 Lwa = logMean(L);
 
 %Scale luminance using alpha and logarithmic mean
-Lscaled = (pAlpha * L)/Lwa;
+Lscaled = (pAlpha * L) / Lwa;
 
 %Local calculation?
 sMax    = 8;     

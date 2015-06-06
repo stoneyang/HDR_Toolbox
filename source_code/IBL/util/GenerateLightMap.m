@@ -1,7 +1,7 @@
-function img=GenerateLightMap(lights, width, height)
+function img = GenerateLightMap(lights, width, height)
 %
 %
-%        img=GenerateLightMap(lights, width, height)
+%        img = GenerateLightMap(lights, width, height)
 %
 %
 %        Input:
@@ -38,7 +38,7 @@ if(~exist('width', 'var') || ~exist('height', 'var'))
     height = 256;
 end
 
-col = length(lights(1).color);
+col = length(lights(1).col);
 
 img = zeros(height, width, col);
 
