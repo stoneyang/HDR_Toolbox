@@ -1,4 +1,4 @@
-function weight = WeightFunction(img, weight_type, bMeanWeight)
+function weight = WeightFunction(img, weight_type, bMeanWeight, bounds)
 %
 %       weight = WeightFunction(img, weight_type)
 %
@@ -8,9 +8,11 @@ function weight = WeightFunction(img, weight_type, bMeanWeight)
 %           -weight_type:
 %               - 'all': weight is set to 1
 %               - 'hat': hat function 1-(2x-1)^12
+%               - 'box': weight is set to 1 in [bounds(1), bounds(2)]
 %               - 'Deb97': Debevec and Malik 97 weight function
 %               - 'Gauss': Gaussian (mu = 0.5, sigma=0.15) 
 %           -bMeanWeight:
+%           -bounds: range of valid values for Deb97 and box
 %
 %        Output:
 %           -weight: the output weight function for a given LDR image
@@ -35,6 +37,10 @@ if(~exist('bMeanWeight', 'var'))
     bMeanWeight = 0;
 end
 
+if(~exist('bounds', 'var'))
+    bounds = [0, 1];
+end
+
 col = size(img, 3);
 if((size(img, 3) > 1) && bMeanWeight)
     L = mean(img, 3);
@@ -47,6 +53,11 @@ end
 switch weight_type
     case 'all'
         weight = ones(size(img));
+
+    case 'box'
+        weight = ones(size(img));
+        weight(img < bounds(1)) = 0.0;
+        weight(img > bounds(2)) = 0.0;
         
     case 'Gauss'
         mu = 0.5;
@@ -58,8 +69,8 @@ switch weight_type
         weight = 1 - (2 * img - 1).^12;
         
     case 'Deb97'
-        Zmin = 0.01;
-        Zmax = 0.99;
+        Zmin = bounds(1);
+        Zmax = bounds(2);
         tr = (Zmin + Zmax) / 2;
         indx1 = find (img <= tr);
         indx2 = find (img > tr);
