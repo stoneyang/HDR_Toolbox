@@ -9,7 +9,7 @@ function [alignment, stackOut] = WardAlignment(stack, bStackOut, folder_name, fo
 %
 %       Input:
 %           -stack: a stack (4D) containing all images.
-%           -bStackOut: if it is sets to 1 it outputs an aligned stack in
+%           -bStackOut: if it is true (1), it outputs an aligned stack in
 %           stackOut. Otherwise, stackOut is set to empty, [].
 %           -folder_name: the folder name where the stack is stored. This flag
 %           is valid if stack is empty, [].
