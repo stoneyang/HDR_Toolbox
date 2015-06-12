@@ -32,12 +32,17 @@ function imgGlare = ComputeGlareImage( img, PSF, hot_pixels_pos)
 
 m = size(hot_pixels_pos, 2);
 
-hot_pixels_col = zeros(m, 3);
+hot_pixels_col = zeros(m, size(img, 3));
 for i=1:m
     hot_pixels_col(i, :) = img(hot_pixels_pos(2, i), hot_pixels_pos(1, i), :); 
 end
 
-[imgGlare, counter_map] = imSplat(size(img, 1), size(img, 2),PSF, hot_pixels_pos, hot_pixels_col);
+PSF_col = zeros(size(PSF,1), size(PSF, 2), size(img, 3));
+for i=1:size(img, 3)
+    PSF_col(:,:,i) = PSF;
+end
+
+[imgGlare, ~] = imSplat(size(img, 1), size(img, 2), PSF_col, hot_pixels_pos, hot_pixels_col);
 
 %compensation
 while(1)
