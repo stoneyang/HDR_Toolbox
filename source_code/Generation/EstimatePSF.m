@@ -30,9 +30,9 @@ function [PSF, C, hot_pixels_pos] = EstimatePSF( img )
 %
 %
 
-[r, c, col] = size(img);
+[r, c, ~] = size(img);
 
-Icr = imresize(img, [round(r*128/c), 128], 'bilinear');
+Icr = imresize(img, [round(r * 128 / c), 128], 'bilinear');
 
 Igr = lum(Icr); 
 
@@ -45,16 +45,16 @@ end
 thr = 1000.0 * min(min_values);
 
 %getting hot pixels' positions
-[y_h, x_h] = find(Igr>thr);
+[y_h, x_h] = find(Igr > thr);
 
 %getting dark pixels' positions
-[y_d, x_d] = find(Igr<=thr);
+[y_d, x_d] = find(Igr <= thr);
 
 m = length(y_h);
 n = length(y_d);
 A = zeros(n, 4);
 
-tot = sum(Igr(Igr>thr));
+tot = sum(Igr(Igr > thr));
 
 for i=1:length(y_d)
    A(i, 1) = tot;
@@ -77,7 +77,7 @@ b = Igr(Igr<=thr);
 
 C = A\b;
 
-[x, y] = meshgrid(1:33,1:33);
+[x, y] = meshgrid(1:33, 1:33);
 x = x - 16;
 y = y - 16;
 r = max(sqrt(x.^2 + y.^2),3);
