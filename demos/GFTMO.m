@@ -8,6 +8,8 @@ outputSuffix = '.png';
 if (~exist('filename', 'file'))
     % % read HDR image as input -- single input temporarily
     filename = 'trafficLight';
+    % filename = 'trafficLight_flare_removed'
+    % filename = 'cathedral_sub';
     % filename = 'camp_daylight_10am_sanfran_barn_006_d';
     % filename = 'E:\yangfan\DATA\HDR_IBL\HDR_110_Tunnel\HDR_110_Tunnel_Ref_ROI_1833_811_1610_972';
     % filename = double(imread('E:\yangfan\DATA\WDR_raw_tif\INPUT\xueyuanroad_1920x1112_GR.tif'));
@@ -112,8 +114,8 @@ figure; imshow(gammaImg);
 figure; imshow(I_est);
 
 % write the results
-gammaFilename = strcat(outputDir, filename, '_median', '_r', num2str(medianRadius), '_GFDrg', '_r', num2str(GF_r), '_eps', num2str(GF_eps), '_detail', num2str(GF_detail), '_b', num2str(dragoB), '_drago_Ld_max', num2str(dragoLdMax), outputSuffix);
-estFilename = strcat(outputDir, filename, '_median', '_r', num2str(medianRadius), '_GFDrg', '_r', num2str(GF_r), '_eps', num2str(GF_eps), '_detail', num2str(GF_detail), '_b', num2str(dragoB), '_drago_Ld_max', num2str(dragoLdMax), '_BM3D', '_sigma', num2str(sigma), outputSuffix);
+gammaFilename = strcat(outputDir, filename, '_median', '_r', num2str(medianRadius), '_', tmo, '_r', num2str(GF_r), '_eps', num2str(GF_eps), '_detail', num2str(GF_detail), '_b', num2str(dragoB), '_dragoLdMax', num2str(dragoLdMax), '_dragoGamma', num2str(dragoGamma), outputSuffix);
+estFilename = strcat(outputDir, filename, '_median', '_r', num2str(medianRadius), '_', tmo, '_r', num2str(GF_r), '_eps', num2str(GF_eps), '_detail', num2str(GF_detail), '_b', num2str(dragoB), '_dragoLdMax', num2str(dragoLdMax), '_dragoGamma', num2str(dragoGamma), '_BM3D', '_sigma', num2str(sigma), outputSuffix);
 imwrite(gammaImg, gammaFilename);
 imwrite(I_est, estFilename);
 
