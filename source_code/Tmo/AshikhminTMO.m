@@ -1,4 +1,4 @@
-function imgOut=AshikhminTMO(img, LdMax, pLocal)
+function [imgOut, Ldetail]=AshikhminTMO(img, LdMax, pLocal)
 %
 %
 %      imgOut=AshikhminTMO(img, LdMax, pLocal)
