@@ -39,7 +39,7 @@ end
 imgOut = zeros(r, c, col);
 counter_map = zeros(r, c);
 
-[rS, cS, colS] = size(imSprite);
+[rS, cS, ~] = size(imSprite);
 imSprite_counting = ones(rS, cS);
 
 n = size(splat_pos, 2);

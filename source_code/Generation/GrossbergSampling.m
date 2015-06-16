@@ -45,9 +45,9 @@ for i=1:stackSize
         h_cdf = cumsum(stack(:,j,i));
         stack(:,j,i) = h_cdf / max(h_cdf(:));
     end
-%    plot(stack(:,1,i));
+    %plot(stack(:,1,i));
 end
-%figure(1);
+
 stackOut = zeros(nSamples, stackSize, col);
 
 u = 0:(1.0 / (nSamples - 1)):1;

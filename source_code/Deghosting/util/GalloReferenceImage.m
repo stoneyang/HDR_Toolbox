@@ -49,6 +49,9 @@ toe = 248 / 255;
 tue =   7 / 255;
 
 target_exposure = -1;
+
+r = size(stack, 1);
+c = size(stack, 2);
 value = r * c;
 
 for i=1:n

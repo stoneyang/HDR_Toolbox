@@ -1,7 +1,7 @@
-function Y=FallOff(r,c)
+function Y = FallOff(r, c)
 %
 %
-%        Y=FallOff(r,c)
+%        Y = FallOff(r, c)
 %
 %
 %        Input:
@@ -26,8 +26,8 @@ function Y=FallOff(r,c)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-[X,Y] = meshgrid(1:c,1:r);
-Y = (0.5-Y/r)*pi;
+[~, Y] = meshgrid(1:c, 1:r);
+Y = (0.5 - Y / r) * pi;
 Y = cos(Y);
 
 end

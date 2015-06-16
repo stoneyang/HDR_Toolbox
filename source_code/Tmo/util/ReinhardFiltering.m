@@ -55,14 +55,14 @@ sizeWindow = 1;
 
 for i=1:sMax        
     s = round(sizeWindow);
-    V1 = ReinhardGaussianFilter(L,s,alpha1);    
-    V2 = ReinhardGaussianFilter(L,s,alpha2);       
+    V1 = ReinhardGaussianFilter(L, s, alpha1);    
+    V2 = ReinhardGaussianFilter(L, s, alpha2);       
      
     %normalized difference of Gaussian levels
-    V = (V1-V2)./(constant/(s^2)+V1);
+    V = (V1 - V2) ./ (constant / (s^2) + V1);
     V_vec(:,:,i) = RemoveSpecials(abs(V)); 
     V1_vec(:,:,i) = V1;
-    sizeWindow = sizeWindow*1.6;
+    sizeWindow = sizeWindow * 1.6;
 end  
     
 %threshold is a constant for solving the band-limited 
@@ -75,13 +75,13 @@ prevMask = zeros(r,c);
 for i=1:sMax
     V  = V_vec(:,:,i);
    
-    indx = find(V>pEpsilon);
+    indx = find(V > pEpsilon);
     if(~isempty(indx))
         V1 = V1_vec(:,:,i);
-        mask(V>pEpsilon) = mask(V>pEpsilon)+1;
+        mask(V>pEpsilon) = mask(V > pEpsilon) + 1;
        
         prevMask = mask - prevMask; 
-        L_adapt(prevMask==1) = V1(prevMask==1);
+        L_adapt(prevMask == 1) = V1(prevMask == 1);
     end
 end
 

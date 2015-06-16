@@ -1,7 +1,7 @@
-function img=GenerateLightMap(lights, width, height)
+function img = GenerateLightMap(lights, width, height)
 %
 %
-%        img=GenerateLightMap(lights, width, height)
+%        img = GenerateLightMap(lights, width, height)
 %
 %
 %        Input:
@@ -33,12 +33,12 @@ if(isempty(lights))
     error('lights can not be empty');
 end
 
-if(~exist('width','var')||~exist('height','var'))
+if(~exist('width', 'var') || ~exist('height', 'var'))
     width  = 512;
     height = 256;
 end
 
-col = length(lights(1).color);
+col = length(lights(1).col);
 
 img = zeros(height, width, col);
 
@@ -48,7 +48,7 @@ for i=1:length(lights)
     
     if(isnan(XX)==0)
         for j=1:col
-            img(YY, XX, j) = lights(i).color(j);
+            img(YY, XX, j) = lights(i).col(j);
         end
     end
 end

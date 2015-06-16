@@ -1,4 +1,4 @@
-function fstops = ExposureHistogramCovering(img, nBin)
+function fstops = ExposureHistogramCovering(img, nBin, eh_overlap)
 %
 %
 %        fstops = ExposureHistogramCovering(img, nBin)
@@ -26,19 +26,22 @@ function fstops = ExposureHistogramCovering(img, nBin)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-if(~exist('nBin','var'))
+if(~exist('nBin', 'var'))
     nBin = 1024;
 end
 
-[histo, bound, haverage] = HistogramHDR(img, nBin, 'log2', [], 0, 0);
+if(~exist('eh_overlap', 'var'))
+    eh_overlap = 1.0;
+end
 
-overlap = 1.0;
+[histo, bound, ~] = HistogramHDR(img, nBin, 'log2', [], 0, 0);
+
 dMM = (bound(2) - bound(1)) / nBin;
-removingBins = round((4.0 - overlap) / dMM);
+removingBins = round((4.0 - eh_overlap) / dMM);
 
 fstops = [];
 while(sum(histo) > 0)
-    [val,ind] = max(histo);
+    [~, ind] = max(histo);
     indMin = max([(ind - removingBins), 1]);
     indMax = min([(ind + removingBins), nBin]);
     histo(indMin:indMax) = 0;

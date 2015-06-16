@@ -1,7 +1,7 @@
-function [val,pdf]=Sampling1DDistribution(distr,u)
+function [val, pdf] = Sampling1DDistribution(distr, u)
 %
 %
-%        distr=Create1DDistribution(values)
+%        distr = Sampling1DDistribution(distr, u)
 %
 %
 %        Input:
@@ -28,7 +28,7 @@ function [val,pdf]=Sampling1DDistribution(distr,u)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-[p,val] = min(abs(distr.CDF-u));
+[p, val] = min(abs(distr.CDF - u));
 pdf = distr.PDF(val);
     
 end
