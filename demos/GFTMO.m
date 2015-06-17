@@ -1,4 +1,4 @@
-function [tmImg, I_est] = GFTMO(filename, medianRadius, GF_r, GF_eps, GF_detail, tmo, sigma, profile)
+function [tmImg, I_est] = GFTMO(tmo, filename, medianRadius, GF_r, GF_eps, GF_detail, sigma, profile)
 
 inputDir = 'E:\yangfan\DATA\HDR\INPUT\';
 outputDir = 'E:\yangfan\DATA\HDR\OUTPUT\AD\';
@@ -56,7 +56,7 @@ enhancedImg = (I - q) * GF_detail + q;
 % tone mapping using various tone mapping algorithms with corresponding
 % gamma correction afterwards
 if (~exist('dragoB', 'var'))
-    dragoB = 1;
+    dragoB = 1.2;
 end
 
 if (~exist('dragoLdMax', 'var'))
@@ -64,7 +64,7 @@ if (~exist('dragoLdMax', 'var'))
 end
 
 if (~exist('dragoGamma', 'var'))
-    dragoGamma = 2.2;
+    dragoGamma = 2.4;
 end
 
 if (~exist('dragoSlope', 'var'))
@@ -114,8 +114,8 @@ figure; imshow(gammaImg);
 figure; imshow(I_est);
 
 % write the results
-gammaFilename = strcat(outputDir, filename, '_median', '_r', num2str(medianRadius), '_', tmo, '_r', num2str(GF_r), '_eps', num2str(GF_eps), '_detail', num2str(GF_detail), '_b', num2str(dragoB), '_dragoLdMax', num2str(dragoLdMax), '_dragoGamma', num2str(dragoGamma), outputSuffix);
-estFilename = strcat(outputDir, filename, '_median', '_r', num2str(medianRadius), '_', tmo, '_r', num2str(GF_r), '_eps', num2str(GF_eps), '_detail', num2str(GF_detail), '_b', num2str(dragoB), '_dragoLdMax', num2str(dragoLdMax), '_dragoGamma', num2str(dragoGamma), '_BM3D', '_sigma', num2str(sigma), outputSuffix);
+gammaFilename = strcat(outputDir, filename, '_median', '_r', num2str(medianRadius), '_GF_r', num2str(GF_r), '_eps', num2str(GF_eps), '_detail', num2str(GF_detail), tmo, 'drago_b', num2str(dragoB), '_LdMax', num2str(dragoLdMax), '_Gamma', num2str(dragoGamma), outputSuffix);
+estFilename = strcat(outputDir, filename, '_median', '_r', num2str(medianRadius), '_GF_r', num2str(GF_r), '_eps', num2str(GF_eps), '_detail', num2str(GF_detail), tmo, 'drago_b', num2str(dragoB), '_LdMax', num2str(dragoLdMax), '_Gamma', num2str(dragoGamma), '_BM3D', '_sigma', num2str(sigma), outputSuffix);
 imwrite(gammaImg, gammaFilename);
 imwrite(I_est, estFilename);
 
