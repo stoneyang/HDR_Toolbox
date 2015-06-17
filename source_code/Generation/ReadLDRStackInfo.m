@@ -64,6 +64,18 @@ for i=1:n
             disp(err);
         end
     end
+
+    if(~isfield(img_info.DigitalCamera, 'ISOSpeedRatings'))
+        img_info.DigitalCamera.ISOSpeedRatings = 1.0;
+    end    
+    
+    if(~isfield(img_info.DigitalCamera, 'ExposureTime'))
+        img_info.DigitalCamera.ExposureTime = 1.0;
+    end
+    
+    if(~isfield(img_info.DigitalCamera, 'FNumber'))
+        img_info.DigitalCamera.FNumber = 1.0;
+    end
     
     if(~isempty(img_info)) 
         if(isfield(img_info, 'DigitalCamera'))
