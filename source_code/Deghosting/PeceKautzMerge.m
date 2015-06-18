@@ -86,7 +86,7 @@ end
 
 [moveMask, num] = PeceKautzMoveMask(imageStack, iterations, ke_size, kd_size);
 
-weight_move = zeros(r, c, n);
+weight_move = weight;
 for i=0:num
     indx = find(moveMask == i);
     
@@ -99,7 +99,13 @@ for i=0:num
 
     W = zeros(r, c);
     W(indx) = 1;
-    weight_move(:,:,j) = weight_move(:,:,j) + W;
+    weight_move(:,:,j) = weight_move(:,:,j).* (1 - W) + W;
+    
+    for k=1:n
+        if(j ~= k)
+            weight_move(:,:,k) = weight_move(:,:,k) .* (1 - W);
+        end
+    end
 end
 
 %Normalization of weights

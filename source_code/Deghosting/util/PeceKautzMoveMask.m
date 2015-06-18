@@ -60,7 +60,7 @@ end
 moveMask(moveMask == n) = 0;
 
 %convert moveMask into a binary mask
-moveMask(moveMask > 0) = 1;    
+moveMask(moveMask > 0) = 1;
 
 kernel_d = strel('disk', kd_size);
 kernel_e = strel('disk', ke_size);
