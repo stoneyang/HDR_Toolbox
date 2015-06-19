@@ -32,17 +32,17 @@ function [PSF, C, hot_pixels_pos] = EstimatePSF( img )
 
 [r, c, ~] = size(img);
 
-Icr = imresize(img, [round(r * 128 / c), 128], 'bilinear');
+Icr = imresize(img, [round(r * 256 / c), 256], 'bilinear');
 
 Igr = lum(Icr); 
 
-min_values = Igr(Igr>0.0);
+min_values = Igr(Igr > 0.0);
 
 if(isempty(min_values))
     error('PSF cannot be estimated');
 end
 
-thr = 1000.0 * min(min_values);
+thr = min([1000.0 * min(min_values), MaxQuart(Igr, 0.1)]);
 
 %getting hot pixels' positions
 [y_h, x_h] = find(Igr > thr);
@@ -63,24 +63,24 @@ for i=1:length(y_d)
        r2 = (x_h(j) - x_d(i)).^2 + (y_h(j) - y_d(i)).^2;
        r  = sqrt(r2);
        
-       if(r>=3) 
+       if(r >= 3) 
            P_j = Igr(y_h(j), x_h(j));
 
-           A(i, 2) = A(i, 2) + P_j/r;
-           A(i, 3) = A(i, 3) + P_j/r2;
-           A(i, 4) = A(i, 4) + P_j/(r2*r);
+           A(i, 2) = A(i, 2) + P_j / r;
+           A(i, 3) = A(i, 3) + P_j / r2;
+           A(i, 4) = A(i, 4) + P_j / (r2 * r);
        end
    end
 end
 
-b = Igr(Igr<=thr);
+b = Igr(Igr <= thr);
 
 C = A\b;
 
 [x, y] = meshgrid(1:33, 1:33);
 x = x - 16;
 y = y - 16;
-r = max(sqrt(x.^2 + y.^2),3);
+r = max(sqrt(x.^2 + y.^2), 2);
 PSF = C(1) + C(2)./r + C(3)./(r.^2) + C(4)./(r.^3);
 
 hot_pixels_pos = [x_h'; y_h'];
