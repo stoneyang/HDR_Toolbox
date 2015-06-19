@@ -1,7 +1,7 @@
-function ret=MaxQuart(matrix,percentile)
+function ret = MaxQuart(matrix, percentile)
 %
 %
-%       ret=MaxQuart(matrix,percentile)
+%       ret = MaxQuart(matrix, percentile)
 %
 %
 %       Input:
@@ -11,7 +11,7 @@ function ret=MaxQuart(matrix,percentile)
 %       Output:
 %           -ret: the percentile of the input matrix
 %
-%     Copyright (C) 2011  Francesco Banterle
+%     Copyright (C) 2011-2015  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -27,10 +27,10 @@ function ret=MaxQuart(matrix,percentile)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-[n,m]=size(matrix);
+[n, m] = size(matrix);
 
-matrix=sort(reshape(matrix,n*m,1));
+matrix = sort(reshape(matrix, n * m, 1));
 
-ret=matrix(round(n*m*percentile));
+ret = matrix(max([round(n * m * percentile), 1]));
 
 end
