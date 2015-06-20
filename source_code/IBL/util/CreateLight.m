@@ -32,17 +32,16 @@ tot  = (yMax - yMin + 1) * (xMax - xMin + 1);
 tmpL = L(yMin:yMax, xMin:xMax);
 totL = sum(tmpL(:));
 
-if((tot > 0) & (totL > 0))
+if((tot > 0) && (totL > 0))
     %color value
     col = reshape(img(yMin:yMax, xMin:xMax,:), tot, 1, size(img, 3));
-    value = sum(col,1);
-    
+    value = sum(col,1);    
     %position
     [r, c] = size(L);
     [X, Y] = meshgrid(xMin:xMax, yMin:yMax);   
     x_light = sum(sum(tmpL .* X)) / (totL * c);    
     y_light = sum(sum(tmpL .* Y))/(totL * r);  
-    
+    %struct
     light = struct('col', value, 'x', x_light, 'y', y_light);
 else
     light = [];   
