@@ -31,7 +31,7 @@ function [imgOut, lights] = UniformSampling(img, nlights, falloff)
 %
 
 if(~exist('nlights', 'var'))
-    nlights = 1024;
+    nlights = -1;
 end
 
 if(~exist('falloff', 'var'))
@@ -45,7 +45,11 @@ end
 
 %Global variables initialization
 L = lum(img);
-[r,c] = size(L);
+[r, c] = size(L);
+if(nlights < 0)
+    nlights = 2.^(round(log2(min([r, c])) + 2));
+end
+
 n = round(sqrt(nlights));
 
 c1 = ceil(c / n);

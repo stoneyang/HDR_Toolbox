@@ -14,7 +14,7 @@ function [imgOut, lights] = MedianCut(img, nlights, falloff)
 %           -imgOut: an image with sampled points
 %           -lights: a list of directional lights
 %
-%     Copyright (C) 2011-13  Francesco Banterle
+%     Copyright (C) 2011-15  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -30,21 +30,23 @@ function [imgOut, lights] = MedianCut(img, nlights, falloff)
 %     along with this program. If not, see <http://www.gnu.org/licenses/>.
 %
 
-global L;
-global imgWork;
-global limitSize;
-global nLights;
-global lights;
-
-L = lum(img);
-[r,c] = size(L);
-
 if(~exist('nlights', 'var'))
-    nlights = 2.^(round(log2(min([r, c])) + 2));
+    nlights = -1;
 end
 
 if(~exist('falloff', 'var'))
     falloff = 0;
+end
+
+global L;
+global imgWork;
+global lights;
+
+L = lum(img);
+[r, c] = size(L);
+
+if(nlights < 0)
+    nlights = 2.^(round(log2(min([r, c])) + 2));
 end
 
 %falloff compensation
@@ -54,14 +56,9 @@ end
 
 %Global variables initialization
 imgWork = img;
-nLights = round(log2(nlights));
-
-limitSize = 2;
 
 lights = [];
-
-MedianCutAux(1,c,1,r,0);
-
+MedianCutAux(1, c, 1, r, round(log2(nlights)));
 imgOut = GenerateLightMap(lights, c, r);
 
 end

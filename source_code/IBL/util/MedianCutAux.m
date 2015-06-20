@@ -22,7 +22,6 @@ function MedianCutAux(xMin, xMax, yMin, yMax, iter)
 
 global L;
 global imgWork;
-global nLights;
 global lights;
 
 lx = xMax - xMin;
@@ -42,7 +41,7 @@ if((lx > 2) && (ly > 2) && (iter > 0))
             end
         end
 
-        if(pivot==-1)
+        if(pivot == -1)
             pivot = xMax-1;
         end
         
