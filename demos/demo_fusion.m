@@ -10,6 +10,7 @@
 %       Copyright June 2012-13 (c)
 %
 %
+clear all;
 
 disp('1) Load the image Bottles_Small.pfm using hdrimread');
 img = hdrimread('Bottles_Small.hdr');

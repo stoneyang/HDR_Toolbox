@@ -10,6 +10,7 @@
 %       Copyright 2013-15 (c)
 %
 %
+clear all;
 
 name_folder = 'stack_alignment';
 format = 'jpg';

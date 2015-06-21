@@ -11,22 +11,25 @@
 %
 %
 
+clear all;
+
 disp('1) Read a stack of LDR images');
 
 name_folder = 'stack_alignment';
-format = 'jpg';
+format = 'JPG';
 
-stack = ReadLDRStack(name_folder, format);
+stack = double(ReadLDRStack(name_folder, format));
 
 disp('2) Align the stack');
 [alignment, stackOut] = WardAlignment(stack / 255.0, 1, '', '');
-clear('stack');
 
 disp('3) Read exposure values from the exif');
 stack_exposure = ReadLDRStackInfo(name_folder, format);
 
+[lin_fun, ~] = ComputeCRF(stack / 255.0, stack_exposure);    
+
 disp('4) Build the radiance map using the stack and stack_exposure');
-imgHDR = BuildHDR(stackOut, stack_exposure, 'LUT', [], 'Deb97', 'linear', 0);
+[imgHDR, lin_fun] = BuildHDR(stackOut, stack_exposure, 'LUT', lin_fun, 'Deb97', 'linear', 0);
 
 disp('5) Save the radiance map in the .hdr format');
 hdrimwrite(imgHDR, 'example_build_alignment.hdr');

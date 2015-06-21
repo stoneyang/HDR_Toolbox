@@ -12,6 +12,9 @@
 %       Copyright June 2012 (c)
 %
 %
+% 
+
+clear all;
 
 %Raman's method
 disp('1) Applying Fusion Operator by Raman and Chaudhuri to images in stack folder');
