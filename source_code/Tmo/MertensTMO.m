@@ -6,7 +6,7 @@ function imgOut = MertensTMO( img, folder_name, format, imageStack, wE, wS, wC)
 %
 %        Input:
 %           -img: input HDR image
-%           -folder_name: the folder_name where to fetch the exposure stack in
+%           -folder_name: the folder where to fetch the exposure stack in
 %           the case img=[]
 %           -format: the format of LDR images ('bmp', 'jpg', etc) in case
 %                    img=[] and the tone mapped images is built from a sequence of

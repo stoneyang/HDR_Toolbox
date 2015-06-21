@@ -1,16 +1,16 @@
-function imgOut = PeceKautzMerge(imageStack, directory, format, iterations, ke_size, kd_size)
+function imgOut = PeceKautzMerge(imageStack, folder_name, format, iterations, ke_size, kd_size)
 %
 %
-%        imgOut = PeceKautzMerge(imageStack, directory, format, iterations, kernelSize)
+%        imgOut = PeceKautzMerge(imageStack, folder_name, format, iterations, kernelSize)
 %
 %
 %        Input:
 %           -imageStack: an exposure stack of LDR images
-%           -directory: the directory where to fetch the exposure imageStack in
+%           -folder_name: the folder where to fetch the exposure imageStack in
 %           the case imageStack=[]
 %           -format: the format of LDR images ('bmp', 'jpg', etc) in case
 %                    imageStack=[] and the tone mapped images is built from a sequence of
-%                    images in the current directory
+%                    images in the current folder_name
 %           -iterations: number of iterations for improving the movements'
 %           mask
 %           -ke_size: size of the erosion kernel
@@ -50,7 +50,7 @@ if(~exist('imageStack', 'var'))
 end
 
 if(isempty(imageStack))
-    imageStack = ReadLDRStack(directory, format, 1);
+    imageStack = ReadLDRStack(folder_name, format, 1);
 end
        
 if(isa(imageStack, 'uint8'))
