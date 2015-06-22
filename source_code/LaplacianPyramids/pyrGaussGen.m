@@ -24,8 +24,8 @@ function p=pyrGaussGen(img)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-[r,c,col] = size(img);
-levels = floor(log(min(r,c)) / log(2))-1;
+[r, c, ~] = size(img);
+levels = floor(log(min(r,c)) / log(2)) - 1;
 list = [];
 for i=1:levels
     %Detail layer
@@ -37,6 +37,6 @@ for i=1:levels
 end
 
 %Base layer
-p=struct('list',list,'base',img);
+p=struct('list', list, 'base', img);
 
 end

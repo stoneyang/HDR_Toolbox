@@ -27,13 +27,13 @@ function imgOut = pyrGaussGenAux(img)
 
 %5x5 Gaussian Kernel
 kernel = [1,4,6,4,1];
-mtx = kernel'*kernel;
-mtx = mtx/sum(mtx(:));
+mtx = kernel' * kernel;
+mtx = mtx / sum(mtx(:));
 
 %Convolution
-imgB = imfilter(img,mtx,'replicate');
+imgB = imfilter(img, mtx, 'replicate');
 
 %Downsampling
-imgOut = imresize(imgB, 0.5,'bilinear');
+imgOut = imresize(imgB, 0.5, 'bilinear');
 
 end

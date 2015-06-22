@@ -1,7 +1,7 @@
-function p=pyrLapGen(img)
+function p = pyrLapGen(img)
 %
 %
-%        p=pyrLapGen(img)
+%        p = pyrLapGen(img)
 %
 %
 %        Input:
@@ -24,8 +24,8 @@ function p=pyrLapGen(img)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-[r,c,col] = size(img);
-levels = floor(log(min(r,c)) / log(2))-1;
+[r, c, ~] = size(img);
+levels = floor(log(min(r,c)) / log(2)) - 1;
 list = [];
 for i=1:levels
     %Calculating detail and base layers
@@ -33,11 +33,11 @@ for i=1:levels
     img = tL0;
     
     %Detail layer
-    ts   = struct('detail',tB0);
-    list = [list,ts];  
+    ts   = struct('detail', tB0);
+    list = [list, ts];  
 end
 
 %Base layer
-p=struct('list',list,'base',tL0);
+p=struct('list', list, 'base', tL0);
 
 end

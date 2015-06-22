@@ -1,7 +1,7 @@
-function lstOut=pyrLst1OP(lstIn,fun)
+function lstOut = pyrLst1OP(lstIn, fun)
 %
 %
-%        lstOut=pyrLst1OP(lstIn,fun)
+%        lstOut = pyrLst1OP(lstIn, fun)
 %
 %
 %        Input:
@@ -30,8 +30,8 @@ n = length(lstIn);
 lstOut=[];
 
 for i=1:n
-    p=fun(lstIn(i));
-    lstOut=[lstOut,p];
+    p = fun(lstIn(i));
+    lstOut = [lstOut, p];
 end
 
 end

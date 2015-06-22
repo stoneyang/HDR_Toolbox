@@ -25,9 +25,9 @@ function lstOut=pyrImg3(img,fun)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-[r,c,col] = size(img);
+col = size(img, 3);
 
-lstOut=[];
+lstOut = [];
 
 for i=1:col
     lstOut = [lstOut, fun(img(:,:,i))];

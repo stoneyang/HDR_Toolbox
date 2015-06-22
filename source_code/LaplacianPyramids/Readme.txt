@@ -2,7 +2,7 @@ Title: The Laplacian Pyramid Toolbox for Matlab
 
 Author: Francesco Banterle
 
-Copyright: February 2010-2013 (C)
+Copyright: February 2010-2015 (C)
 
 Description: This toolbox allows the user to
 represent images using Laplacian/Gaussian pyramids.
@@ -21,4 +21,3 @@ to a three color channels image
 - pyrMul.m: multiplies two pyramids
 - pyrAdd.m: addes two pyramids
 - pyrVal.m: evaluates a pyramid
-

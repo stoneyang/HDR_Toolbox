@@ -1,7 +1,7 @@
-function lstOut=pyrLstS2OP(lstIn,pyrImg,fun)
+function lstOut = pyrLstS2OP(lstIn, pyrImg, fun)
 %
 %
-%        lst=pyrLstS2OP(img)
+%        lstOut = pyrLstS2OP(lstIn, pyrImg, fun)
 %
 %
 %        Input:
@@ -28,11 +28,11 @@ function lstOut=pyrLstS2OP(lstIn,pyrImg,fun)
 
 n = length(lstIn);
 
-lstOut=[];
+lstOut = [];
 
 for i=1:n
-    p = fun(lstIn(i),pyrImg);
-    lstOut = [lstOut,p];
+    p = fun(lstIn(i), pyrImg);
+    lstOut = [lstOut, p];
 end
 
 end
