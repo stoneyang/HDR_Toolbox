@@ -30,7 +30,7 @@ col = size(img, 3);
 lstOut = [];
 
 for i=1:col
-    lstOut = [lstOut, fun(img(:,:,i))];
+    lstOut = [lstOut, fun(img(:,:,i))];    
 end
 
 end
