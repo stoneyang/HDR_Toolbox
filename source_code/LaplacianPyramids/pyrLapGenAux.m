@@ -26,7 +26,7 @@ function [L0, B0] = pyrLapGenAux(img)
 %
 
 %5x5 Gaussian kernel
-kernel=[1,4,6,4,1];
+kernel = [1,4,6,4,1];
 mtx = kernel' * kernel;
 mtx = mtx / sum(sum(mtx));
 

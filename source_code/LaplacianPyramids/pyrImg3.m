@@ -1,7 +1,7 @@
-function lstOut=pyrImg3(img,fun)
+function lstOut = pyrImg3(img, fun)
 %
 %
-%        lstOut=pyrImg3(img)
+%        lstOut = pyrImg3(img, fun)
 %
 %
 %        Input:

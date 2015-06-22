@@ -1,7 +1,7 @@
-function p=pyrGaussGen(img)
+function p = pyrGaussGen(img)
 %
 %
-%        p=pyrGaussGen(img)
+%        p = pyrGaussGen(img)
 %
 %
 %        Input:
@@ -37,6 +37,6 @@ for i=1:levels
 end
 
 %Base layer
-p=struct('list', list, 'base', img);
+p = struct('list', list, 'base', img);
 
 end

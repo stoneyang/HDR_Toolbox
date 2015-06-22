@@ -29,7 +29,7 @@ levels = floor(log(min(r,c)) / log(2)) - 1;
 list = [];
 for i=1:levels
     %Calculating detail and base layers
-    [tL0,tB0] = pyrLapGenAux(img);
+    [tL0, tB0] = pyrLapGenAux(img);
     img = tL0;
     
     %Detail layer
@@ -38,6 +38,6 @@ for i=1:levels
 end
 
 %Base layer
-p=struct('list', list, 'base', tL0);
+p = struct('list', list, 'base', tL0);
 
 end
