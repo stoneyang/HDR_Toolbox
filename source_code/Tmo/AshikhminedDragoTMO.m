@@ -67,6 +67,6 @@ Ld = Ld .* Ldetail;
 %Changing luminance
 imgOut = ChangeLuminance(img, lum(img), Ld);
 
-disp('Note that tone mapped images with DragoTMO should be gamma corrected with function GammaDrago.m');
+disp('Note that tone mapped images with AshikhminedDragoTMO should be gamma corrected with function GammaDrago.m');
 
 end
