@@ -67,7 +67,14 @@ L_adapt(ind) = Lfiltered(r*c*(Ashikhmin_sMax-1)+ind);
     
 %Remove the detail layer
 Ldetail = RemoveSpecials(L./L_adapt);
+% Ldetail = SigmoidFiltering(Ldetail, 1, 0, 0.25, 0.75);
 L = L_adapt;
 
+end
+
+function Lout = SigmoidFiltering(L, outputMax, outputMin, alpha, beta)
+k = outputMax - outputMin;
+E = 1 + exp(-(L - beta)./alpha);
+Lout = k .* (1 ./ E) + outputMin;
 end
     
