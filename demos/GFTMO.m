@@ -1,19 +1,23 @@
-function [tmImg, I_est] = GFTMO(tmo, filename, medianRadius, GF_r, GF_eps, GF_detail, sigma, profile)
+function [tmImg, I_est] = GFTMO(tmo, sigma, profile, patch_size, filename, medianRadius, GF_r, GF_eps, GF_detail)
+% reading input
+disp('Reading input');
+inputDir = 'E:\yangfan\DATA\HDR\INPUT\';
+outputDir = 'E:\yangfan\DATA\HDR\OUTPUT\AD\';
+inputSuffix = '.hdr';
 
-% inputDir = 'E:\yangfan\DATA\HDR\INPUT\';
-% outputDir = 'E:\yangfan\DATA\HDR\OUTPUT\AD\';
+% inputDir = 'E:\yangfan\DATA\HDR_IBL\';
+% outputDir = inputDir;
 % inputSuffix = '.hdr';
 
-inputDir = 'E:\yangfan\DATA\WDR_raw_tif\INPUT\calibrated\';
-outputDir = 'E:\yangfan\DATA\WDR_raw_tif\OUTPUT\';
-inputSuffix = '.tif';
+% inputDir = 'E:\yangfan\DATA\WDR_raw_tif\INPUT\calibrated\';
+% outputDir = 'E:\yangfan\DATA\WDR_raw_tif\OUTPUT\';
+% inputSuffix = '.tif';
 
 outputSuffix = '.png';
 
-
 if (~exist('filename', 'file'))
     % % read HDR image as input -- single input temporarily
-    % filename = 'trafficLight';
+    filename = 'trafficLight';
     % filename = 'trafficLight_flare_removed'
     % filename = 'cathedral_sub';
     % filename = 'camp_daylight_10am_sanfran_barn_006_d';
@@ -25,7 +29,10 @@ if (~exist('filename', 'file'))
     % filename = 'AtriumMorning';
     % filename = 'AtriumNight';
     
-    % filename = 'E:\yangfan\DATA\HDR_IBL\HDR_110_Tunnel\HDR_110_Tunnel_Ref_ROI_1833_811_1610_972';
+    % filename = 'HDR_110_Tunnel\HDR_110_Tunnel_Ref_ROI_1833_811_1610_972';
+    % filename = 'HDR_Free_City_Night_Lights\HDR_Free_City_Night_Lights_Ref_1010_370_2060_1530';
+    % filename = 'Church_HarvestLobby\Church_HarvestLobby_0_0_1500_1500';
+    % filename = 'Church_HarvestLobby\Church_HarvestLobby_1500_0_1500_1500';
     
     % filename = '1_1920x1112_GB_R95_G9_B97';
     % filename = '2_1920x1112_GB_R95_G9_B97';
@@ -42,7 +49,7 @@ if (~exist('filename', 'file'))
     % filename = 'linear_raw_1936x1112_GR_2015-04-14-16-00-12-715_R09_G06_B1';
     % filename = 'linear_raw_1936x1112_GR_2015-04-14-18-43-13-375_R065_G05_B1';
     % filename = 'shiningparking_1920x1112_GR_R95_G9_B97';
-    filename = 'xueyuanroad_1920x1112_GR_R95_G9_B97';
+    % filename = 'xueyuanroad_1920x1112_GR_R95_G9_B97';
 end
 
 if strcmp(inputSuffix, '.tif')
@@ -53,6 +60,7 @@ end
 I = hdrImg / 255;
 
 % smoothing the salt and pepper in each channels
+disp('Smoothing the salt and pepper in each channels');
 if (~exist('median', 'var'))
     medianRadius = 5;
 end
@@ -62,6 +70,7 @@ medianImg(:,:,2) = medfilt2(I(:,:,2), medianPatch);
 medianImg(:,:,3) = medfilt2(I(:,:,3), medianPatch);
 
 % smoothing with edge preserving
+disp('Smoothing with edge preserving');
 if (~exist('GF_r', 'var'))
     GF_r = 1;
 end
@@ -83,6 +92,7 @@ enhancedImg = (I - q) * GF_detail + q;
 
 % tone mapping using various tone mapping algorithms with corresponding
 % gamma correction afterwards
+disp('Tone mapping');
 if (~exist('dragoB', 'var'))
     dragoB = 1.2;
 end
@@ -124,7 +134,10 @@ switch tmo
         disp('Unexpected tmo');
 end
 
+figure; imshow(gammaImg); title('Tone mapping');
+
 % noise removal using BM3D
+disp('Noise removal');
 if (~exist('sigma', 'var'))
     sigma = 5;
 end
@@ -139,15 +152,49 @@ end
 
 I_est = cat(3, I_est_r, I_est_g, I_est_b);
 
-% displaying the results
-figure; imshow(gammaImg);
-figure; imshow(I_est);
+figure; imshow(I_est); title('Noise removal');
+
+% haze removal
+disp('Haze removal');
+if (~exist('patch_size', 'var'))
+    patch_size = 3;
+end
+
+[~, dehaze, J, T_est, T, A] = removeHaze(I_est, patch_size);
+
+figure; imshow(dehaze); title('Haze removal');
+figure; imshow(J); title('Haze removal -- dark channel prior');
+figure; imshow(T_est); title('Haze removal -- transmission');
+figure; imshow(T); title('Haze removal -- Laplacian');
+figure; imshow(A); title('Haze removal -- estimation of atmospheric light');
 
 % write the results
-gammaFilename = strcat(outputDir, filename, '_median', '_r', num2str(medianRadius), '_GF_r', num2str(GF_r), '_eps', num2str(GF_eps), '_detail', num2str(GF_detail), '_', tmo, '_dragoB', num2str(dragoB), '_LdMax', num2str(dragoLdMax), '_Gamma', num2str(dragoGamma), outputSuffix);
-estFilename = strcat(outputDir, filename, '_median', '_r', num2str(medianRadius), '_GF_r', num2str(GF_r), '_eps', num2str(GF_eps), '_detail', num2str(GF_detail), '_', tmo, '_dragoB', num2str(dragoB), '_LdMax', num2str(dragoLdMax), '_Gamma', num2str(dragoGamma), '_BM3D', '_sigma', num2str(sigma), outputSuffix);
+disp('Saving results');
+gammaFilename = strcat(outputDir, filename, '_median', '_r', num2str(medianRadius), ...
+    '_GF_r', num2str(GF_r), '_eps', num2str(GF_eps), '_detail', num2str(GF_detail), ...
+    '_', tmo, '_dragoB', num2str(dragoB), '_LdMax', num2str(dragoLdMax), '_Gamma', num2str(dragoGamma));
+estFilename = strcat(gammaFilename, '_BM3D', '_sigma', num2str(sigma));
+dehazeFilename = strcat(estFilename, '_dehaze', '_patch', num2str(patch_size)); 
+darkChannelFilename = strcat(estFilename, '_dehaze', '_dark');
+transmissionFilename = strcat(estFilename, '_dehaze', '_trans');
+laplacianFilename = strcat(estFilename, '_dehaze', '_laplacian');
+atmosphericLightFilename = strcat(estFilename, '_dehaze', '_atmosphericLight');
+
+gammaFilename = strcat(gammaFilename, outputSuffix);
+estFilename = strcat(estFilename, outputSuffix);
+dehazeFilename = strcat(dehazeFilename, outputSuffix);
+darkChannelFilename = strcat(darkChannelFilename, outputSuffix);
+transmissionFilename = strcat(transmissionFilename, outputSuffix);
+laplacianFilename = strcat(laplacianFilename, outputSuffix);
+atmosphericLightFilename = strcat(atmosphericLightFilename, outputSuffix);
+
 imwrite(gammaImg, gammaFilename);
 imwrite(I_est, estFilename);
+imwrite(dehaze, dehazeFilename);
+imwrite(J, darkChannelFilename);
+imwrite(T_est, transmissionFilename);
+imwrite(T, laplacianFilename);
+imwrite(A, atmosphericLightFilename);
 
 % organize the results in the form of html
 end
