@@ -1,4 +1,24 @@
 function [tmImg, I_est] = GFTMO(tmo, sigma, profile, patch_size, filename, medianRadius, GF_r, GF_eps, GF_detail)
+%GFTMO is a function to integrate the different modules in the workflow of
+% high dynamic range imaging. 
+%
+% Input variables:
+%  tmo         : tone mapping operator selected
+%  sigma       : sigma in BM3D
+%  profile     : profile in BM3D
+%  patch_size  : patch size in dehaze algorithm
+%  filename    : input file name
+%  medianRadius: radius of window of median filter
+%  GF_r        : r in guided filter
+%  GF_eps      : eps in guided filter
+%  GF_detail   : detail in guided filter
+% 
+% Output variables;
+%  tmImg       : tone mapped image
+%  I_est       : image after noise removal
+%
+% Fan Yang 06/24/2015
+
 % reading input
 disp('Reading input');
 inputDir = 'E:\yangfan\DATA\HDR\INPUT\';
@@ -17,10 +37,10 @@ outputSuffix = '.png';
 
 if (~exist('filename', 'file'))
     % % read HDR image as input -- single input temporarily
-    filename = 'trafficLight';
+    % filename = 'trafficLight';
     % filename = 'trafficLight_flare_removed'
     % filename = 'cathedral_sub';
-    % filename = 'camp_daylight_10am_sanfran_barn_006_d';
+    filename = 'camp_daylight_10am_sanfran_barn_006_d';
     % filename = 'office';
     % filename = 'belgium';
     % filename = 'bigFogMap';
@@ -139,7 +159,7 @@ figure; imshow(gammaImg); title('Tone mapping');
 % noise removal using BM3D
 disp('Noise removal');
 if (~exist('sigma', 'var'))
-    sigma = 5;
+    sigma = 20;
 end
 
 if (~exist('profile', 'var'))
@@ -172,7 +192,8 @@ figure; imshow(A); title('Haze removal -- estimation of atmospheric light');
 disp('Saving results');
 gammaFilename = strcat(outputDir, filename, '_median', '_r', num2str(medianRadius), ...
     '_GF_r', num2str(GF_r), '_eps', num2str(GF_eps), '_detail', num2str(GF_detail), ...
-    '_', tmo, '_dragoB', num2str(dragoB), '_LdMax', num2str(dragoLdMax), '_Gamma', num2str(dragoGamma));
+    '_', tmo, '_dragoB', num2str(dragoB), '_LdMax', num2str(dragoLdMax), ...
+    '_Gamma', num2str(dragoGamma), '_Start', num2str(dragoStart), '_Slope', num2str(dragoSlope));
 estFilename = strcat(gammaFilename, '_BM3D', '_sigma', num2str(sigma));
 dehazeFilename = strcat(estFilename, '_dehaze', '_patch', num2str(patch_size)); 
 darkChannelFilename = strcat(estFilename, '_dehaze', '_dark');
