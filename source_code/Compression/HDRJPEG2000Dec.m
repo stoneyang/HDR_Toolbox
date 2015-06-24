@@ -1,7 +1,7 @@
 function imgRec = HDRJPEG2000Dec(name)
 %
 %
-%       imgRec=HDRJPEG2000Dec(name)
+%       imgRec = HDRJPEG2000Dec(name)
 %
 %
 %       Input:
