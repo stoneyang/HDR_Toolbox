@@ -49,9 +49,10 @@ Lwa = Lwa / ((1.0 + Drago_b - 0.85)^5);
 LMax = max(L(:));
 
 if(exist('Drago_LMax', 'var'))
-    LMax = LMax * 0.5 + Drago_LMax * 0.5;%smoothing in case of videos
-    Drago_LMax_out = LMax;
+    LMax = Drago_LMax;%smoothing in case of videos
 end
+
+Drago_LMax_out = LMax;
 
 L_wa = L / Lwa;
 LMax_wa = LMax / Lwa;

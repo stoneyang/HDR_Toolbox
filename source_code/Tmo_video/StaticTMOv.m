@@ -51,7 +51,7 @@ if(~exist('filenameOutput', 'var'))
 end
 
 if(~exist('tmo_operator', 'var'))
-    tmo_operator = @ReinhardBilTMO;
+    tmo_operator = @DragoTMO;
 end
 
 if(~exist('tmo_gamma', 'var'))

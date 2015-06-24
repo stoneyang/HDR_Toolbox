@@ -35,7 +35,7 @@ function [lin_fun, max_lin_fun] = ComputeCRF(stack, stack_exposure, nSamples, bN
 %
 
 if(~exist('nSamples', 'var'))
-    nSamples = 1000;
+    nSamples = 100;
 end
 
 if(~exist('bNormalize', 'var'))
@@ -51,7 +51,7 @@ if(isempty(stack_exposure))
 end
 
 if(~exist('smoothing_term', 'var'))
-    smoothing_term = 30;
+    smoothing_term = 10;
 end
 
 col = size(stack, 3);
