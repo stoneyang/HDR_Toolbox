@@ -37,23 +37,44 @@ outputSuffix = '.png';
 
 if (~exist('filename', 'file'))
     % % read HDR image as input -- single input temporarily
-    % filename = 'trafficLight';
-    % filename = 'trafficLight_flare_removed'
-    % filename = 'cathedral_sub';
-    filename = 'camp_daylight_10am_sanfran_barn_006_d';
-    % filename = 'office';
-    % filename = 'belgium';
-    % filename = 'bigFogMap';
-    % filename = 'cathedral';
-    % filename = 'BigI_big';
     % filename = 'AtriumMorning';
     % filename = 'AtriumNight';
+    % filename = 'belgium';
+    % filename = 'bigFogMap';
+    % filename = 'BigI_big'; 
+    % filename = 'Bottles_Small';
+    % filename = 'camp_daylight_10am_sanfran';
+    % filename = 'camp_daylight_10am_sanfran_02';
+    % filename = 'camp_daylight_10am_sanfran_barn';
+    % filename = 'camp_daylight_10am_sanfran_barn_006';
+    % filename = 'camp_daylight_10am_sanfran_barn_006_c';
+    % filename = 'camp_daylight_10am_sanfran_barn_006_d';
+    % filename = 'camp_daylight_10am_sanfran_barn_007b';
+    % filename = 'camp_daylight_10am_sanfran_barn_007c';
+    % filename = 'camp_daylight_10am_sanfran_barn_007d';
+    % filename = 'camp_daylight_10am_sanfran_barn_007e';
+    % filename = 'cathedral';
+    % filename = 'cathedral_sub'; 
+    % filename = 'CS_Warwick';
+    % filename = 'groveC';
+    % filename = 'groveD';
+    % filename = 'office_matlab\office';
+    % filename = 'memorial';
+    % filename = 'nave';
+    % filename = 'NotreDame1';
+    % filename = 'Oxford_Church';
+    % filename = 'rosette';
+    % filename = 'synagogue';
+    % filename = 'vinesunset';
+    % filename = 'office';
+    filename = 'trafficLight';
+    % filename = 'trafficLight_flare_removed'    
     
+    % filename = 'Church_HarvestLobby\Church_HarvestLobby_0_0_1500_1500';
+    % filename = 'Church_HarvestLobby\Church_HarvestLobby_1500_0_1500_1500';   
     % filename = 'HDR_110_Tunnel\HDR_110_Tunnel_Ref_ROI_1833_811_1610_972';
     % filename = 'HDR_Free_City_Night_Lights\HDR_Free_City_Night_Lights_Ref_1010_370_2060_1530';
-    % filename = 'Church_HarvestLobby\Church_HarvestLobby_0_0_1500_1500';
-    % filename = 'Church_HarvestLobby\Church_HarvestLobby_1500_0_1500_1500';
-    
+   
     % filename = '1_1920x1112_GB_R95_G9_B97';
     % filename = '2_1920x1112_GB_R95_G9_B97';
     % filename = '3_1920x1112_GB_R95_G9_B97';
@@ -159,7 +180,7 @@ figure; imshow(gammaImg); title('Tone mapping');
 % noise removal using BM3D
 disp('Noise removal');
 if (~exist('sigma', 'var'))
-    sigma = 20;
+    sigma = 10;
 end
 
 if (~exist('profile', 'var'))
@@ -175,18 +196,18 @@ I_est = cat(3, I_est_r, I_est_g, I_est_b);
 figure; imshow(I_est); title('Noise removal');
 
 % haze removal
-disp('Haze removal');
-if (~exist('patch_size', 'var'))
-    patch_size = 3;
-end
-
-[~, dehaze, J, T_est, T, A] = removeHaze(I_est, patch_size);
-
-figure; imshow(dehaze); title('Haze removal');
-figure; imshow(J); title('Haze removal -- dark channel prior');
-figure; imshow(T_est); title('Haze removal -- transmission');
-figure; imshow(T); title('Haze removal -- Laplacian');
-figure; imshow(A); title('Haze removal -- estimation of atmospheric light');
+% disp('Haze removal');
+% if (~exist('patch_size', 'var'))
+%     patch_size = 3;
+% end
+% 
+% [~, dehaze, J, T_est, T, A] = removeHaze(I_est, patch_size);
+% 
+% figure; imshow(dehaze); title('Haze removal');
+% figure; imshow(J); title('Haze removal -- dark channel prior');
+% figure; imshow(T_est); title('Haze removal -- transmission');
+% figure; imshow(T); title('Haze removal -- Laplacian');
+% figure; imshow(A); title('Haze removal -- estimation of atmospheric light');
 
 % write the results
 disp('Saving results');
@@ -195,27 +216,27 @@ gammaFilename = strcat(outputDir, filename, '_median', '_r', num2str(medianRadiu
     '_', tmo, '_dragoB', num2str(dragoB), '_LdMax', num2str(dragoLdMax), ...
     '_Gamma', num2str(dragoGamma), '_Start', num2str(dragoStart), '_Slope', num2str(dragoSlope));
 estFilename = strcat(gammaFilename, '_BM3D', '_sigma', num2str(sigma));
-dehazeFilename = strcat(estFilename, '_dehaze', '_patch', num2str(patch_size)); 
-darkChannelFilename = strcat(estFilename, '_dehaze', '_dark');
-transmissionFilename = strcat(estFilename, '_dehaze', '_trans');
-laplacianFilename = strcat(estFilename, '_dehaze', '_laplacian');
-atmosphericLightFilename = strcat(estFilename, '_dehaze', '_atmosphericLight');
+% dehazeFilename = strcat(estFilename, '_dehaze', '_patch', num2str(patch_size)); 
+% darkChannelFilename = strcat(estFilename, '_dehaze', '_dark');
+% transmissionFilename = strcat(estFilename, '_dehaze', '_trans');
+% laplacianFilename = strcat(estFilename, '_dehaze', '_laplacian');
+% atmosphericLightFilename = strcat(estFilename, '_dehaze', '_atmosphericLight');
 
 gammaFilename = strcat(gammaFilename, outputSuffix);
 estFilename = strcat(estFilename, outputSuffix);
-dehazeFilename = strcat(dehazeFilename, outputSuffix);
-darkChannelFilename = strcat(darkChannelFilename, outputSuffix);
-transmissionFilename = strcat(transmissionFilename, outputSuffix);
-laplacianFilename = strcat(laplacianFilename, outputSuffix);
-atmosphericLightFilename = strcat(atmosphericLightFilename, outputSuffix);
+% dehazeFilename = strcat(dehazeFilename, outputSuffix);
+% darkChannelFilename = strcat(darkChannelFilename, outputSuffix);
+% transmissionFilename = strcat(transmissionFilename, outputSuffix);
+% laplacianFilename = strcat(laplacianFilename, outputSuffix);
+% atmosphericLightFilename = strcat(atmosphericLightFilename, outputSuffix);
 
 imwrite(gammaImg, gammaFilename);
 imwrite(I_est, estFilename);
-imwrite(dehaze, dehazeFilename);
-imwrite(J, darkChannelFilename);
-imwrite(T_est, transmissionFilename);
-imwrite(T, laplacianFilename);
-imwrite(A, atmosphericLightFilename);
+% imwrite(dehaze, dehazeFilename);
+% imwrite(J, darkChannelFilename);
+% imwrite(T_est, transmissionFilename);
+% imwrite(T, laplacianFilename);
+% imwrite(A, atmosphericLightFilename);
 
 % organize the results in the form of html
 end
