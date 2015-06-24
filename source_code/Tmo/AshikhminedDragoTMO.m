@@ -1,7 +1,7 @@
 function [imgOut, Ldetail, Drago_LMax_out] = AshikhminedDragoTMO(img, Drago_Ld_Max, Drago_b, Drago_LMax)
 %
 %
-%        [imgOut, Drago_LMax_out] = DragoTMO(img, Drago_Ld_Max, Drago_b, Drago_LMax)
+%        [imgOut, Drago_LMax_out] = AshikhminedDragoTMO(img, Drago_Ld_Max, Drago_b, Drago_LMax)
 %
 %
 %        Input:
@@ -15,7 +15,7 @@ function [imgOut, Ldetail, Drago_LMax_out] = AshikhminedDragoTMO(img, Drago_Ld_M
 %           -imgOut: tone mapped image
 %           -Drago_LMax_out: max luminance in img
 % 
-%     Copyright (C) 2010-13 Francesco Banterle
+%     Copyright (C) 2015 Fan Yang, Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
