@@ -1,7 +1,7 @@
-function ExportLights(lights,name)
+function ExportLights(lights, name)
 %
 %
-%        ExportLights(lights,name)
+%        ExportLights(lights, name)
 %
 %
 %        Input:
@@ -25,20 +25,20 @@ function ExportLights(lights,name)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-n=length(lights);
+n = length(lights);
 
-fid=fopen([name,'.txt'],'w');
+fid = fopen([name, '.txt'], 'w');
 
 %The number of lightsources
-fprintf(fid,'Num: %d\n',n);
-fprintf(fid,'\n');
+fprintf(fid,'Num: %d\n', n);
+fprintf(fid, \n');
 
 for i=1:n        
     %Save the direction
-    dir=PolarVec3((0.5-lights(i).y)*pi,lights(i).x*pi*2);    
-    fprintf(fid,'Dir: %g %g %g\n',dir(1),dir(2),dir(3));
+    dir = PolarVec3((0.5 - lights(i).y) * pi, lights(i).x * pi * 2);    
+    fprintf(fid,'Dir: %g %g %g\n', dir(1), dir(2), dir(3));
     %Save the color
-    fprintf(fid,'Col: %g %g %g\n',lights(i).color(1),lights(i).color(2),lights(i).color(3));
+    fprintf(fid,'Col: %g %g %g\n', lights(i).col(1), lights(i).col(2), lights(i).col(3));
     fprintf(fid,'\n');
 end
 
