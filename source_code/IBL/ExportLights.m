@@ -31,7 +31,7 @@ fid = fopen([name, '.txt'], 'w');
 
 %The number of lightsources
 fprintf(fid,'Num: %d\n', n);
-fprintf(fid, \n');
+fprintf(fid, '\n');
 
 for i=1:n        
     %Save the direction
