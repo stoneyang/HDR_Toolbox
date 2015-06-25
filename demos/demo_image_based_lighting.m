@@ -25,15 +25,25 @@ set(h,'Name','Tone mapped (ReinhardTMO) environment map with gamma encoding, 2.2
 GammaTMO(imgTMO, 2.2, 0, 1);
 
 disp('5) Calculate/Show/Save a Diffuse Map');
-[imgOut,SH] = DiffuseConvolutionSH(img, 1);
+[imgOut, SH] = DiffuseConvolutionSH(img, 1);
 h = figure(2);
 set(h,'Name','Diffuse map with gamma encoding, 2.2');
-GammaTMO(imgOut*0.5,2.2,0,1);
+GammaTMO(imgOut * 0.5, 2.2, 0, 1);
 hdrimwrite(imgOut,'diffuse_map.hdr');
 
 disp('6) Calculate/Show/Save a Light sources');
-[imgMC,lights]=MedianCut(img,256,1);
+[imgMC, lights] = MedianCut(img, 256, 1);
 h = figure(3);
 set(h,'Name','Median-Cut Algorithm sampling for light sources');
-GammaTMO(GaussianFilter(imgMC*0.25,1.0),1.0,0,1);
-ExportLights(lights,'light_sources');
+imgOut = GaussianFilter(imgMC * 0.25, 1.0);
+imwrite(imgOut, 'ibl_median_cut.png');
+GammaTMO(imgOut, 1.0, 0, 1);
+ExportLights(lights, 'light_sources');
+
+[imgUS, lights] = UniformSampling(img, 256, 1);
+h = figure(3);
+set(h,'Name','Median-Cut Algorithm sampling for light sources');
+imgOut = GaussianFilter(imgUS * 0.25, 1.0);
+imwrite(imgOut, 'ibl_uniform_sampling.png');
+GammaTMO(imgOut, 1.0, 0, 1);
+ExportLights(lights, 'light_sources');
