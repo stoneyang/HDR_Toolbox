@@ -52,8 +52,8 @@ end
 
 n = round(sqrt(nlights));
 
-c1 = ceil(c / n);
-r1 = ceil(r / n);
+c1 = max([floor(c / n), 1]);
+r1 = max([floor(r / n), 1]);
 
 limitSize = 2;
 
@@ -62,13 +62,13 @@ if((c1 < limitSize) || (r1 < limitSize))
 end
 
 lights = [];
-for i=1:r1
-    yMin = (i - 1) * n + 1;
-    yMax = min(i * n, r);
+for i=1:n
+    yMin = (i - 1) * r1 + 1;
+    yMax = min(i * r1, r);
     
-    for j=1:c1
-        xMin = (j - 1) * n + 1;
-        xMax = min(j * n, c);
+    for j=1:n
+        xMin = (j - 1) * c1 + 1;
+        xMax = min(j * c1, c);
         
         lights = [lights, CreateLight(xMin, xMax, yMin, yMax, L, img)];
     end
