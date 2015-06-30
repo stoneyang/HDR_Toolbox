@@ -50,7 +50,7 @@ end
 medVal = MaxQuart(grey, wardPercentile);
     
 imgThr = zeros(size(grey));
-imgThr(grey>medVal) = 1.0;
+imgThr(grey > medVal) = 1.0;
 
 A = medVal - wardTolerance;
 B = medVal + wardTolerance;

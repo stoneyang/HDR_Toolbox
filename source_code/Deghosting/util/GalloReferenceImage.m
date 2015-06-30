@@ -50,16 +50,17 @@ tue =   7 / 255;
 
 target_exposure = -1;
 
-r = size(stack, 1);
-c = size(stack, 2);
-value = r * c;
-
 for i=1:n
-    
     if(bStack)
         current_exposure = stack(:,:,:,i);
+        r = size(stack, 1);
+        c = size(stack, 2);
+        value = r * c;        
     else
-        current_exposure = ldrimread([folder_name, '/', lst(i).name], 0);
+        current_exposure = ldrimread([folder_name, '/', lst(i).name]);
+        r = size(current_exposure, 1);
+        c = size(current_exposure, 2);
+        value = r * c;            
     end    
     
     over_exp = max(current_exposure, [], 3);
@@ -70,7 +71,7 @@ for i=1:n
 
     mask_ue = zeros(r, c);
     mask_ue(under_exp <= tue) = 1;
-    
+
     mask = mask_oe + mask_ue;
     mask(mask > 1) = 1;
     

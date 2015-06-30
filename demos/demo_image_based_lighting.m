@@ -13,7 +13,7 @@
 clear all;
 
 disp('1) Load "CS_Warwick.hdr" HDR image');
-img = hdrimread('CS_Warwick.hdr');
+img = hdrimread('warwick.hdr');
 
 disp('2) Tone Mapping the HDR image');
 imgTMO = ReinhardTMO(img, 0.15, 1e8, 0,8);

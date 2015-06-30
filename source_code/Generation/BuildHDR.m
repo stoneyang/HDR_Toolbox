@@ -99,11 +99,6 @@ if(isempty(stack) || isempty(stack_exposure))
     error('The stack is set empty!');
 end
 
-%is the inverse camera function ok? Do we need to recompute it?
-if((strcmp(lin_type, 'LUT') == 1) && isempty(lin_fun))
-    [lin_fun, ~] = ComputeCRF(stack, stack_exposure);        
-end
-
 %merging
 [r, c, col, n] = size(stack);
 
@@ -118,6 +113,11 @@ end
 
 if(isa(stack, 'uint16'))
     scale = 65535.0;
+end
+
+%is the inverse camera function ok? Do we need to recompute it?
+if((strcmp(lin_type, 'LUT') == 1) && isempty(lin_fun))
+    [lin_fun, ~] = ComputeCRF(single(stack) / scale, stack_exposure);        
 end
 
 %for each LDR image...
