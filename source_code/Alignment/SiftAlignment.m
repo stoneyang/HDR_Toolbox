@@ -55,7 +55,7 @@ if(n < 2)
 end
 
 if(~exist('target_exposure','var'))
-    target_exposure = GetTargetExposure(stack, folder_name, format); 
+    target_exposure = GalloReferenceImage(stack, folder_name, format); 
 else
     if(~bStack)
         target_exposure = findNameInList(lst, target_exposure);
