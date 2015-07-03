@@ -1,4 +1,4 @@
-function pp = MitsunagaNayarCRF(stack, stack_exposure, N, nSamples)
+function [pp, lin_fun] = MitsunagaNayarCRF(stack, stack_exposure, N, nSamples)
 %
 %       pp = MitsunagaNayarCRF(stack, stack_exposure, N, nSamples)
 %
@@ -14,6 +14,7 @@ function pp = MitsunagaNayarCRF(stack, stack_exposure, N, nSamples)
 %
 %        Output:
 %           -pp: a polynomial encoding the inverse CRF.
+%           -lin_fun: tabled function
 %
 %     Copyright (C) 2015  Francesco Banterle
 % 
@@ -105,6 +106,12 @@ for channel=1:col
     c_n = 1.0 - sum(c);
     
     pp(channel, :) = [c_n, c'];
+end
+
+lin_fun = zeros(256, col);
+
+for i=1:col
+    lin_fun(:,i) = polyval(pp(i,:), 0:(1.0 / 255.0):1);
 end
 
 end

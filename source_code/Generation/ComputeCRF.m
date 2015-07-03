@@ -38,6 +38,10 @@ if(~exist('nSamples', 'var'))
     nSamples = 100;
 end
 
+if(nSamples < 1)
+    nSamples = 100;
+end
+
 if(~exist('bNormalize', 'var'))
     bNormalize = 1;
 end
@@ -51,7 +55,7 @@ if(isempty(stack_exposure))
 end
 
 if(~exist('smoothing_term', 'var'))
-    smoothing_term = 10;
+    smoothing_term = 20;
 end
 
 col = size(stack, 3);

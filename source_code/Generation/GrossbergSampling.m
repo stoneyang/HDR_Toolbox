@@ -35,17 +35,25 @@ if(nSamples < 1)
     nSamples = 100;
 end
 
+debug = 0;
+
 [~, col, stackSize] = size(stack);
 
 %Compute CDF
-%figure(4);
-%hold on;
+if(debug)
+    figure(4);
+    hold on;
+end
+
 for i=1:stackSize
     for j=1:col
         h_cdf = cumsum(stack(:,j,i));
         stack(:,j,i) = h_cdf / max(h_cdf(:));
     end
-    %plot(stack(:,1,i));
+    
+    if(debug)
+        plot(stack(:,1,i));
+    end
 end
 
 stackOut = zeros(nSamples, stackSize, col);
