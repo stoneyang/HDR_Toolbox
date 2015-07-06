@@ -26,12 +26,6 @@ function mask = getOverUnderExposedParts(img)
 %     You should have received a copy of the GNU General Public License
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
-%     The paper describing this technique is:
-%     "Artifact-free High Dynamic Range Imaging"
-% 	  by  O. Gallo, N. Gelfand, W. Chen, M. Tico, and K. Pulli. 
-%     in IEEE International Conference on Computational Photography (ICCP)
-%     2009
-%
 
 toe = 248 / 255;
 tue =   7 / 255;
