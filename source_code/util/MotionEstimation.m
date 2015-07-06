@@ -1,6 +1,6 @@
-function motionMap = MotionEstimation(img1, img2, blockSize)
+function motionMap = MotionEstimation(img1, img2, blockSize, bVisualize)
 %
-%       motionMap = MotionEstimation(img1, img2, blockSize)
+%       motionMap = MotionEstimation(img1, img2, blockSize, bVisualize)
 %
 %       This computes motion estimation between frames
 %
@@ -30,6 +30,10 @@ function motionMap = MotionEstimation(img1, img2, blockSize)
 
 [r,c,col] = size(img1);
 
+if(~exist('bVisualize', 'var'))
+    bVisualize = 0;
+end
+
 if(~exist('blockSize', 'var'))
     nPixels = r * c;
     blockSize = max([2^ceil(log10(nPixels)), 4]);
@@ -43,6 +47,8 @@ block_r = ceil(r / blockSize);
 block_c = ceil(c / blockSize);
 
 motionMap = zeros(r, c, 3);
+
+uv = zeros(block_r, block_c, 4);
 
 for i=1:block_r   
     for j=1:block_c     
@@ -80,11 +86,20 @@ for i=1:block_r
                 end
             end
         end
-                        
+           
         motionMap(i_b:i_e,j_b:j_e,1) = dx;
         motionMap(i_b:i_e,j_b:j_e,2) = dy;
         motionMap(i_b:i_e,j_b:j_e,3) = err;
+        
+        uv(i, j, 1) = (j_b + j_e) / 2.0;
+        uv(i, j, 2) = (i_b + i_e) / 2.0;
+        uv(i, j, 3) = dx;
+        uv(i, j, 4) = dy;
     end
+end
+
+if(bVisualize)
+    quiver(uv(:, :, 1), uv(:, :, 2), uv(:, :, 3), uv(:, :, 4));
 end
 
 end
