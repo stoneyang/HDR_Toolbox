@@ -58,6 +58,25 @@ if(~exist('smoothing_term', 'var'))
     smoothing_term = 20;
 end
 
+if(size(stack, 4) ~= length(stack_exposure))
+    error('stack and stack_exposure have different number of exposures');
+end
+
+if(isa(stack, 'uint8'))
+    stack = single(stack) / 255.0;
+end
+
+if(isa(stack, 'uint16'))
+    stack = single(stack) / 65535.0;
+end
+
+if(isa(stack, 'double') | isa(stack, 'single'))
+    max_val_stack = max(stack(:));
+    if(max_val_stack > 1.0) 
+        stack = stack / max_val_stack;
+    end
+end
+
 col = size(stack, 3);
 
 %Weight function

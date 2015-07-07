@@ -8,11 +8,12 @@ function motionMap = MotionEstimation(img1, img2, blockSize, bVisualize)
 %         - img1: source
 %         - img2: target
 %         - blockSize: size of the block
+%         - bVisualize: 
 %
 %       output:
 %         - motionMap: motion map for each pixel
 %
-%     Copyright (C) 2013-14  Francesco Banterle
+%     Copyright (C) 2013-15  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -28,7 +29,7 @@ function motionMap = MotionEstimation(img1, img2, blockSize, bVisualize)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-[r,c,col] = size(img1);
+[r, c, col] = size(img1);
 
 if(~exist('bVisualize', 'var'))
     bVisualize = 0;

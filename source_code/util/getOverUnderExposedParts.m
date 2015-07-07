@@ -30,7 +30,7 @@ function mask = getOverUnderExposedParts(img)
 toe = 248 / 255;
 tue =   7 / 255;
 
-[r, c, col] = size(img);
+[r, c, ~] = size(img);
 
 over_exp = max(img, [], 3);
 under_exp = min(img, [], 3);
