@@ -29,7 +29,7 @@ function motionMap = MotionEstimation(img1, img2, blockSize, bVisualize)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-[r, c, col] = size(img1);
+[r, c, ~] = size(img1);
 
 if(~exist('bVisualize', 'var'))
     bVisualize = 0;
@@ -40,7 +40,7 @@ if(~exist('blockSize', 'var'))
     blockSize = max([2^ceil(log10(nPixels)), 4]);
 end
 
-maxSearchRadius = 1;%size in blocks
+maxSearchRadius = 1; %size in blocks
 
 shift = blockSize * maxSearchRadius;
 
@@ -61,8 +61,7 @@ for i=1:block_r
         j_b = (j - 1) * blockSize + 1;
         i_e = min([i_b + blockSize - 1, r]);
         j_e = min([j_b + blockSize - 1, c]);
-        
-        block1 = zeros(blockSize, blockSize, col);
+                
         block1(1:length(i_b:i_e),1:length(j_b:j_e),:) = img1(i_b:i_e, j_b:j_e, :);
         
         for k=(-shift):shift
@@ -73,7 +72,6 @@ for i=1:block_r
                 j_e2 = j_e + l;
                   
                 if((i_b2 > 0) && (j_b2 > 0) && (i_e2 <= r) && (j_e2 <= c))
-                    block2 = zeros(blockSize, blockSize, col);   
                     block2(1:length(i_b2:i_e2),1:length(j_b2:j_e2),:) = img2(i_b2:i_e2, j_b2:j_e2, :);
 
                     tmp_err = abs(block1 - block2);

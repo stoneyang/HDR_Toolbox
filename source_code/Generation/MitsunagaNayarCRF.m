@@ -37,7 +37,7 @@ if(~exist('nSamples', 'var'))
 end
 
 if(~exist('N', 'var'))
-    nSamples = 3;
+    nSamples = 5;
 end
 
 if(isempty(stack))
