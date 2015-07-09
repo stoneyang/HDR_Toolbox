@@ -31,7 +31,7 @@ function [frame, ldrv] = ldrvGetFrame(ldrv, frameCounter)
 %which frame?
 maxFrames = length(ldrv.list);
 
-if(~exist('frameCounter','var'))
+if(~exist('frameCounter', 'var'))
     frameCounter = ldrv.frameCounter;
 else
     if(frameCounter<1)
@@ -56,9 +56,9 @@ switch ldrv.type
 end
 
 if(~isempty(frame))
-    frame = double(frame)/255.0;
+    frame = single(frame) / 255.0;
 end
 
 %updating the counter
-ldrv.frameCounter = mod( frameCounter + 1, maxFrames+1 );
+ldrv.frameCounter = mod( frameCounter + 1, maxFrames + 1);
 end

@@ -1,17 +1,16 @@
-function hdrv = hdrvopen(hdrv)
+function ConvLDRvtoLDRi(filename, outputname, format)
 %
-%        hdrv = hdrvopen(hdrv)
+%        ConvLDRvtoLDRi(filename, outputname, format)
 %
 %
 %        Input:
-%           -hdrv: a HDR video structure
+%           -filename: video filename
+%           -outputname: output name
+%           -format: image file format
 %
-%        Output:
-%           -hdrv: a HDR video structure
+%        This function converts an LDR video into LDR images
 %
-%        This function opens the video stream for reading frames
-%
-%     Copyright (C) 2013-15  Francesco Banterle
+%     Copyright (C) 2015  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -27,8 +26,14 @@ function hdrv = hdrvopen(hdrv)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-if(hdrv.streamOpen == 0)   
-    hdrv.streamOpen = 1;
+ldrv = ldrvread(filename);
+ldrv = ldrvopen(ldrv);
+
+for i=1:ldrv.totalFrames
+    [frame, ldrv] = ldrvGetFrame(ldrv, i);
+    imwrite(frame, [outputname, sprintf('_%07d.', i), format]);
 end
+
+ldrvclose(ldrv);
 
 end

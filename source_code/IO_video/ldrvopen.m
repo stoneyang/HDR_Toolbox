@@ -27,8 +27,8 @@ function ldrv = ldrvopen(ldrv)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-if(ldrv.streamOpen==0)
-    if(strfind(ldrv.type,'TYPE_LDR_VIDEO')==1)
+if(ldrv.streamOpen == 0)
+    if(strfind(ldrv.type, 'TYPE_LDR_VIDEO') == 1)
         open(ldrv.stream);
     end
     

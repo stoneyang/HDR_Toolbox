@@ -40,9 +40,9 @@ if(~exist('blockSize', 'var'))
     blockSize = max([2^ceil(log10(nPixels)), 4]);
 end
 
-maxSearchRadius = 1; %size in blocks
+maxSearchRadius = 2; %size in blocks
 
-shift = blockSize * maxSearchRadius;
+shift = round(blockSize * maxSearchRadius);
 
 block_r = ceil(r / blockSize);
 block_c = ceil(c / blockSize);

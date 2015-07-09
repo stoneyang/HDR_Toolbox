@@ -27,15 +27,15 @@ function ldrv = ldrvread(filename)
 
 if(isdir(filename))
     %PNG?
-    tmp_list = dir([filename,'/','*.png']);
+    tmp_list = dir([filename, '/', '*.png']);
     type = 'TYPE_LDR_PNG';
     
     %JPEG?
     if(isempty(tmp_list))
-        tmp_list = dir([filename,'/','*.jpg']);
+        tmp_list = dir([filename, '/', '*.jpg']);
         
         if(isempty(tmp_list))
-            tmp_list = dir([filename,'/','*.jpeg']);
+            tmp_list = dir([filename, '/', '*.jpeg']);
         end
         
         type = 'TYPE_LDR_JPEG';
@@ -43,7 +43,7 @@ if(isdir(filename))
     
     %JPEG 2000?
     if(isempty(tmp_list))
-        tmp_list = dir([filename,'/','*.jp2']);
+        tmp_list = dir([filename, '/', '*.jp2']);
         type = 'TYPE_LDR_JPEG_2000';
     end
     
