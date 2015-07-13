@@ -33,6 +33,9 @@ function [lin_fun, max_lin_fun] = ComputeCRF(stack, stack_exposure, nSamples, bN
 %     You should have received a copy of the GNU General Public License
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
+%
+%
+%
 
 if(~exist('nSamples', 'var'))
     nSamples = 100;

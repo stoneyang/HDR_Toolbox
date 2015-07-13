@@ -16,7 +16,7 @@ function disparityMap = DisparitySlow(imgL, imgR, dm_patchSize, dm_maxDisparity,
 %       output:
 %         - offsetMap: shift vectors from img1 to img2
 %
-%     Copyright (C) 2013-14  Francesco Banterle
+%     Copyright (C) 2013-15  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -32,56 +32,56 @@ function disparityMap = DisparitySlow(imgL, imgR, dm_patchSize, dm_maxDisparity,
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-if(~exist('dm_patchSize','var'))
+if(~exist('dm_patchSize', 'var'))
     dm_patchSize = 7;
 end
 
-if(~exist('dm_maxDisparity','var'))
-    dm_maxDisparity = dm_patchSize*4;
+if(~exist('dm_maxDisparity', 'var'))
+    dm_maxDisparity = dm_patchSize * 4;
 end
 
-if(~exist('dm_metric','var'))
+if(~exist('dm_metric', 'var'))
     dm_metric = 'SSD';    
 end
 
-[r,c,~] = size(imgL);
+[r, c, ~] = size(imgL);
 
-halfPatchSize = ceil(dm_patchSize/2);
+halfPatchSize = ceil(dm_patchSize / 2);
 
-disparityMap = zeros(r,c,2);
+disparityMap = zeros(r, c, 2);
 
-for i=(dm_patchSize+1):(r-dm_patchSize-1)
+for i=(dm_patchSize + 1):(r - dm_patchSize - 1)
     
-    for j=(dm_patchSize+1):(c-dm_patchSize-1)
+    for j=(dm_patchSize + 1):(c - dm_patchSize - 1)
         
         err = 1e30;
         disp = j;
-        patch1 = imgL((i-halfPatchSize):(i+halfPatchSize), (j-halfPatchSize):(j+halfPatchSize), :);
+        patch1 = imgL((i - halfPatchSize):(i + halfPatchSize), (j - halfPatchSize):(j + halfPatchSize), :);
         p1_2 = patch1.^2;
         
-        min_j = max([j-dm_maxDisparity,dm_patchSize+1]);
-        max_j = min([j+dm_maxDisparity,c-dm_patchSize-1]);
+        min_j = max([j-dm_maxDisparity, dm_patchSize + 1]);
+        max_j = min([j+dm_maxDisparity, c - dm_patchSize - 1]);
         
         for k=min_j:max_j
-            patch2 = imgR((i-halfPatchSize):(i+halfPatchSize), (k-halfPatchSize):(k+halfPatchSize), :);
+            patch2 = imgR((i - halfPatchSize):(i + halfPatchSize), (k - halfPatchSize):(k + halfPatchSize), :);
             p2_2 = patch2.^2;
                 
             switch dm_metric
                 case 'SSD'
-                    tmp_err = (patch1-patch2).^2;
+                    tmp_err = (patch1 - patch2).^2;
                 case 'SAD'
-                    tmp_err = abs(patch1-patch2);
+                    tmp_err = abs(patch1 - patch2);
                 case 'NCC'
-                    tmp_err = (patch1.*patch2)/sqrt(sum(p1_2(:))*sum(p2_2(:)));
+                    tmp_err = (patch1 .* patch2) / sqrt(sum(p1_2(:)) * sum(p2_2(:)));
                 otherwise
-                    tmp_err = (patch1-patch2).^2;
+                    tmp_err = (patch1 - patch2).^2;
             end
             
             tmp_err = sum(tmp_err(:));
                 
-            if(tmp_err<err)
-                err = tmp_err;
-                disp = k-j;
+            if(tmp_err < err)
+                err  = tmp_err;
+                disp = k - j;
             end            
         end
         
