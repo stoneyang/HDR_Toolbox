@@ -71,3 +71,11 @@ disp('      isbn = {9781568817194},');
 disp('      publisher = {AK Peters (CRC Press)},');
 disp('      address = {Natick, MA, USA},');
 disp('      }');
+
+disp(' ');
+disp('Note on Tone Mapping:');
+disp('The majority of TMOs return images with linear values. This means that gamma encoding');
+disp('needs to be applied to the output of these TMOs before visualization; otherwise images may appear dark.');
+disp('A few operators (e.g. Mertens et al.''s operator) return gamma encoded values,');
+disp('so there is no need to apply gamma to them; in this case a message is displayed');
+disp('after tone mapping alerting that there is no need of gamma encoding.');
