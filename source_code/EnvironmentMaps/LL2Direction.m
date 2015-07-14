@@ -25,14 +25,14 @@ function D = LL2Direction(r, c)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-[X0,Y0] = meshgrid(0:(c-1),0:(r-1));
-phi   =  pi*  ((X0/c)*2-1)-pi*0.5;
-theta =  pi   * (Y0/r);
+[X0, Y0] = meshgrid(0:(c - 1),0:(r - 1));
+phi   =  pi * ((X0 / c) * 2 - 1) - pi * 0.5;
+theta =  pi * (Y0 / r);
 
 sinTheta = sin(theta);
-D = zeros(r,c,3);
-D(:,:,1) =  cos(phi).*sinTheta;
+D = zeros(r, c, 3);
+D(:,:,1) =  cos(phi) .* sinTheta;
 D(:,:,2) =  cos(theta);
-D(:,:,3) =  sin(phi).*sinTheta;
+D(:,:,3) =  sin(phi) .* sinTheta;
 
 end

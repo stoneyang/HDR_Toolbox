@@ -1,6 +1,6 @@
-function line = LLDescriptor(img, bNor)
+function line = LLDescriptor(img, bNormalization)
 %
-%        imgOut = LLDescriptor(img, bNor)
+%        imgOut = LLDescriptor(img, bNormalization)
 %
 %        This function creates a descriptor for an environment map in
 %        logituted latitude (LL) coordinates. The descriptor can be used
@@ -8,11 +8,11 @@ function line = LLDescriptor(img, bNor)
 %
 %        Input:
 %           -img: an environment map encoded with LL encoding
-%           -bNor: normalization
+%           -bNormalization: normalization flag
 %        Output:
 %           -line: the descriptor line for an environment map
 %
-%     Copyright (C) 2012  Francesco Banterle
+%     Copyright (C) 2012-15  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -28,23 +28,14 @@ function line = LLDescriptor(img, bNor)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-if(~exist('bNor'))
-    bNor = 0;
+if(~exist('bNormalization', 'var'))
+    bNormalization = 0;
 end
 
-col = size(img,3);
+line = sum(lum(img));
 
-work = [];
-if(col==3)
-    work = lum(img);
-else
-    work = img;
-end
-
-line = sum(work);
-
-if(bNor)
-    line = line/max(line);
+if(bNormalization)
+    line = line / max(line);
 end
 
 end

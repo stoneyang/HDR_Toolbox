@@ -1,15 +1,17 @@
-function [X1,Y1] = Direction2Angular(D,r,c)
+function [X1, Y1] = Direction2Angular(D, r, c)
 %
-%        imgOut = Direction2Angular(D)
+%        [X1, Y1] = Direction2Angular(D, r, c)
 %
 %
 %        Input:
 %           -D: 3D directions of the img format
+%           -r: height of the angular image
+%           -c: width of the angular image
 %        Output:
 %           -X1: X coordinates in the Angular format
 %           -Y1: Y coordinates in the Angular format
 %
-%     Copyright (C) 2011  Francesco Banterle
+%     Copyright (C) 2011-15  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -26,10 +28,10 @@ function [X1,Y1] = Direction2Angular(D,r,c)
 %
 
 %Coordinates generation
-R = acos(-D(:,:,3))./(pi*2*sqrt(D(:,:,1).^2+D(:,:,2).^2));
+R = acos(-D(:,:,3)) ./ (pi * 2 * sqrt(D(:,:,1).^2 + D(:,:,2).^2));
 
-X1 = (0.5+R.*D(:,:,1))*c;
-Y1 = (0.5-R.*D(:,:,2))*r;
+X1 = (0.5 + R .* D(:,:,1)) * c;
+Y1 = (0.5 - R .* D(:,:,2)) * r;
 
 X1 = RemoveSpecials(X1);
 Y1 = RemoveSpecials(Y1);

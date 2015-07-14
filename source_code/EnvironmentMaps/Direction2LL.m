@@ -1,6 +1,6 @@
-function [X1,Y1] = Direction2LL(D,r,c)
+function [X1, Y1] = Direction2LL(D, r, c)
 %
-%        imgOut = Direction2LL(D)
+%        [X1, Y1] = Direction2LL(D, r, c)
 %
 %
 %        Input:
@@ -9,7 +9,7 @@ function [X1,Y1] = Direction2LL(D,r,c)
 %           -X1: X coordinates in the LongitudeLatitude format
 %           -Y1: Y coordinates in the LongitudeLatitude format
 %
-%     Copyright (C) 2011  Francesco Banterle
+%     Copyright (C) 2011-15  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -25,12 +25,10 @@ function [X1,Y1] = Direction2LL(D,r,c)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-%TESED
-
 %Coordinates generation
-X1 = 1+atan2(D(:,:,1),-D(:,:,3))/pi;
-Y1 = acos(D(:,:,2))/pi;
-X1 = RemoveSpecials(X1*c/2);
-Y1 = RemoveSpecials(Y1*r);
+X1 = 1 + atan2(D(:,:,1), -D(:,:,3)) / pi;
+Y1 = acos(D(:,:,2)) / pi;
+X1 = RemoveSpecials(X1 * c / 2);
+Y1 = RemoveSpecials(Y1 * r);
 
 end

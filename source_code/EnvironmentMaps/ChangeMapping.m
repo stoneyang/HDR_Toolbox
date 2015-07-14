@@ -19,7 +19,7 @@ function imgOut = ChangeMapping(img, mappingIn, mappingOut)
 %        Output:
 %           -imgOut: img in the mapping2 format
 %
-%     Copyright (C) 2011-12  Francesco Banterle
+%     Copyright (C) 2011-15  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -36,33 +36,33 @@ function imgOut = ChangeMapping(img, mappingIn, mappingOut)
 %
 
 %Mapping to be fixed
-if(strcmpi(mappingOut,'Spherical'))
+if(strcmpi(mappingOut, 'Spherical'))
     error('This output mapping is not yet supported');
 end
 
 %First step generation of directions
-[r,c,col] = size(img);
+[r, c, col] = size(img);
 
-if(strcmpi(mappingIn,'LL')==1)
+if(strcmpi(mappingIn, 'LL') == 1)
     mappingIn = 'LongitudeLatitude';
 end
 
-if(strcmpi(mappingOut,'LL')==1)
+if(strcmpi(mappingOut, 'LL') == 1)
     mappingOut = 'LongitudeLatitude';
 end
 
-if(strcmpi(mappingIn,mappingOut)==1)
+if(strcmpi(mappingIn,mappingOut) == 1)
     %if it is the same mapping no work to be done
     imgOut = img;
 else
-    maxCoord = max([r,c])/2;
+    maxCoord = max([r, c]) / 2;
     switch mappingOut
         case 'LongitudeLatitude'        
-            D = LL2Direction(maxCoord,maxCoord*2);        %TESTED OK   
+            D = LL2Direction(maxCoord, maxCoord * 2);    
         case 'Angular'
-            D = Angular2Direction(maxCoord,maxCoord);     %TESTED OK   
+            D = Angular2Direction(maxCoord, maxCoord);
         case 'CubeMap'
-            D = CubeMap2Direction(maxCoord*4,maxCoord*3); %TESTED OK
+            D = CubeMap2Direction(maxCoord * 4, maxCoord * 3);
         case 'Spherical'
             %D = Spherical2Direction(maxCoord,maxCoord);   
         otherwise
@@ -74,36 +74,36 @@ else
     
     switch mappingIn
         case 'LongitudeLatitude'
-            [X1,Y1] = Direction2LL(D,r,c);            %TESTED OK
+            [X1,Y1] = Direction2LL(D, r, c);
         case 'Spherical'
-            [X1,Y1] = Direction2Spherical(D,r,c);     %TESTED OK
+            [X1,Y1] = Direction2Spherical(D, r, c); 
         case 'Angular'
-            [X1,Y1] = Direction2Angular(D,r,c);       %TESTED OK               
+            [X1,Y1] = Direction2Angular(D, r, c);           
         case 'CubeMap'
-            [X1,Y1] = Direction2CubeMap(D,r,c);       %TESTED OK
+            [X1,Y1] = Direction2CubeMap(D, r, c);
         otherwise
             error('ChangeMapping: The following mapping is not recognized.');
     end
 
     %Interpolation
-    [X,Y] = meshgrid(1:c,1:r);
+    [X, Y] = meshgrid(1:c, 1:r);
     X1 = real(round(X1));
     Y1 = real(round(Y1));
     
     for i=1:col
-        imgOut(:,:,i) = interp2(X,Y,img(:,:,i),X1,Y1,'*cubic');
+        imgOut(:,:,i) = interp2(X, Y, img(:,:,i), X1, Y1, '*cubic');
     end
 
-    [rM,cM,colM] = size(imgOut);
+    [rM, cM, ~] = size(imgOut);
     switch mappingOut
         case 'CubeMap'
-            imgOut = imgOut.*CrossMask(rM,cM);
+            imgOut = imgOut.*CrossMask(rM, cM);
 
         case 'Angular'
-            imgOut = imgOut.*AngularMask(rM,cM);
+            imgOut = imgOut.*AngularMask(rM, cM);
 
         case 'Spherical'
-            imgOut = imgOut.*AngularMask(rM,cM);
+            imgOut = imgOut.*AngularMask(rM, cM);
     end    
 
     imgOut = RemoveSpecials(imgOut);
