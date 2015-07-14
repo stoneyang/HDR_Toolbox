@@ -33,10 +33,11 @@ HOW TO INSTALL:
 
 NOTE ON TONE MAPPING:
 =====================
-The majority of TMOs return images with linear values. This means that gamma encoding
-needs to be applied to the output of these TMOs before visualization; otherwise images may appear dark.
+The majority of TMOs return tone mapped images with linear values. This means that gamma encoding
+needs to be applied to the output of these TMOs before visualization or before writing tone mapped images
+ on the disk; otherwise these images may appear dark.
 A few operators (e.g. Mertens et al.'s operator) return gamma encoded values,
-so there is no need to apply gamma to them; in this case a message is displayed
+so there is no need to apply gamma to them; in this case a message (e.g. a Warning) is displayed
 after tone mapping alerting that there is no need of gamma encoding.
 
 

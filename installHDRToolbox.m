@@ -74,8 +74,9 @@ disp('      }');
 
 disp(' ');
 disp('Note on Tone Mapping:');
-disp('The majority of TMOs return images with linear values. This means that gamma encoding');
-disp('needs to be applied to the output of these TMOs before visualization; otherwise images may appear dark.');
+disp('The majority of TMOs return tone mapped images with linear values. This means that gamma encoding');
+disp('needs to be applied to the output of these TMOs before visualization or before writing tone mapped images');
+disp(' on the disk; otherwise these images may appear dark.');
 disp('A few operators (e.g. Mertens et al.''s operator) return gamma encoded values,');
-disp('so there is no need to apply gamma to them; in this case a message is displayed');
+disp('so there is no need to apply gamma to them; in this case a message (e.g. a Warning) is displayed');
 disp('after tone mapping alerting that there is no need of gamma encoding.');

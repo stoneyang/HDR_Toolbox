@@ -1,7 +1,7 @@
-function imgOut=SaturatedPixels(img, min, max)
+function imgOut = SaturatedPixels(img, min, max)
 %
 %
-%        imgOut=SaturatedPixels(img, min, max)
+%        imgOut = SaturatedPixels(img, min, max)
 %
 %
 %        Input:
@@ -12,7 +12,7 @@ function imgOut=SaturatedPixels(img, min, max)
 %        Output:
 %           -imgOut: a mask with1 over-exposed and under-exposed pixels
 %
-%     Copyright (C) 2011  Francesco Banterle
+%     Copyright (C) 2011-15  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -28,8 +28,8 @@ function imgOut=SaturatedPixels(img, min, max)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-imgOut=ones(size(img));
-imgOut(find(img<min))=0;
-imgOut(find(img>max))=0;
+imgOut = ones(size(img));
+imgOut(find(img < min)) = 0;
+imgOut(find(img > max)) = 0;
 
 end
