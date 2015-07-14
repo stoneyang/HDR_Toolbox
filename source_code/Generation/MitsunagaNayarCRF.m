@@ -1,6 +1,6 @@
-function [lin_fun,pp] = MitsunagaNayarCRF(stack, stack_exposure, N, nSamples)
+function [lin_fun, pp] = MitsunagaNayarCRF(stack, stack_exposure, N, nSamples)
 %
-%       [lin_fun,pp] = MitsunagaNayarCRF(stack, stack_exposure, N, nSamples)
+%       [lin_fun, pp] = MitsunagaNayarCRF(stack, stack_exposure, N, nSamples)
 %
 %       This function computes camera response function using Mitsunaga and
 %       Nayar method.
@@ -99,7 +99,8 @@ for channel=1:col
                 b(i) = b(i) + MN_d(channel, p, q, i - 1) * MN_d(channel, p, q, N);
             end
         end
-    end    
+    end   
+    
     b = -b;
     
     c = A \ b;    
