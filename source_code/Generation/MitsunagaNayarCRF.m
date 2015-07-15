@@ -41,11 +41,11 @@ if(~exist('N', 'var'))
 end
 
 if(isempty(stack))
-    error('ComputeCRF: a stack cannot be empty!');
+    error('MitsunagaNayarCRF: a stack cannot be empty!');
 end
 
 if(isempty(stack_exposure))
-    error('ComputeCRF: a stack_exposure cannot be empty!');
+    error('MitsunagaNayarCRF: a stack_exposure cannot be empty!');
 end
 
 col = size(stack, 3);
