@@ -29,7 +29,7 @@ stack_exposure = ReadLDRStackInfo(name_folder, format);
 [lin_fun, ~] = ComputeCRF(stack / 255.0, stack_exposure);    
 
 disp('4) Build the radiance map using the stack and stack_exposure');
-[imgHDR, lin_fun] = BuildHDR(stackOut, stack_exposure, 'LUT', lin_fun, 'Deb97', 'linear', 0);
+[imgHDR, lin_fun] = BuildHDR(stackOut, stack_exposure, 'LUT', lin_fun, 'Gauss', 'linear', 0);
 
 disp('5) Save the radiance map in the .hdr format');
 hdrimwrite(imgHDR, 'example_build_alignment.hdr');
