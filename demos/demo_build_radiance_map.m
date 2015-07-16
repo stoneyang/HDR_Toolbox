@@ -21,7 +21,7 @@ format = 'JPG';
 stack = double(ReadLDRStack(name_folder, format));
 
 disp('2) Align the stack');
-stackOut = WardAlignment(stack / 255.0, 1, '', '');
+stackOut = WardAlignment(stack / 255.0, 1, name_folder, format);
 
 disp('3) Read exposure values from the exif');
 stack_exposure = ReadLDRStackInfo(name_folder, format);
