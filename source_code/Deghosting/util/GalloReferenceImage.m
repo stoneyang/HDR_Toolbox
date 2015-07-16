@@ -45,32 +45,33 @@ else
     n = size(stack, 4);
 end
 
-toe = 248 / 255;
-tue =   7 / 255;
+t_oe = 248 / 255;
+t_ue =   7 / 255;
 
 target_exposure = -1;
 
 for i=1:n
     if(bStack)
         current_exposure = stack(:,:,:,i);
-        r = size(stack, 1);
-        c = size(stack, 2);
-        value = r * c;        
     else
         current_exposure = ldrimread([folder_name, '/', lst(i).name]);
-        r = size(current_exposure, 1);
-        c = size(current_exposure, 2);
+    end
+    
+    r = size(current_exposure, 1);
+    c = size(current_exposure, 2);
+    
+    if(i == 1)
         value = r * c;            
-    end    
+    end
     
     over_exp = max(current_exposure, [], 3);
     under_exp = min(current_exposure, [], 3);
     
     mask_oe = zeros(r, c);
-    mask_oe(over_exp >= toe) = 1;
+    mask_oe(over_exp >= t_oe) = 1;
 
     mask_ue = zeros(r, c);
-    mask_ue(under_exp <= tue) = 1;
+    mask_ue(under_exp <= t_ue) = 1;
 
     mask = mask_oe + mask_ue;
     mask(mask > 1) = 1;
