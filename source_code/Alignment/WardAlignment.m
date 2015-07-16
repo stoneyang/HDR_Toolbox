@@ -38,6 +38,14 @@ function stackOut = WardAlignment(stack, bStackOut, folder_name, format, target_
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
+if(~exist('folder_name', 'var'))
+    folder_name = '';
+end
+
+if(~exist('format', 'var'))
+    format = '';
+end
+
 lst = [];
 
 bStack = ~isempty(stack);
