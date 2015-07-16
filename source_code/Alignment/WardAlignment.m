@@ -55,6 +55,7 @@ if(~bStack)
     n = length(lst);
 else
     n = size(stack, 4);
+    stack = normalizeFromAnything(stack);
 end
 
 if(n < 2)

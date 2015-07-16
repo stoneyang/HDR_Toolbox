@@ -1,7 +1,7 @@
-function imgOut = MertensTMO( img, folder_name, format, imageStack, wE, wS, wC)
+function imgOut = MertensTMO( img, folder_name, format, imageStack, wE, wS, wC, bWarning)
 %
 %
-%        imgOut = MertensTMO( img, folder_name, format, imageStack, wE, wS, wC )
+%        imgOut = MertensTMO( img, folder_name, format, imageStack, wE, wS, wC, bWarning )
 %
 %
 %        Input:
@@ -58,6 +58,10 @@ end
 
 if(~exist('wC', 'var'))
     wC = 1.0;
+end
+
+if(~exist('bWarning', 'var'))
+    bWarning = 1;
 end
 
 %imageStack generation
@@ -144,6 +148,9 @@ end
 %Clamping
 imgOut = ClampImg(imgOut / max(imgOut(:)), 0.0, 1.0);
 
-disp('WARNING: This algorithm outputs images with gamma encoding. Inverse gamma is not required to be applied!');
+if(bWarning)
+    disp('WARNING: TMO outputs images with gamma encoding.');
+    disp('Inverse gamma is not required to be applied!');
+end
 
 end

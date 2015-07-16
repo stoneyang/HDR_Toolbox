@@ -38,11 +38,11 @@ function [lin_fun, max_lin_fun] = ComputeCRF(stack, stack_exposure, nSamples, bN
 %
 
 if(~exist('nSamples', 'var'))
-    nSamples = 100;
+    nSamples = 256;
 end
 
 if(nSamples < 1)
-    nSamples = 100;
+    nSamples = 256;
 end
 
 if(~exist('bNormalize', 'var'))
@@ -65,20 +65,7 @@ if(size(stack, 4) ~= length(stack_exposure))
     error('stack and stack_exposure have different number of exposures');
 end
 
-if(isa(stack, 'uint8'))
-    stack = single(stack) / 255.0;
-end
-
-if(isa(stack, 'uint16'))
-    stack = single(stack) / 65535.0;
-end
-
-if(isa(stack, 'double') | isa(stack, 'single'))
-    max_val_stack = max(stack(:));
-    if(max_val_stack > 1.0) 
-        stack = stack / max_val_stack;
-    end
-end
+stack = normalizeFromAnything(stack);
 
 col = size(stack, 3);
 

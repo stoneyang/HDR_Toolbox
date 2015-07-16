@@ -28,11 +28,11 @@ function stackOut = GrossbergSampling(stack, nSamples)
 %
 
 if(~exist('nSamples', 'var'))
-    nSamples = 100;
+    nSamples = 256;
 end
 
 if(nSamples < 1)
-    nSamples = 100;
+    nSamples = 256;
 end
 
 debug = 0;

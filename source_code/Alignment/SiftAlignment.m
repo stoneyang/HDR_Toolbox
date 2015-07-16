@@ -37,6 +37,14 @@ function stackOut = SiftAlignment(stack, bStackOut, folder_name, format, target_
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
+if(~exist('folder_name', 'var'))
+    folder_name = '';
+end
+
+if(~exist('format', 'var'))
+    format = '';
+end
+
 lst = [];
 
 stackOut = [];
@@ -48,13 +56,14 @@ if(~bStack)
     n = length(lst);
 else
     n = size(stack, 4);
+    stack = normalizeFromAnything(stack);
 end
 
 if(n < 2)
     return;
 end
 
-if(~exist('target_exposure','var'))
+if(~exist('target_exposure', 'var'))
     target_exposure = GalloReferenceImage(stack, folder_name, format); 
 else
     if(~bStack)
