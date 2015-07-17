@@ -75,6 +75,7 @@ W = WeightFunction(0:(1 / 255):1, 'Deb97');
 %stack sub-sampling
 stack_hist = ComputeLDRStackHistogram(stack);
 stack_samples = GrossbergSampling(stack_hist, nSamples);
+%stack_samples = SpatialSampling(stack, nSamples);
 
 %recovering the CRF
 lin_fun = zeros(256, col);
