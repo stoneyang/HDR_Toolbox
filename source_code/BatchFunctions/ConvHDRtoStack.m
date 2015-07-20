@@ -71,9 +71,9 @@ for i=1:length(lst)
         bSkip = 0;
         if(~bSampling)
             tImg1 = ClampImg(round(255 * img_exp_j) / 255, 0, 1);
-            val = mean(tImg1(:));%mean value
+            val = mean(tImg1(:)); %mean value
 
-            if((val > 0.15) && (val < 0.85))
+            if((val < 0.1) || (val > 0.9))
                 bSkip = 1;
             end
    
