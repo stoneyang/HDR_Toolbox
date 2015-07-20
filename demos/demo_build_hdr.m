@@ -13,17 +13,17 @@
 
 %clear all;
 
-name_folder = 'stack';
-format = 'jpg';
+name_folder = 'memorial';
+format = 'png';
 
 disp('1) Read a stack of LDR images');
 stack = ReadLDRStack(name_folder, format);
 
 disp('2) Read exposure values from the exif');
-stack_exposure = ReadLDRStackInfo(name_folder, format);
+%stack_exposure = ReadLDRStackInfo(name_folder, format);
 
 disp('3) Estimate the Camera Response Function (CRF)');
-[lin_fun, ~] = ComputeCRF(stack, stack_exposure);    
+[lin_fun, ~] = ComputeCRF(stack, stack_exposure, 512);    
 h = figure(1);
 set(h, 'Name', 'The Camera Response Function (CRF)');
 plot(lin_fun);

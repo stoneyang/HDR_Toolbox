@@ -33,6 +33,7 @@ folder = [folder, cellstr('EO')];
 folder = [folder, cellstr('EO/util')];
 folder = [folder, cellstr('Formats')];
 folder = [folder, cellstr('Generation')];
+folder = [folder, cellstr('Generation/util')];
 folder = [folder, cellstr('IBL')];
 folder = [folder, cellstr('IBL/util')];
 folder = [folder, cellstr('IO')];
