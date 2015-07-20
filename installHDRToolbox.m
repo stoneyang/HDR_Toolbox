@@ -37,6 +37,7 @@ folder = [folder, cellstr('Generation/util')];
 folder = [folder, cellstr('IBL')];
 folder = [folder, cellstr('IBL/util')];
 folder = [folder, cellstr('IO')];
+folder = [folder, cellstr('IO_stack')];
 folder = [folder, cellstr('IO_video')];
 folder = [folder, cellstr('LaplacianPyramids')];
 folder = [folder, cellstr('Metrics')];
