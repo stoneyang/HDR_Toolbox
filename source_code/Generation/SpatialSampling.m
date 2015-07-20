@@ -29,7 +29,7 @@ function stackOut = SpatialSampling(stack, nSamples)
 
 [r, c, col, stackSize] = size(stack);
 
-minSamples = max([round(r * c * 0.01), 1]);
+minSamples = max([round(r * c * 0.001), 512]);
 
 if(~exist('nSamples', 'var'))
     nSamples = minSamples;
@@ -41,8 +41,13 @@ end
 
 stackOut = zeros(nSamples, stackSize, col);
 
-X = ClampImg(round(rand(nSamples, 1) * c), 1, c);
-Y = ClampImg(round(rand(nSamples, 1) * r), 1, r);
+r_quart = round(r / 4);
+c_quart = round(c / 4);
+r_half  = round(r / 2);
+c_half  = round(c / 2);
+
+X = ClampImg(round(rand(nSamples, 1) * c_half) + c_quart, 1, c);
+Y = ClampImg(round(rand(nSamples, 1) * r_half) + r_quart, 1, r);
 
 for i=1:nSamples
     for j=1:col
