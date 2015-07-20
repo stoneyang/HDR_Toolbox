@@ -1,12 +1,10 @@
-function ConvHDRtoLDR(fmtIn, fmtOut, tonemapper, ldr_gamma)
+function ConvHDRtoStack(fmtIn, fmtOut, ldr_gamma)
 %
-%        ConvHDRtoLDR(fmtIn, fmtOut, tonemapper, ldr_gamma)
+%        ConvHDRtoLDR(fmtIn, fmtOut)
 %
-%        This batch function converts HDR images in the current directory
-%        from a format, fmtIn, to tone mapped image in LDR format, fmtOut.
 %        
 %        For example:
-%           ConvLDRtoLDR('hdr', 'jpg', @ReinhardTMO, 2.2);
+%           ConvLDRtoLDR('hdr', 'jpg', 2.2);
 %
 %        This lines tonemaps all the .hdr files in the folder using the 
 %        Reinhard et al.'s operator and it saves them as .jpg files using
@@ -22,6 +20,9 @@ function ConvHDRtoLDR(fmtIn, fmtOut, tonemapper, ldr_gamma)
 %           Reinhard et al.'s operator
 %           -ldr_gamma: the encoding gamma for the LDR images. The default
 %           value is 2.2
+%
+%        Output:
+%           -ret: a boolean value, true or 1 if the method succeeds
 %
 %     Copyright (C) 2012-15  Francesco Banterle
 %
@@ -43,10 +44,6 @@ if(~exist('ldr_gamma', 'var'))
     ldr_gamma = 2.2;
 end
 
-if(~exist('tonemapper', 'var'))
-    tonemapper = @ReinhardTMO;
-end
-
 lst = dir(['*.', fmtIn]);
 
 for i=1:length(lst)
@@ -54,12 +51,17 @@ for i=1:length(lst)
     
     tmp_name = lst(i).name;    
     img = hdrimread(tmp_name);
+    L = lum(img);
     
-    img_tmo = GammaTMO(tonemapper(img), ldr_gamma);
+    fstops = ExposureHistogramCovering(L);
     
-    tmp_name_we = RemoveExt(tmp_name);
-    tmp_name_out = [tmp_name_we, '.', fmtOut];
-    imwrite(img_tmo, tmp_name_out);
+    for j=1:length(fstops)    
+        img_exp_j = GammaTMO(img, ldr_gamma, fstops(i));
+    
+        tmp_name_we = RemoveExt(tmp_name);
+        tmp_name_out = [tmp_name_we, '_fstop_', num2str(j), '.', fmtOut];
+        imwrite(img_exp_j, tmp_name_out);
+    end       
 end
 
 end
