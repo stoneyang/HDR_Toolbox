@@ -1,6 +1,6 @@
-function ConvHDRtoStack(fmtIn, fmtOut, ldr_gamma)
+function ConvHDRtoStack(fmtIn, fmtOut, bSampling, ldr_gamma)
 %
-%        ConvHDRtoLDR(fmtIn, fmtOut)
+%        ConvHDRtoStack(fmtIn, fmtOut, bSampling, ldr_gamma)
 %
 %        
 %        For example:
@@ -15,9 +15,7 @@ function ConvHDRtoStack(fmtIn, fmtOut, ldr_gamma)
 %           to be converted. This can be: 'hdr', 'pfm'
 %           -fmtOut: an input string represeting the LDR format of
 %           converted images. This can be: 'jpeg', 'jpg', 'png', etc.
-%           -tonemapper: the tone mapping function to be used for tone
-%           mapping the input HDR images. The default value is the
-%           Reinhard et al.'s operator
+%           -bSampling: using or not histogram sampling
 %           -ldr_gamma: the encoding gamma for the LDR images. The default
 %           value is 2.2
 %
@@ -40,6 +38,10 @@ function ConvHDRtoStack(fmtIn, fmtOut, ldr_gamma)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
+if(~exist('bSampling', 'var'))
+    bSampling = 0;
+end
+
 if(~exist('ldr_gamma', 'var'))
     ldr_gamma = 2.2;
 end
@@ -51,16 +53,37 @@ for i=1:length(lst)
     
     tmp_name = lst(i).name;    
     img = hdrimread(tmp_name);
-    L = lum(img);
+    L = lum(img);    
+    L = imresize(L, 0.5, 'bilinear');
     
-    fstops = ExposureHistogramCovering(L);
+    if(bSampling)
+        fstops = ExposureHistogramCovering(L, 1024);
+    else
+        minL = round(log2(min(L(:))));
+        maxL = round(log2(max(L(:))));
+        fstops = -maxL:-minL; 
+    end
     
-    for j=1:length(fstops)    
-        img_exp_j = GammaTMO(img, ldr_gamma, fstops(i));
-    
-        tmp_name_we = RemoveExt(tmp_name);
-        tmp_name_out = [tmp_name_we, '_fstop_', num2str(j), '.', fmtOut];
-        imwrite(img_exp_j, tmp_name_out);
+    for j=1:length(fstops)   
+        disp(fstops(j));
+        img_exp_j = GammaTMO(img, ldr_gamma, fstops(j));
+        
+        bSkip = 0;
+        if(~bSampling)
+            tImg1 = ClampImg(round(255 * img_exp_j) / 255, 0, 1);
+            val = mean(tImg1(:));%mean value
+
+            if((val > 0.15) && (val < 0.85))
+                bSkip = 1;
+            end
+   
+        end
+            
+        if(~bSkip)
+            tmp_name_we = RemoveExt(tmp_name);
+            tmp_name_out = [tmp_name_we, '_fstop_', num2str(j), '.', fmtOut];
+            imwrite(img_exp_j, tmp_name_out);
+        end
     end       
 end
 

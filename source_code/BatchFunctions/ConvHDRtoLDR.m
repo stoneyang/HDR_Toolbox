@@ -3,7 +3,7 @@ function ConvHDRtoLDR(fmtIn, fmtOut, tonemapper, ldr_gamma)
 %        ConvHDRtoLDR(fmtIn, fmtOut, tonemapper, ldr_gamma)
 %
 %        This batch function converts HDR images in the current directory
-%        from a format, fmtIn, to tone mapped image in LDR format, fmtOut.
+%        from a format, fmtIn, to tone mapped image in a LDR format, fmtOut.
 %        
 %        For example:
 %           ConvLDRtoLDR('hdr', 'jpg', @ReinhardTMO, 2.2);
