@@ -1,6 +1,6 @@
-function stackOut = SpatialSampling(stack, nSamples)
+function stackOut = RandomSpatialSampling(stack, nSamples)
 %
-%       stackOut = SpatialSampling(stack, nSamples)
+%       stackOut = RandomSpatialSampling(stack, nSamples)
 %
 %
 %        Input:

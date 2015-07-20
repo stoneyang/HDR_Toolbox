@@ -13,7 +13,8 @@ function [lin_fun, max_lin_fun] = ComputeCRF(stack, stack_exposure, nSamples, sa
 %           -sampling_strategy: how to select samples:
 %               -'Grossberg': picking samples according to Grossberg and
 %               Nayar algorithm (CDF based).
-%               -'SpatialRandom': picking random samples in the image.
+%               -'RandomSpatial': picking random samples in the image.
+%               -'RegularSpatial': picking regular samples in the image.
 %           -bNormalize: if 1 it enables function normalization.
 %           -smoothing_term: a smoothing term for solving the linear
 %           system.
@@ -90,8 +91,11 @@ switch sampling_strategy
         stack_hist = ComputeLDRStackHistogram(stack);
         stack_samples = GrossbergSampling(stack_hist, nSamples);
         
-    case 'SpatialRandom'
-        stack_samples = SpatialSampling(stack, nSamples);
+    case 'RandomSpatial'
+        stack_samples = RandomSpatialSampling(stack, nSamples);
+
+    case 'RegularSpatial'
+        stack_samples = RegularSpatialSampling(stack, nSamples);
         
     otherwise
         stack_hist = ComputeLDRStackHistogram(stack);

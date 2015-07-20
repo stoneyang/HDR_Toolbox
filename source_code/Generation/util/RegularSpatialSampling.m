@@ -1,6 +1,6 @@
-function stackOut = RegularSampling(stack, nSamples)
+function stackOut = RegularSpatialSampling(stack, nSamples)
 %
-%       stackOut = RegularSampling(stack, nSamples)
+%       stackOut = RegularSpatialSampling(stack, nSamples)
 %
 %
 %        Input:
@@ -46,8 +46,16 @@ c_quart = round(c / 4);
 r_half  = round(r / 2);
 c_half  = round(c / 2);
 
-X = ClampImg(round(rand(nSamples, 1) * c_half) + c_quart, 1, c);
-Y = ClampImg(round(rand(nSamples, 1) * r_half) + r_quart, 1, r);
+f = round(sqrt(nSamples) + 1);
+rate_x = max([ceil(c_half / f), 1]);
+rate_y = max([ceil(r_half / f), 1]);
+
+[X, Y] = meshgrid(c_quart:rate_x:(c_quart + c_half), r_quart:rate_y:(r_quart + r_half));
+ 
+X = X(:);
+Y = Y(:);
+
+nSamples = length(X);
 
 for i=1:nSamples
     for j=1:col
