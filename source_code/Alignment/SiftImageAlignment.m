@@ -6,12 +6,12 @@ function imgOut = SiftImageAlignment(img1, img2, maxIterations)
 %
 %
 %       input:
-%           img1: target image
-%           img2: image to align to img1
-%           maxIterations: number of iterations for RANSAC (typically 32-100) 
+%           -img1: reference image
+%           -img2: image to be aligned to img1
+%           -maxIterations: number of iterations for RANSAC (typically 32-100) 
 %
 %       output:
-%           imgOut: img2 aligned to img1 using a homography
+%           -imgOut: img2 aligned to img1 using a homography
 %
 %
 %     This code is written by Francesco Banterle, based upon the 

@@ -1,7 +1,7 @@
-function imgOut = WardImageAlignment(img1, img2, bRotation)
+function [imgOut, alignment_info] = WardImageAlignment(img1, img2, bRotation)
 %
 %
-%       imgOut = WardImageAlignment(img1, img2, bRotation)
+%       [imgOut, alignment_info] = WardImageAlignment(img1, img2, bRotation)
 %
 %       This function shifts pixels on the right with wrapping of the moved
 %       pixels. This can be used as rotation on the Y-axis for environment
@@ -15,6 +15,7 @@ function imgOut = WardImageAlignment(img1, img2, bRotation)
 %
 %       output:
 %           -imgOut: img2 aligned to img1 using a homography
+%           -alignment_info: 
 %
 %
 %     Copyright (C) 2015  Francesco Banterle
@@ -36,19 +37,27 @@ function imgOut = WardImageAlignment(img1, img2, bRotation)
 if(~exist('bRotation', 'var'))
     bRotation = 1;
 end
-         
+
+alignment_info = zeros(3, 2);
+
 shift_ret = WardGetExpShift(img1, img2);
 imgOut = imshift(img2, shift_ret);
+
+alignment_info(1, :) = shift_ret;
         
 if(bRotation)
     [rot_ret, bCheck] = WardSimpleRot(img1, imgOut);
         
+    alignment_info(2, :) = [rot_ret, bCheck];
+    
     if(bCheck)
         imgOut = imrotate(imgOut, rot_ret, 'bilinear', 'crop');
 
         %final shift
         shift_ret = WardGetExpShift(img1, imgOut);
-        imgOut = imshift(imgOut, shift_ret);            
+        imgOut = imshift(imgOut, shift_ret); 
+        
+        alignment_info(3, :) = shift_ret;    
     end
 end
 
