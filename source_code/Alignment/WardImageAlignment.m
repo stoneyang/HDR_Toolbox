@@ -1,4 +1,4 @@
-function [imgOut, alignment_info] = WardImageAlignment(img1, img2, bRotation)
+function [imgOut, alignment_info] = WardImageAlignment(img1, img2, bRotation, ward_percentile)
 %
 %
 %       [imgOut, alignment_info] = WardImageAlignment(img1, img2, bRotation)
@@ -12,6 +12,7 @@ function [imgOut, alignment_info] = WardImageAlignment(img1, img2, bRotation)
 %           -img2: image to be aligned to img1
 %           -bRotation: flag to enable (1) or disable (0) rotational
 %           alignment
+%           -ward_percentile: 
 %
 %       output:
 %           -imgOut: img2 aligned to img1 using a homography
@@ -40,7 +41,7 @@ end
 
 alignment_info = zeros(3, 2);
 
-shift_ret = WardGetExpShift(img1, img2);
+shift_ret = WardGetExpShift(img1, img2, ward_percentile);
 imgOut = imshift(img2, shift_ret);
 
 alignment_info(1, :) = shift_ret;
