@@ -1,17 +1,19 @@
-function imgOut = SiftImageAlignment(img1, img2, maxIterations)
+function [imgOut, H] = SiftImageAlignment(img1, img2, maxIterations)
 %
-%       imgOut = SiftImageAlignment(img1, img2, maxIterations)
+%       [imgOut, H] = SiftImageAlignment(img1, img2, maxIterations)
 %
 %       This function computes alignment using SIFT from VL Feat.
 %
 %
 %       input:
-%           -img1: reference image
-%           -img2: image to be aligned to img1
-%           -maxIterations: number of iterations for RANSAC (typically 32-100) 
+%           -img1: reference image.
+%           -img2: image to be aligned to img1.
+%           -maxIterations: number of iterations for RANSAC (typically
+%           32-100).
 %
 %       output:
-%           -imgOut: img2 aligned to img1 using a homography
+%           -imgOut: img2 aligned to img1 using a homography.
+%           -H: the homography for aligning img2 onto img1.
 %
 %
 %     This code is written by Francesco Banterle, based upon the 
