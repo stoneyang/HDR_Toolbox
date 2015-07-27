@@ -1,7 +1,7 @@
-function imgOut=CleanWell(img, iter)
+function imgOut = CleanWell(img, iter)
 %
 %
-%       imgOut=CleanWell(img,iter)
+%       imgOut = CleanWell(img,iter)
 %
 %
 %        Input:
@@ -26,19 +26,19 @@ function imgOut=CleanWell(img, iter)
 %     You should have received a copy of the GNU General Public License
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
-tmp=bwmorph(img,'clean');
-img=tmp;
+tmp = bwmorph(img, 'clean');
+img = tmp;
 
 for i=1:iter
-    tmp=bwmorph(tmp,'erode');
-    tmp=bwmorph(tmp,'clean');
+    tmp=bwmorph(tmp, 'erode');
+    tmp=bwmorph(tmp, 'clean');
 end
 
-for i=1:iter+2
-    tmp=bwmorph(tmp,'dilate');
+for i=1:(iter + 2)
+    tmp=bwmorph(tmp, 'dilate');
 end
 
-imgOut=tmp.*img;
-imgOut=bwmorph(imgOut,'clean');
+imgOut = tmp .* img;
+imgOut = bwmorph(imgOut, 'clean');
 
 end

@@ -61,8 +61,8 @@ fAlpha = 0.1 * mean(G2(:));
 imgTmp = L;
 for i=1:numPyr
     imgTmp=imresize(conv2(imgTmp,kernel,'same'),0.5,'bilinear');
-    Fx = imfilter(imgTmp, kernelX, 'same') / (2^(i+1));
-    Fy = imfilter(imgTmp, kernelY, 'same') / (2^(i+1));
+    Fx = imfilter(imgTmp, kernelX, 'same') / (2^(i + 1));
+    Fy = imfilter(imgTmp, kernelY, 'same') / (2^(i + 1));
     G = [G, struct('fx', Fx, 'fy', Fy)];
 end
 
@@ -82,13 +82,13 @@ kernelX = [0, 0, 0; -1, 1, 0; 0,  0, 0];
 kernelY = [0, 0, 0;  0, 1, 0; 0, -1, 0];
 dx = imfilter(G(1).fx, kernelX, 'same');
 dy = imfilter(G(1).fy, kernelY, 'same');
-divG = RemoveSpecials(dx+dy);
+divG = RemoveSpecials(dx + dy);
 
 %Solving Poisson equation
 Ld = exp(PoissonSolver(divG));
 
 if(bNormalization)
-    Ld = ClampImg(Ld/MaxQuart(Ld, 0.99995), 0, 1);
+    Ld = ClampImg(Ld / MaxQuart(Ld, 0.99995), 0, 1);
 end
 
 %Changing luminance

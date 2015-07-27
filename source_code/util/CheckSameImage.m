@@ -1,7 +1,7 @@
-function same=CheckSameImage(Img1,Img2)
+function same = CheckSameImage(Img1, Img2)
 %
 %
-%       same=CheckSameImage(Img1,Img2)
+%       same = CheckSameImage(Img1, Img2)
 %
 %
 %       This image checks if two images are the same.
@@ -22,9 +22,9 @@ function same=CheckSameImage(Img1,Img2)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-[r1,c1,col1]=size(Img1);
-[r2,c2,col2]=size(Img2);
+[r1, c1, col1] = size(Img1);
+[r2, c2, col2] = size(Img2);
 
-same = ((r1==r2)&(c1==c2)&(col1==col2));
+same = ((r1 == r2) & (c1 == c2) & (col1 == col2));
 
 end
