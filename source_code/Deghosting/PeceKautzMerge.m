@@ -114,7 +114,7 @@ end
 
 %Normalization of weights
 for i=1:n
-    hdrimwrite(weight_move(:,:,i),['weight_move',num2str(i),'.pfm']);
+    %hdrimwrite(weight_move(:,:,i),['weight_move',num2str(i),'.pfm']);
     total = total + weight_move(:,:,i);
 end
 

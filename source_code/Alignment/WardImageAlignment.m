@@ -39,6 +39,10 @@ if(~exist('bRotation', 'var'))
     bRotation = 1;
 end
 
+if(~exist('ward_percentile', 'var'))
+    ward_percentile = 0.5;
+end
+
 alignment_info = zeros(3, 2);
 
 shift_ret = WardGetExpShift(img1, img2, ward_percentile);
