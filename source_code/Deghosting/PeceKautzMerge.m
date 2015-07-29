@@ -89,11 +89,7 @@ for i=1:n
     weight(:,:,i) = MertensWellExposedness(imageStack(:,:,:,i));
 end
 
-hdrimwrite(weight(:,:,1),'w11.pfm');
-hdrimwrite(weight(:,:,2),'w12.pfm');
-
 [moveMask, num] = PeceKautzMoveMask(imageStack, iterations, ke_size, kd_size, ward_percentile);
-hdrimwrite(moveMask, 'moveMask.pfm');
 weight_move = weight;
 for i=0:num
     indx = find(moveMask == i);
