@@ -1,7 +1,7 @@
-function [moveMask, num] = PeceKautzMoveMask(imageStack, iterations, ke_size, kd_size)
+function [moveMask, num] = PeceKautzMoveMask(imageStack, iterations, ke_size, kd_size, ward_percentile)
 %
 %
-%        [moveMask, num] = PeceKautzMoveMask(imageStack, iterations, kernelSize)
+%        [moveMask, num] = PeceKautzMoveMask(imageStack, iterations, kernelSize, ward_percentile)
 %
 %
 %        Input:
@@ -10,6 +10,7 @@ function [moveMask, num] = PeceKautzMoveMask(imageStack, iterations, ke_size, kd
 %           mask
 %           -ke_size: size of the erosion kernel
 %           -kd_size: size of the dilation kernel
+%           -ward_percentile:
 %
 %        Output:
 %           -moveMask: movements' mask
@@ -49,10 +50,16 @@ if(~exist('kd_size', 'var'))
     kd_size = 17;
 end
 
+if(~exist('ward_percentile', 'var'))
+    ward_percentile = 0.5;
+end
+
+%computing the move mask
 n = size(imageStack, 4);
-[moveMask, ~] = WardComputeThreshold(imageStack(:,:,:,1)); 
+[moveMask, ~] = WardComputeThreshold(imageStack(:,:,:,1), ward_percentile); 
+
 for i = 2:n   
-    [mask, ~] = WardComputeThreshold(imageStack(:,:,:,i));
+    [mask, ~] = WardComputeThreshold(imageStack(:,:,:,i), ward_percentile);
     moveMask = moveMask + mask;
 end
 

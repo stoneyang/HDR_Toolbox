@@ -1,7 +1,7 @@
-function imgOut = PeceKautzMerge(imageStack, folder_name, format, iterations, ke_size, kd_size)
+function imgOut = PeceKautzMerge(imageStack, folder_name, format, iterations, ke_size, kd_size, ward_percentile)
 %
 %
-%        imgOut = PeceKautzMerge(imageStack, folder_name, format, iterations, kernelSize)
+%        imgOut = PeceKautzMerge(imageStack, folder_name, format, iterations, kernelSize, ward_percentile)
 %
 %
 %        Input:
@@ -15,6 +15,7 @@ function imgOut = PeceKautzMerge(imageStack, folder_name, format, iterations, ke
 %           mask
 %           -ke_size: size of the erosion kernel
 %           -kd_size: size of the dilation kernel
+%           -ward_percentile: 
 %
 %        Output:
 %           -imgOut: tone mapped image
@@ -70,7 +71,11 @@ if(~exist('ke_size', 'var'))
 end
 
 if(~exist('kd_size', 'var'))
-    kd_size = 17;
+    kd_size = 7;
+end
+
+if(~exist('ward_percentile', 'var'))
+    ward_percentile = 0.5;
 end
 
 %number of images in the stack
@@ -84,7 +89,7 @@ for i=1:n
     weight(:,:,i) = MertensWellExposedness(imageStack(:,:,:,i));
 end
 
-[moveMask, num] = PeceKautzMoveMask(imageStack, iterations, ke_size, kd_size);
+[moveMask, num] = PeceKautzMoveMask(imageStack, iterations, ke_size, kd_size, ward_percentile);
 
 weight_move = weight;
 for i=0:num
@@ -99,7 +104,7 @@ for i=0:num
 
     W = zeros(r, c);
     W(indx) = 1;
-    weight_move(:,:,j) = weight_move(:,:,j).* (1 - W) + W;
+    weight_move(:,:,j) = weight_move(:,:,j) .* (1 - W) + W;
     
     for k=1:n
         if(j ~= k)
@@ -110,6 +115,7 @@ end
 
 %Normalization of weights
 for i=1:n
+    hdrimwrite(weight_move(:,:,i),['weight_move',num2str(i),'.pfm']);
     total = total + weight_move(:,:,i);
 end
 
