@@ -116,9 +116,6 @@ for i=0:num
     end
 end
 
-hdrimwrite(weight_move(:,:,1),'w1.pfm');
-hdrimwrite(weight_move(:,:,2),'w2.pfm');
-
 %Normalization of weights
 for i=1:n
     hdrimwrite(weight_move(:,:,i),['weight_move',num2str(i),'.pfm']);
