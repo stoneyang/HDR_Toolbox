@@ -1,7 +1,7 @@
-function [moveMask, num] = PeceKautzMoveMask(imageStack, iterations, ke_size, kd_size, ward_percentile)
+function [moveMaskOut, num] = PeceKautzMoveMask(imageStack, iterations, ke_size, kd_size, ward_percentile)
 %
 %
-%        [moveMask, num] = PeceKautzMoveMask(imageStack, iterations, kernelSize, ward_percentile)
+%        [moveMaskOut, num] = PeceKautzMoveMask(imageStack, iterations, kernelSize, ward_percentile)
 %
 %
 %        Input:
@@ -13,7 +13,7 @@ function [moveMask, num] = PeceKautzMoveMask(imageStack, iterations, ke_size, kd
 %           -ward_percentile:
 %
 %        Output:
-%           -moveMask: movements' mask
+%           -moveMaskOut: movements' mask
 %           -num: number of different connected components in moveMask
 % 
 %     Copyright (C) 2013-15  Francesco Banterle
@@ -68,7 +68,6 @@ moveMask(moveMask == n) = 0;
 
 %convert moveMask into a binary mask
 moveMask(moveMask > 0) = 1;
-
 kernel_d = strel('disk', kd_size);
 kernel_e = strel('disk', ke_size);
 
@@ -78,10 +77,9 @@ for i=1:iterations
 end
 
 %calculate connected components
-[moveMask1, num1] = bwlabel(moveMask, 4);
-[moveMask2, num2] = bwlabel(1 - moveMask, 4);
+[moveMask_tmp, num] = bwlabel(moveMask, 4);
 
-moveMask = moveMask1 + (moveMask2 + num1);
-num = num1 + num2;
+moveMaskOut = moveMask_tmp .* moveMask; 
+moveMaskOut(moveMask == 0) = -1;
 
 end

@@ -75,7 +75,7 @@ if(~exist('kd_size', 'var'))
 end
 
 if(~exist('ward_percentile', 'var'))
-    ward_percentile = 0.5;
+    ward_percentile = 0.6;
 end
 
 %number of images in the stack
@@ -89,8 +89,11 @@ for i=1:n
     weight(:,:,i) = MertensWellExposedness(imageStack(:,:,:,i));
 end
 
-[moveMask, num] = PeceKautzMoveMask(imageStack, iterations, ke_size, kd_size, ward_percentile);
+hdrimwrite(weight(:,:,1),'w11.pfm');
+hdrimwrite(weight(:,:,2),'w12.pfm');
 
+[moveMask, num] = PeceKautzMoveMask(imageStack, iterations, ke_size, kd_size, ward_percentile);
+hdrimwrite(moveMask, 'moveMask.pfm');
 weight_move = weight;
 for i=0:num
     indx = find(moveMask == i);
@@ -112,6 +115,9 @@ for i=0:num
         end
     end
 end
+
+hdrimwrite(weight_move(:,:,1),'w1.pfm');
+hdrimwrite(weight_move(:,:,2),'w2.pfm');
 
 %Normalization of weights
 for i=1:n
