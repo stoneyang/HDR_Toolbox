@@ -63,7 +63,7 @@ if(isa(imageStack, 'uint16'))
 end
 
 if(~exist('iterations', 'var'))
-    iterations = 15;
+    iterations = 1;
 end
 
 if(~exist('ke_size', 'var'))
@@ -71,7 +71,7 @@ if(~exist('ke_size', 'var'))
 end
 
 if(~exist('kd_size', 'var'))
-    kd_size = 7;
+    kd_size = 17;
 end
 
 if(~exist('ward_percentile', 'var'))
@@ -86,7 +86,15 @@ total  = zeros(r, c);
 weight = ones(r, c, n);
 for i=1:n
     %calculation of the weights
+    L = lum(imageStack(:,:,:,i));  
+
     weight(:,:,i) = MertensWellExposedness(imageStack(:,:,:,i));
+    
+    weight(:,:,i) = weight(:,:,i) .* MertensContrast(L);
+     
+    weight(:,:,i) = weight(:,:,i) .* MertensSaturation(imageStack(:,:,:,i));
+    
+    weight(:,:,i) = weight(:,:,i) + 1e-12;  
 end
 
 [moveMask, num] = PeceKautzMoveMask(imageStack, iterations, ke_size, kd_size, ward_percentile);
@@ -146,7 +154,7 @@ for i=1:col
 end
 
 %Clamping
-imgOut = ClampImg(imgOut / max(imgOut(:)), 0.0, 1.0);
+imgOut = ClampImg(imgOut, 0.0, 1.0);
 
 disp('This algorithm outputs images with gamma encoding. Inverse gamma is not required to be applied!');
 end
