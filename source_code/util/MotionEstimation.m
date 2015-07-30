@@ -1,6 +1,6 @@
-function motionMap = MotionEstimation(img1, img2, blockSize, bVisualize)
+function [motionMap, uv] = MotionEstimation(img1, img2, blockSize, bVisualize)
 %
-%       motionMap = MotionEstimation(img1, img2, blockSize, bVisualize)
+%       [motionMap, uv] = MotionEstimation(img1, img2, blockSize, bVisualize)
 %
 %       This computes motion estimation between frames
 %
@@ -98,6 +98,7 @@ for i=1:block_r
 end
 
 if(bVisualize)
+    figure(bVisualize)
     quiver(uv(:, :, 1), uv(:, :, 2), uv(:, :, 3), uv(:, :, 4));
 end
 
