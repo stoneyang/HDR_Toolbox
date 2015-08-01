@@ -99,7 +99,8 @@ end
 
 if(bVisualize)
     figure(bVisualize)
-    quiver(uv(:, :, 1), uv(:, :, 2), uv(:, :, 3), uv(:, :, 4));
+    
+    quiver(uv(:, :, 1), r - uv(:, :, 2) + 1, uv(:, :, 3), -uv(:, :, 4));
 end
 
 end

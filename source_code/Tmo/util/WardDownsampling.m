@@ -1,18 +1,16 @@
-function H = histogram_ceiling(H, k)
+function imgOut = WardDownsampling(img)
 %
-%
-%        H = histogram_ceiling(H, k)
+%        imgOut = WardDownsampling(img)
 %
 %
 %        Input:
-%           -H: input histogram
-%           -k: 
+%           -img: input image
 %
 %        Output:
-%           -H: output histogram
+%           -imgOut: downsampled image
 % 
-%     Copyright (C) 2010-15 Francesco Banterle
-%  
+%     Copyright (C) 2015  Francesco Banterle
+%
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
 %     the Free Software Foundation, either version 3 of the License, or
@@ -27,26 +25,13 @@ function H = histogram_ceiling(H, k)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-tolerance = sum(H) * 0.025;
-trimmings = 0;
-val = 1;
-n = length(H);
+[n, m, col] = size(img);
+maxCoord = max([n, m]);
+viewAngleWidth  = 2 * atan(m / (2 * maxCoord * 0.75));
+viewAngleHeight = 2 * atan(n / (2 * maxCoord * 0.75));
+fScaleX = (2 * tan(viewAngleWidth / 2) / 0.01745);
+fScaleY = (2 * tan(viewAngleHeight / 2) / 0.01745);
 
-while((trimmings <= tolerance) & val)
-    trimmings = 0;
-    T = sum(H);
-    
-    if(T < tolerance)
-        val = 0;
-    else
-        ceiling = T * k;
-        for i=1:n
-            if(H(i) > ceiling)
-                trimmings = trimmings + H(i) - ceiling;
-                H(i) = ceiling;
-            end
-        end
-    end
-end
+imgOut = imresize(img, [round(fScaleY), round(fScaleX)], 'bilinear');
 
 end

@@ -43,16 +43,7 @@ end
 
 %Luminance channel
 L = lum(img);
-
-%The image is downsampled
-[n, m] =size(L);
-maxCoord = max([n, m]);
-viewAngleWidth  = 2 * atan(m / (2 * maxCoord * 0.75));
-viewAngleHeight = 2 * atan(n / (2 * maxCoord * 0.75));
-fScaleX = (2 * tan(viewAngleWidth / 2) / 0.01745);
-fScaleY = (2 * tan(viewAngleHeight / 2) / 0.01745);
-
-L2 = imresize(L, [round(fScaleY), round(fScaleX)], 'bilinear');
+L2 = WardDownsampling(L);
 LMax = max(L2(:));
 LMin = min(L2(:));
 
@@ -80,7 +71,7 @@ for i=1:nBin
     p(i) = numel(indx);
 end
 
-%Histogram ceiling   
+%Histogram ceiling
 p = histogram_ceiling(p, delta / (LldMax - LldMin));
 if(bPlotHistogram)
     bar(p);
