@@ -42,6 +42,11 @@ global L;
 global imgWork;
 global lights;
 
+%falloff compensation
+if(falloff)
+    img = FallOffEnvMap(img);
+end
+
 L = lum(img);
 [r, c] = size(L);
 
@@ -49,14 +54,8 @@ if(nlights < 0)
     nlights = 2.^(round(log2(min([r, c])) + 2));
 end
 
-%falloff compensation
-if(falloff)
-    img = FallOffEnvMap(img);
-end
-
 %Global variables initialization
 imgWork = img;
-
 lights = [];
 MedianCutAux(1, c, 1, r, round(log2(nlights)));
 imgOut = GenerateLightMap(lights, c, r);

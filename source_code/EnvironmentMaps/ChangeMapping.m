@@ -97,13 +97,13 @@ else
     [rM, cM, ~] = size(imgOut);
     switch mappingOut
         case 'CubeMap'
-            imgOut = imgOut.*CrossMask(rM, cM);
+            imgOut = imgOut .* CrossMask(rM, cM);
 
         case 'Angular'
-            imgOut = imgOut.*AngularMask(rM, cM);
+            imgOut = imgOut .* AngularMask(rM, cM);
 
         case 'Spherical'
-            imgOut = imgOut.*AngularMask(rM, cM);
+            imgOut = imgOut .* AngularMask(rM, cM);
     end    
 
     imgOut = RemoveSpecials(imgOut);

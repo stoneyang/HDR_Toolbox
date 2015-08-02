@@ -25,7 +25,6 @@ function [X1, Y1] = Direction2LL(D, r, c)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-%Coordinates generation
 X1 = 1 + atan2(D(:,:,1), -D(:,:,3)) / pi;
 Y1 = acos(D(:,:,2)) / pi;
 X1 = RemoveSpecials(X1 * c / 2);
