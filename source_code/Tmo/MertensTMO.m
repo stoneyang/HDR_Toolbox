@@ -93,7 +93,6 @@ end
 total  = zeros(r, c);
 weight = ones(r, c, n);
 for i=1:n
-    %calculation of the weights
     if(wE > 0.0)
         weightE = MertensWellExposedness(imageStack(:,:,:,i));
         weight(:,:,i) = weight(:,:,i) .* weightE.^wE;
@@ -115,8 +114,7 @@ for i=1:n
     total = total + weight(:,:,i);
 end
 
-%Normalization of weights
-for i=1:n
+for i=1:n %weights normalization
     weight(:,:,i) = weight(:,:,i) ./ total;
 end
 

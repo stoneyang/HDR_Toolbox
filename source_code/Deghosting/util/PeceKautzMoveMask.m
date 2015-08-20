@@ -1,7 +1,7 @@
-function [moveMask, num] = PeceKautzMoveMask(imageStack, iterations, ke_size, kd_size)
+function [moveMaskOut, num] = PeceKautzMoveMask(imageStack, iterations, ke_size, kd_size, ward_percentile)
 %
 %
-%        [moveMask, num] = PeceKautzMoveMask(imageStack, iterations, kernelSize)
+%        [moveMaskOut, num] = PeceKautzMoveMask(imageStack, iterations, kernelSize, ward_percentile)
 %
 %
 %        Input:
@@ -10,9 +10,10 @@ function [moveMask, num] = PeceKautzMoveMask(imageStack, iterations, ke_size, kd
 %           mask
 %           -ke_size: size of the erosion kernel
 %           -kd_size: size of the dilation kernel
+%           -ward_percentile:
 %
 %        Output:
-%           -moveMask: movements' mask
+%           -moveMaskOut: movements' mask
 %           -num: number of different connected components in moveMask
 % 
 %     Copyright (C) 2013-15  Francesco Banterle
@@ -49,10 +50,16 @@ if(~exist('kd_size', 'var'))
     kd_size = 17;
 end
 
+if(~exist('ward_percentile', 'var'))
+    ward_percentile = 0.5;
+end
+
+%computing the move mask
 n = size(imageStack, 4);
-[moveMask, ~] = WardComputeThreshold(imageStack(:,:,:,1)); 
+[moveMask, ~] = WardComputeThreshold(imageStack(:,:,:,1), ward_percentile); 
+
 for i = 2:n   
-    [mask, ~] = WardComputeThreshold(imageStack(:,:,:,i));
+    [mask, ~] = WardComputeThreshold(imageStack(:,:,:,i), ward_percentile);
     moveMask = moveMask + mask;
 end
 
@@ -61,7 +68,6 @@ moveMask(moveMask == n) = 0;
 
 %convert moveMask into a binary mask
 moveMask(moveMask > 0) = 1;
-
 kernel_d = strel('disk', kd_size);
 kernel_e = strel('disk', ke_size);
 
@@ -71,10 +77,9 @@ for i=1:iterations
 end
 
 %calculate connected components
-[moveMask1, num1] = bwlabel(moveMask, 4);
-[moveMask2, num2] = bwlabel(1 - moveMask, 4);
+[moveMask_tmp, num] = bwlabel(moveMask, 4);
 
-moveMask = moveMask1 + (moveMask2 + num1);
-num = num1 + num2;
+moveMaskOut = moveMask_tmp .* moveMask; 
+moveMaskOut(moveMask == 0) = -1;
 
 end

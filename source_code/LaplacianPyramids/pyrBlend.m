@@ -26,19 +26,20 @@ function imgOut = pyrBlend(img1, img2, weight)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-col = size(img1,3);
+col = size(img1, 3);
 
-p1 = pyrImg3(img1,@pyrLapGen);
-p2 = pyrImg3(img2,@pyrLapGen);
+p1 = pyrImg3(img1, @pyrLapGen);
+p2 = pyrImg3(img2, @pyrLapGen);
 
 g1 = pyrGaussGen(weight);
-g2 = pyrGaussGen(1-weight);
+g2 = pyrGaussGen(1 - weight);
 
 imgOut = zeros(size(img1));
+
 for i=1:col
-    tpg1 = pyrLst2OP(p1(i),g1, @pyrMul);
-    tpg2 = pyrLst2OP(p2(i),g2, @pyrMul);
-    tf   = pyrLst2OP(tpg1,tpg2,@pyrAdd);
+    tpg1 = pyrLst2OP(p1(i), g1,  @pyrMul);
+    tpg2 = pyrLst2OP(p2(i), g2,  @pyrMul);
+    tf   = pyrLst2OP(tpg1, tpg2, @pyrAdd);
     
     imgOut(:,:,i) = pyrVal(tf);
 end

@@ -28,25 +28,25 @@ function [imgOut, Lt] = CalibrateHDR(img, bRobust)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-if(~exist('bRobust','var'))
+if(~exist('bRobust', 'var'))
     bRobust = 0;
 end
 
 L = lum(img);
-L_log10 = log10(L+1e-5);
+L_log10 = log10(L + 1e-5);
 Lavg = mean(L_log10(:));
     
 if(bRobust)
-	Lmin = MaxQuart(L,0.05);
-	Lmax = MaxQuart(L,0.95);
+	Lmin = MaxQuart(L, 0.05);
+	Lmax = MaxQuart(L, 0.95);
 else
-	Lmin = min(L(L>0.0));
-	Lmax = max(L(L>0.0));
+	Lmin = min(L(L > 0.0));
+	Lmax = max(L(L > 0.0));
 end
     
-k = (Lavg-log10(Lmin)) / (log10(Lmax)-log10(Lmin));
-f = 1e4*k / Lmax;
-Lt = Lmin + (06.+0.4*(1.0-k))*(Lmax-Lmin);
+k = (Lavg - log10(Lmin)) / (log10(Lmax) - log10(Lmin));
+f = 1e4 * k / Lmax;
+Lt = Lmin + (06. + 0.4 * (1.0 - k)) * (Lmax - Lmin);
     
-imgOut = img*f;
+imgOut = img * f;
 end

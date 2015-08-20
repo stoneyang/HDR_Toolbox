@@ -1,6 +1,6 @@
-function [lin_fun, max_lin_fun] = ComputeCRF(stack, stack_exposure, nSamples, bNormalize, smoothing_term)
+function [lin_fun, max_lin_fun] = ComputeCRF(stack, stack_exposure, nSamples, sampling_strategy, bNormalize, smoothing_term)
 %
-%       lin_fun = ComputeCRF(stack, stack_exposure, nSamples, bNormalize)
+%       [lin_fun, max_lin_fun] = ComputeCRF(stack, stack_exposure, nSamples, sampling_strategy, bNormalize, smoothing_term)
 %
 %       This function computes camera response function using Debevec and
 %       Malik method.
@@ -10,6 +10,11 @@ function [lin_fun, max_lin_fun] = ComputeCRF(stack, stack_exposure, nSamples, bN
 %           -stack_exposure: an array containg the exposure time of each
 %           image. Time is expressed in second (s).
 %           -nSamples: number of samples for computing the CRF.
+%           -sampling_strategy: how to select samples:
+%               -'Grossberg': picking samples according to Grossberg and
+%               Nayar algorithm (CDF based).
+%               -'RandomSpatial': picking random samples in the image.
+%               -'RegularSpatial': picking regular samples in the image.
 %           -bNormalize: if 1 it enables function normalization.
 %           -smoothing_term: a smoothing term for solving the linear
 %           system.
@@ -45,6 +50,14 @@ if(nSamples < 1)
     nSamples = 256;
 end
 
+if(~exist('sampling_strategy', 'var'))
+    sampling_strategy = 'Grossberg';
+end
+
+if(isempty(sampling_strategy))
+    sampling_strategy = 'Grossberg';
+end
+
 if(~exist('bNormalize', 'var'))
     bNormalize = 1;
 end
@@ -73,8 +86,21 @@ col = size(stack, 3);
 W = WeightFunction(0:(1 / 255):1, 'Deb97');
 
 %stack sub-sampling
-stack_hist = ComputeLDRStackHistogram(stack);
-stack_samples = GrossbergSampling(stack_hist, nSamples);
+switch sampling_strategy
+    case 'Grossberg'
+        stack_hist = ComputeLDRStackHistogram(stack);
+        stack_samples = GrossbergSampling(stack_hist, nSamples);
+        
+    case 'RandomSpatial'
+        stack_samples = RandomSpatialSampling(stack, nSamples);
+
+    case 'RegularSpatial'
+        stack_samples = RegularSpatialSampling(stack, nSamples);
+        
+    otherwise
+        stack_hist = ComputeLDRStackHistogram(stack);
+        stack_samples = GrossbergSampling(stack_hist, nSamples);
+end
 
 %recovering the CRF
 lin_fun = zeros(256, col);

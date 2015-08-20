@@ -1,7 +1,7 @@
-function H=histogram_ceiling(H,k)
+function H = histogram_ceiling(H, k)
 %
 %
-%        [H,val]=histogram_ceiling(H,k)
+%        H = histogram_ceiling(H, k)
 %
 %
 %        Input:
@@ -11,7 +11,7 @@ function H=histogram_ceiling(H,k)
 %        Output:
 %           -H: output histogram
 % 
-%     Copyright (C) 2010 Francesco Banterle
+%     Copyright (C) 2010-15 Francesco Banterle
 %  
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -27,23 +27,23 @@ function H=histogram_ceiling(H,k)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-tolerance=sum(H)*0.025;
-trimmings=0;
-val=1;
-n=length(H);
+tolerance = sum(H) * 0.025;
+trimmings = 0;
+val = 1;
+n = length(H);
 
-while((trimmings<=tolerance)&val)
-    trimmings=0;
+while((trimmings <= tolerance) & val)
+    trimmings = 0;
     T = sum(H);
     
-    if(T<tolerance)
-        val=0;
+    if(T < tolerance)
+        val = 0;
     else
-        ceiling=T*k;
+        ceiling = T * k;
         for i=1:n
-            if(H(i)>ceiling)
-                trimmings=trimmings+H(i)-ceiling;
-                H(i)=ceiling;
+            if(H(i) > ceiling)
+                trimmings = trimmings + H(i) - ceiling;
+                H(i) = ceiling;
             end
         end
     end

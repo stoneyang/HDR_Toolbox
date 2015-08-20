@@ -20,6 +20,7 @@
 disp('Installing the HDR Toolbox...');
 
 folder = cellstr('Alignment');
+folder = [folder, cellstr('Alignment/util')];
 folder = [folder, cellstr('BatchFunctions')];
 folder = [folder, cellstr('ColorCorrection')];
 folder = [folder, cellstr('ColorSpace')];
@@ -33,9 +34,11 @@ folder = [folder, cellstr('EO')];
 folder = [folder, cellstr('EO/util')];
 folder = [folder, cellstr('Formats')];
 folder = [folder, cellstr('Generation')];
+folder = [folder, cellstr('Generation/util')];
 folder = [folder, cellstr('IBL')];
 folder = [folder, cellstr('IBL/util')];
 folder = [folder, cellstr('IO')];
+folder = [folder, cellstr('IO_stack')];
 folder = [folder, cellstr('IO_video')];
 folder = [folder, cellstr('LaplacianPyramids')];
 folder = [folder, cellstr('Metrics')];

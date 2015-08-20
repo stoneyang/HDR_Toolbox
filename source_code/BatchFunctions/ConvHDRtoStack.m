@@ -1,12 +1,10 @@
-function ConvHDRtoLDR(fmtIn, fmtOut, tonemapper, ldr_gamma)
+function ConvHDRtoStack(fmtIn, fmtOut, bSampling, ldr_gamma)
 %
-%        ConvHDRtoLDR(fmtIn, fmtOut, tonemapper, ldr_gamma)
+%        ConvHDRtoStack(fmtIn, fmtOut, bSampling, ldr_gamma)
 %
-%        This batch function converts HDR images in the current directory
-%        from a format, fmtIn, to tone mapped image in a LDR format, fmtOut.
 %        
 %        For example:
-%           ConvLDRtoLDR('hdr', 'jpg', @ReinhardTMO, 2.2);
+%           ConvLDRtoLDR('hdr', 'jpg', 2.2);
 %
 %        This lines tonemaps all the .hdr files in the folder using the 
 %        Reinhard et al.'s operator and it saves them as .jpg files using
@@ -17,11 +15,12 @@ function ConvHDRtoLDR(fmtIn, fmtOut, tonemapper, ldr_gamma)
 %           to be converted. This can be: 'hdr', 'pfm'
 %           -fmtOut: an input string represeting the LDR format of
 %           converted images. This can be: 'jpeg', 'jpg', 'png', etc.
-%           -tonemapper: the tone mapping function to be used for tone
-%           mapping the input HDR images. The default value is the
-%           Reinhard et al.'s operator
+%           -bSampling: using or not histogram sampling
 %           -ldr_gamma: the encoding gamma for the LDR images. The default
 %           value is 2.2
+%
+%        Output:
+%           -ret: a boolean value, true or 1 if the method succeeds
 %
 %     Copyright (C) 2012-15  Francesco Banterle
 %
@@ -39,12 +38,12 @@ function ConvHDRtoLDR(fmtIn, fmtOut, tonemapper, ldr_gamma)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-if(~exist('ldr_gamma', 'var'))
-    ldr_gamma = 2.2;
+if(~exist('bSampling', 'var'))
+    bSampling = 0;
 end
 
-if(~exist('tonemapper', 'var'))
-    tonemapper = @ReinhardTMO;
+if(~exist('ldr_gamma', 'var'))
+    ldr_gamma = 2.2;
 end
 
 lst = dir(['*.', fmtIn]);
@@ -54,12 +53,38 @@ for i=1:length(lst)
     
     tmp_name = lst(i).name;    
     img = hdrimread(tmp_name);
+    L = lum(img);    
+    L = imresize(L, 0.5, 'bilinear');
     
-    img_tmo = GammaTMO(tonemapper(img), ldr_gamma);
+    if(bSampling)
+        fstops = ExposureHistogramCovering(L, 1024);
+    else
+        minL = round(log2(min(L(:))));
+        maxL = round(log2(max(L(:))));
+        fstops = -maxL:-minL; 
+    end
     
-    tmp_name_we = RemoveExt(tmp_name);
-    tmp_name_out = [tmp_name_we, '.', fmtOut];
-    imwrite(img_tmo, tmp_name_out);
+    for j=1:length(fstops)   
+        disp(fstops(j));
+        img_exp_j = GammaTMO(img, ldr_gamma, fstops(j));
+        
+        bSkip = 0;
+        if(~bSampling)
+            tImg1 = ClampImg(round(255 * img_exp_j) / 255, 0, 1);
+            val = mean(tImg1(:)); %mean value
+
+            if((val < 0.1) || (val > 0.9))
+                bSkip = 1;
+            end
+   
+        end
+            
+        if(~bSkip)
+            tmp_name_we = RemoveExt(tmp_name);
+            tmp_name_out = [tmp_name_we, '_fstop_', num2str(j), '.', fmtOut];
+            imwrite(img_exp_j, tmp_name_out);
+        end
+    end       
 end
 
 end

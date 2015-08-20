@@ -13,7 +13,7 @@ img_merged = PeceKautzMerge([], 'stack_ghost', 'jpg', 1, 3, 17);
 
 disp('2) Showing the image after fusion, note that there is no need of gamma correction!');
 h = figure(1);
-set(h, 'Name', 'Pence and Kautz exposure fusion with deghosting (no need of gamma encoding)');
+set(h, 'Name', 'Pece and Kautz exposure fusion with deghosting (no need of gamma encoding)');
 GammaTMO(img_merged, 1.0, 0, 1);
 
 disp('3) Saving the tone mapped image as a PNG.');

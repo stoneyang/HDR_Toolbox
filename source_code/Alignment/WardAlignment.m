@@ -98,19 +98,8 @@ for i=1:n
         else
             img_work = stack(:,:,:,i);
         end
-            
-        shift_ret = WardGetExpShift(img, img_work);
-        img_work_shifted = imshift(img_work, shift_ret);
         
-        [rot_ret, bCheck] = WardSimpleRot(img, img_work_shifted);
-        
-        if(bCheck)
-            img_work_shifted = imrotate(img_work_shifted, rot_ret, 'bilinear', 'crop');
-
-            %final shift
-            shift_ret = WardGetExpShift(img, img_work_shifted);
-            img_work_shifted = imshift(img_work_shifted, shift_ret);            
-        end
+        img_work_shifted = WardImageAlignment(img, img_work);
         
         if(bStackOut)
             stackOut(:,:,:,i) = img_work_shifted;

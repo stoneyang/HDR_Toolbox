@@ -1,14 +1,15 @@
-function check13Color(img)
+function plotColors(img)
 %
 %
-%        check13Color(img)
+%        plotColors(img)
 %
+%        This function visualizes colors of the image in its 3D color
+%        space.
 %
 %        Input:
-%           -img: an image to be tested if it is an one or three color
-%                 channels image
+%           -img: an image
 %
-%     Copyright (C) 2013  Francesco Banterle
+%     Copyright (C) 2015  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -24,7 +25,16 @@ function check13Color(img)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-col = size(img, 3);
-if(col ~= 3 && col ~= 1)
-    error('The image has to be an RGB or luminance image.');
+check3Color(img);
+
+[r, c, col] = size(img);
+
+x = img(:,:,1);
+y = img(:,:,2);
+z = img(:,:,3);
+
+c = reshape(img, r * c, col);
+
+scatter3(x(:), y(:), z(:), [], c, 'filled');
+
 end

@@ -40,7 +40,7 @@ if((tot > 0) && (totL > 0))
     [r, c] = size(L);
     [X, Y] = meshgrid(xMin:xMax, yMin:yMax);   
     x_light = sum(sum(tmpL .* X)) / (totL * c);    
-    y_light = sum(sum(tmpL .* Y))/(totL * r);  
+    y_light = sum(sum(tmpL .* Y)) / (totL * r);  
     %struct
     light = struct('col', value, 'x', x_light, 'y', y_light);
 else

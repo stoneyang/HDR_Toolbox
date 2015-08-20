@@ -9,7 +9,7 @@ function expand_map = KuoExpandMap(L, gammaRemoval)
 %		 Output:
 %			-expand_map: the final expand map
 %
-%     Copyright (C) 2013  Francesco Banterle
+%     Copyright (C) 2013-15 Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -47,7 +47,7 @@ mask = double(bwmorph(mask,'erode'));
 tmp_expand_map = L .* mask;
 
 sigma_s = kernelSize / 5.0; %as in the original paper
-sigma_r = 100.0/255.0; %as in the original paper
+sigma_r = 100.0 / 255.0; %as in the original paper
 if(gammaRemoval > 0.0)
     sigma_r = sigma_r^gammaRemoval;
 end

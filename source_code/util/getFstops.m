@@ -1,17 +1,18 @@
-function [eMin, eMax] = getFstops(img)
+function [eMin, eMax] = getFstops(img, img_percentile)
 %
 %
-%        [eMin, eMax] = getFstops(img)
+%        [eMin, eMax] = getFstops(img, img_percentile)
 %
 %
 %        Input:
 %           -img: the input image
+%           -img_percentile: a percentile value for robust statistics
 %
 %        Output:
 %           -eMin: the minimum f-stop
 %           -eMax: the maximum f-stop
 %
-%     Copyright (C) 2011  Francesco Banterle
+%     Copyright (C) 2011-15  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -27,12 +28,24 @@ function [eMin, eMax] = getFstops(img)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
+if(~exist('img_percentile', 'var'))
+    img_percentile = 0.001;
+end
+
+if(img_percentile < 0.0)
+    img_percentile = 0.001;
+end
+
+if(img_percentile > 1.0)
+    img_percentile = 0.001;
+end
+
 L = lum(img);
 
-maxL = MaxQuart(L,0.999);
-minL = MaxQuart(L,0.001);
+maxL = MaxQuart(L, 1.0 - img_percentile);
+minL = MaxQuart(L, img_percentile);
 
-eMin = round(log2(minL+1e-6));
-eMax = round(log2(maxL+1e-6));
+eMin = round(log2(minL + 1e-6));
+eMax = round(log2(maxL + 1e-6));
 
 end

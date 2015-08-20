@@ -1,17 +1,16 @@
-function stackOut = StackLowRes (stack)
+function imgOut = WardDownsampling(img)
 %
-%
-%        stackOut = StackLowRes (stack)
+%        imgOut = WardDownsampling(img)
 %
 %
 %        Input:
-%           -stack: a stack of LDR images
+%           -img: input image
 %
 %        Output:
-%           -stackOut: a reshaped stack at low resolution
-%
-%     Copyright (C) 2011  Francesco Banterle
+%           -imgOut: downsampled image
 % 
+%     Copyright (C) 2015  Francesco Banterle
+%
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
 %     the Free Software Foundation, either version 3 of the License, or
@@ -26,22 +25,13 @@ function stackOut = StackLowRes (stack)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-%stack of images
-n = size(stack, 4);
-stackOut = [];
+[n, m, col] = size(img);
+maxCoord = max([n, m]);
+viewAngleWidth  = 2 * atan(m / (2 * maxCoord * 0.75));
+viewAngleHeight = 2 * atan(n / (2 * maxCoord * 0.75));
+fScaleX = (2 * tan(viewAngleWidth / 2) / 0.01745);
+fScaleY = (2 * tan(viewAngleHeight / 2) / 0.01745);
 
-for i=1:n
-    tmpStack = stack(:,:,:,i);
-    tmpStack = round(imresize(tmpStack,0.01,'nearest'));
-    [r,c,col] = size(tmpStack);  
-    
-    if(i==1)
-        stackOut = zeros(r*c,n,col);
-    end
-    
-    for j=1:col
-        stackOut(:,i,j) = reshape(tmpStack(:,:,j),r*c,1);
-    end
-end
+imgOut = imresize(img, [round(fScaleY), round(fScaleX)], 'bilinear');
 
 end

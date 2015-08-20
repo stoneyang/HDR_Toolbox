@@ -1,7 +1,7 @@
-function imgOut = PeceKautzMerge(imageStack, folder_name, format, iterations, ke_size, kd_size)
+function imgOut = PeceKautzMerge(imageStack, folder_name, format, iterations, ke_size, kd_size, ward_percentile)
 %
 %
-%        imgOut = PeceKautzMerge(imageStack, folder_name, format, iterations, kernelSize)
+%        imgOut = PeceKautzMerge(imageStack, folder_name, format, iterations, kernelSize, ward_percentile)
 %
 %
 %        Input:
@@ -15,6 +15,7 @@ function imgOut = PeceKautzMerge(imageStack, folder_name, format, iterations, ke
 %           mask
 %           -ke_size: size of the erosion kernel
 %           -kd_size: size of the dilation kernel
+%           -ward_percentile: 
 %
 %        Output:
 %           -imgOut: tone mapped image
@@ -62,7 +63,7 @@ if(isa(imageStack, 'uint16'))
 end
 
 if(~exist('iterations', 'var'))
-    iterations = 15;
+    iterations = 1;
 end
 
 if(~exist('ke_size', 'var'))
@@ -73,6 +74,10 @@ if(~exist('kd_size', 'var'))
     kd_size = 17;
 end
 
+if(~exist('ward_percentile', 'var'))
+    ward_percentile = 0.6;
+end
+
 %number of images in the stack
 [r, c, col, n] = size(imageStack);
 
@@ -81,11 +86,18 @@ total  = zeros(r, c);
 weight = ones(r, c, n);
 for i=1:n
     %calculation of the weights
+    L = lum(imageStack(:,:,:,i));  
+
     weight(:,:,i) = MertensWellExposedness(imageStack(:,:,:,i));
+    
+    weight(:,:,i) = weight(:,:,i) .* MertensContrast(L);
+     
+    weight(:,:,i) = weight(:,:,i) .* MertensSaturation(imageStack(:,:,:,i));
+    
+    weight(:,:,i) = weight(:,:,i) + 1e-12;  
 end
 
-[moveMask, num] = PeceKautzMoveMask(imageStack, iterations, ke_size, kd_size);
-
+[moveMask, num] = PeceKautzMoveMask(imageStack, iterations, ke_size, kd_size, ward_percentile);
 weight_move = weight;
 for i=0:num
     indx = find(moveMask == i);
@@ -99,7 +111,7 @@ for i=0:num
 
     W = zeros(r, c);
     W(indx) = 1;
-    weight_move(:,:,j) = weight_move(:,:,j).* (1 - W) + W;
+    weight_move(:,:,j) = weight_move(:,:,j) .* (1 - W) + W;
     
     for k=1:n
         if(j ~= k)
@@ -110,6 +122,7 @@ end
 
 %Normalization of weights
 for i=1:n
+    %hdrimwrite(weight_move(:,:,i),['weight_move',num2str(i),'.pfm']);
     total = total + weight_move(:,:,i);
 end
 
@@ -141,7 +154,7 @@ for i=1:col
 end
 
 %Clamping
-imgOut = ClampImg(imgOut / max(imgOut(:)), 0.0, 1.0);
+imgOut = ClampImg(imgOut, 0.0, 1.0);
 
 disp('This algorithm outputs images with gamma encoding. Inverse gamma is not required to be applied!');
 end

@@ -13,6 +13,8 @@ function g = gsolve(Z,B,l,w)
 %        Output:
 %           -g:
 %
+%
+%
 
 n = 256;
 A = zeros(size(Z, 1) * size(Z, 2) + n + 1, n + size(Z, 1));
@@ -32,8 +34,8 @@ end
 
 % Fix the curve by setting its middle value to 0
 A(k,129) = 1;
-k = k+1;
-size(A)
+k = k + 1;
+
 %the smoothness term
 for i=1:n-2
     A(k,i)  =    l*w(i+1);
