@@ -1,5 +1,10 @@
 function I_out = color_imaging(inputFile, outputFile, bAWB, AWB, catType, bTM, TM)
-    I = im2double(imread(inputFile));
+    [~, ~, ext] = fileparts(inputFile);
+    if strcmp(ext, '.hdr')
+        I = hdrimread(inputFile);
+    else
+        I = im2double(imread(inputFile));
+    end
     
     if bAWB
         disp('use AWB');    
