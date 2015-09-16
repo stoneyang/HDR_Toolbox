@@ -1,6 +1,6 @@
-function mask = AngularMask(r,c)
+function mask = AngularMask(r, c)
 %
-%        mask = AngularMask(r,c)
+%        mask = AngularMask(r, c)
 %
 %        This function creates a mask for a Angular/Spherical map
 %
@@ -10,7 +10,7 @@ function mask = AngularMask(r,c)
 %        Output:
 %           -mask: a mask where the Angular/Spherical is defined
 %
-%     Copyright (C) 2011-12  Francesco Banterle
+%     Copyright (C) 2011-15  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -27,14 +27,16 @@ function mask = AngularMask(r,c)
 %
 
 
-[X,Y]=meshgrid(1:c,1:r);
-X = X/c*2-1; Y = Y/r*2-1;
-R = sqrt(X.^2+Y.^2);
+[X,Y] = meshgrid(1:c, 1:r);
+X = X / c * 2 - 1;
+Y = Y / r * 2 - 1;
+R = sqrt(X.^2 + Y.^2);
 
-tmpMask = ones(r,c);
-tmpMask(find(R>1)) = 0;
+tmpMask = ones(r, c);
+tmpMask(R > 1) = 0;
 
-mask = zeros(r,c,3);
+mask = zeros(r, c, 3);
+
 for i=1:3
     mask(:,:,i) = tmpMask;
 end

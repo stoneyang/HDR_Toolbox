@@ -1,7 +1,7 @@
-function imgOut=CalculateWP(img)
+function imgOut = CalculateWP(img)
 %
 %
-%       imgOut=CalculateWP(img)
+%       imgOut = CalculateWP(img)
 %
 %
 %       Input:
@@ -10,7 +10,7 @@ function imgOut=CalculateWP(img)
 %       Output:
 %           -imgOut: a white balanced image using global average
 %
-%     Copyright (C) 2011  Francesco Banterle
+%     Copyright (C) 2011-15  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -29,10 +29,11 @@ function imgOut=CalculateWP(img)
 %is it a three color channels image?
 check3Color(img);
 
-imgOut=zeros(size(img));
+imgOut = zeros(size(img));
+
 for i=1:3
-    avg=mean(mean(img(:,:,i)));
-    imgOut(:,:,i)=img(:,:,i)/avg;
+    avg = mean(mean(img(:,:,i)));
+    imgOut(:,:,i) = img(:,:,i) / avg;
 end
 
 end

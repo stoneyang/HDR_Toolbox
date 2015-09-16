@@ -50,6 +50,10 @@ if((size(img, 3) > 1) && bMeanWeight)
     end
 end
 
+if(strcmp(weight_type, 'Deb97_p05'))
+    bounds = [0.05, 0.95];
+end
+
 switch weight_type
     case 'all'
         weight = ones(size(img));

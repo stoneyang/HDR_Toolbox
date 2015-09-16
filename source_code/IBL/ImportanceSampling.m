@@ -46,7 +46,7 @@ end
 
 %Luminance channel
 L = lum(img);
-c = size(L, 2);
+[r, c] = size(L);
 
 %Creation of 1D distributions for sampling
 cDistr = [];
@@ -59,29 +59,22 @@ for i=1:c
 end
 rDistr = Create1DDistribution(values);
 
-%Sampling
 samples = [];
 imgOut = zeros(size(L));
 pi22 = 2 * pi^2;
-
 for i=1:nSamples
-    %random values in [0,1]
-    u = rand(2, 1);
-    
     %sampling rDistr
-    [val1, pdf1] = Sampling1DDistribution(rDistr, u(1));
-
+    [x, pdf1] = Sampling1DDistribution(rDistr, rand());
     %sampling cDistr
-    [val2, pdf2] = Sampling1DDistribution(cDistr(val1), u(2));
-    
-    phi = pi * 2 * val1 / c;
-    theta = pi * val2 / r;
-    vec = PolarVec3(theta, phi);
-    pdf = (pdf1 * pdf2) / (pi22 * abs(sin(theta)));
-    sample = struct('dir', vec, 'col', img(val2,val1,:), 'pdf', pdf);
-    samples = [samples, sample];
-    
-    imgOut(val2, val1) = imgOut(val2, val1) + 1;
+    [y, pdf2] = Sampling1DDistribution(cDistr(x), rand());
+    %direction
+    angles = pi * [2 * x / c, y / r];
+    vec = PolarVec3(angles(2), angles(1));
+    pdf = (pdf1 * pdf2) / (pi22 * abs(sin(angles(1))));
+    %creating a sample
+    sample = struct('dir', vec, 'x', x/c, 'y', y/r, 'col', img(y,x,:), 'pdf', pdf);
+    samples = [samples, sample];    
+    imgOut(y, x) = imgOut(y, x) + 1;
 end
 
 end

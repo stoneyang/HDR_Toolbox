@@ -1,18 +1,18 @@
-function imgOut = BruceExpoBlendTMO(img, directory, format, imageStack, beb_R, beb_beta)
+function imgOut = BruceExpoBlendTMO(img, folder_name, format, imageStack, beb_R, beb_beta)
 %
 %
-%        imgOut = BruceExpoBlendTMO(img, directory, format, imageStack, beb_R, beb_beta)
+%        imgOut = BruceExpoBlendTMO(img, folder_name, format, imageStack, beb_R, beb_beta)
 %
 %
 %        Input:
 %           -img: input HDR image
-%           -directory: the directory where to fetch the exposure imageStack in
+%           -folder_name: the folder where to fetch the exposure imageStack in
 %           the case img=[]
 %           -format: the format of LDR images ('bmp', 'jpg', etc) in case
 %                    img=[] and the tone mapped images is built from a sequence of
-%                    images in the current directory
+%                    images in the current folder_name
 %           -imageStack: an exposure stack of LDR images; in case img=[],
-%                        and directory='' and format=''
+%                        and folder_name='' and format=''
 %           -beb_R: radius in pixels for computing entropy, R parameter
 %           from the original paper
 %           -beb_beta: beta parameter from the original paper
@@ -64,7 +64,7 @@ if(~isempty(img))
     [imageStack, ~] = GenerateExposureBracketing(img, 1);
 else
     if(isempty(imageStack))
-        imageStack = double(ReadLDRStack(directory, format, 1));
+        imageStack = double(ReadLDRStack(folder_name, format, 1));
     else
         if(isa(imageStack, 'single'))
             imageStack = double(imageStack);

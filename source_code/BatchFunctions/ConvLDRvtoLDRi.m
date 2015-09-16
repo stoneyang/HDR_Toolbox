@@ -1,16 +1,16 @@
-function stackOut = StackLowRes (stack)
+function ConvLDRvtoLDRi(filename, outputname, format)
 %
-%
-%        stackOut = StackLowRes (stack)
+%        ConvLDRvtoLDRi(filename, outputname, format)
 %
 %
 %        Input:
-%           -stack: a stack of LDR images
+%           -filename: video filename
+%           -outputname: output name
+%           -format: image file format
 %
-%        Output:
-%           -stackOut: a reshaped stack at low resolution
+%        This function converts an LDR video into LDR images
 %
-%     Copyright (C) 2011  Francesco Banterle
+%     Copyright (C) 2015  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -26,22 +26,14 @@ function stackOut = StackLowRes (stack)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-%stack of images
-n = size(stack, 4);
-stackOut = [];
+ldrv = ldrvread(filename);
+ldrv = ldrvopen(ldrv);
 
-for i=1:n
-    tmpStack = stack(:,:,:,i);
-    tmpStack = round(imresize(tmpStack,0.01,'nearest'));
-    [r,c,col] = size(tmpStack);  
-    
-    if(i==1)
-        stackOut = zeros(r*c,n,col);
-    end
-    
-    for j=1:col
-        stackOut(:,i,j) = reshape(tmpStack(:,:,j),r*c,1);
-    end
+for i=1:ldrv.totalFrames
+    [frame, ldrv] = ldrvGetFrame(ldrv, i);
+    imwrite(frame, [outputname, sprintf('_%07d.', i), format]);
 end
+
+ldrvclose(ldrv);
 
 end

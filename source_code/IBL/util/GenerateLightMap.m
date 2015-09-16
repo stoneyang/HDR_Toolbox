@@ -43,10 +43,10 @@ col = length(lights(1).col);
 img = zeros(height, width, col);
 
 for i=1:length(lights)
-    YY = ClampImg(round(lights(i).y*height),1,height);
-    XX = ClampImg(round(lights(i).x*width),1,width);
+    YY = ClampImg(round(lights(i).y * height), 1, height);
+    XX = ClampImg(round(lights(i).x * width),  1, width);
     
-    if(isnan(XX)==0)
+    if(isnan(XX) == 0)
         for j=1:col
             img(YY, XX, j) = lights(i).col(j);
         end

@@ -61,7 +61,7 @@ bin_size2 = 0.5;
 La=zeros(size(L));
 for i=0:(nLayer - 1)
     bin_size = bin_size1+(bin_size2 - bin_size1) * i / (nLayer - 1);    
-    segments = round((Llog-minLLog) / bin_size) + 1; 
+    segments = round((Llog - minLLog) / bin_size) + 1; 
     
     %Calculation of layers
     [imgLabel] = CompoCon(segments,8);    

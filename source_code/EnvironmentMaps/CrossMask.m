@@ -1,6 +1,6 @@
-function mask = CrossMask(r,c)
+function mask = CrossMask(r, c)
 %
-%        mask = CrossMask(r,c)
+%        mask = CrossMask(r, c)
 %
 %       This function creates a mask for a cube map
 %
@@ -26,9 +26,9 @@ function mask = CrossMask(r,c)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-mask = zeros(r,c,3);
+mask = zeros(r, c, 3);
 
-tileSize = round(max([r/4,c/3]));
+tileSize = round(max([r / 4, c / 3]));
 
 mask(tileSize:(2*tileSize-1),1:tileSize,:) = 1;
 mask(tileSize:(2*tileSize-1),tileSize:(2*tileSize-1),:) = 1;

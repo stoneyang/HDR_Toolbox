@@ -1,6 +1,6 @@
-function stackOut = GrossbergSampling(stack, nSamples)
+function stackOut = RegularSpatialSampling(stack, nSamples)
 %
-%       stackOut = GrossbergSampling(stack, nSamples)
+%       stackOut = RegularSpatialSampling(stack, nSamples)
 %
 %
 %        Input:
@@ -11,7 +11,7 @@ function stackOut = GrossbergSampling(stack, nSamples)
 %           -stackOut: a stack of LDR samples for Debevec and Malik method
 %           (gsolve.m)
 %
-%     Copyright (C) 2013-15  Francesco Banterle
+%     Copyright (C) 2015  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -27,36 +27,40 @@ function stackOut = GrossbergSampling(stack, nSamples)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
+[r, c, col, stackSize] = size(stack);
+
+minSamples = max([round(r * c * 0.001), 512]);
+
 if(~exist('nSamples', 'var'))
-    nSamples = 100;
+    nSamples = minSamples;
 end
 
 if(nSamples < 1)
-    nSamples = 100;
-end
-
-[~, col, stackSize] = size(stack);
-
-%Compute CDF
-%figure(4);
-%hold on;
-for i=1:stackSize
-    for j=1:col
-        h_cdf = cumsum(stack(:,j,i));
-        stack(:,j,i) = h_cdf / max(h_cdf(:));
-    end
-    %plot(stack(:,1,i));
+    nSamples = minSamples;
 end
 
 stackOut = zeros(nSamples, stackSize, col);
 
-u = 0:(1.0 / (nSamples - 1)):1;
+r_quart = round(r / 4);
+c_quart = round(c / 4);
+r_half  = round(r / 2);
+c_half  = round(c / 2);
+
+f = round(sqrt(nSamples) + 1);
+rate_x = max([ceil(c_half / f), 1]);
+rate_y = max([ceil(r_half / f), 1]);
+
+[X, Y] = meshgrid(c_quart:rate_x:(c_quart + c_half), r_quart:rate_y:(r_quart + r_half));
+ 
+X = X(:);
+Y = Y(:);
+
+nSamples = length(X);
 
 for i=1:nSamples
     for j=1:col
         for k=1:stackSize
-           [~, val] = min(abs(stack(:,j,k) - u(i)));
-           stackOut(i,k,j) = val - 1;
+           stackOut(i,k,j) = round(stack(Y(i), X(i), j, k) * 255);
         end
     end
 end

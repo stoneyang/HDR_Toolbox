@@ -1,7 +1,7 @@
-function [L0,B0]=pyrLapGenAux(img)
+function [L0, B0] = pyrLapGenAux(img)
 %
 %
-%        [L0,B0]=pyrLapGenAux(img)
+%        [L0, B0] = pyrLapGenAux(img)
 %
 %
 %        Input:
@@ -26,19 +26,19 @@ function [L0,B0]=pyrLapGenAux(img)
 %
 
 %5x5 Gaussian kernel
-kernel=[1,4,6,4,1];
-mtx=kernel'*kernel;
-mtx=mtx/sum(sum(mtx));
+kernel = [1,4,6,4,1];
+mtx = kernel' * kernel;
+mtx = mtx / sum(sum(mtx));
 
 %Convolution
-imgB = imfilter(img,mtx,'replicate');
+imgB = imfilter(img, mtx, 'replicate');
 
 %Downsampling
-L0 = imresize(imgB, 0.5,'bilinear');
+L0 = imresize(imgB, 0.5, 'bilinear');
 
 %Upsampling
-[r,c]=size(img);
-imgE = imresize(L0, [r,c], 'bilinear');
+[r, c] = size(img);
+imgE = imresize(L0, [r, c], 'bilinear');
 
 %Difference between the two levels
 B0 = img - imgE;

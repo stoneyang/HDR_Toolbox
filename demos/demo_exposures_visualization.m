@@ -9,6 +9,8 @@
 %       Copyright June 2012 (c)
 %
 %
+clear all;
+
 disp('1) Load "Bottles_Small.hdr" HDR image');
 img = hdrimread('Bottles_Small.hdr');
 % img = hdrimread('E:\yangfan\DATA\HDR\INPUT\trafficLight.hdr');

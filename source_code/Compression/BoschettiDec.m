@@ -25,7 +25,7 @@ function imgRec = BoschettiDec(name)
 %
 
 %Read metadata
-info = imfinfo([name,'_bos_RGB.jp2']);
+info = imfinfo([name, '_bos_RGB.jp2']);
 decoded = sscanf(cell2mat(info.Comments), '%g', 3);
 nBit = decoded(1);
 maxE = decoded(2);
@@ -34,17 +34,17 @@ minE = decoded(3);
 maxVal = 2^nBit - 1;
 
 %Reading and Decoding Eq
-EqDec = double(imread([name,'_bos_E.jp2']))/maxVal;
-EDec = EqDec*(maxE-minE)+minE;
+EqDec = double(imread([name, '_bos_E.jp2'])) / maxVal;
+EDec = EqDec * (maxE - minE) + minE;
 mult = 2.^EDec;
 
 %Decoding RGB
-RGBDec = double(imread([name,'_bos_RGB.jp2']))/maxVal;
+RGBDec = double(imread([name, '_bos_RGB.jp2'])) / maxVal;
 
 %Reconstruction
 imgRec = zeros(size(RGBDec));
 for i=1:size(imgRec, 3)
-    imgRec(:,:,i) = (RGBDec(:,:,i)).*mult;
+    imgRec(:,:,i) = (RGBDec(:,:,i)) .* mult;
 end
 
 end

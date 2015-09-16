@@ -1,12 +1,12 @@
-function imgOut = MertensTMO( img, folder_name, format, imageStack, wE, wS, wC)
+function imgOut = MertensTMO( img, folder_name, format, imageStack, wE, wS, wC, bWarning)
 %
 %
-%        imgOut = MertensTMO( img, folder_name, format, imageStack, wE, wS, wC )
+%        imgOut = MertensTMO( img, folder_name, format, imageStack, wE, wS, wC, bWarning )
 %
 %
 %        Input:
 %           -img: input HDR image
-%           -folder_name: the folder_name where to fetch the exposure stack in
+%           -folder_name: the folder where to fetch the exposure stack in
 %           the case img=[]
 %           -format: the format of LDR images ('bmp', 'jpg', etc) in case
 %                    img=[] and the tone mapped images is built from a sequence of
@@ -60,6 +60,10 @@ if(~exist('wC', 'var'))
     wC = 1.0;
 end
 
+if(~exist('bWarning', 'var'))
+    bWarning = 1;
+end
+
 %imageStack generation
 if(~exist('imageStack', 'var'))
     imageStack = [];
@@ -89,7 +93,6 @@ end
 total  = zeros(r, c);
 weight = ones(r, c, n);
 for i=1:n
-    %calculation of the weights
     if(wE > 0.0)
         weightE = MertensWellExposedness(imageStack(:,:,:,i));
         weight(:,:,i) = weight(:,:,i) .* weightE.^wE;
@@ -111,8 +114,7 @@ for i=1:n
     total = total + weight(:,:,i);
 end
 
-%Normalization of weights
-for i=1:n
+for i=1:n %weights normalization
     weight(:,:,i) = weight(:,:,i) ./ total;
 end
 
@@ -144,6 +146,9 @@ end
 %Clamping
 imgOut = ClampImg(imgOut / max(imgOut(:)), 0.0, 1.0);
 
-disp('WARNING: This algorithm outputs images with gamma encoding. Inverse gamma is not required to be applied!');
+if(bWarning)
+    disp('WARNING: TMO outputs images with gamma encoding.');
+    disp('Inverse gamma is not required to be applied!');
+end
 
 end

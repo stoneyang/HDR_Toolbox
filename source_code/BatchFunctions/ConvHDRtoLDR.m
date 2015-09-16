@@ -1,9 +1,9 @@
-function ret = ConvHDRtoLDR(fmtIn, fmtOut, tonemapper, ldr_gamma)
+function ConvHDRtoLDR(fmtIn, fmtOut, tonemapper, ldr_gamma)
 %
-%        iret = ConvHDRtoLDR(fmtIn, fmtOut)
+%        ConvHDRtoLDR(fmtIn, fmtOut, tonemapper, ldr_gamma)
 %
-%        This batch function converts LDR images in the current directory
-%        from a format, fmtIn, to another LDR format, fmtOut.
+%        This batch function converts HDR images in the current directory
+%        from a format, fmtIn, to tone mapped image in a LDR format, fmtOut.
 %        
 %        For example:
 %           ConvLDRtoLDR('hdr', 'jpg', @ReinhardTMO, 2.2);
@@ -22,9 +22,6 @@ function ret = ConvHDRtoLDR(fmtIn, fmtOut, tonemapper, ldr_gamma)
 %           Reinhard et al.'s operator
 %           -ldr_gamma: the encoding gamma for the LDR images. The default
 %           value is 2.2
-%
-%        Output:
-%           -ret: a boolean value, true or 1 if the method succeeds
 %
 %     Copyright (C) 2012-15  Francesco Banterle
 %
@@ -64,7 +61,5 @@ for i=1:length(lst)
     tmp_name_out = [tmp_name_we, '.', fmtOut];
     imwrite(img_tmo, tmp_name_out);
 end
-
-ret = 1;
 
 end

@@ -1,7 +1,7 @@
-function [alignment, stackOut] = WardAlignment(stack, bStackOut, folder_name, format, target_exposure)
+function stackOut = WardAlignment(stack, bStackOut, folder_name, format, target_exposure)
 %
 %
-%       [alignment, stackOut] = WardAlignment(stack, bStackOut, folder_name, format)
+%       stackOut = WardAlignment(stack, bStackOut, folder_name, format)
 %
 %       This function shifts pixels on the right with wrapping of the moved
 %       pixels. This can be used as rotation on the Y-axis for environment
@@ -20,7 +20,6 @@ function [alignment, stackOut] = WardAlignment(stack, bStackOut, folder_name, fo
 %           for the alignment. If not provided the stack will be analyzed.
 %
 %       Output:
-%           -alignment: a vector of shifting vector for aligning the stack
 %           -stackOut: the aligned stack as output
 %
 %     Copyright (C) 2012-15  Francesco Banterle
@@ -39,7 +38,14 @@ function [alignment, stackOut] = WardAlignment(stack, bStackOut, folder_name, fo
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-alignment = [];
+if(~exist('folder_name', 'var'))
+    folder_name = '';
+end
+
+if(~exist('format', 'var'))
+    format = '';
+end
+
 lst = [];
 
 bStack = ~isempty(stack);
@@ -49,6 +55,7 @@ if(~bStack)
     n = length(lst);
 else
     n = size(stack, 4);
+    stack = normalizeFromAnything(stack);
 end
 
 if(n < 2)
@@ -56,7 +63,7 @@ if(n < 2)
 end
 
 if(~exist('target_exposure', 'var'))
-    target_exposure = GetTargetExposure(stack, folder_name, format); 
+    target_exposure = GalloReferenceImage(stack, folder_name, format); 
 else
     if(~bStack)
         target_exposure = findNameInList(lst, target_exposure);
@@ -66,7 +73,7 @@ end
 if(bStack)
     img = stack(:,:,:,target_exposure);
 else
-    img = ldrimread([folder_name, '/', lst(target_exposure).name], 0);
+    img = ldrimread([folder_name, '/', lst(target_exposure).name]);
 end
 
 [r, c, col] = size(img);
@@ -87,23 +94,12 @@ for i=1:n
         disp(['Aligning image ', num2str(i), ' to image ', num2str(target_exposure)]);
        
         if(~bStack)
-            img_work = ldrimread([folder_name, '/', lst(i).name], 0);  
+            img_work = ldrimread([folder_name, '/', lst(i).name]);  
         else
             img_work = stack(:,:,:,i);
         end
-            
-        shift_ret = WardGetExpShift(img, img_work);
-        img_work_shifted = imshift(img_work, shift_ret);
         
-        [rot_ret, bCheck] = WardSimpleRot(img, img_work_shifted);
-        
-        if(bCheck)
-            img_work_shifted = imrotate(img_work_shifted, rot_ret, 'bilinear', 'crop');
-
-            %final shift
-            shift_ret = WardGetExpShift(img, img_work_shifted);
-            img_work_shifted = imshift(img_work_shifted, shift_ret);            
-        end
+        img_work_shifted = WardImageAlignment(img, img_work);
         
         if(bStackOut)
             stackOut(:,:,:,i) = img_work_shifted;

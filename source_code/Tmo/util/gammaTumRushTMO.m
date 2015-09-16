@@ -1,6 +1,6 @@
-function val=gammaTumRushTMO(x)
+function y = gammaTumRushTMO(x)
 %
-%        val=gammaTumRushTMO(x)
+%        y = gammaTumRushTMO(x)
 %
 %
 %       The gamma function used in Tumblin-Rushmeier tone mapping operator
@@ -9,9 +9,9 @@ function val=gammaTumRushTMO(x)
 %           -x: a value
 %
 %       Output:
-%           -val: application of the gamma function
+%           -y: gamma function result
 % 
-%     Copyright (C) 2010 Francesco Banterle
+%     Copyright (C) 2010-15 Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -27,17 +27,9 @@ function val=gammaTumRushTMO(x)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-val=zeros(size(x));
-
-indx=find(x<=100);
-if(~isempty(indx))
-    val(indx)=1.855+0.4*log10(x(indx)+2.3*1e-5);
-end
-
-indx=find(x>100);
-if(~isempty(indx))
-    val(indx)=2.655;
-end
+y = zeros(size(x));
+y(x <= 100) = 1.855 + 0.4 * log10(x(x <= 100) + 2.3 * 1e-5);
+y(x > 100) = 2.655;
 
 end
 

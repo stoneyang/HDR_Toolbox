@@ -1,7 +1,7 @@
-function img=pyrVal(pyramid)
+function img = pyrVal(pyramid)
 %
 %
-%        img=pyrVal(pyramid)
+%        img = pyrVal(pyramid)
 %
 %
 %        Input:
@@ -24,21 +24,21 @@ function img=pyrVal(pyramid)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-list=pyramid.list;
-base=pyramid.base;
+list = pyramid.list;
+base = pyramid.base;
 
 n = length(list);
 
 img=[];
 for i=1:n
-    ind = n-i+1;
-    [r,c]=size(list(ind).detail);
-    if(i==1)        
-        base = imresize(base, [r,c], 'bilinear');
-        img  = base+list(ind).detail;
+    ind = n - i + 1;
+    [r, c] = size(list(ind).detail);
+    if(i == 1)        
+        base = imresize(base, [r, c], 'bilinear');
+        img  = base + list(ind).detail;
     else
-        img = imresize(img, [r,c], 'bilinear');
-        img = img+list(ind).detail;        
+        img = imresize(img, [r, c], 'bilinear');
+        img = img + list(ind).detail;        
     end
 end
 

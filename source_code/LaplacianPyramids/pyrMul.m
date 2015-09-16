@@ -1,7 +1,7 @@
-function pOut=pyrMul(pA,pB)
+function pOut = pyrMul(pA, pB)
 %
 %
-%        pOut=pyrMul(pA,pB)
+%        pOut = pyrMul(pA, pB)
 %
 %
 %        Input:
@@ -26,20 +26,20 @@ function pOut=pyrMul(pA,pB)
 %
 
 %checking lenght of the pyramids
-nA=length(pA.list);
-nB=length(pB.list);
+nA = length(pA.list);
+nB = length(pB.list);
 
-if(nA~=nB)
+if(nA ~= nB)
     error('pyrAdd error: pA and pB are different size pyramids.');
 end
 
 %multiplying base levels
-pOut.base=pA.base.*pB.base;
-pOut.list=pA.list;
+pOut.base = pA.base .* pB.base;
+pOut.list = pA.list;
 
 %multiplying the detail of each level
 for i=1:nA
-    pOut.list(i).detail=pA.list(i).detail.*pB.list(i).detail;
+    pOut.list(i).detail = pA.list(i).detail .* pB.list(i).detail;
 end
 
 end

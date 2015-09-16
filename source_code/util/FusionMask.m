@@ -32,8 +32,8 @@ function [imgBin, nlv] = FusionMask(listOfNeighbors, comp, imgBin, j)
 
 nlv = length(listOfNeighbors);
 
-if(nlv>0)%taking the smallest cluster in the list for the merging
-   imgBin(comp==j) = listOfNeighbors(1);
+if(nlv > 0)%taking the smallest cluster in the list for the merging
+   imgBin(comp == j) = listOfNeighbors(1);
 end
 
 end

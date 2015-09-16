@@ -24,7 +24,7 @@ function check13Color(img)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-col = size(img,3);
-if(col~=3&&col~=1)
+col = size(img, 3);
+if(col ~= 3 && col ~= 1)
     error('The image has to be an RGB or luminance image.');
 end

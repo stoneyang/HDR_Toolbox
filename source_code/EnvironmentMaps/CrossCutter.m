@@ -1,4 +1,4 @@
-function ret = CrossCutter(img, cb_name, cb_format)
+function CrossCutter(img, cb_name, cb_format)
 %
 %        ret = CrossCutter(img, cb_name, cb_format)
 %
@@ -36,21 +36,13 @@ if(~exist('cb_format', 'var'))
     cb_name = 'hdr';
 end
 
-ret = 0;
+c = size(img, 2);
 
-[r,c,col] = size(img);
-
-cubeSize = round(c/3);
+cubeSize = round(c / 3);
 
 %CUBE_POS_Y
 imgPosY = img(1:cubeSize,(cubeSize+1):(2*cubeSize),:);
-% for i=1:3
-%     imgPosY(:,:,i) = flipud(imgPosY(:,:,i));
-% end
-imgPosY = imrotate(imgPosY,-270);
-% for i=1:3
-%     imgPosY(:,:,i) = flipud(imgPosY(:,:,i));
-% end
+imgPosY = imrotate(imgPosY, -270);
 hdrimwrite(imgPosY,[cb_name,'_POS_Y.',cb_format]);
 
 %CUBE_POS_X
@@ -72,8 +64,6 @@ hdrimwrite(imgNegX,[cb_name,'_NEG_X.',cb_format]);
 hdrimwrite(img((cubeSize+1):(2*cubeSize),1:cubeSize,:),[cb_name,'_POS_Z.',cb_format]);
 
 %CUBE_NEG_Z
-hdrimwrite(img((cubeSize+1):(2*cubeSize),(2*cubeSize+1):(3*cubeSize),:),[cb_name,'_NEG_Z.',cb_format]);
-
-ret = 1;
+hdrimwrite(img((cubeSize+1):(2*cubeSize),(2*cubeSize+1):(3*cubeSize),:),[cb_name,'_NEG_Z.', cb_format]);
 
 end

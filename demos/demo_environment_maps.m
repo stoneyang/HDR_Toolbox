@@ -11,6 +11,9 @@
 %       Copyright June 2012 (c)
 %
 %
+
+clear all;
+
 disp('1) Load "CS_Warwick.hdr" HDR image');
 img = hdrimread('CS_Warwick.hdr');
 

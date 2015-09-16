@@ -1,6 +1,6 @@
-function ret = ConvLDRtoLDR(fmtIn, fmtOut)
+function ConvLDRtoLDR(fmtIn, fmtOut)
 %
-%        iret = ConvLDRtoLDR(fmtIn, fmtOut)
+%        ConvLDRtoLDR(fmtIn, fmtOut)
 %
 %        This batch function converts LDR images in the current directory
 %        from a format, fmtIn, to another LDR format, fmtOut.
@@ -15,9 +15,6 @@ function ret = ConvLDRtoLDR(fmtIn, fmtOut)
 %           to be converted. This can be: 'jpeg', 'jpg', 'png', etc.
 %           -fmtOut: an input string represeting the LDR format of
 %           converted images. This can be: 'jpeg', 'jpg', 'png', etc.
-%
-%        Output:
-%           -ret: a boolean value, true or 1 if the method succeeds
 %
 %     Copyright (C) 2012-15  Francesco Banterle
 %
@@ -35,8 +32,6 @@ function ret = ConvLDRtoLDR(fmtIn, fmtOut)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-ret = 0;
-
 lst = dir(['*.', fmtIn]);
 
 for i=1:length(lst)
@@ -47,7 +42,5 @@ for i=1:length(lst)
     tmp_name_we = RemoveExt(tmp_name);
     imwrite(img,[tmp_name_we, '.', fmtOut]);
 end
-
-ret = 1;
 
 end

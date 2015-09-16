@@ -25,7 +25,7 @@ function check3Color(img)
 %
 
 %is a three color channels image?
-if(size(img,3)~=3)
+if(size(img, 3) ~= 3)
     error('The image has to be a three color channels image.');
 end
 

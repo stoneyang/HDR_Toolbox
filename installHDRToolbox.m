@@ -20,6 +20,7 @@
 disp('Installing the HDR Toolbox...');
 
 folder = cellstr('Alignment');
+folder = [folder, cellstr('Alignment/util')];
 folder = [folder, cellstr('BatchFunctions')];
 folder = [folder, cellstr('ColorCorrection')];
 folder = [folder, cellstr('ColorSpace')];
@@ -33,9 +34,11 @@ folder = [folder, cellstr('EO')];
 folder = [folder, cellstr('EO/util')];
 folder = [folder, cellstr('Formats')];
 folder = [folder, cellstr('Generation')];
+folder = [folder, cellstr('Generation/util')];
 folder = [folder, cellstr('IBL')];
 folder = [folder, cellstr('IBL/util')];
 folder = [folder, cellstr('IO')];
+folder = [folder, cellstr('IO_stack')];
 folder = [folder, cellstr('IO_video')];
 folder = [folder, cellstr('LaplacianPyramids')];
 folder = [folder, cellstr('Metrics')];
@@ -71,3 +74,12 @@ disp('      isbn = {9781568817194},');
 disp('      publisher = {AK Peters (CRC Press)},');
 disp('      address = {Natick, MA, USA},');
 disp('      }');
+
+disp(' ');
+disp('Note on Tone Mapping:');
+disp('The majority of TMOs return tone mapped images with linear values. This means that gamma encoding');
+disp('needs to be applied to the output of these TMOs before visualization or before writing tone mapped images');
+disp(' on the disk; otherwise these images may appear dark.');
+disp('A few operators (e.g. Mertens et al.''s operator) return gamma encoded values,');
+disp('so there is no need to apply gamma to them; in this case a message (e.g. a Warning) is displayed');
+disp('after tone mapping alerting that there is no need of gamma encoding.');

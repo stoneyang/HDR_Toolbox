@@ -99,11 +99,6 @@ if(isempty(stack) || isempty(stack_exposure))
     error('The stack is set empty!');
 end
 
-%is the inverse camera function ok? Do we need to recompute it?
-if((strcmp(lin_type, 'LUT') == 1) && isempty(lin_fun))
-    [lin_fun, ~] = ComputeCRF(stack, stack_exposure);        
-end
-
 %merging
 [r, c, col, n] = size(stack);
 
@@ -118,6 +113,19 @@ end
 
 if(isa(stack, 'uint16'))
     scale = 65535.0;
+end
+
+
+if(isa(stack, 'double') | isa(stack, 'single'))
+    max_val = max(stack(:));
+    if(max_val > 1.0) 
+        scale = max_val;
+    end
+end
+
+%is the inverse camera function ok? Do we need to recompute it?
+if((strcmp(lin_type, 'LUT') == 1) && isempty(lin_fun))
+    [lin_fun, ~] = ComputeCRF(single(stack) / scale, stack_exposure);        
 end
 
 %for each LDR image...
@@ -159,6 +167,12 @@ for i=1:n
     end
 end
 
+imgOut = (imgOut ./ totWeight);
+
+if(strcmp(merge_type, 'log') == 1)
+    imgOut = exp(imgOut);
+end
+
 %checking for saturated pixels
 bSaturation = 0;
 if(~isempty(totWeight <= 0.0))
@@ -166,35 +180,29 @@ if(~isempty(totWeight <= 0.0))
     disp('WARNING: the stack has saturated pixels.');
 end
 
-imgOut = (imgOut ./ totWeight);
-
-if(strcmp(merge_type, 'log') == 1)
-    imgOut = exp(imgOut);
-end
-
 %handling saturated pixels
 if(bSaturation)
     [~, index] = min(stack_exposure);
-
+ 
     for i=1:col
         max_val = double(max(max(stack(:,:,i,index)))) / (t * scale);
-
+ 
         saturation_value = max_val;
         for j=1:n
             if(j ~= index)
                 saturation_value = saturation_value + (1.0 / stack_exposure(j));
             end
         end
-
+ 
         tmp = imgOut(:,:,i);
         
         tmp((isnan(tmp) | isinf(tmp)) & stack(:,:,i,index) > 0.9) = saturation_value;
         tmp((isnan(tmp) | isinf(tmp)) & stack(:,:,i,index) < 0.5) = 0.0;
-        
+         
         imgOut(:,:,i) = tmp;
     end
 end
-
+ 
 %forcing to double type for allowing to be used in some MATLAB functions
 imgOut = double(imgOut);
 

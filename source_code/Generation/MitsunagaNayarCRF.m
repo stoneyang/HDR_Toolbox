@@ -1,6 +1,6 @@
-function pp = MitsunagaNayarCRF(stack, stack_exposure, N, nSamples)
+function [lin_fun, pp] = MitsunagaNayarCRF(stack, stack_exposure, N, nSamples)
 %
-%       pp = MitsunagaNayarCRF(stack, stack_exposure, N, nSamples)
+%       [lin_fun, pp] = MitsunagaNayarCRF(stack, stack_exposure, N, nSamples)
 %
 %       This function computes camera response function using Mitsunaga and
 %       Nayar method.
@@ -14,6 +14,7 @@ function pp = MitsunagaNayarCRF(stack, stack_exposure, N, nSamples)
 %
 %        Output:
 %           -pp: a polynomial encoding the inverse CRF.
+%           -lin_fun: tabled function
 %
 %     Copyright (C) 2015  Francesco Banterle
 % 
@@ -36,15 +37,15 @@ if(~exist('nSamples', 'var'))
 end
 
 if(~exist('N', 'var'))
-    nSamples = 3;
+    N = 5;
 end
 
 if(isempty(stack))
-    error('ComputeCRF: a stack cannot be empty!');
+    error('MitsunagaNayarCRF: a stack cannot be empty!');
 end
 
 if(isempty(stack_exposure))
-    error('ComputeCRF: a stack_exposure cannot be empty!');
+    error('MitsunagaNayarCRF: a stack_exposure cannot be empty!');
 end
 
 col = size(stack, 3);
@@ -98,13 +99,20 @@ for channel=1:col
                 b(i) = b(i) + MN_d(channel, p, q, i - 1) * MN_d(channel, p, q, N);
             end
         end
-    end    
+    end   
+    
     b = -b;
     
     c = A \ b;    
     c_n = 1.0 - sum(c);
     
     pp(channel, :) = [c_n, c'];
+end
+
+lin_fun = zeros(256, col);
+
+for i=1:col
+    lin_fun(:,i) = polyval(pp(i,:), 0:(1.0 / 255.0):1);
 end
 
 end

@@ -22,49 +22,47 @@ function MedianCutAux(xMin, xMax, yMin, yMax, iter)
 
 global L;
 global imgWork;
-global limitSize;
-global nLights;
 global lights;
 
 lx = xMax - xMin;
 ly = yMax - yMin;
 
-if((lx>limitSize)&&(ly>limitSize)&&(iter<nLights))
-    tot = sum(sum(L(yMin:yMax,xMin:xMax)));
+if((lx > 2) && (ly > 2) && (iter > 0))
+    tot = sum(sum(L(yMin:yMax, xMin:xMax)));
     pivot = -1;
   
-    if(lx>ly)
+    if(lx > ly)
         %cut on the X-axis
-        for i=xMin:(xMax-1)
-            c = sum(sum(L(yMin:yMax,xMin:i)));
-            if(c>=(tot-c))
+        for i=xMin:(xMax - 1)
+            c = sum(sum(L(yMin:yMax, xMin:i)));
+            if(c >= (tot - c))
                 pivot = i;
                 break;
             end
         end
 
-        if(pivot==-1)
+        if(pivot == -1)
             pivot = xMax-1;
         end
         
-        MedianCutAux(xMin,    pivot, yMin, yMax, iter+1);
-        MedianCutAux(pivot+1, xMax,  yMin, yMax, iter+1);
+        MedianCutAux(xMin,    pivot, yMin, yMax, iter-1);
+        MedianCutAux(pivot+1, xMax,  yMin, yMax, iter-1);
     else
         %cut on the Y-axis
-        for i=yMin:(yMax-1)
-            c = sum(sum(L(yMin:i,xMin:xMax)));
-            if(c>=(tot-c))
+        for i=yMin:(yMax - 1)
+            c = sum(sum(L(yMin:i, xMin:xMax)));
+            if(c >= (tot - c))
                 pivot = i;
                 break;
             end
         end
         
-        if(pivot==-1)
+        if(pivot == -1)
             pivot = yMax-1;
         end
         
-        MedianCutAux(xMin, xMax, yMin,    pivot, iter+1);
-        MedianCutAux(xMin, xMax, pivot+1, yMax,  iter+1);
+        MedianCutAux(xMin, xMax, yMin,    pivot, iter-1);
+        MedianCutAux(xMin, xMax, pivot+1, yMax,  iter-1);
     end
 else
     %Generation of the light source

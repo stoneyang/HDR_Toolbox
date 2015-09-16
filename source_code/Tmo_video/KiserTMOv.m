@@ -43,15 +43,15 @@ function KiserTMOv(hdrv, filenameOutput, tmo_alpha_coeff, tmo_dn_clamping, tmo_g
 %
 %
 
-if(~exist('tmo_alpha_coeff','var'))
+if(~exist('tmo_alpha_coeff', 'var'))
     tmo_alpha_coeff = 0.98;
 end
 
-if(~exist('tmo_dn_clamping','var'))
+if(~exist('tmo_dn_clamping', 'var'))
     tmo_dn_clamping = 0;
 end
 
-if(~exist('tmo_gamma','var'))
+if(~exist('tmo_gamma', 'var'))
     tmo_gamma = 2.2;
 end
 
@@ -61,11 +61,11 @@ else
     bsRGB = 0;
 end
 
-if(~exist('tmo_quality','var'))
+if(~exist('tmo_quality', 'var'))
     tmo_quality = 95;
 end
 
-if(~exist('tmo_video_profile','var'))
+if(~exist('tmo_video_profile', 'var'))
     tmo_video_profile = 'Motion JPEG AVI';
 end
 
@@ -75,7 +75,7 @@ ext  = fileExtension(filenameOutput);
 bVideo = 0;
 writerObj = 0;
 
-if(strfind(ext,'avi')||strfind(ext,'mp4'))
+if(strfind(ext, 'avi') | strfind(ext, 'mp4'))
     bVideo = 1;
     writerObj = VideoWriter(filenameOutput, tmo_video_profile);
     writerObj.FrameRate = hdrv.FrameRate;
@@ -92,7 +92,7 @@ beta_clamping   = 0.999;
 beta_clamping_c = (1.0 - beta_clamping);
 
 for i=1:hdrv.totalFrames
-    disp(['Processing frame ',num2str(i)]);
+    disp(['Processing frame ', num2str(i)]);
     [frame, hdrv] = hdrvGetFrame(hdrv, i);
     
     %Only physical values
@@ -105,10 +105,10 @@ for i=1:hdrv.totalFrames
         [histo, bound, ~] = HistogramHDR(L, 256, 'log10', [], 1);  
         histo_cdf = cumsum(histo);
         histo_cdf = histo_cdf/max(histo_cdf(:));
-        [Y,ind] = min(abs(histo_cdf - beta_clamping));
+        [~, ind] = min(abs(histo_cdf - beta_clamping));
         maxL = 10^(ind*(bound(2) - bound(1)) / 256 + bound(1));
 
-        [Y,ind] = min(abs(histo_cdf-beta_clamping_c));
+        [~, ind] = min(abs(histo_cdf-beta_clamping_c));
         minL = 10^(ind*(bound(2) - bound(1)) / 256 + bound(1));
 
         frame(frame>maxL) = maxL;
@@ -122,21 +122,21 @@ for i=1:hdrv.totalFrames
     A = max(L(:)) - Lav;
     B = Lav - min(L(:));
    
-    if(i==1)
+    if(i == 1)
         Aprev = A;
         Bprev = B;
-        aprev = 0.18*2^(2*(B-A)/(A+B));
+        aprev = 0.18 * 2^(2 * (B - A) / (A + B));
     end
     
     %temporal average
     An = tmo_alpha_coeff_c * Aprev + tmo_alpha_coeff * A;
     Bn = tmo_alpha_coeff_c * Bprev + tmo_alpha_coeff * B;
 
-    a = 0.18*2^(2*(Bn-An)/(An+Bn));
+    a = 0.18 * 2^(2 * (Bn - An) / (An + Bn));
     an = tmo_alpha_coeff_c * aprev + tmo_alpha_coeff * a;
     
     %tone mapping
-    [frameOut,~,~] = ReinhardTMO(frame, an);
+    [frameOut, ~, ~] = ReinhardTMO(frame, an);
 
     %Gamma/sRGB encoding
     if(bsRGB)

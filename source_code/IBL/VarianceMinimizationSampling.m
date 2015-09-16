@@ -1,7 +1,7 @@
-function [imgOut,lights]=VarianceMinimizationSampling(img,nlights,falloff)
+function [imgOut, lights] = VarianceMinimizationSampling(img, nlights, falloff)
 %
 %
-%        [imgOut,lights]=VarianceMinimizationSampling(img,nlights,falloff)
+%        [imgOut, lights] = VarianceMinimizationSampling(img, nlights, falloff)
 %
 %
 %        Input:
@@ -30,17 +30,16 @@ function [imgOut,lights]=VarianceMinimizationSampling(img,nlights,falloff)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-if(~exist('nlights','var'))
-    nlights = 2.^(round(log2(min([r,c]))+2));
+if(~exist('nlights', 'var'))
+    nlights = -1;
 end
 
-if(~exist('falloff','var'))
+if(~exist('falloff', 'var'))
     falloff = 0;
 end
 
 global L;
 global imgWork;
-global limitSize;
 global nLights;
 global lights;
 
@@ -52,15 +51,18 @@ end
 %Global variables initialization
 L = lum(img);
 imgWork = img;
-nLights = round(log2(nlights));
+[r, c] = size(L);
 
-[r,c] = size(L);
-limitSize = 2;
+if(nlights < 0)
+    nlights = 2.^(round(log2(min([r, c])) + 2));
+end
+
+nLights = round(log2(nlights));
 
 lights = [];
 
-VarianceMinimizationSamplingAux(1,c,1,r,0);
+VarianceMinimizationSamplingAux(1, c, 1, r, 0);
 
-imgOut = GenerateLightMap(lights,c,r);
+imgOut = GenerateLightMap(lights, c, r);
 
 end

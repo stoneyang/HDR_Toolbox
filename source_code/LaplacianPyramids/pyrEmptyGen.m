@@ -1,7 +1,7 @@
-function p=pyrEmptyGen(r,c)
+function p = pyrEmptyGen(r, c)
 %
 %
-%        p=pyrEmptyGen(r,c)
+%        p = pyrEmptyGen(r, c)
 %
 %
 %        Input:
@@ -25,8 +25,8 @@ function p=pyrEmptyGen(r,c)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-empty = zeros(r,c);
+empty = zeros(r, c);
 
-p=pyrLapGen(empty);
+p = pyrLapGen(empty);
 
 end

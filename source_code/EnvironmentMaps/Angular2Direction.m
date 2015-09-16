@@ -1,6 +1,6 @@
-function D = Angular2Direction(r,c)
+function D = Angular2Direction(r, c)
 %
-%        D = LL2Direction(r,c)
+%        D = LL2Direction(r, c)
 %
 %
 %        Input:
@@ -9,7 +9,7 @@ function D = Angular2Direction(r,c)
 %        Output:
 %           -D: 3D directions of the mapping
 %
-%     Copyright (C) 2011  Francesco Banterle
+%     Copyright (C) 2011-15  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -25,18 +25,18 @@ function D = Angular2Direction(r,c)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-[X,Y] = meshgrid(0:(c-1),0:(r-1));
-X = X/c;
-Y = Y/r;
+[X, Y] = meshgrid(0:(c-1), 0:(r-1));
+X = X / c;
+Y = Y / r;
 
-theta = atan2((-2*Y+1),(2*X-1));
-phi = pi*sqrt((2*X-1).^2+(2*Y-1).^2);
+theta =   atan2((-2 * Y + 1),(2 * X - 1));
+phi = pi * sqrt(( 2 * X - 1).^2+(2 * Y - 1).^2);
 
-D = zeros(r,c,3);
+D = zeros(r, c, 3);
 
 sinPhi = sin(phi);
-D(:,:,1) = cos(theta).*sinPhi;
-D(:,:,2) = sin(theta).*sinPhi;
+D(:,:,1) = cos(theta) .* sinPhi;
+D(:,:,2) = sin(theta) .* sinPhi;
 D(:,:,3) = -cos(phi);
 
 end

@@ -31,6 +31,16 @@ HOW TO INSTALL:
 4) Write the command installHDRToolbox in the Command Window, and wait for the installation process to end.
 
 
+NOTE ON TONE MAPPING:
+=====================
+The majority of TMOs return tone mapped images with linear values. This means that gamma encoding
+needs to be applied to the output of these TMOs before visualization or before writing tone mapped images
+ on the disk; otherwise these images may appear dark.
+A few operators (e.g. Mertens et al.'s operator) return gamma encoded values,
+so there is no need to apply gamma to them; in this case a message (e.g. a Warning) is displayed
+after tone mapping alerting that there is no need of gamma encoding.
+
+
 REFERENCE:
 ==========
 Please reference the book in your work or papers if you use this toolbox:

@@ -4,7 +4,7 @@ function VarianceMinimizationSamplingAux(xMin,xMax,yMin,yMax,iter)
 %        VarianceMinimizationSamplingAux(xMin,xMax,yMin,yMax,iter)
 %       
 %
-%     Copyright (C) 2014  Francesco Banterle
+%     Copyright (C) 2014-2015  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -22,14 +22,13 @@ function VarianceMinimizationSamplingAux(xMin,xMax,yMin,yMax,iter)
 
 global L;
 global imgWork;
-global limitSize;
 global nLights;
 global lights;
 
 lx = xMax-xMin;
 ly = yMax-yMin;
 
-if((lx>limitSize)&&(ly>limitSize)&&(iter<nLights))
+if((lx > 2) && (ly > 2) && (iter < nLights))
     %checking a cut on the X-Axis
     v_min = 1e30;
     cut   = -1;

@@ -1,7 +1,7 @@
-function pOut=pyrAdd(pA, pB)
+function pOut = pyrAdd(pA, pB)
 %
 %
-%        pOut=pyrAdd(pA,pB)
+%        pOut = pyrAdd(pA, pB)
 %
 %
 %        Input:
@@ -28,20 +28,20 @@ function pOut=pyrAdd(pA, pB)
 %
 
 %checking lenght of the pyramids
-nA=length(pA.list);
-nB=length(pA.list);
+nA = length(pA.list);
+nB = length(pA.list);
 
-if(nA~=nB)
+if(nA ~= nB)
     error('pyrAdd error: pA and pB are different size pyramids.');
 end
 
 %adding base levels
-pOut.base=pA.base+pB.base;
-pOut.list=pA.list;
+pOut.base = pA.base + pB.base;
+pOut.list = pA.list;
 
 %adding the detail of each level
 for i=1:nA
-    pOut.list(i).detail=pA.list(i).detail+pB.list(i).detail;
+    pOut.list(i).detail = pA.list(i).detail + pB.list(i).detail;
 end
 
 end

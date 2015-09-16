@@ -16,7 +16,7 @@ function imgOut = BilateralFilterFull(img, imgEdges, sigma_s, sigma_r)
 %		 Output:
 %			-imgOut: is the filtered image.
 %
-%     Copyright (C) 2014  Francesco Banterle
+%     Copyright (C) 2014-15  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -36,12 +36,12 @@ if(isempty(imgEdges))
     imgEdges = img;
 end
 
-[r,c,col] = size(img);
+[r, c, col] = size(img);
 imgOut = zeros(r,c,col);
 imgWeight = zeros(r,c);
 
-sigma_r2 = 2.0*(sigma_r^2);
-sigma_s2 = 2.0*(sigma_s^2);
+sigma_r2 = 2.0 * (sigma_r^2);
+sigma_s2 = 2.0 * (sigma_s^2);
 
 kernelSize = max([round(sigma_s * 5.0), 1]);
 halfKernelSize = max([round(kernelSize / 2),1]);
@@ -58,7 +58,7 @@ for i=1:nSamples
     imgFetch = imshift(img, X(i), Y(i));
     imgFetch_Edge = imshift(imgEdges, X(i), Y(i));
 
-    if(col>1)
+    if(col > 1)
         tmp = sum((imgFetch_Edge - imgEdges).^2, col);
     else
         tmp = (imgFetch_Edge - imgEdges).^2;

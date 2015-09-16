@@ -44,25 +44,25 @@ function StaticTMOv(hdrv, filenameOutput, tmo_operator, tmo_gamma, tmo_quality, 
 %     account for temporal coherency
 %
 
-if(~exist('filenameOutput','var'))
-    date_str = strrep(datestr(now()),' ','_');
-    date_str = strrep(date_str,':','_');
-    filenameOutput = ['static_tmo_output_',date_str,'.avi'];
+if(~exist('filenameOutput', 'var'))
+    date_str = strrep(datestr(now()), ' ', '_');
+    date_str = strrep(date_str, ':', '_');
+    filenameOutput = ['static_tmo_output_', date_str, '.avi'];
 end
 
-if(~exist('tmo_operator','var'))
-    tmo_operator = @ReinhardBilTMO;
+if(~exist('tmo_operator', 'var'))
+    tmo_operator = @DragoTMO;
 end
 
-if(~exist('tmo_gamma','var'))
+if(~exist('tmo_gamma', 'var'))
     tmo_gamma = 2.2;
 end
 
-if(~exist('tmo_quality','var'))
+if(~exist('tmo_quality', 'var'))
     tmo_quality = 95;
 end
 
-if(~exist('tmo_video_profile','var'))
+if(~exist('tmo_video_profile', 'var'))
     tmo_video_profile = 'Motion JPEG AVI';
 end
 
@@ -78,7 +78,7 @@ ext = fileExtension(filenameOutput);
 bVideo = 0;
 writerObj = 0;
 
-if(strfind(ext,'avi')||strfind(ext,'mp4'))
+if(strfind(ext, 'avi') | strfind(ext, 'mp4'))
     bVideo = 1;
     writerObj = VideoWriter(filenameOutput, tmo_video_profile);
     writerObj.FrameRate = hdrv.FrameRate;
@@ -109,9 +109,9 @@ for i=1:hdrv.totalFrames
     
     %Storing 
     if(bVideo)
-        writeVideo(writerObj,frameOut);
+        writeVideo(writerObj, frameOut);
     else
-        nameOut = [name,sprintf('%.10d',i),'.',ext];
+        nameOut = [name, sprintf('%.10d',i), '.', ext];
         imwrite(frameOut, nameOut);
     end
     

@@ -27,28 +27,7 @@ function hdrv = hdrvopen(hdrv)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-if(hdrv.streamOpen == 0)
-
-%     switch hdrv.type
-%         case 'TYPE_HDRV_MB06'
-%             if(~isempty(hdrv.streamTMO))
-%                 open(hdrv.streamTMO)
-%             end
-%             
-%             if(~isempty(hdrv.streamR))
-%                 open(hdrv.streamR)
-%             end
-%             
-%         case 'TYPE_HDRV_LK08'
-%             if(~isempty(hdrv.streamTMO))
-%                 open(hdrv.streamTMO)
-%             end
-%             
-%             if(~isempty(hdrv.streamR))
-%                 open(hdrv.streamR)
-%             end            
-%     end
-    
+if(hdrv.streamOpen == 0)   
     hdrv.streamOpen = 1;
 end
 

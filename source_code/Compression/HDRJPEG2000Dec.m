@@ -1,7 +1,7 @@
 function imgRec = HDRJPEG2000Dec(name)
 %
 %
-%       imgRec=HDRJPEG2000Dec(name)
+%       imgRec = HDRJPEG2000Dec(name)
 %
 %
 %       Input:
@@ -10,7 +10,7 @@ function imgRec = HDRJPEG2000Dec(name)
 %       Output:
 %           -imgRec: the reconstructed HDR image
 %
-%     Copyright (C) 2011  Francesco Banterle
+%     Copyright (C) 2011-2015  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -30,24 +30,24 @@ function imgRec = HDRJPEG2000Dec(name)
 info = imfinfo(name);
 
 decoded = sscanf(cell2mat(info.Comments), '%g', 6);
-xMin = zeros(3,1);
-xMax = zeros(3,1);
+xMin = zeros(3, 1);
+xMax = zeros(3, 1);
 
 c = 1;
 for i=1:2:6
     xMax(c) = decoded(i);
     xMin(c) = decoded(i + 1);
-    c = c+1;
+    c = c + 1;
 end
 
 %Decompression
 nBit = 16;
 delta = 1e-6;
-imgRec = double(imread(name))/(2^nBit-1);
+imgRec = double(imread(name)) / (2^nBit - 1);
 for i = 1:size(imgRec, 3)
     imgRec(:,:,i) = exp(imgRec(:,:,i) * (xMax(i) - xMin(i)) + xMin(i)) - delta;
 end
 
-imgRec(imgRec<0.0)=0;
+imgRec(imgRec < 0.0) = 0;
 
 end

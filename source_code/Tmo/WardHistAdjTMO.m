@@ -43,16 +43,7 @@ end
 
 %Luminance channel
 L = lum(img);
-
-%The image is downsampled
-[n, m] =size(L);
-maxCoord = max([n, m]);
-viewAngleWidth  = 2 * atan(m / (2 * maxCoord * 0.75));
-viewAngleHeight = 2 * atan(n / (2 * maxCoord * 0.75));
-fScaleX = (2 * tan(viewAngleWidth / 2) / 0.01745);   % see eqn.(1) in Larson et al's paper on TIP 1997
-fScaleY = (2 * tan(viewAngleHeight / 2) / 0.01745);  % see eqn.(1) in Larson et al's paper on TIP 1997
-
-L2 = imresize(L, [round(fScaleY), round(fScaleX)], 'bilinear');
+L2 = WardDownsampling(L);
 LMax = max(L2(:));
 LMin = min(L2(:));
 
@@ -73,20 +64,20 @@ LldMin = log(LdMin);
 
 %function P
 p = zeros(nBin, 1);
-delta = (LlMax - LlMin) / nBin;  % see equations below eqn.(3) in Larson et al's paper on TIP 1997
+delta = (LlMax - LlMin) / nBin;
 
 for i=1:nBin
     indx = find(Llog > (delta * (i - 1) + LlMin) & Llog <= (delta * i + LlMin));
     p(i) = numel(indx);
 end
 
-%Histogram ceiling   
+%Histogram ceiling
 p = histogram_ceiling(p, delta / (LldMax - LldMin));
 if(bPlotHistogram)
     bar(p);
 end
 
-%Calculation of P(x); see eqn.(2) in the original paper
+%Calculation of P(x) 
 Pcum = cumsum(p);
 Pcum = Pcum / max(Pcum);
 
@@ -94,9 +85,10 @@ Pcum = Pcum / max(Pcum);
 L(L > LMax) = LMax;
 x = (LlMin:((LlMax - LlMin) / (nBin - 1)):LlMax)';
 pps = spline(x, Pcum);
-Ld  = exp(LldMin + (LldMax - LldMin) * ppval(pps, real(log(L)))); % eqn.(4) in the original paper
+Ld  = exp(LldMin + (LldMax - LldMin) * ppval(pps, real(log(L))));
 Ld  = (Ld - LdMin) / (LdMax - LdMin);
 
 %Changing luminance
 imgOut = ChangeLuminance(img, L, Ld);
 end
+

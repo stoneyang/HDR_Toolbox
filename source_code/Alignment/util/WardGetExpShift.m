@@ -1,7 +1,7 @@
-function cur_shift = WardGetExpShift(img1, img2, shift_bits, wardPercentile)
+function cur_shift = WardGetExpShift(img1, img2, ward_percentile, shift_bits)
 %
 %
-%       cur_shift = WardGetExpShift(img1, img2, shift_bits, wardPercentile)
+%       cur_shift = WardGetExpShift(img1, img2, ward_percentile, shift_bits)
 %
 %       This function computes the Ward's MTB.
 %
@@ -28,8 +28,8 @@ function cur_shift = WardGetExpShift(img1, img2, shift_bits, wardPercentile)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-if(~exist('wardPercentile', 'var'))
-    wardPercentile = 0.5;
+if(~exist('ward_percentile', 'var'))
+    ward_percentile = 0.5;
 end
 
 if(~exist('shift_bits', 'var'))
@@ -44,8 +44,8 @@ while(shift_bits > 0)
     sml_img1 = imresize(img1, 2^(-shift_bits), 'bilinear');
     sml_img2 = imresize(img2, 2^(-shift_bits), 'bilinear');
     
-    [tb1, eb1] = WardComputeThreshold(sml_img1, wardPercentile);
-    [tb2, eb2] = WardComputeThreshold(sml_img2, wardPercentile);
+    [tb1, eb1] = WardComputeThreshold(sml_img1, ward_percentile);
+    [tb2, eb2] = WardComputeThreshold(sml_img2, ward_percentile);
 
     min_err = size(sml_img1, 1) * size(sml_img1, 2);
 

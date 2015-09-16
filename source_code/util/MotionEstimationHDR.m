@@ -1,4 +1,4 @@
-function motionMap = MotionEstimationHDR(img1, img2, blockSize)
+function motionMap = MotionEstimationHDR(img1, img2, blockSize, bVisualize)
 %
 %        motionMap = MotionEstimationHDR(img1, img2, blockSize)
 %
@@ -8,11 +8,12 @@ function motionMap = MotionEstimationHDR(img1, img2, blockSize)
 %         - img1: source
 %         - img2: target
 %         - blockSize: size of the block
+%         - bVisualize
 %
 %       output:
 %         - motionMap: motion map for each pixel
 %
-%     Copyright (C) 2013-14  Francesco Banterle
+%     Copyright (C) 2013-15  Francesco Banterle
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -31,14 +32,17 @@ function motionMap = MotionEstimationHDR(img1, img2, blockSize)
 img1 = lum(img1);
 img2 = lum(img2);
 
-[r,c] = size(img1);
+[r, c] = size(img1);
 
-if(~exist('blockSize','var'))
-    nPixels = r*c;
-    blockSize = max([2^ceil(log10(nPixels)),4]);
+if(~exist('blockSize', 'var'))
+    nPixels = r * c;
+    blockSize = max([2^ceil(log10(nPixels)), 4]);
 end
 
+if(~exist('bVisualize', 'var'))
+    bVisualize = 0;
+end
 
-motionMap = MotionEstimation(log(img1+1), log(img2+1), blockSize);
+motionMap = MotionEstimation(log(img1 + 1), log(img2 + 1), blockSize, bVisualize);
 
 end

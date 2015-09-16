@@ -39,8 +39,8 @@ function imgTMO_c = ColorCorrectionPouli(imgHDR, imgTMO)
 check3Color(imgHDR);
 check3Color(imgTMO);
 
-[r1, c1, col1] = size(imgHDR);
-[r2, c2, col2] = size(imgTMO);
+[r1, c1, ~] = size(imgHDR);
+[r2, c2, ~] = size(imgTMO);
 
 if((r1 ~= r2) || (c1 ~= c2))
     error('ERROR: imgHDR and imgTMO have different spatial resolutions.');

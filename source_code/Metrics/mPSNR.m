@@ -38,23 +38,21 @@ if(CheckSameImage(img1, img2) == 0)
     error('The two images are different they can not be used or there are more than one channel.');
 end
 
-if(~exist('eMin','var') || ~exist('eMax','var'))
+if(~exist('eMin', 'var') || ~exist('eMax', 'var'))
     L1 = lum(img1);
     L2 = lum(img2);
     
-    ind1 = find(L1>0);
-    ind2 = find(L2>0);
+    ind1 = find(L1 > 0);
+    ind2 = find(L2 > 0);
     
-    cMin = min([min(L1(ind1)),min(L2(ind2))]); 
-    cMax = max([max(L1(ind1)),max(L2(ind2))]); 
+    cMin = min([min(L1(ind1)), min(L2(ind2))]); 
+    cMax = max([max(L1(ind1)), max(L2(ind2))]); 
     
     minFstop = round(log2(cMin));
     maxFstop = round(log2(cMax));
-    
-    halfStops = (maxFstop-minFstop+1)/2;
-    
-    eMin = -halfStops + 1;
-    eMax =  halfStops - 1;
+      
+    eMin = -maxFstop;
+    eMax = -minFstop;
 end
 
 if(eMax == eMin)
