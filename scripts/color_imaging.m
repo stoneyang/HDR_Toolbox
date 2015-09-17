@@ -1,5 +1,5 @@
-function I_out = color_imaging(inputFile, outputFile, bAWB, AWB, catType, bTM, TM)
-    [~, ~, ext] = fileparts(inputFile);
+function I_out = color_imaging(inputFile, bAWB, AWB, catType, bTM, TM)
+    [path, name, ext] = fileparts(inputFile);
     if strcmp(ext, '.hdr')
         I = hdrimread(inputFile);
     else
@@ -17,5 +17,6 @@ function I_out = color_imaging(inputFile, outputFile, bAWB, AWB, catType, bTM, T
     end
     
     I_out = I_tm;
+    outputFile = strcat(path, name, '_', AWB, '_', catType, '_', TM, '.png');
     imwrite(I_out, outputFile);
 end
