@@ -19,6 +19,8 @@ function I_AWB = AWB_switch(I, catType, AWB)
     switch AWB
         case 'grayWorld'
             disp('apply gray world method');
+            maxIter = 1;
+            I_AWB = gray_world(I, catType, maxIter);
         case 'simplestAWB'
             disp('apply simplest AWB method');
         case 'robustAWB'
@@ -28,5 +30,4 @@ function I_AWB = AWB_switch(I, catType, AWB)
         otherwise
             disp('no correct method''s fed!');
     end
-    I_AWB = I;
 end
