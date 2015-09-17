@@ -23,6 +23,8 @@ function I_AWB = AWB_switch(I, catType, AWB)
             I_AWB = gray_world(I, catType, maxIter);
         case 'simplestAWB'
             disp('apply simplest AWB method');
+            satLvl = 0.01;
+            I_AWB = simplest_AWB(I, satLvl);
         case 'robustAWB'
             disp('apply robust AWB method');
         case 'sensorCorrelation'
