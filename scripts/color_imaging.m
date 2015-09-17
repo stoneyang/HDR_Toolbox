@@ -3,7 +3,7 @@ function I_out = color_imaging(inputFile, bAWB, AWB, catType, bTM, TM)
     if strcmp(ext, '.hdr')
         I = hdrimread(inputFile);
     else
-        I = im2double(imread(inputFile));
+        I = imread(inputFile);
     end
     
     if bAWB
