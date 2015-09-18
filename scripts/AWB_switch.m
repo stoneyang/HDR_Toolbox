@@ -1,4 +1,4 @@
-function I_AWB = AWB_switch(I, catType, AWB)
+function I_AWB = AWB_switch(I, AWB, catType, input, output)
     switch catType
     	case 'vonKries'
         	disp('apply von Kries CAT');
@@ -27,8 +27,16 @@ function I_AWB = AWB_switch(I, catType, AWB)
             I_AWB = simplest_AWB(I, satLvl);
         case 'robustAWB'
             disp('apply robust AWB method');
+            option = 'RG gain';
+            T = 0.3;
+            maxIter = 1000;
+            plots = 0;
+%             I_AWB = robust_AWB(I, catType, T, maxIter);
+            I_AWB = robustAWB(input, output, option, catType, T, maxIter, plots);
         case 'sensorCorrelation'
             disp('apply sensor correlation method');
+            plots = 0;
+            I_AWB = sensorCorrelation(input, output, catType, plots);
         otherwise
             disp('no correct method''s fed!');
     end
