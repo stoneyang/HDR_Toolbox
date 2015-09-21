@@ -2,11 +2,14 @@ function I_out = TM_switch(I_in, TM)
 	switch TM
         case 'AshDrg'
             disp('apply Ashikhmined Drago TMO');
-            I_tm = AshikhminedDragoTMO(I_in);
+            I_tm = AshikhminedDragoTMO(I_in, 100, 1.2);
             I_gamma = GammaDrago(I_tm);
             I_out = I_gamma;
         case 'Ash'
             disp('apply Ashikhmin TMO');
+            I_tm = AshikhminTMO(I_in);
+            I_gamma = GammaTMO(I_tm, 2.4);
+            I_out = I_gamma;
         case 'Ban'
             disp('apply Banterle TMO');
         case 'Bru'
@@ -15,6 +18,9 @@ function I_out = TM_switch(I_in, TM)
             disp('apply Chiu TMO');
         case 'Drg'
             disp('apply Drago TMO');
+            I_tm = DragoTMO(I_in, 100, 1.2);
+            I_gamma = GammaDrago(I_tm);
+            I_out = I_gamma;
         case 'Durand'
             disp('apply Durand TMO');
         case 'exp'
