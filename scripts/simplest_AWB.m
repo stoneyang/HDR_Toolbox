@@ -5,8 +5,7 @@ function I_out = simplest_AWB(I_in, satLvl)
     
     imgRGB_orig = cbreshape(I_in) * 255;
     imgRGB = zeros(size(imgRGB_orig));
-    N = size(imgRGB, 2);
-    color = {'r', 'g', 'b'};
+    
     for ch = 1:3
         tiles = quantile(imgRGB_orig(ch, :), q);
         imgRGB(ch, :) = cbsaturate(imgRGB_orig(ch, :), tiles);
